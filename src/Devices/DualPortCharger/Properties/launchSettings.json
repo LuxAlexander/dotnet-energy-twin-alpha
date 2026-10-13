@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "DualPortCharger": {
+      "commandName": "Project",
+      "commandLineArgs": "--id DC-01 --power 150 --step 1 --speed 300 --duration 24",
+      "workingDirectory": "$(ProjectDir)"
+    }
+  }
+}

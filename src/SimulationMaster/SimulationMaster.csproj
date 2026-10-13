@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../SimCore.Contracts/SimCore.Contracts.csproj" />
+    <ProjectReference Include="../SimCore.Time/SimCore.Time.csproj" />
+    <ProjectReference Include="../Shared.Config/Shared.Config.csproj" />
+  </ItemGroup>
+
+</Project>

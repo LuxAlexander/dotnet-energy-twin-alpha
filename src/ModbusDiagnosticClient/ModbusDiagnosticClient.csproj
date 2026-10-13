@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../SimCore.Contracts/SimCore.Contracts.csproj" />
+    <ProjectReference Include="../Modbus.Contracts/Modbus.Contracts.csproj" />
+    <ProjectReference Include="../Shared.Config/Shared.Config.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EasyModbusTCP.NETCore" />
+  </ItemGroup>
+
+</Project>

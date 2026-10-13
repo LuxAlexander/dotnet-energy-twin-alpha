@@ -1,0 +1,11 @@
+<Project>
+  <!-- Gemeinsame Einstellungen für alle LB02-Projekte unter src/ (und über tests/Directory.Build.props auch für die Tests).
+       Liegt bewusst NICHT im Repo-Root, damit die LB01-Projekte (Alex/, Domi/, Susi/) unverändert bauen. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <!-- LB02-Regel: 0 Fehler / 0 Warnungen -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+</Project>
