@@ -1,4 +1,5 @@
 using Devices.Common;
+using Devices.Common.Modbus;
 using Shared.Config;
 
 namespace DualChargerSim.Simulation;
@@ -24,6 +25,9 @@ public class SimulationConfig
 
     /// <summary>Woher die virtuelle Zeit kommt (Master oder lokale Uhr).</summary>
     public TimeSyncOptions TimeSync { get; init; } = new() { StandaloneSpeed = DefaultStandaloneSpeed };
+
+    /// <summary>Host, Port und Unit-ID des Modbus-Servers.</summary>
+    public ModbusOptions Modbus { get; init; } = new();
 
     public TimeSpan Step => TimeSpan.FromMinutes(StepMinutes);
     public TimeSpan? Duration => DurationHours is { } hours ? TimeSpan.FromHours(hours) : null;

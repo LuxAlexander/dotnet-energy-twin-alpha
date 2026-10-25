@@ -42,21 +42,26 @@ public static class ConsoleDisplay
         Environment.GetEnvironmentVariable("ENERGYSIM_RENDER_LOG");
 
     public static void Render(
-        DateTime now,
+        DateTime? nowOrNull,
         Season season,
         SimulationMode mode,
         PvSystem pv,
         double peakPowerKw,
-        int timescale,
+        double timescale,
         string notification,
-        double dayProgress)
+        double dayProgress,
+        string timeStatus,
+        string? modbusStatus)
     {
+        // Ohne Zeit (Master noch nicht erreicht) zeigt die Anzeige Platzhalter statt Datum und Uhrzeit
+        DateTime now = nowOrNull ?? DateTime.MinValue;
         bool night = pv.IsNight;
         bool off = !pv.IsEnabled;
         bool generating = pv.PowerKw > 0;
         FaultType fault = pv.ActiveFault;
 
-        string time = now.ToString("HH:mm:ss");
+        string time = nowOrNull is null ? "--:--:--" : now.ToString("HH:mm:ss");
+        string date = nowOrNull is null ? "--.--.----" : now.ToString("dd.MM.yyyy");
 
         string modeText = mode switch
         {
@@ -106,17 +111,22 @@ public static class ConsoleDisplay
 
         Row(
             ("  ", ""),
-            (now.ToString("dd.MM.yyyy"), B + WHITE),
+            (date, B + WHITE),
             ("  ", ""),
             (time, B + WHITE),
             ("   ", ""),
             (season.ToGerman().PadRight(9), seasonColor),
             (modeText.PadRight(9), modeColor),
             (stateText.PadRight(8), stateColor),
-            ($"x{timescale}", DIM)
+            ($"x{timescale:0.##}", DIM)
         );
 
         Row(("  ", ""), (progress.Filled, CYAN), (progress.Empty, DIM));
+
+        Sep();
+
+        Info("Zeitquelle ", timeStatus);
+        Info("Modbus     ", modbusStatus ?? "aus (--no-modbus)");
 
         Sep();
 
@@ -372,6 +382,15 @@ public static class ConsoleDisplay
         );
     }
 
+    /// <summary>Beschriftete Textzeile, auf die Boxbreite gekürzt.</summary>
+    private static void Info(string label, string text)
+    {
+        int room = InnerWidth - 2 - label.Length;
+        if (text.Length > room)
+            text = text[..(room - 1)] + "…";
+        Row(("  ", ""), (label, B), (text, DIM));
+    }
+
     private static void Top() =>
         _frame.Add("  " + DIM + "╭" + new string('─', BorderWidth) + "╮" + R);
 
@@ -384,10 +403,10 @@ public static class ConsoleDisplay
     private static void Footer()
     {
         _frame.Add(string.Empty);
-        _frame.Add("  " + DIM + "P Pause   M Modus   Q Beenden   C Module reinigen" + R);
+        _frame.Add("  " + DIM + "P Pause (nur standalone)   M Modus   Q Beenden   C Module reinigen" + R);
         _frame.Add("  " + DIM + "Störung:  F Inverter   T Überhitzung   G Netzspannung" + R);
         _frame.Add("  " + DIM + "Wetter:   0 Nacht  1 Sonnig  2 Bewölkt  3 Dicht  4 Gewitter" + R);
-        _frame.Add("  " + DIM + "Tempo:    5 x1  6 x15  7 x60  8 x300  9 x1800" + R);
+        _frame.Add("  " + DIM + "Tempo:    5 x1  6 x15  7 x60  8 x300  9 x1800  (nur standalone, sonst steuert der Master)" + R);
         _frame.Add("  " + DIM + "Anzeige:  R ruhiger / schneller" + R);
     }
 }

@@ -1,44 +1,51 @@
+using System.Globalization;
 using System.Text;
 using EnergySimulator.Devices;
 using EnergySimulator.Simulation;
 
 namespace EnergySimulator.Data;
 
-public sealed class CsvExporter
+/// <summary>
+/// Schreibt die Messwerte der PV-Anlage als CSV (asynchron, angehängt statt die ganze Datei neu zu schreiben).
+/// Der Dateiname enthält Geräte-ID und Startzeit, damit mehrere Anlagen und mehrere Läufe sich nicht überschreiben.
+/// </summary>
+public sealed class CsvExporter : IAsyncDisposable
 {
-    private const int FlushEveryRows = 5;
+    // InvariantCulture: Dezimaltrenner ist immer ".", unabhängig von der Regionseinstellung des Rechners.
+    private static readonly CultureInfo Invariant = CultureInfo.InvariantCulture;
 
-    // alle 5 Zeilen Flush: kurze Testlaeufe (z. B. 20 s)
-    // laengere Laeufe verursachen nicht pro Zeile
-    // einen Dateizugriff.
+    private const string Header =
+        "Datum;Zeit;Jahreszeit;Modus;Wetter;Einstrahlung_W_m2;Leistung_kW;Tagesenergie_kWh;Gesamtenergie_kWh;" +
+        "Modultemperatur_C;Aussentemperatur_C;Netzspannung_V;Verschmutzung_pct;Alterung_pct;Fehler;Anlagenstatus;" +
+        "Lauf;Leistungsbegrenzung_pct";
 
-    private readonly StringBuilder _builder = new();
-    private readonly string _filePath;
-    private bool _headerWritten;
-    private int _rowsSinceFlush;
+    private readonly StreamWriter _writer;
 
-    public CsvExporter(string directory, string fileName)
+    public string FilePath { get; }
+
+    private CsvExporter(string filePath, StreamWriter writer)
+    {
+        FilePath = filePath;
+        _writer = writer;
+    }
+
+    /// <summary>Legt Ordner und Datei an und schreibt die Kopfzeile.</summary>
+    public static async Task<CsvExporter> CreateAsync(string deviceId, string directory, CancellationToken cancellationToken)
     {
         Directory.CreateDirectory(directory);
-        _filePath = Path.Combine(directory, fileName);
+
+        string safeId = string.Concat(deviceId.Select(c => Path.GetInvalidFileNameChars().Contains(c) ? '_' : c));
+        string filePath = Path.Combine(directory, $"{safeId}_{DateTime.Now:yyyy-MM-dd_HHmmss}.csv");
+
+        var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read, 4096, FileOptions.Asynchronous);
+        var writer = new StreamWriter(stream, new UTF8Encoding(encoderShouldEmitUTF8Identifier: true));
+        await writer.WriteLineAsync(Header.AsMemory(), cancellationToken);
+        await writer.FlushAsync(cancellationToken);
+        return new CsvExporter(filePath, writer);
     }
 
-    public void WriteHeader()
+    public async Task WriteRowAsync(DateTime now, SimulationMode mode, int runId, PvSystem pv, CancellationToken cancellationToken)
     {
-        _builder.Clear();
-        _builder.AppendLine(string.Join(';',
-            "Datum", "Zeit", "Jahreszeit", "Modus", "Wetter",
-            "Einstrahlung_W_m2", "Leistung_kW", "Tagesenergie_kWh", "Gesamtenergie_kWh",
-            "Modultemperatur_C", "Aussentemperatur_C", "Netzspannung_V",
-            "Verschmutzung_pct", "Alterung_pct", "Fehler", "Anlagenstatus"));
-        _headerWritten = true;
-    }
-
-    public void WriteRow(DateTime now, SimulationMode mode, PvSystem pv)
-    {
-        if (!_headerWritten)
-            WriteHeader();
-
         string modeStr = mode switch
         {
             SimulationMode.Auto => "AUTO",
@@ -49,32 +56,30 @@ public sealed class CsvExporter
 
         string status = !pv.IsEnabled ? "AUS" : pv.ActiveFault != FaultType.None ? "STOERUNG" : "AKTIV";
 
-        // InvariantCulture: Dezimaltrenner ist immer ".", unabhaengig von der
-        // Sprach- und Regionseinstellung des Rechners. Sonst wuerde bei einem
-        // System mit "Komma als Dezimaltrenner" (z. B. de-DE) eine unlesbare
-        // CSV entstehen (12,5 statt 12.5) oder der Import in Tools scheitern.
-        // built-in static property for consistent formatting and parsing
-        _builder.AppendLine(string.Join(';',
-            now.ToString("yyyy-MM-dd"),
-            now.ToString("HH:mm"),
+        string line = string.Join(';',
+            now.ToString("yyyy-MM-dd", Invariant),
+            now.ToString("HH:mm", Invariant),
             SeasonInfo.FromMonth(now.Month).ToGerman(),
             modeStr,
             pv.Weather.ToGerman(),
-            pv.IrradiationWm2.ToString("F1", System.Globalization.CultureInfo.InvariantCulture),
-            pv.PowerKw.ToString("F2", System.Globalization.CultureInfo.InvariantCulture),
-            pv.DailyEnergyKwh.ToString("F3", System.Globalization.CultureInfo.InvariantCulture),
-            pv.TotalEnergyKwh.ToString("F2", System.Globalization.CultureInfo.InvariantCulture),
-            pv.ModuleTemperatureC.ToString("F1", System.Globalization.CultureInfo.InvariantCulture),
-            pv.AmbientTemperatureC.ToString("F1", System.Globalization.CultureInfo.InvariantCulture),
-            pv.GridVoltageV.ToString("F1", System.Globalization.CultureInfo.InvariantCulture),
-            pv.SoilingLossPercent.ToString("F2", System.Globalization.CultureInfo.InvariantCulture),
-            pv.AgingLossPercent.ToString("F2", System.Globalization.CultureInfo.InvariantCulture),
+            pv.IrradiationWm2.ToString("F1", Invariant),
+            pv.PowerKw.ToString("F2", Invariant),
+            pv.DailyEnergyKwh.ToString("F3", Invariant),
+            pv.TotalEnergyKwh.ToString("F2", Invariant),
+            pv.ModuleTemperatureC.ToString("F1", Invariant),
+            pv.AmbientTemperatureC.ToString("F1", Invariant),
+            pv.GridVoltageV.ToString("F1", Invariant),
+            pv.SoilingLossPercent.ToString("F2", Invariant),
+            pv.AgingLossPercent.ToString("F2", Invariant),
             pv.ActiveFault.ToGString(),
-            status));
+            status,
+            runId.ToString(Invariant),
+            pv.PowerLimitPercent.ToString("F1", Invariant));
 
-        if (++_rowsSinceFlush >= FlushEveryRows)
-            Flush();
+        await _writer.WriteLineAsync(line.AsMemory(), cancellationToken);
     }
 
-    public void Flush() => File.WriteAllText(_filePath, _builder.ToString());
+    public Task FlushAsync(CancellationToken cancellationToken) => _writer.FlushAsync(cancellationToken);
+
+    public ValueTask DisposeAsync() => _writer.DisposeAsync();
 }

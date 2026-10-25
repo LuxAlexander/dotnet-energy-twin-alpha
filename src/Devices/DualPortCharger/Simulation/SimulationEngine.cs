@@ -21,11 +21,15 @@ public class SimulationEngine
     private readonly InputHandler _input;
     private readonly StepScheduler _scheduler;
     private readonly Random _random;
+    private readonly ChargerModbus? _modbus;
     private DateTime? _endTime;
 
     public SimulationConfig Config { get; }
     public DualCharger Charger { get; }
     public DeviceTimeSource Time { get; }
+
+    /// <summary>Zustand des Modbus-Servers für die Anzeige; <c>null</c> mit <c>--no-modbus</c>.</summary>
+    public string? ModbusStatus => _modbus?.StatusText;
 
     /// <summary>Virtuelle Zeit des dargestellten Zustands (nach dem letzten Schritt); <c>null</c> bis zur ersten Zeit.</summary>
     public DateTime? SimulationTime { get; private set; }
@@ -56,6 +60,9 @@ public class SimulationEngine
 
         Time = DeviceTimeSource.Create(config.TimeSync, config.DeviceId, "Charger");
         Time.Log += (_, message) => Message = message;
+
+        if (!config.Modbus.Disabled)
+            _modbus = new ChargerModbus(Charger, Time, config.Modbus, message => Message = message);
     }
 
     public void Quit() => IsRunning = false;
@@ -84,6 +91,7 @@ public class SimulationEngine
     /// <returns>Pfad der geschriebenen CSV-Datei.</returns>
     public async Task<string> RunAsync(CancellationToken cancellationToken)
     {
+        _modbus?.Start();                                         // Port belegt → IOException, bevor etwas angelegt wird
         await using var logger = await CsvLogger.CreateAsync(Config.DeviceId, Config.OutputDirectory, cancellationToken);
         using var stop = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         var syncTask = Time.RunAsync(stop.Token);
@@ -103,6 +111,13 @@ public class SimulationEngine
             {
                 bool changed = await _input.HandlePendingKeysAsync(stop.Token);
                 changed |= await AdvanceAsync(logger, stop.Token);
+
+                // Modbus läuft auch in der Pause und bei verlorenem Master weiter: Befehle umsetzen, Zustand veröffentlichen
+                if (_modbus is not null)
+                {
+                    _modbus.ProcessCommands();
+                    _modbus.Publish(SimulationTime, RunId);
+                }
 
                 // Interaktiv sofort neu zeichnen; umgeleitet (Protokoll) nur im festen Takt.
                 if ((changed && ConsoleRenderer.IsInteractive) || DateTime.UtcNow >= nextRender)
@@ -127,6 +142,7 @@ public class SimulationEngine
         finally
         {
             await stop.CancelAsync();
+            _modbus?.Dispose();
             await syncTask;                                       // meldet sich beim Master ab
             await _renderer.ShutdownAsync();
         }

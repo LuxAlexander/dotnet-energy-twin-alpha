@@ -34,7 +34,10 @@ Die weiteren Beispiele in dieser Datei gehen vom Projektordner aus.
 
 In Visual Studio: `EnergyTwin.sln` öffnen, `BatterySimulator` als Startprojekt festlegen, dann *Projekt → Eigenschaften → Debuggen → Befehlszeilenargumente*, dort die Argumente eintragen (ohne `dotnet run --`).
 
-Ohne Argumente läuft die Simulation mit den Standardwerten (siehe Tabelle) über 24 Simulationsstunden, das sind bei Standardgeschwindigkeit etwa 2,5 Minuten Echtzeit.
+> **Ab LB02** kommt die Zeit vom Simulations-Master (`--master`). Die Aufrufe unten (LB01) laufen nur noch mit `--standalone`; `--speed`, `--start` und
+> `--duration` gelten nur dort, `--start` jetzt mit Datum (`"2026-01-15 06:00"`). Siehe Abschnitt „LB02“ am Ende.
+
+Ohne Argumente (und ohne Master) wartet das Gerät auf den Simulations-Master; mit `--standalone` läuft es mit den Standardwerten auf einer lokalen Uhr.
 
 ### Kommandozeilenargumente
 
@@ -47,10 +50,10 @@ Ohne Argumente läuft die Simulation mit den Standardwerten (siehe Tabelle) übe
 | `--soc-min` | SOC-Untergrenze in % | 10 |
 | `--soc-max` | SOC-Obergrenze in % | 100 |
 | `--soc-start` | Start-SOC in % | 50 |
-| `--speed` | Simulationssekunden pro Realsekunde | 600 |
+| `--speed` | (standalone) Simulationssekunden pro Realsekunde | 600 |
 | `--step` | Schrittweite in Simulationssekunden | 60 |
-| `--duration` | Simulationsdauer in Stunden, `0` = endlos | 24 |
-| `--start` | Startuhrzeit (z. B. `06:00`) | 00:00 |
+| `--duration` | (standalone) Simulationsdauer in Stunden; ohne Angabe endlos | endlos |
+| `--start` | (standalone) Startzeit `yyyy-MM-dd HH:mm` | heute 00:00 |
 
 Hinweise:
 
@@ -77,7 +80,8 @@ Während der Simulation zeigt ein festes Dashboard Simulationszeit, Tempo, Modus
 
 | Taste | Funktion |
 |---|---|
-| Leertaste | Pause, öffnet das Pausenmenü |
+| Leertaste | Pause (nur standalone; mit Master pausiert der Master) |
+| S | Einstellungen öffnen (löst das Pausenmenü ab) |
 | M | Umschalten Auto / Manuell (beim Wechsel auf Manuell wird der Sollwert 0) |
 | Pfeil hoch / runter | Sollwert um 0,5 kW erhöhen / senken (nur im Manuell-Modus) |
 | 0 | Sollwert auf 0 kW (nur im Manuell-Modus dauerhaft, im Auto-Modus überschreibt das Profil ihn wieder) |
@@ -89,9 +93,10 @@ Während der Simulation zeigt ein festes Dashboard Simulationszeit, Tempo, Modus
 
 Zum Beenden immer **Q** drücken (oder die Simulationsdauer ablaufen lassen). Wird der Debugger hart gestoppt, kann das Ende der CSV-Datei fehlen.
 
-### Pausenmenü
+### Pausenmenü (LB01) und Einstellungen (LB02)
 
-Die Leertaste hält die gesamte Simulation an (Uhr, SOC, Temperatur, Zähler). Im Menü sind änderbar:
+In LB01 hielt die Leertaste die Simulation an und öffnete ein Menü. Ab LB02 steuert der Master die Pause; die Einstellungen öffnet `S`, die Zeit läuft dabei weiter,
+Tempo und Schrittweite sind dort nicht mehr änderbar. Änderbar sind:
 
 1. Sollwert (wechselt dabei in den Manuell-Modus)
 2. Maximale Ladeleistung
@@ -241,8 +246,10 @@ src/Devices/BatterySimulator/
 ├── Batterie.cs                       # Gerätephysik
 ├── BatterieConfig.cs                 # Einstellungen
 ├── DailyProfile.cs                   # Tagesprofil (Auto-Modus)
-├── Simulator.cs                      # Simulationsuhr, Hauptschleife, Tasten, Pausenmenü
-├── CsvLogger.cs                      # CSV-Verlauf
+├── Simulator.cs                      # Hauptschleife (Zeit vom Master, feste Schritte), Tasten, Einstellungen
+├── ArgsParser.cs, SimulatorOptions.cs # Kommandozeile
+├── BatteryModbus.cs                  # Modbus: Register veröffentlichen, Schreibzugriffe anwenden
+├── CsvLogger.cs                      # CSV-Verlauf (async)
 ├── ConsoleDashboard.cs               # Statusanzeige
 └── Enum.cs                           # DeviceState, ControlMode, FaultType
 
@@ -254,25 +261,117 @@ docs/                                 # zentral im Repository
 
 ---
 
-## LB02 – Umbau zum Modbus-Feldgerät (Gerüst)
+## LB02 – Umbau zum Modbus-Feldgerät
 
-> Gerüst – wird mit der Umsetzung gefüllt (LB02-Pflichtinhalte siehe `AGENTS.md` §2).
-
-**Zweck:** Batteriespeicher als Modbus-Feldgerät.
-**Verantwortlich:** _offen_
+**Zweck:** Batteriespeicher als Feldgerät im Gesamtsystem: virtuelle Zeit vom Simulations-Master, Zustand und Sollwert über Modbus TCP.
+**Verantwortlich:** Dominik Zach (LB01-Gerät); Umbau auf Master-Zeit und Modbus am 2026-10-25 von Susanne Lastowicka (mit Dominik abzustimmen)
 **Basis aus LB01:** Domi Batterie, BatterieConfig, DailyProfile
 
+### Stand (2026-10-25)
+
+| Schritt | Stand |
+|---|---|
+| Zeit vom Simulations-Master (`DeviceTimeSource`, `StepScheduler`, feste Schritte `--step`) | ✅ |
+| Standalone mit lokaler Uhr (`--standalone`; Leertaste und `<`/`>` wirken nur dort) | ✅ |
+| async Schleife, CSV, Tastatur und Einstellungsmenü (kein `Thread.Sleep`, kein `ReadLine`) | ✅ |
+| Modbus-Server mit Registerplan, Server bleibt in der Pause erreichbar | ✅ |
+
 ### Konfiguration
-_offen_
+
+| Option | Bedeutung | Standard |
+|---|---|---|
+| `--id`, `--capacity`, `--max-charge`, `--max-discharge`, `--soc-min`, `--soc-max`, `--soc-start` | Gerätedaten wie in LB01 (Tabelle oben) | |
+| `--step <s>` | feste Schrittweite in Simulationssekunden | 60 |
+| `--seed <zahl>` | Zufalls-Seed für das Tagesprofil | zufällig |
+| `--master <host:port>` | Simulations-Master | `127.0.0.1:5100` |
+| `--standalone` | ohne Master, lokale Uhr | aus |
+| `--start <zeit>` | nur standalone, `yyyy-MM-dd HH:mm` (früher nur Uhrzeit) | heute 00:00 |
+| `--speed <x>` | nur standalone, Tempo 1–100 000 | 600 |
+| `--duration <h>` | nur standalone, Dauer; ohne Angabe endlos (früher 0 = endlos, Standard 24) | endlos |
+| `--modbus-port <port>` | Modbus-TCP-Port, pro Gerät eigener | 1502 |
+| `--modbus-bind <ip>` | Adresse des Servers | 127.0.0.1 |
+| `--unit-id <n>` | Modbus-Unit-ID | 1 |
+| `--no-modbus` | Server nicht starten | aus |
+| `--register-plan` | Registerplan als Markdown ausgeben | |
+
+Zusätzlich geprüft: `--max-charge`/`--max-discharge` > 0, `0 ≤ --soc-min < --soc-max ≤ 100`, `--soc-start` dazwischen. Dezimalzahlen mit Punkt **oder** Komma.
 
 ### Bedienung / Start
-_offen_
+
+```
+dotnet run --project src/SimulationMaster -- --speed 600          # 1. Master
+dotnet run --project src/Devices/BatterySimulator -- --id BAT-01 --modbus-port 1503   # 2. Batterie
+dotnet run --project src/Devices/BatterySimulator -- --standalone --speed 3600 --start "2026-01-15 06:00" --duration 24   # ohne Master
+```
+
+Tasten: Leertaste Pause (nur standalone, sonst Master), `<` / `>` Tempo ÷2 / ×2 (nur standalone), `M`, `↑`/`↓`, `0`, `E`, `N`, `H`, `R`, `Q` wie in LB01.
+**`S` öffnet die Einstellungen** unter der Anzeige (löst das Pausenmenü ab): 1 Sollwert, 2 max. Ladeleistung, 3 max. Entladeleistung, 4 SOC-Min, 5 SOC-Max.
+Die Zeit läuft währenddessen weiter, die Modbus-Register auch. Tempo und Schrittweite lassen sich nicht mehr im Programm ändern (Tempo: Master, Schritt: `--step`).
+Die Anzeige hat neue Zeilen „Zeitquelle“, „Modbus“ und „Meldung“. Bei umgeleiteter Ausgabe erscheint alle 5 s eine Statuszeile.
+
+### Modbus-Registerplan
+
+Holding Registers (Funktionscode 03 lesen, 06/16 schreiben). Standard: Host `127.0.0.1`, Port `1502`, Unit-ID `1` – alle drei sind konfigurierbar.
+Adressen sind Protokolladressen (0-basiert, Referenzadresse = 40001 + Adresse). Pro Register Big-Endian;
+mehrteilige Werte (`UInt32`, `Float32`) belegen zwei Register, das höherwertige Wort steht zuerst (Float32 = IEEE 754, Byte-Folge ABCD).
+Mehrteilige Werte müssen mit **einem** Schreibzugriff (FC16) auf beide Register geschrieben werden.
+
+| Adresse | Ref. | Name | Typ | Regs | Einheit | Zugriff | Schreibbereich | Bedeutung / Fehlerverhalten |
+|---|---|---|---|---|---|---|---|---|
+| 0 | 40001 | Gerätetyp | UInt16 | 1 |  | lesen | – | 1 PV, 2 Batterie, 3 Charger, 4 Wind |
+| 1 | 40002 | Geräte-Nummer | UInt16 | 1 |  | lesen | – | Zahl am Ende der Geräte-ID (DC-02 → 2), 0 wenn keine |
+| 2 | 40003 | Betriebszustand | UInt16 | 1 |  | lesen | – | 0 Aus, 1 Bereit/Leerlauf, 2 Betrieb, 3 Störung |
+| 3 | 40004 | Fehlercode | UInt16 | 1 |  | lesen | – | 0 = kein Fehler, sonst gerätespezifisch (siehe Registerplan des Geräts) |
+| 4–5 | 40005 | Wirkleistung | Float32 | 2 | kW | lesen | – | Aktuelle Wirkleistung; positiv = Aufnahme, negativ = Abgabe |
+| 6–7 | 40007 | Kumulierte Energie | Float32 | 2 | kWh | lesen | – | Energiezähler seit Programmstart (Bedeutung je Gerät im Registerplan) |
+| 8–9 | 40009 | Modellzeit | UInt32 | 2 | s | lesen | – | Virtuelle Zeit des dargestellten Zustands, Sekunden seit 1970-01-01 00:00 (ohne Zeitzone); 0 = noch keine Zeit |
+| 10 | 40011 | Lauf | UInt16 | 1 |  | lesen | – | Lauf-Nummer; ändert sich bei jedem Neustart im Master (Modellzeit springt dann) |
+| 11 | 40012 | Sequenznummer | UInt16 | 1 |  | lesen | – | Zählt bei jeder neuen Modellzeit hoch (Überlauf bei 65535); gleiche Nummer = gleicher Zustand |
+| 12 | 40013 | Zeitstatus | UInt16 | 1 |  | lesen | – | 0 keine Zeit, 1 synchron mit Master, 2 Standalone, 3 Master verloren (Zeit steht) |
+| 13 | 40014 | Simulation läuft | UInt16 | 1 |  | lesen | – | 1 = virtuelle Zeit läuft, 0 = pausiert oder keine Zeit; bei Pause zeigen die Register den letzten Zustand |
+| 14–15 | 40015 | Tempo | Float32 | 2 | x | lesen | – | Simulationsgeschwindigkeit gegenüber Echtzeit |
+| 16 | 40017 | Ein/Aus | UInt16 | 1 |  | lesen/schreiben | 0 … 1 | Lesen: 1 = Gerät ein. Schreiben: 0 aus, 1 ein |
+| 17 | 40018 | Fehler zurücksetzen | UInt16 | 1 |  | lesen/schreiben | 1 … 1 | Schreiben von 1 setzt Störungen zurück, sofern das Gerät es zulässt; liest immer 0 |
+| 18 | 40019 | Letzter Schreibfehler | UInt16 | 1 |  | lesen | – | 0 = letzter Schreibzugriff angenommen, 1 nicht beschreibbar, 2 ungültiger Wert, 3 Wert unvollständig geschrieben |
+| 19 | 40020 | Adresse des letzten Schreibzugriffs | UInt16 | 1 |  | lesen | – | Erste Adresse des letzten Schreibzugriffs (bei Fehler: die fehlerhafte Adresse) |
+| 20–21 | 40021 | Leistungssollwert | Float32 | 2 | kW | lesen/schreiben | -1000 … 1000 | Sollwert der Leistung: positiv laden, negativ entladen. Gültig von −max. Entladeleistung bis +max. Ladeleistung (Register 37 und 35, Standard ±5 kW), sonst abgelehnt (Letzter Schreibfehler = 2). Ein Schreibzugriff schaltet in den Betriebsmodus Manuell |
+| 22 | 40023 | Betriebsmodus | UInt16 | 1 |  | lesen/schreiben | 0 … 1 | 0 Auto (Tagesprofil bestimmt den Sollwert), 1 Manuell (Sollwert aus Register 20) |
+| 23–24 | 40024 | Ladezustand (SOC) | Float32 | 2 | % | lesen | – | Ladezustand, zwischen SOC-Min und SOC-Max begrenzt |
+| 25–26 | 40026 | Temperatur | Float32 | 2 | °C | lesen | – | Derating ab 45 °C, Abschaltung bei 60 °C (Fehlercode 2), Freigabe ≤ 50 °C |
+| 27–28 | 40028 | Geladene Energie | Float32 | 2 | kWh | lesen | – | Seit Programmstart (entspricht der Energie im Kopf) |
+| 29–30 | 40030 | Entladene Energie | Float32 | 2 | kWh | lesen | – | Seit Programmstart |
+| 31–32 | 40032 | Vollzyklen | Float32 | 2 |  | lesen | – | Äquivalente Vollzyklen |
+| 33–34 | 40034 | Kapazität | Float32 | 2 | kWh | lesen | – | Konfigurierte Kapazität |
+| 35–36 | 40036 | Max. Ladeleistung | Float32 | 2 | kW | lesen | – | Konfiguriert (--max-charge) |
+| 37–38 | 40038 | Max. Entladeleistung | Float32 | 2 | kW | lesen | – | Konfiguriert (--max-discharge) |
+| 39–40 | 40040 | SOC-Minimum | Float32 | 2 | % | lesen | – | Konfiguriert (--soc-min) |
+| 41–42 | 40042 | SOC-Maximum | Float32 | 2 | % | lesen | – | Konfiguriert (--soc-max) |
+| 43 | 40044 | Gerätezustand | UInt16 | 1 |  | lesen | – | 0 aus, 1 Bereitschaft, 2 lädt, 3 entlädt, 4 Störung, 5 Abkühlung (Fehlercode im Kopf: 0 keiner, 1 Not-Aus, 2 Überhitzung, 3 Abkühlung nach Überhitzung) |
+
+Besonderheiten des Batteriespeichers:
+- **Leistung:** positiv = Laden (Aufnahme), negativ = Entladen (Abgabe). **Energie** im Kopf = geladene Energie, die entladene steht in Register 29–30.
+- **Betriebszustand:** Aus, Bereitschaft, Betrieb (lädt/entlädt), Störung (Fault und Abkühlung).
+- **Fehlercode:** 0 keiner, 1 Not-Aus, 2 Überhitzung, 3 Abkühlung nach Überhitzung (keine aktive Störung, Gerät sperrt bis ≤ 50 °C).
+- **Sollwert (20–21):** gültig von −max. Entladeleistung bis +max. Ladeleistung (konfiguriert, Registerplan nennt nur die absolute Grenze ±1000 kW);
+  alles außerhalb wird abgelehnt (Register 18 = 2), kein stilles Begrenzen. Ein Schreibzugriff schaltet in den Modus **Manuell**
+  (im Auto-Modus würde das Tagesprofil den Wert sofort wieder überschreiben). Zurück in Auto: Register 22 = 0.
+- **Ein/Aus (16):** wie Taste `E`; Aus setzt den Sollwert auf 0. **Fehler zurücksetzen (17):** wie Taste `R`.
+- Fehlerverhalten bei Schreibzugriffen: siehe `src/Devices/DualPortCharger/README.md`, Abschnitt „Fehlerverhalten bei Schreibzugriffen“.
+
+### CSV
+`docs/data/battery_<ID>_<Datum>_<Uhrzeit>.csv`, neue Spalte `Lauf` am Ende, `SimTime` jetzt mit Datum (`yyyy-MM-dd HH:mm:ss`). Beim Start und bei jedem
+Neustart im Master wird zusätzlich eine Zeile geschrieben.
 
 ### Schnittstellen
-_offen_
+- **Benötigt:** Simulations-Master (TCP, `127.0.0.1:5100`).
+- **Angeboten:** Modbus-TCP-Server (siehe Registerplan), CSV. Prüfen mit `src/ModbusDiagnosticClient`.
 
 ### Tests
-_offen_
+- `tests/FieldDevices.Tests`: Modbus-Anbindung (Kopf, Vorzeichen, Sollwert innerhalb/außerhalb der konfigurierten Leistung, Modus, Störung, Reset, Ein/Aus),
+  Optionen und Prüfungen, `Update(TimeSpan)`, wiederholbares Tagesprofil mit Seed.
+- Probelauf 2026-10-25 mit Master (x600): synchron, Sollwert −2,5 kW per Diagnose-Client angenommen, 9 kW abgelehnt, Zurück auf Auto.
 
 ### Bekannte Probleme
-_offen_
+- Ein Neustart im Master behält den Zustand (SOC, Temperatur, Zähler).
+- Die interaktive Anzeige, die Tasten und das Einstellungsmenü sind nur mit umgeleiteter Ausgabe geprüft, noch nicht in einem echten Terminalfenster.
+- Die Beispiel-CSV aus LB01 hat noch das alte Format (`SimTime` als Zeitdauer, ohne `Lauf`).

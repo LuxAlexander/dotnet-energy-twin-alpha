@@ -10,13 +10,15 @@ namespace Batterie_Sim
     {
         private readonly BatterieConfig _config;
 
-        private readonly Random random = new Random();
+        private readonly Random random;
         private double noiseFactor = 1.0;
         private int lastWindow = -1;
 
-        public DailyProfile(BatterieConfig config)
+        /// <param name="random">Zufallsquelle für das Rauschen; mit festem Seed wiederholbar.</param>
+        public DailyProfile(BatterieConfig config, Random? random = null)
         {
             _config = config;
+            this.random = random ?? new Random();
         }
 
         public double GetSetpoint(TimeSpan timeOfDay)

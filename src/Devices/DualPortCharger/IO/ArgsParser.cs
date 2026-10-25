@@ -1,5 +1,6 @@
 using System.Globalization;
 using Devices.Common;
+using Devices.Common.Modbus;
 using DualChargerSim.Models;
 using DualChargerSim.Simulation;
 
@@ -24,9 +25,13 @@ public static class ArgsParser
         {TimeSyncOptions.Usage}
           --duration <h>        Nur standalone: Simulationsdauer in Stunden (Standard: endlos)
 
+        Modbus-TCP-Server (jede Säule braucht einen eigenen Port):
+        {ModbusOptions.Usage}
+
         Beispiele:
           dotnet run --project src/Devices/DualPortCharger -- --id DC-01 --power 150 --step 1 --seed 42
           dotnet run --project src/Devices/DualPortCharger -- --standalone --speed 300 --duration 24 --seed 42
+          dotnet run --project src/Devices/DualPortCharger -- --id DC-02 --modbus-port 1503
         """;
 
     public static bool IsHelpRequested(string[] args) =>
@@ -43,12 +48,19 @@ public static class ArgsParser
         int? seed = null;
         string output = defaults.OutputDirectory;
         var timeSync = defaults.TimeSync;
+        var modbus = defaults.Modbus;
 
         for (int i = 0; i < args.Length; i++)
         {
             string name = args[i].ToLowerInvariant();
             int index = i;
             if (TimeSyncOptions.TryApply(name, () => NextValue(args, ref index, name), timeSync, out timeSync))
+            {
+                i = index;
+                continue;
+            }
+
+            if (ModbusOptions.TryApply(name, () => NextValue(args, ref index, name), modbus, out modbus))
             {
                 i = index;
                 continue;
@@ -102,6 +114,7 @@ public static class ArgsParser
             Seed = seed,
             OutputDirectory = output,
             TimeSync = timeSync,
+            Modbus = modbus,
         };
     }
 

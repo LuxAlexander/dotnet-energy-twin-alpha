@@ -71,6 +71,14 @@ public sealed class PvFaultModel
 
     public void CleanModules() => SoilingLossPercent = 0.0;
 
+    /// <summary>Hebt alle von Hand ausgelösten Störungen auf (Inverter, erzwungene Überhitzung, Netzstörung).</summary>
+    public void ResetFaults()
+    {
+        InverterFault = false;
+        OverheatForced = false;
+        GridDisturbanceForced = false;
+    }
+
     public void Step(double irradiation, DateTime now, Season season, double hour, double elapsedSimHours)
     {
         StepTemperature(irradiation, now, season, hour, elapsedSimHours);

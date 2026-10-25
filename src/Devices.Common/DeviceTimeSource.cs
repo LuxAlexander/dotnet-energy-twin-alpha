@@ -120,6 +120,18 @@ public sealed class DeviceTimeSource
         return $"Tempo auf x{Speed(speed)} gesetzt (lokale Uhr).";
     }
 
+    /// <summary>Tempo auf einen festen Wert, begrenzt auf 1–100 000; nur standalone.</summary>
+    /// <returns>Meldung für die Anzeige.</returns>
+    public string SetSpeed(double speed)
+    {
+        if (_local is null)
+            return "Pause und Tempo steuert der Simulations-Master.";
+
+        speed = Math.Clamp(speed, MasterClock.MinSpeed, MasterClock.MaxSpeed);
+        _local.SetSpeed(speed);
+        return $"Tempo auf x{Speed(speed)} gesetzt (lokale Uhr).";
+    }
+
     private static string ModeText(SimMode mode) => mode == SimMode.Running ? "LÄUFT" : "PAUSIERT";
 
     private static string Speed(double speed) => speed.ToString("0.##", Culture);

@@ -8,6 +8,10 @@ public sealed class PvSystem : IDevice
     private readonly PvFaultModel _faults;
 
     public string Name => "PV-Anlage";
+    public double PeakPowerKw => _peakPowerKw;
+
+    /// <summary>Wirkleistungsbegrenzung in % der Nennleistung (Einspeisemanagement, per Modbus einstellbar).</summary>
+    public double PowerLimitPercent { get; set; } = 100.0;
     public bool IsEnabled { get; set; } = true;
     public WeatherCondition Weather { get; private set; } = WeatherCondition.Sunny;
 
@@ -57,7 +61,7 @@ public sealed class PvSystem : IDevice
         // ganz abschalten, nur stark begrenzen – realitaetsnah fuer eine PV-Anlage.
         double degradation = Math.Max(0.10, 1.0 - _faults.TotalLossPercent / 100.0);
 
-        PowerKw = Math.Round(_peakPowerKw * yieldFactor * degradation, 2);
+        PowerKw = Math.Round(Math.Min(_peakPowerKw * yieldFactor * degradation, _peakPowerKw * PowerLimitPercent / 100.0), 2);
 
         double produced = PowerKw * elapsedSimHours;
         DailyEnergyKwh = Math.Round(DailyEnergyKwh + produced, 4);

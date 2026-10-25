@@ -54,6 +54,11 @@ dotnet run --project src/Devices/DualPortCharger -- --help
 | `--start <zeit>` | nur standalone: Startzeit `yyyy-MM-dd HH:mm` | heute 00:00 | |
 | `--speed <faktor>` | nur standalone: Tempo gegenüber Echtzeit | `120` | 1–100 000 |
 | `--duration <h>` | nur standalone: Simulationsdauer in Stunden | endlos | > 0 (Warnung bei < 24) |
+| `--modbus-port <port>` | Port des Modbus-TCP-Servers (jede Säule braucht einen eigenen) | `1502` | 1024–65535 |
+| `--modbus-bind <ip>` | Adresse, auf der der Server lauscht | `127.0.0.1` | IP-Adresse (`0.0.0.0` = alle) |
+| `--unit-id <n>` | Modbus-Unit-ID | `1` | 1–247 |
+| `--no-modbus` | Modbus-Server nicht starten | aus | |
+| `--register-plan` | Registerplan als Markdown ausgeben und beenden | | |
 
 Ungültige Werte oder unbekannte Argumente führen zu einer Fehlermeldung mit Hilfetext (Exit-Code 1).
 `--start`, `--speed` und `--duration` ohne `--standalone` sind ein Fehler: Mit Master bestimmt der Master Zeit und Tempo.
@@ -75,7 +80,7 @@ dotnet run --project src/Devices/DualPortCharger
 # Feiner Verlauf, reproduzierbar, Master auf einem anderen Rechner
 dotnet run --project src/Devices/DualPortCharger -- --id DC-01 --power 150 --step 1 --seed 42 --master 192.168.1.20:5100
 
-# Zweite Säule am selben Master (andere ID)
+# Zweite Säule am selben Master (andere ID, anderer Modbus-Port)
 dotnet run --project src/Devices/DualPortCharger -- --id DC-02 --power 100 --step 15
 
 # Standalone wie in LB01: 24 h in 4,8 min, reproduzierbar
@@ -300,7 +305,7 @@ src/Devices/DualPortCharger/
 ├── DualPortCharger.csproj            Projekt (Einstellungen aus src/Directory.Build.props)
 ├── Program.cs                        Einstieg
 ├── Models/                           Vehicle, VehicleCatalog, ChargingPoint, ChargingPointState, DualCharger
-├── Simulation/                       SimulationEngine, AutoModeController, SimulationConfig
+├── Simulation/                       SimulationEngine, AutoModeController, SimulationConfig, ChargerModbus
 ├── IO/                               ConsoleRenderer, InputHandler, CsvLogger, ArgsParser
 └── Properties/launchSettings.json    Startprofile „Master“ und „Standalone“ für Rider/Visual Studio
 
@@ -314,9 +319,94 @@ docs/                                 zentral im Repository
 
 ---
 
+## Modbus-Server und Registerplan
+
+Jede Säule hostet einen eigenen Modbus-TCP-Server (EasyModbusTCP.NETCore, Baustein `Devices.Common.Modbus`, Anbindung in
+`Simulation/ChargerModbus.cs`, Registerdefinition in `src/Modbus.Contracts/ChargerRegisters.cs`). Er startet mit dem Programm, läuft parallel zur Simulation und bleibt bei **Pause** und bei
+verlorenem Master erreichbar; die Register zeigen dann den zuletzt berechneten Zustand (Register „Simulation läuft“ = 0).
+Zwei Säulen auf einem Rechner brauchen verschiedene Ports (`--id DC-02 --modbus-port 1503`). Ist der Port belegt, endet das
+Programm sofort mit einer Fehlermeldung.
+
+### Registerplan
+
+Holding Registers (Funktionscode 03 lesen, 06/16 schreiben). Standard: Host `127.0.0.1`, Port `1502`, Unit-ID `1` – alle drei sind konfigurierbar.
+Adressen sind Protokolladressen (0-basiert, Referenzadresse = 40001 + Adresse). Pro Register Big-Endian;
+mehrteilige Werte (`UInt32`, `Float32`) belegen zwei Register, das höherwertige Wort steht zuerst (Float32 = IEEE 754, Byte-Folge ABCD).
+Mehrteilige Werte müssen mit **einem** Schreibzugriff (FC16) auf beide Register geschrieben werden.
+
+| Adresse | Ref. | Name | Typ | Regs | Einheit | Zugriff | Schreibbereich | Bedeutung / Fehlerverhalten |
+|---|---|---|---|---|---|---|---|---|
+| 0 | 40001 | Gerätetyp | UInt16 | 1 |  | lesen | – | 1 PV, 2 Batterie, 3 Charger, 4 Wind |
+| 1 | 40002 | Geräte-Nummer | UInt16 | 1 |  | lesen | – | Zahl am Ende der Geräte-ID (DC-02 → 2), 0 wenn keine |
+| 2 | 40003 | Betriebszustand | UInt16 | 1 |  | lesen | – | 0 Aus, 1 Bereit/Leerlauf, 2 Betrieb, 3 Störung |
+| 3 | 40004 | Fehlercode | UInt16 | 1 |  | lesen | – | 0 = kein Fehler, sonst gerätespezifisch (siehe Registerplan des Geräts) |
+| 4–5 | 40005 | Wirkleistung | Float32 | 2 | kW | lesen | – | Aktuelle Wirkleistung; positiv = Aufnahme, negativ = Abgabe |
+| 6–7 | 40007 | Kumulierte Energie | Float32 | 2 | kWh | lesen | – | Energiezähler seit Programmstart (Bedeutung je Gerät im Registerplan) |
+| 8–9 | 40009 | Modellzeit | UInt32 | 2 | s | lesen | – | Virtuelle Zeit des dargestellten Zustands, Sekunden seit 1970-01-01 00:00 (ohne Zeitzone); 0 = noch keine Zeit |
+| 10 | 40011 | Lauf | UInt16 | 1 |  | lesen | – | Lauf-Nummer; ändert sich bei jedem Neustart im Master (Modellzeit springt dann) |
+| 11 | 40012 | Sequenznummer | UInt16 | 1 |  | lesen | – | Zählt bei jeder neuen Modellzeit hoch (Überlauf bei 65535); gleiche Nummer = gleicher Zustand |
+| 12 | 40013 | Zeitstatus | UInt16 | 1 |  | lesen | – | 0 keine Zeit, 1 synchron mit Master, 2 Standalone, 3 Master verloren (Zeit steht) |
+| 13 | 40014 | Simulation läuft | UInt16 | 1 |  | lesen | – | 1 = virtuelle Zeit läuft, 0 = pausiert oder keine Zeit; bei Pause zeigen die Register den letzten Zustand |
+| 14–15 | 40015 | Tempo | Float32 | 2 | x | lesen | – | Simulationsgeschwindigkeit gegenüber Echtzeit |
+| 16 | 40017 | Ein/Aus | UInt16 | 1 |  | lesen/schreiben | 0 … 1 | Lesen: 1 = Gerät ein. Schreiben: 0 aus, 1 ein |
+| 17 | 40018 | Fehler zurücksetzen | UInt16 | 1 |  | lesen/schreiben | 1 … 1 | Schreiben von 1 setzt Störungen zurück, sofern das Gerät es zulässt; liest immer 0 |
+| 18 | 40019 | Letzter Schreibfehler | UInt16 | 1 |  | lesen | – | 0 = letzter Schreibzugriff angenommen, 1 nicht beschreibbar, 2 ungültiger Wert, 3 Wert unvollständig geschrieben |
+| 19 | 40020 | Adresse des letzten Schreibzugriffs | UInt16 | 1 |  | lesen | – | Erste Adresse des letzten Schreibzugriffs (bei Fehler: die fehlerhafte Adresse) |
+| 20–21 | 40021 | Leistungsgrenze der Säule | Float32 | 2 | kW | lesen/schreiben | 50 … 350 | Gemeinsames Leistungsbudget beider Ladepunkte (Sollwert). Außerhalb 50–350 kW wird der Schreibzugriff abgelehnt (Letzter Schreibfehler = 2), der alte Wert bleibt |
+| 22 | 40023 | Punkt 1: Zustand | UInt16 | 1 |  | lesen | – | 0 frei, 1 angesteckt, 2 lädt, 3 fertig, 4 Störung |
+| 23–24 | 40024 | Punkt 1: Leistung | Float32 | 2 | kW | lesen | – | Mittlere Netzleistung des Punkts im letzten Schritt |
+| 25–26 | 40026 | Punkt 1: SOC | Float32 | 2 | % | lesen | – | Ladezustand des Fahrzeugs; 0 wenn kein Fahrzeug angesteckt |
+| 27–28 | 40028 | Punkt 1: Temperatur | Float32 | 2 | °C | lesen | – | Temperatur von Kabel und Stecker; Derating ab 60 °C, Störung ab 80 °C |
+| 29 | 40030 | Punkt 2: Zustand | UInt16 | 1 |  | lesen | – | 0 frei, 1 angesteckt, 2 lädt, 3 fertig, 4 Störung |
+| 30–31 | 40031 | Punkt 2: Leistung | Float32 | 2 | kW | lesen | – | Mittlere Netzleistung des Punkts im letzten Schritt |
+| 32–33 | 40033 | Punkt 2: SOC | Float32 | 2 | % | lesen | – | Ladezustand des Fahrzeugs; 0 wenn kein Fahrzeug angesteckt |
+| 34–35 | 40035 | Punkt 2: Temperatur | Float32 | 2 | °C | lesen | – | Temperatur von Kabel und Stecker; Derating ab 60 °C, Störung ab 80 °C |
+| 36 | 40037 | Warteschlange | UInt16 | 1 | Fahrzeuge | lesen | – | Wartende Fahrzeuge (max. 5 min) |
+| 37 | 40038 | Abgewiesene Fahrzeuge | UInt16 | 1 | Fahrzeuge | lesen | – | Seit Programmstart weggefahren, weil die Wartezeit abgelaufen ist (Sättigung bei 65535) |
+
+### Bedeutung für die Säule
+
+- **Betriebszustand:** Aus (Säule ausgeschaltet), Störung (mindestens ein Ladepunkt gestört), Betrieb (Leistung > 0), sonst Bereit.
+- **Fehlercode:** Bitmaske, Bit 0 = Ladepunkt 1 gestört, Bit 1 = Ladepunkt 2 gestört (3 = beide).
+- **Wirkleistung / Energie:** Summe der Netzleistung bzw. der abgegebenen Netzenergie beider Punkte (positiv, die Säule nimmt auf);
+  der Energiezähler zählt seit Programmstart und läuft bei einem Neustart im Master weiter.
+- **Modellzeit:** Zeit des zuletzt berechneten Schritts; die **Sequenznummer** wächst mit jeder neuen Modellzeit. Zwei Lesezugriffe
+  mit gleicher Sequenznummer und gleichem Lauf gehören zum selben Zustand; ändert sich die Nummer zwischen Anfang und Ende
+  eines Lesevorgangs, sollte der Client noch einmal lesen (es gibt keine atomare Lesegarantie über mehrere Register).
+- **Ein/Aus (16):** schaltet die Säule (wie Taste `O`); Aus stoppt die Ladung, Fahrzeuge bleiben angesteckt.
+- **Fehler zurücksetzen (17):** Schreiben von 1 setzt gestörte Punkte zurück, wenn sie unter 60 °C sind (wie Taste `R`).
+  Sonst keine Wirkung, die Meldung steht in der Konsole der Säule.
+- **Leistungsgrenze (20–21):** Sollwert, 50–350 kW. Er wird sofort übernommen und ist auch in der Pause wirksam.
+
+### Fehlerverhalten bei Schreibzugriffen
+
+Die Bibliothek EasyModbusTCP.NETCore übernimmt einen Schreibzugriff zuerst und meldet ihn erst danach an die Anwendung; das Modbus-Protokoll
+bietet dort keinen Weg, vorher mit einer Ausnahmeantwort abzulehnen (die Bibliothek darf laut Aufgabe nicht verändert werden).
+Die Säule geht deshalb so vor:
+
+1. Ungültige Zugriffe werden **sofort rückgängig gemacht**, das Register zeigt wieder den alten Wert. Der Zugriff gilt als Ganzes: Ist ein Teil ungültig, wird nichts übernommen.
+2. Ungültig sind: nur lesbare oder nicht belegte Adressen (Letzter Schreibfehler = 1), Werte außerhalb des Bereichs, `NaN`/`∞` (= 2), und
+   ein Float, von dem nur ein Register geschrieben wird (= 3, Floats immer mit FC16 auf beide Register).
+3. Register 18 (Fehlerart) und 19 (Adresse) halten das Ergebnis des **letzten** Schreibzugriffs fest (0 = angenommen); die Konsole zeigt eine Meldung.
+   Der Diagnose-Client prüft diese Register nach jedem Schreiben.
+
+### Prüfen mit dem Diagnose-Client
+
+```
+dotnet run --project src/Devices/DualPortCharger -- --standalone --speed 600 --modbus-port 1502
+```
+In einem zweiten Terminal:
+```
+dotnet run --project src/ModbusDiagnosticClient -- --port 1502
+```
+(Befehle `read`, `write Leistungsgrenze 200`, `force 20 999` – siehe `src/ModbusDiagnosticClient/README.md`.) Ein beliebiger anderer Modbus-Client geht auch
+(Holding Registers ab Adresse 0, Anzahl 38). Den Registerplan als Markdown erzeugt `--register-plan`.
+
+---
+
 ## LB02 – Umbau zum Feldgerät im Gesamtsystem
 
-**Zweck:** Dual-Port-DC-Ladesäule als Feldgerät, das der gemeinsamen virtuellen Zeit folgt (später mit Modbus-Server).
+**Zweck:** Dual-Port-DC-Ladesäule als Feldgerät, das der gemeinsamen virtuellen Zeit folgt (mit Modbus-Server).
 **Verantwortlich:** Susanne Lastowicka (Gerät aus LB01; im Team noch zu bestätigen)
 **Basis aus LB01:** Susi DualCharger, ChargingPoint, Vehicle, VehicleCatalog, AutoModeController
 
@@ -327,14 +417,15 @@ docs/                                 zentral im Repository
 | Zeit vom Simulations-Master (`SyncedClock`, `TimeSyncClient`) | ✅ |
 | Standalone-Betrieb mit lokaler Uhr (`--standalone`) | ✅ |
 | async Schleife, CSV, Tastatur (kein `Thread.Sleep`, kein `ReadLine`) | ✅ |
-| Modbus-Server, Registerplan | offen (nach dem gemeinsamen Registerkopf) |
+| Modbus-Server, Registerplan (Kopf 0–19, Säule 20–38; Server bleibt in der Pause erreichbar) | ✅ (2026-10-25) |
 | Umgebungstemperatur aus dem Wetter | offen |
 
 ### Schnittstellen
 - **Benötigt:** Simulations-Master (TCP, Standard `127.0.0.1:5100`, Protokoll in `src/SimCore.TimeSync/README.md`).
-- **Angeboten:** CSV-Datei; Modbus folgt.
+- **Angeboten:** CSV-Datei; Modbus-TCP-Server (Registerplan oben, Standardport 1502); Gegenstück: `src/ModbusDiagnosticClient`.
 
 ### Tests
+- Der Modbus-Baustein (Registerplan, Lesen, gültige und ungültige Schreibzugriffe, Pause) ist in `tests/Devices.Common.Tests` getestet.
 - Die Zeitanbindung ist in `tests/Devices.Common.Tests` getestet (Schrittsteuerung, Optionen, Zeitquelle mit echtem Master über TCP).
 - Probeläufe am 2026-10-25 (umgeleitete Ausgabe):
   - Standalone `--start "2026-01-15 00:00" --speed 100000 --duration 24 --seed 42`: endet von selbst mit Exit-Code 0,
@@ -343,6 +434,7 @@ docs/                                 zentral im Repository
     Master hart beendet ⇒ beide melden nach 3 s „MASTER NICHT ERREICHBAR – Zeit steht“.
 
 ### Bekannte Probleme
+- Modbus-Schreibfehler werden nicht mit einer Modbus-Ausnahmeantwort gemeldet, sondern über Register 18/19 (Grenze der Bibliothek, siehe oben).
 - Interaktive Anzeige und Tasten nach dem Umbau noch nicht in einem echten Terminalfenster getestet.
 - Ein Neustart im Master behält den Zustand der Säule (Fahrzeuge bleiben angesteckt); ob das gewünscht ist, im Team klären.
 - Die Screenshots stammen noch aus LB01.

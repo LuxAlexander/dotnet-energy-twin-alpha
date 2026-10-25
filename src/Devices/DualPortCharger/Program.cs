@@ -13,6 +13,13 @@ public static class Program
             return 0;
         }
 
+        if (args.Any(a => a.Equals("--register-plan", StringComparison.OrdinalIgnoreCase)))
+        {
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+            Console.Write(Modbus.Contracts.ChargerRegisters.Plan.ToMarkdown());
+            return 0;
+        }
+
         SimulationEngine engine;
         try
         {
@@ -39,7 +46,7 @@ public static class Program
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            Console.Error.WriteLine($"Fehler beim Schreiben der CSV-Datei: {ex.Message}");
+            Console.Error.WriteLine($"Fehler (Modbus-Port oder CSV-Datei): {ex.Message}");
             return 1;
         }
     }

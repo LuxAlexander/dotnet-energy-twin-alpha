@@ -56,6 +56,8 @@ namespace Batterie_Sim
         {
             SetpointKW = kW;
         }
+        public void Update(TimeSpan dt) => Update(dt.TotalSeconds);
+
         public void Update(double dtSeconds)
         {
             double dthours = dtSeconds / 3600;
