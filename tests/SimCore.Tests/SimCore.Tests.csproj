@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../../src/SimCore.Time/SimCore.Time.csproj" />
+    <ProjectReference Include="../../src/SimCore.TimeSync/SimCore.TimeSync.csproj" />
   </ItemGroup>
 
   <ItemGroup>

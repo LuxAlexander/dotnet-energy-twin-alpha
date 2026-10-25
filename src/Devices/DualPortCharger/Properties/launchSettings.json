@@ -1,8 +1,13 @@
 {
   "profiles": {
-    "DualPortCharger": {
+    "DualPortCharger (Master)": {
       "commandName": "Project",
-      "commandLineArgs": "--id DC-01 --power 150 --step 1 --speed 300 --duration 24",
+      "commandLineArgs": "--id DC-01 --power 150 --step 1 --master 127.0.0.1:5100",
+      "workingDirectory": "$(ProjectDir)"
+    },
+    "DualPortCharger (Standalone)": {
+      "commandName": "Project",
+      "commandLineArgs": "--id DC-01 --power 150 --step 1 --standalone --speed 300 --duration 24",
       "workingDirectory": "$(ProjectDir)"
     }
   }

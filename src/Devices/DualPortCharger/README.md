@@ -2,7 +2,10 @@
 
 Konsolensimulator einer **öffentlichen DC-Schnellladesäule mit zwei Ladepunkten** und gemeinsamem Leistungsbudget (LB01, .NET Programmierung 2026).
 
-Fahrzeuge kommen an, stecken an, laden nach einer SOC-abhängigen Ladekurve und fahren wieder ab. Die Säule teilt ihre Leistung zwischen den beiden Punkten auf. Die Ladepunkte erwärmen sich und können überhitzen. Alles läuft beschleunigt über mindestens 24 h Simulationszeit und wird pro Schritt in eine CSV-Datei geschrieben.
+Fahrzeuge kommen an, stecken an, laden nach einer SOC-abhängigen Ladekurve und fahren wieder ab. Die Säule teilt ihre Leistung zwischen den beiden Punkten auf. Die Ladepunkte erwärmen sich und können überhitzen. Jeder Schritt wird in eine CSV-Datei geschrieben.
+
+**Seit LB02 (2026-10-25)** kommt die virtuelle Zeit vom **Simulations-Master** (`src/SimulationMaster`). Pause, Tempo und Neustart
+steuert der Master für alle Geräte gemeinsam. Ohne Master läuft der Charger mit `--standalone` auf einer lokalen Uhr (wie in LB01).
 
 ---
 
@@ -13,15 +16,22 @@ Fahrzeuge kommen an, stecken an, laden nach einer SOC-abhängigen Ladekurve und 
 - Empfohlen: Konsolenfenster mit mindestens **140 Zeichen** Breite, sonst werden die Zeilen abgeschnitten
 - Optional: Rider oder Visual Studio: `EnergyTwin.sln` öffnen, `DualPortCharger` als Startprojekt (Startprofil in `src/Devices/DualPortCharger/Properties/launchSettings.json`)
 - Teil der Solution `EnergyTwin.sln` im Repository-Hauptordner. Das Projekt verweist auf `src/Devices.Common`
-  (bringt EasyModbusTCP.NETCore mit, wird beim ersten Build aus NuGet geladen). Der LB01-Code nutzt das noch nicht.
+  (Zeitquelle, Schrittsteuerung, async Konsoleneingabe; bringt auch EasyModbusTCP.NETCore mit, das noch nicht genutzt wird).
 
 ## Start
 
-Aus dem Repository-Hauptordner:
+Aus dem Repository-Hauptordner, **zuerst den Master**, dann den Charger (eigenes Konsolenfenster):
 
 ```bash
-dotnet build src/Devices/DualPortCharger
-dotnet run --project src/Devices/DualPortCharger
+dotnet run --project src/SimulationMaster -- --speed 600      # Fenster 1: Master (startet pausiert, Leertaste = Start)
+dotnet run --project src/Devices/DualPortCharger              # Fenster 2: Charger, verbindet sich mit 127.0.0.1:5100
+```
+
+Startet der Charger vor dem Master, zeigt er „WARTE AUF MASTER“ und versucht es alle 2 s erneut.
+Ohne Master (z. B. zum Testen):
+
+```bash
+dotnet run --project src/Devices/DualPortCharger -- --standalone --speed 300 --duration 24
 ```
 
 Ohne Argumente gelten die Standardwerte (siehe unten). Die Hilfe zeigt `--help`:
@@ -37,14 +47,18 @@ dotnet run --project src/Devices/DualPortCharger -- --help
 | `--id <text>` | Geräte-ID (erscheint in Anzeige und CSV-Dateiname) | `DC-01` | nicht leer |
 | `--power <kW>` | Gesamtleistung der Säule | `150` | 50–350 |
 | `--step <min>` | Schrittweite = Detailgrad (Rechenintervall, eine CSV-Zeile pro Schritt) | `5` | > 0 |
-| `--speed <faktor>` | Tempo gegenüber Echtzeit | `120` | > 0 |
-| `--duration <h>` | Simulationsdauer in Stunden | `24` | > 0 (Warnung bei < 24) |
 | `--seed <zahl>` | Zufalls-Seed für wiederholbare Läufe | zufällig | ganze Zahl |
 | `--output <ordner>` | Zielordner der CSV (wird angelegt) | `docs/data` im Repo | gültiger Pfad |
+| `--master <host:port>` | Simulations-Master | `127.0.0.1:5100` | Port 1–65535 |
+| `--standalone` | ohne Master, lokale Uhr | aus | |
+| `--start <zeit>` | nur standalone: Startzeit `yyyy-MM-dd HH:mm` | heute 00:00 | |
+| `--speed <faktor>` | nur standalone: Tempo gegenüber Echtzeit | `120` | 1–100 000 |
+| `--duration <h>` | nur standalone: Simulationsdauer in Stunden | endlos | > 0 (Warnung bei < 24) |
 
 Ungültige Werte oder unbekannte Argumente führen zu einer Fehlermeldung mit Hilfetext (Exit-Code 1).
+`--start`, `--speed` und `--duration` ohne `--standalone` sind ein Fehler: Mit Master bestimmt der Master Zeit und Tempo.
 
-**Echtzeit pro Schritt = Schrittweite / Tempo.** Beispiele:
+**Echtzeit pro Schritt = Schrittweite / Tempo** (Tempo vom Master bzw. `--speed`). Beispiele:
 
 | Schrittweite | Tempo | Echtzeit pro Schritt | 24 h dauern |
 |---|---|---|---|
@@ -55,20 +69,21 @@ Ungültige Werte oder unbekannte Argumente führen zu einer Fehlermeldung mit Hi
 ### Beispielparameter
 
 ```bash
-# Standardlauf: 150 kW, 5-min-Schritte, 24 h in 12 min
+# Mit Master (Standard): 150 kW, 5-min-Schritte
 dotnet run --project src/Devices/DualPortCharger
 
-# Feiner Verlauf, reproduzierbar
-dotnet run --project src/Devices/DualPortCharger -- --id DC-01 --power 150 --step 1 --speed 300 --duration 24 --seed 42
+# Feiner Verlauf, reproduzierbar, Master auf einem anderen Rechner
+dotnet run --project src/Devices/DualPortCharger -- --id DC-01 --power 150 --step 1 --seed 42 --master 192.168.1.20:5100
 
-# Schwächere Säule (Lastmanagement), grobe Schritte, schnell
-dotnet run --project src/Devices/DualPortCharger -- --id DC-02 --power 100 --step 15 --speed 600
+# Zweite Säule am selben Master (andere ID)
+dotnet run --project src/Devices/DualPortCharger -- --id DC-02 --power 100 --step 15
 
-# Starke Säule: LKW kann mehr Leistung ziehen, Überhitzung möglich
-dotnet run --project src/Devices/DualPortCharger -- --id DC-03 --power 300 --step 5 --speed 120
+# Standalone wie in LB01: 24 h in 4,8 min, reproduzierbar
+dotnet run --project src/Devices/DualPortCharger -- --standalone --step 1 --speed 300 --duration 24 --seed 42
 ```
 
-Mehrere Instanzen mit verschiedenen `--id` können gleichzeitig laufen. Jede schreibt ihre eigene CSV.
+Mehrere Instanzen mit verschiedenen `--id` können gleichzeitig laufen. Jede schreibt ihre eigene CSV und erscheint
+einzeln in der Liste des Masters.
 
 ## Bedienung
 
@@ -76,7 +91,7 @@ Die Tasten wirken sofort, auch während die Simulation läuft:
 
 | Taste | Befehl |
 |---|---|
-| `P` | Pause an/aus (Simulationszeit steht, keine CSV-Zeilen) |
+| `P` | nur standalone: Pause an/aus (Simulationszeit steht, keine CSV-Zeilen). Mit Master: Pause im Master |
 | `A` | Auto-Modus an/aus |
 | `N` | Manueller Modus: zufälliges Fahrzeug kommt, steckt am freien Punkt an und lädt sofort; abstecken mit `D` |
 | `1` / `2` | Ladepunkt wählen (markiert mit `>`) |
@@ -86,19 +101,36 @@ Die Tasten wirken sofort, auch während die Simulation läuft:
 | `F` | Störung auslösen (Kühlungsdefekt) |
 | `R` | Störung zurücksetzen (erst unter 60 °C) |
 | `+` / `-` | Gesamtleistung ±10 kW (50–350 kW) |
-| `<` / `>` | Tempo halbieren / verdoppeln (1–100 000x), wirkt sofort |
+| `<` / `>` | nur standalone: Tempo halbieren / verdoppeln (1–100 000x). Mit Master: Tempo im Master |
 | `O` | Säule ein/aus |
 | `Q` | Beenden |
 
 Die Zeile **Meldung** zeigt das Ergebnis jedes Befehls, auch warum ein Befehl gerade nicht möglich ist (z. B. „Reset erst unter 60 °C möglich (aktuell 72 °C)“).
 
-Nach Ablauf der Dauer bleibt die letzte Anzeige stehen, bis man `Q` drückt. Danach wird der Pfad der CSV-Datei ausgegeben.
+Standalone mit `--duration`: Nach Ablauf bleibt die letzte Anzeige stehen, bis man `Q` drückt. Danach wird der Pfad der
+CSV-Datei ausgegeben. `Q` oder Strg+C beenden jederzeit geordnet (Abmeldung beim Master, CSV wird geschlossen).
+
+Die Eingaben beim Anstecken (`C`) werden ohne blockierendes Warten gelesen, `Esc` bricht ab. Während der Eingabe
+rechnet das Modell nicht weiter; die fälligen Schritte werden danach nachgeholt (die Zeit kommt ja vom Master).
+
+Die Zeile **Zeitquelle** zeigt den Zustand der Verbindung:
+
+| Anzeige | Bedeutung |
+|---|---|
+| `WARTE AUF MASTER host:port – <Fehler>` | noch keine Zeit; Wiederverbindung alle 2 s |
+| `Master host:port · synchron · LÄUFT · x600 · Lauf 1 · Abweichung ≤ 204 ms (RTT 0,7 ms)` | Normalbetrieb; Abweichung = größtmöglicher Fehler zum Master (RTT/2 · Tempo) |
+| `MASTER host:port NICHT ERREICHBAR – Zeit steht, Wiederverbindung läuft` | 3 s nichts vom Master; das Modell hält an |
+| `STANDALONE (lokale Uhr, ohne Master) · LÄUFT · x120` | `--standalone` |
+
+Ein **Neustart im Master** (neue Zeit, neuer Lauf) wird übernommen: Die Modellzeit springt auf die neue Zeit,
+der Zustand der Säule (Fahrzeuge, Temperaturen, Zähler) bleibt erhalten. Die Meldung zeigt „Neustart durch den Master“.
 
 ### Konsolenausgabe
 
 ```
 === Dual-Charger DC-01 | AUTO ===
-Simulationszeit: 2026-10-04 17:30   Schritt: 5 min   Tempo: 120x   Ende: 2026-10-05 00:00
+Simulationszeit: So. 2026-10-04 17:30   Lauf: 1   Schritt: 5 min
+Zeitquelle:      Master 127.0.0.1:5100 · synchron · LÄUFT · x120 · Lauf 1 · Abweichung ≤ 41 ms (RTT 0,7 ms)
 
 Säule: EIN   Limit: 150 kW   Abgewiesen: 3   Warteschlange: 0
 Leistung:   142,0 kW [█████████░]  95 %   Energie: 1 284,3 kWh
@@ -109,7 +141,7 @@ Leistung:   142,0 kW [█████████░]  95 %   Energie: 1 284,3 k
 Meldung: ...
 ```
 
-Screenshots aus einem echten Lauf:
+Screenshots aus einem echten Lauf (LB01, noch ohne Zeile „Zeitquelle“):
 
 | Auto-Modus | Manueller Modus |
 |---|---|
@@ -139,10 +171,11 @@ DualCharger
 | | `VehicleCatalog` | Fahrzeugmodelle, zufällige Fahrzeuge |
 | | `ChargingPoint` / `ChargingPointState` | Zustandsautomat, Energie, Temperatur je Ladepunkt |
 | | `DualCharger` | Leistungsbudget, Aufteilung, Warteschlange, Ein/Aus |
-| `Simulation` | `SimulationEngine` | Hauptschleife, Zeit, Pause, Echtzeit-Warten |
+| `Simulation` | `SimulationEngine` | async Hauptschleife: Zeit von `DeviceTimeSource`, feste Schritte über `StepScheduler`, Neustart, CSV |
 | | `AutoModeController` | Zufällige Ankünfte und Abfahrten |
 | | `SimulationConfig` | Startparameter |
-| `IO` | `ConsoleRenderer`, `InputHandler`, `CsvLogger`, `ArgsParser` | Anzeige, Tastatur, CSV, Kommandozeile |
+| `IO` | `ConsoleRenderer`, `InputHandler`, `CsvLogger`, `ArgsParser` | Anzeige, Tastatur, CSV, Kommandozeile (alle async) |
+| `Devices.Common` | `DeviceTimeSource`, `StepScheduler`, `TimeSyncOptions`, `AsyncConsole` | gemeinsame Zeitanbindung aller Geräte |
 
 `Program.cs` baut nur die Konfiguration und startet die Engine.
 
@@ -245,10 +278,11 @@ Die exakte Lösung statt eines Euler-Schritts bleibt bei jeder Schrittweite stab
 
 - **Datei:** `docs/data/<ID>_<yyyy-MM-dd_HHmmss>.csv` im Repository (anderer Ordner per `--output`), es wird nichts überschrieben
 - **Format:** Semikolon als Trenner, Dezimalkomma (de-AT), UTF-8 mit BOM. Das deutsche Excel öffnet die Datei direkt richtig.
-- **Eine Zeile pro Schritt** plus eine Startzeile. Während einer Pause entstehen keine Zeilen.
+- **Eine Zeile pro Schritt** plus eine Startzeile und eine Zeile bei jedem Neustart. Während einer Pause entstehen keine Zeilen.
+- **`Lauf`** (seit LB02): Simulationslauf des Masters; ändert sich bei jedem Neustart mit neuer Zeit (dann springt `Zeit`).
 
 ```
-Zeit;Modus;Saeule_Ein;Gesamtlimit_kW;Gesamtleistung_kW;Energie_kWh;Abgewiesen;Warteschlange;
+Zeit;Lauf;Modus;Saeule_Ein;Gesamtlimit_kW;Gesamtleistung_kW;Energie_kWh;Abgewiesen;Warteschlange;
 P1_Zustand;P1_Fahrzeug;P1_SOC;P1_Leistung_kW;P1_Temp_C;P1_Energie_kWh;
 P2_Zustand;P2_Fahrzeug;P2_SOC;P2_Leistung_kW;P2_Temp_C;P2_Energie_kWh
 ```
@@ -268,7 +302,7 @@ src/Devices/DualPortCharger/
 ├── Models/                           Vehicle, VehicleCatalog, ChargingPoint, ChargingPointState, DualCharger
 ├── Simulation/                       SimulationEngine, AutoModeController, SimulationConfig
 ├── IO/                               ConsoleRenderer, InputHandler, CsvLogger, ArgsParser
-└── Properties/launchSettings.json    Startprofil für Rider/Visual Studio
+└── Properties/launchSettings.json    Startprofile „Master“ und „Standalone“ für Rider/Visual Studio
 
 docs/                                 zentral im Repository
 ├── data/                             CSV-Ausgaben (<ID>_<Zeitstempel>.csv)
@@ -280,25 +314,35 @@ docs/                                 zentral im Repository
 
 ---
 
-## LB02 – Umbau zum Modbus-Feldgerät (Gerüst)
+## LB02 – Umbau zum Feldgerät im Gesamtsystem
 
-> Gerüst – wird mit der Umsetzung gefüllt (LB02-Pflichtinhalte siehe `AGENTS.md` §2).
-
-**Zweck:** Dual-Port-DC-Ladesäule als Modbus-Feldgerät.
-**Verantwortlich:** _offen_
+**Zweck:** Dual-Port-DC-Ladesäule als Feldgerät, das der gemeinsamen virtuellen Zeit folgt (später mit Modbus-Server).
+**Verantwortlich:** Susanne Lastowicka (Gerät aus LB01; im Team noch zu bestätigen)
 **Basis aus LB01:** Susi DualCharger, ChargingPoint, Vehicle, VehicleCatalog, AutoModeController
 
-### Konfiguration
-_offen_
+### Stand (2026-10-25)
 
-### Bedienung / Start
-_offen_
+| Schritt | Stand |
+|---|---|
+| Zeit vom Simulations-Master (`SyncedClock`, `TimeSyncClient`) | ✅ |
+| Standalone-Betrieb mit lokaler Uhr (`--standalone`) | ✅ |
+| async Schleife, CSV, Tastatur (kein `Thread.Sleep`, kein `ReadLine`) | ✅ |
+| Modbus-Server, Registerplan | offen (nach dem gemeinsamen Registerkopf) |
+| Umgebungstemperatur aus dem Wetter | offen |
 
 ### Schnittstellen
-_offen_
+- **Benötigt:** Simulations-Master (TCP, Standard `127.0.0.1:5100`, Protokoll in `src/SimCore.TimeSync/README.md`).
+- **Angeboten:** CSV-Datei; Modbus folgt.
 
 ### Tests
-_offen_
+- Die Zeitanbindung ist in `tests/Devices.Common.Tests` getestet (Schrittsteuerung, Optionen, Zeitquelle mit echtem Master über TCP).
+- Probeläufe am 2026-10-25 (umgeleitete Ausgabe):
+  - Standalone `--start "2026-01-15 00:00" --speed 100000 --duration 24 --seed 42`: endet von selbst mit Exit-Code 0,
+    CSV mit 290 Zeilen von 2026-01-15 00:00 bis 2026-01-16 00:00.
+  - Master (x600) + DC-01 (5 min) + DC-02 (1 min): beide „synchron“, Abweichung ≤ 0,2 s (Toleranz 6 s), Master listet beide.
+    Master hart beendet ⇒ beide melden nach 3 s „MASTER NICHT ERREICHBAR – Zeit steht“.
 
 ### Bekannte Probleme
-_offen_
+- Interaktive Anzeige und Tasten nach dem Umbau noch nicht in einem echten Terminalfenster getestet.
+- Ein Neustart im Master behält den Zustand der Säule (Fahrzeuge bleiben angesteckt); ob das gewünscht ist, im Team klären.
+- Die Screenshots stammen noch aus LB01.

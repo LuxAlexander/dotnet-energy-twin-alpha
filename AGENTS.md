@@ -1,6 +1,8 @@
 # AGENTS.md – dotnet-energy-twin-alpha
 
-**Stand:** 2026-10-13 · **Phase:** LB01 abgeschlossen (3 Einzelsimulatoren), LB02-Projektstruktur angelegt (`EnergyTwin.sln`, `src/`, `tests/`), noch kein LB02-Code
+**Stand:** 2026-10-25 · **Phase:** LB01 abgeschlossen (3 Einzelsimulatoren), LB02-Projektstruktur angelegt (`EnergyTwin.sln`, `src/`, `tests/`),
+Zeitlogik + TCP-Zeitverteilung umgesetzt (`SimCore.*`, 54 Tests), `SimulationMaster` lauffähig, Zeitanbindung der Geräte in
+`Devices.Common` (24 Tests), **Charger an den Master angebunden**; PV/Batterie/Wind, Wetter, Modbus und Diagnose-Client noch offen
 
 Pflichtlektüre für jeden Agenten in diesem Repo. Sie fasst die drei LB01-Projekte und den LB02-Plan
 zusammen, damit nicht alles neu analysiert werden muss. Details:
@@ -84,10 +86,11 @@ ungültiger oder unerlaubter Schreibwert → abgelehnt mit Fehler · Beenden dur
 
 ## 3. LB02 – Architektur (Entscheidungen aus `AGENTS1.md`)
 
-- **Bibliotheken (ohne Zyklen):** `SimCore.Contracts` (Interfaces + DTOs: `ITimeProvider`, `IWeatherService`, `WeatherData`,
-  `TimeState`, `DeviceConfig`; **keine** Abhängigkeiten) ← `SimCore.Time` (virtuelle Zeit, `TimeControlCmd`) ←
+- **Bibliotheken (ohne Zyklen):** `SimCore.Contracts` (Interfaces + DTOs: `ISimClock` (statt des geplanten `ITimeProvider`), `IWeatherService`, `WeatherData`,
+  `TimeState`, `DeviceConfig`; **keine** Abhängigkeiten) ← `SimCore.Time` (virtuelle Zeit) ← `SimCore.TimeSync` (TCP-Zeitverteilung) ←
   `Modbus.Contracts` (Registeradressen, `RegisterMap`, `DeviceId`, `RegisterPlan`) ← `Devices.*` (+ EasyModbusTCP.NETCore).
 - **Zeitverteilung:** Master = TCP-Server, Geräte = TCP-Clients; Master pusht `TimeState` bei Änderung + Heartbeat.
+  Verfahren (Gerade + Vorlaufzeit + Uhrenabgleich) siehe „Entscheidung 2026-10-25“ unten.
   Nicht erreichbare Geräte werden als offline markiert, die anderen laufen weiter.
 - **Wetter:** reine Funktion von (Ort, virtuelles Datum/Stunde), Seed aus Tagesindex + Ort (Muster: Alex' `DailyOffsetC`).
   Antwort `WeatherData { IrradiationWm2, SunHeight, CloudCover, TemperatureC, WindSpeedMs, Condition }`.
@@ -123,11 +126,12 @@ src/Directory.Build.props          net10.0, Nullable, ImplicitUsings, TreatWarni
 tests/Directory.Build.props        importiert src/…, IsPackable=false
 src/
   SimCore.Contracts/       lib   keine Abhängigkeiten
-  SimCore.Time/            lib   → Contracts
+  SimCore.Time/            lib   → Contracts                (Zeitlogik, kein Netzwerk)
+  SimCore.TimeSync/        lib   → Contracts, Time          (TCP: TimeSyncServer/TimeSyncClient, seit 2026-10-25)
   Modbus.Contracts/        lib   → Contracts
   Shared.Config/           lib   → Contracts                (in AGENTS1.md: Shared/DeviceConfig); enthält OutputPaths
-  Devices.Common/          lib   → Contracts, Time, Modbus.Contracts, Shared.Config + EasyModbusTCP.NETCore
-  SimulationMaster/        exe   → Contracts, Time, Shared.Config
+  Devices.Common/          lib   → Contracts, Time, TimeSync, Modbus.Contracts, Shared.Config + EasyModbusTCP.NETCore
+  SimulationMaster/        exe   → Contracts, Time, TimeSync, Shared.Config   (lauffähig seit 2026-10-25)
   WeatherSimulator/        exe   → Contracts, Shared.Config
   ModbusDiagnosticClient/  exe   → Contracts, Modbus.Contracts, Shared.Config + EasyModbusTCP.NETCore
   Devices/PvSimulator/        exe → Devices.Common   enthält LB01-Code von Alex
@@ -135,7 +139,8 @@ src/
   Devices/DualPortCharger/    exe → Devices.Common   enthält LB01-Code von Susi
   Devices/WindSimulator/      exe → Devices.Common   leer
 tests/
-  SimCore.Tests/           xUnit → SimCore.Time
+  SimCore.Tests/           xUnit → SimCore.Time, SimCore.TimeSync
+  Devices.Common.Tests/    xUnit → Devices.Common          (seit 2026-10-25)
   Weather.Tests/           xUnit → WeatherSimulator (Exe-Referenz; ggf. Wetterlogik später in eine lib auslagern)
 docs/                      zentrale Doku und CSV-Ausgaben (Aufbau siehe §1)
 ```
@@ -143,15 +148,54 @@ Jedes Projekt hat eine `README.md` als Gerüst (Zweck, Verantwortlich, Basis aus
 Schnittstellen, Tests, Bekannte Probleme). Noch offen: zentrale `README.md`, `.env.example`, `start-all.ps1`.
 Neue NuGet-Pakete nur in `Directory.Packages.props` versionieren, im `.csproj` ohne `Version`.
 
+### Entscheidung 2026-10-25: Zeitsynchronisation über Gerade, Vorlaufzeit und Uhrenabgleich
+
+Umgesetzt in `SimCore.Contracts` (`TimeState`, `SimMode`, `ISimClock`) und `SimCore.Time` (`MasterClock`, `SyncedClock`,
+`TimeLine`, `ClockOffsetEstimator`, `MonotonicUtcClock`), getestet in `tests/SimCore.Tests`. Details: `src/SimCore.Time/README.md`.
+
+- **Problem:** Eine mitgeschickte Uhrzeit ist beim Empfänger um die Laufzeit `d` alt, der Fehler ist `d · Tempo`
+  und bei jedem Gerät anders.
+- **`TimeState` = Gerade:** `{MasterSession, RunId, Sequence, Mode, Speed, SimAnchor, EffectiveAt}`.
+  Ab Master-Uhrzeit `EffectiveAt` gilt `Sim = SimAnchor + (Master − EffectiveAt) · Speed` (pausiert: `SimAnchor`).
+  Jedes Gerät rechnet selbst (`TimeState.SimTimeAt`), die Laufzeit der Nachricht spielt keine Rolle.
+- **Vorlaufzeit 200 ms:** Jede Änderung gilt erst ab *jetzt + 200 ms*, `SimAnchor` = Wert der alten Geraden dort.
+  Alle schalten gleichzeitig und ohne Sprung um. Verspätete Nachrichten werden übernommen, der Sprung wird als
+  `LastLateness` gemeldet. Einziger gewollter Sprung: `Restart` (neue `RunId`).
+- **Uhrenabgleich (Cristian):** Ping/Pong, `Offset = Master − (t0 + RTT/2)`, Fehler ≤ RTT/2, beste von 8 Messungen.
+  Alle Uhren sind monoton (Systemuhr-Umstellung ohne Wirkung). Reale Uhr immer über `System.TimeProvider` (testbar).
+- **Master startet pausiert**, `Resume()` startet. Tempo 1 … 100 000, ungültige Werte ⇒ `ArgumentOutOfRangeException`.
+- **Neue Geräte** bekommen `MasterClock.CurrentStates` (inkl. angekündigter Änderungen).
+- **Master nicht erreichbar:** nach 3 s ohne Nachricht `SyncStatus.MasterLost`, Gerätezeit steht (`Mode = Paused`),
+  Modbus bleibt lesbar. Beim nächsten Heartbeat springt das Gerät sichtbar auf die Master-Zeit.
+  Neu gestarteter Master (neue `MasterSession`) ersetzt den Verlauf.
+- **Toleranz (Vorschlag):** 10 ms reale Zeit ⇒ zulässige Sim-Abweichung = 10 ms · Tempo; Nachweis über
+  `SyncedClock.SimUncertainty` (= RTT/2 · Tempo) in der Geräteanzeige.
+- **Transport (umgesetzt 2026-10-25, `SimCore.TimeSync`):** TCP, eine JSON-Nachricht pro Zeile, Port 5100.
+  `hello` (Sim→Master) · `states` (Master→Sim: **alle** ab jetzt gültigen Zustände; nach `hello`, bei Änderung, Heartbeat 1 s) ·
+  `ping`/`pong` (Uhrenabgleich, 5× schnell nach dem Verbinden, dann 1 s; `ping` meldet auch Sim-Zeit und Unsicherheit) ·
+  `bye` (geordnetes Beenden/Ablehnung). Protokollversion 1, ungültige Nachrichten trennen nur die betroffene Verbindung.
+  Simulator: `TimeSyncClient` verbindet sich alle 2 s neu. Master: listet Simulatoren mit gemessener Abweichung Δ, ✓/✗ gegen Toleranz,
+  „KEINE ANTWORT“ nach 3 s, „GETRENNT“ bei Verbindungsende. Details: `src/SimCore.TimeSync/README.md`.
+- **`SimulationMaster` (2026-10-25):** startet pausiert; Leertaste/P Pause↔Fortsetzen, `+`/`-` Tempo ×2/÷2, `T` Tempo eingeben,
+  `N` Neustart mit Zeit, `1–4` Neustart Frühling/Sommer/Herbst/Winter, `Q`/Strg+C beenden (`bye` an alle).
+  Ein eigenes `TimeControlCmd` ist damit nicht nötig (Bedienung nur im Master). Details: `src/SimulationMaster/README.md`.
+- **Geräte (2026-10-25, `Devices.Common`):** `DeviceTimeSource` (mit Master: `SyncedClock` + `TimeSyncClient`; `--standalone`:
+  lokale `MasterClock`), `StepScheduler` (fragt die Uhr und rechnet die fälligen **festen** Schritte; nie selbst hochzählen,
+  nie `Schritt/Tempo` warten; Neustart = neue `RunId` ⇒ Modellzeit springt, Zustand bleibt), `TimeSyncOptions`
+  (`--master host:port`, `--standalone`, `--start`, `--speed`; die letzten beiden nur standalone), `AsyncConsole`
+  (Eingabe ohne `ReadLine`). Pause/Tempo-Tasten der Geräte wirken nur standalone. Bei `MasterLost` rechnet das Gerät nicht weiter.
+  Muster: `src/Devices/DualPortCharger/Simulation/SimulationEngine.cs`, Anleitung: `src/Devices.Common/README.md`.
+- **Noch offen:** PV, Batterie (und Wind) auf `Devices.Common` umstellen; Modbus-Kopf mit Modellzeit/Lauf.
+
 ### Offene Fragen (müssen im Team entschieden werden)
 
 | # | Frage | Tendenz laut `AGENTS1.md` |
 |---|---|---|
 | 1 | Transport Wettersimulator | HTTP |
-| 2 | Transport Zeitverteilung | TCP-Push |
-| 3 | Drift-Toleranz | 250 ms Sim-Zeit |
+| 2 | Transport Zeitverteilung | ✅ umgesetzt 2026-10-25: TCP, JSON-Zeilen, Port 5100 (`SimCore.TimeSync`) |
+| 3 | Drift-Toleranz | ~~250 ms Sim-Zeit~~ → Vorschlag 2026-10-25: 10 ms Echtzeit · Tempo (bei Tempo 600 sind 250 ms Sim-Zeit < 0,5 ms Echtzeit, nicht einhaltbar) |
 | 4 | Registeradressen je Gerät | 0–9 Kopf, 10–29 gerätespezifisch |
-| 5 | Wie finden Geräte den Master | Konfigurationsdatei (IP:Port) |
+| 5 | Wie finden Geräte den Master | Konfigurationsdatei (IP:Port); Standard `127.0.0.1:5100` (`SyncProtocol.DefaultPort`) |
 | 6 | Ort fürs Wetter | ein globaler Ort |
 | 7 | Komplexität des Batteriemodells | einfaches SOC-Modell |
 | 8 | Was lädt der Charger | „Batterie aus PV-Überschuss“ |
@@ -228,6 +272,11 @@ Tasten: Leertaste Pause/Menü, `M` Auto/Manuell, `↑/↓` Sollwert ±0.5 kW, `0
 Start: `dotnet run --project src/Devices/DualPortCharger -- --id DC-01 --power 150 --step 5 --speed 120 --duration 24 --seed 42`
 (`--power` 50–350 kW, `--step` **Minuten**, `--speed` Faktor, `--seed` macht Läufe reproduzierbar). Ungültige Argumente → Hilfetext, Exit-Code 1.
 
+> **Seit 2026-10-25 (LB02):** Zeit kommt vom Master (`--master`, Standard 127.0.0.1:5100); der LB01-Aufruf oben geht nur noch
+> mit `--standalone` (`--speed`, `--duration`, `--start` sind ohne `--standalone` ein Fehler, `--duration` ist standardmäßig endlos).
+> Schleife, CSV und Eingabe sind async (`Thread.Sleep`/`ReadLine`/`Stopwatch` entfernt), CSV hat die neue Spalte `Lauf`,
+> `P` und `</>` wirken nur standalone. Die Beschreibung unten ist der LB01-Stand; aktuell: `src/Devices/DualPortCharger/README.md`.
+
 - `Models/DualCharger.cs` – gemeinsames Budget. `AllocatePower` gibt jedem Punkt zuerst bis zur Hälfte, den Rest bekommt der andere.
   Warteschlange max. 5 min, danach „abgewiesen“; Ein/Aus; `Tick(now, dt)`.
 - `Models/ChargingPoint.cs` – Zustandsautomat `Available → Connected → Charging → Finished`, `Faulted` aus jedem Zustand
@@ -264,17 +313,31 @@ Tasten: `P` Pause, `A` Auto an/aus, `N` Fahrzeug kommt (manuell), `1/2` Punkt w�
 
 ---
 
-## 6. Build-Status (geprüft am 2026-10-13, .NET SDK 10)
+## 6. Build-Status (geprüft am 2026-10-13, ergänzt 2026-10-25, .NET SDK 10)
+
+**Befehle:**
+```
+dotnet build EnergyTwin.sln                                     # alles bauen
+dotnet test tests/SimCore.Tests                                 # Zeit-Tests (inkl. TCP auf localhost)
+dotnet run --project src/SimulationMaster -- --speed 600        # 1. Master (Port 5100, startet pausiert)
+dotnet test tests/Devices.Common.Tests                          # Geräte-Zeitanbindung
+dotnet run --project src/Devices/DualPortCharger -- --id DC-01  # 2. Charger (verbindet sich mit 127.0.0.1:5100)
+dotnet run --project src/Devices/DualPortCharger -- --standalone --speed 300 --duration 24   # ohne Master
+dotnet run --project src/Devices/<PV|Batterie> -- …             # PV/Batterie: noch ohne Zeitanbindung (LB01-Stand)
+```
 
 `dotnet build EnergyTwin.sln` (nach dem Verschieben):
 
 | Projekt | Ergebnis |
 |---|---|
-| alle Bibliotheken, Testprojekte | ✅ bauen |
+| alle Bibliotheken, Testprojekte | ✅ bauen (2026-10-25 erneut geprüft, 0 Warnungen) |
+| `tests/SimCore.Tests` | ✅ 54/54 Tests grün (2026-10-25, 5 Wiederholungen ohne Ausfall) |
+| `SimulationMaster` | ✅ baut, Probelauf mit umgeleiteter Ausgabe + PowerShell-TCP-Client ok (2026-10-25); echtes Terminal noch ungetestet |
 | `Devices/PvSimulator` | ✅ baut, Probelauf ok (Anzeige, Leistung, CSV) |
-| `Devices/DualPortCharger` | ✅ baut, Probelauf ok (2 h Sim-Zeit, CSV mit 26 Zeilen) |
+| `tests/Devices.Common.Tests` | ✅ 24/24 Tests grün (2026-10-25) |
+| `Devices/DualPortCharger` | ✅ baut; 2026-10-25 mit Master: Master x600 + DC-01 + DC-02 synchron (Abweichung ≤ 0,2 s), Master beendet ⇒ „NICHT ERREICHBAR – Zeit steht“; standalone 24 h endet selbst (CSV 290 Zeilen) |
 | `Devices/BatterySimulator` | ✅ baut (Nullable-Warnungen am 2026-10-13 behoben) |
-| `SimulationMaster`, `WeatherSimulator`, `ModbusDiagnosticClient`, `Devices/WindSimulator` | ❌ `CS5001`, noch kein `Program.cs` (erwartet) |
+| `WeatherSimulator`, `ModbusDiagnosticClient`, `Devices/WindSimulator` | ❌ `CS5001`, noch kein `Program.cs` (erwartet) |
 
 Die Probeläufe liefen mit umgeleiteter Ausgabe. Die Konsolenausgabe von Alex formatiert Zahlen mit Komma, die CSV mit Punkt.
 
@@ -299,6 +362,8 @@ Die Probeläufe liefen mit umgeleiteter Ausgabe. Die Konsolenausgabe von Alex fo
 - Umgeleitete Konsole ≠ echtes Terminal: Cursor- und Puffer-Funktionen brauchen einen Fallback (Alex und Susi haben einen).
   Immer auch in einem echten Terminalfenster testen; ein NullRef beim ersten Diff-Frame endet mit Exit-Code -1073741819.
 - Reproduzierbarkeit: `Random` aus Datum/Ort/Seed erzeugen, nie aus der Uhrzeit.
+- Virtuelle Zeit nur über `ISimClock` lesen (Geräte: `SyncedClock`), nie lokal hochzählen. Die reale Uhr immer als
+  `System.TimeProvider` übergeben (nicht `DateTime.Now`/`Stopwatch` direkt), damit Tests mit einer Test-Uhr laufen.
 - Umgebungsvariablen nur für optionale Entwickler-Features (Muster: `ENERGYSIM_RENDER_LOG`).
 - Bei Modelländerungen die Formeln in der jeweiligen `README.md` mitpflegen. Bei Architekturentscheidungen
   §3 dieser Datei aktualisieren und einen Eintrag im Entwicklungsjournal machen.

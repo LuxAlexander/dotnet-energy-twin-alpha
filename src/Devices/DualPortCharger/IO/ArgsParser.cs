@@ -1,4 +1,5 @@
 using System.Globalization;
+using Devices.Common;
 using DualChargerSim.Models;
 using DualChargerSim.Simulation;
 
@@ -9,19 +10,23 @@ namespace DualChargerSim.IO;
 /// </summary>
 public static class ArgsParser
 {
-    public const string Usage = """
-        Aufruf: dotnet run -- [Optionen]
+    public static readonly string Usage = $"""
+        Aufruf: dotnet run --project src/Devices/DualPortCharger -- [Optionen]
 
           --id <text>        Geräte-ID                      (Standard: DC-01)
           --power <kW>       Gesamtleistung der Säule, 50–350 (Standard: 150)
           --step <min>       Schrittweite in Minuten        (Standard: 5)
-          --speed <faktor>   Tempo gegenüber Echtzeit       (Standard: 120)
-          --duration <h>     Simulationsdauer in Stunden    (Standard: 24)
           --seed <zahl>      Zufalls-Seed für wiederholbare Läufe (optional)
           --output <ordner>  Zielordner der CSV-Datei       (Standard: docs/data im Repo)
           --help             Diese Hilfe anzeigen
 
-        Beispiel: dotnet run -- --id DC-01 --power 150 --step 5 --speed 120 --duration 24 --seed 42
+        Virtuelle Zeit (Standard: vom Simulations-Master):
+        {TimeSyncOptions.Usage}
+          --duration <h>        Nur standalone: Simulationsdauer in Stunden (Standard: endlos)
+
+        Beispiele:
+          dotnet run --project src/Devices/DualPortCharger -- --id DC-01 --power 150 --step 1 --seed 42
+          dotnet run --project src/Devices/DualPortCharger -- --standalone --speed 300 --duration 24 --seed 42
         """;
 
     public static bool IsHelpRequested(string[] args) =>
@@ -34,14 +39,21 @@ public static class ArgsParser
         string id = defaults.DeviceId;
         double power = defaults.PowerLimitKW;
         double step = defaults.StepMinutes;
-        double speed = defaults.Speed;
-        double duration = defaults.DurationHours;
+        double? duration = null;
         int? seed = null;
         string output = defaults.OutputDirectory;
+        var timeSync = defaults.TimeSync;
 
         for (int i = 0; i < args.Length; i++)
         {
             string name = args[i].ToLowerInvariant();
+            int index = i;
+            if (TimeSyncOptions.TryApply(name, () => NextValue(args, ref index, name), timeSync, out timeSync))
+            {
+                i = index;
+                continue;
+            }
+
             switch (name)
             {
                 case "--id":
@@ -57,9 +69,6 @@ public static class ArgsParser
                     break;
                 case "--step":
                     step = ParsePositive(NextValue(args, ref i, name), name);
-                    break;
-                case "--speed":
-                    speed = ParsePositive(NextValue(args, ref i, name), name);
                     break;
                 case "--duration":
                     duration = ParsePositive(NextValue(args, ref i, name), name);
@@ -80,15 +89,19 @@ public static class ArgsParser
             }
         }
 
+        if (!timeSync.Standalone && (duration is not null || timeSync.HasStandaloneSettings))
+            throw new ArgumentException(
+                "--duration, --start und --speed gelten nur mit --standalone; mit Master bestimmt der Simulations-Master Zeit und Tempo.");
+
         return new SimulationConfig
         {
             DeviceId = id,
             PowerLimitKW = power,
             StepMinutes = step,
-            Speed = speed,
             DurationHours = duration,
             Seed = seed,
             OutputDirectory = output,
+            TimeSync = timeSync,
         };
     }
 

@@ -1,29 +1,32 @@
+using Devices.Common;
 using Shared.Config;
 
 namespace DualChargerSim.Simulation;
 
 /// <summary>
-/// Startparameter der Simulation (Geräte-ID, Leistung, Schrittweite, Tempo, Dauer, Seed).
+/// Startparameter der Simulation (Geräte-ID, Leistung, Schrittweite, Zeitquelle, Dauer, Seed).
 /// </summary>
 public class SimulationConfig
 {
     public const double MinimumRecommendedHours = 24;
-    public const double MinSpeed = 1;
-    public const double MaxSpeed = 100_000;
+    public const double DefaultStandaloneSpeed = 120;
 
     public string DeviceId { get; init; } = "DC-01";
     public double PowerLimitKW { get; init; } = 150;
     public double StepMinutes { get; init; } = 5;
-    public double Speed { get; init; } = 120;
-    public double DurationHours { get; init; } = 24;
+
+    /// <summary>Nur standalone: Simulationsdauer in Stunden, <c>null</c> = endlos.</summary>
+    public double? DurationHours { get; init; }
     public int? Seed { get; init; }
 
     /// <summary>Zielordner der CSV; relativ zum Arbeitsverzeichnis oder absolut.</summary>
     public string OutputDirectory { get; init; } = OutputPaths.CsvDirectory;
-    public DateTime StartTime { get; init; } = DateTime.Today;
+
+    /// <summary>Woher die virtuelle Zeit kommt (Master oder lokale Uhr).</summary>
+    public TimeSyncOptions TimeSync { get; init; } = new() { StandaloneSpeed = DefaultStandaloneSpeed };
 
     public TimeSpan Step => TimeSpan.FromMinutes(StepMinutes);
-    public TimeSpan Duration => TimeSpan.FromHours(DurationHours);
+    public TimeSpan? Duration => DurationHours is { } hours ? TimeSpan.FromHours(hours) : null;
 
     public bool IsShortRun => DurationHours < MinimumRecommendedHours;
 }

@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text;
+using Devices.Common;
 using DualChargerSim.Models;
 using DualChargerSim.Simulation;
 
@@ -17,11 +18,11 @@ public class ConsoleRenderer
 
     private int _lineCount;
 
-    private static bool IsInteractive => !Console.IsOutputRedirected;
+    public static bool IsInteractive => !Console.IsOutputRedirected;
 
     private static int Width => IsInteractive ? Math.Max(Console.WindowWidth - 1, 40) : RedirectedWidth;
 
-    public void Initialize()
+    public async Task InitializeAsync()
     {
         Console.OutputEncoding = Encoding.UTF8;
         if (IsInteractive)
@@ -29,20 +30,22 @@ public class ConsoleRenderer
             Console.CursorVisible = false;
             Console.Clear();
         }
+        await Console.Out.FlushAsync();
     }
 
-    public void Shutdown()
+    public async Task ShutdownAsync()
     {
         if (IsInteractive)
         {
             Console.SetCursorPosition(0, BelowStatus());
             Console.CursorVisible = true;
         }
+        await Console.Out.FlushAsync();
     }
 
-    public void Draw(SimulationEngine engine)
+    public async Task DrawAsync(SimulationEngine engine)
     {
-        var lines = BuildLines(engine);
+        var lines = IsInteractive ? BuildLines(engine) : [BuildStatusLine(engine)];
         int width = Width;
 
         var sb = new StringBuilder();
@@ -54,13 +57,26 @@ public class ConsoleRenderer
             sb.AppendLine(new string(' ', width));
 
         if (IsInteractive)
-            Console.SetCursorPosition(0, 0);
-        Console.Write(sb);
-        _lineCount = lines.Count;
+        {
+            try
+            {
+                Console.SetCursorPosition(0, 0);
+            }
+            catch (Exception ex) when (ex is IOException or ArgumentOutOfRangeException)
+            {
+                return;                                           // Fenster wird gerade verändert
+            }
+        }
+        await Console.Out.WriteAsync(sb.ToString());
+        await Console.Out.FlushAsync();
+        _lineCount = IsInteractive ? lines.Count : 0;
     }
 
-    /// <summary>Eingabe unterhalb der Statusanzeige; hier ist ReadLine erlaubt (die Simulation steht dabei).</summary>
-    public string Prompt(string question, IReadOnlyList<string>? info = null)
+    /// <summary>
+    /// Eingabe unterhalb der Statusanzeige, ohne blockierendes Warten (Esc = Abbruch, Ergebnis "").
+    /// Die Zeitsynchronisation läuft währenddessen weiter, die fälligen Schritte werden danach nachgeholt.
+    /// </summary>
+    public async Task<string> PromptAsync(string question, CancellationToken cancellationToken, IReadOnlyList<string>? info = null)
     {
         int width = Width;
         int top = IsInteractive ? BelowStatus() : 0;
@@ -74,16 +90,16 @@ public class ConsoleRenderer
 
         if (info is not null)
             foreach (string line in info)
-                Console.WriteLine(Fit(line, width));
+                await Console.Out.WriteLineAsync(Fit(line, width));
 
-        Console.Write(question + " ");
-        string input = Console.ReadLine() ?? "";
+        await Console.Out.WriteAsync(question + " ");
+        string input = await AsyncConsole.ReadLineAsync(40, cancellationToken) ?? "";
 
         if (IsInteractive)
         {
             Console.SetCursorPosition(0, Math.Min(top, Console.BufferHeight - 1));
             for (int i = 0; i <= infoCount; i++)
-                Console.WriteLine(new string(' ', width));
+                await Console.Out.WriteLineAsync(new string(' ', width));
             Console.CursorVisible = false;
         }
 
@@ -93,18 +109,30 @@ public class ConsoleRenderer
     /// <summary>Eine Zeile unter der Anzeige, aber nie außerhalb des Konsolenpuffers (kleines Fenster).</summary>
     private int BelowStatus() => Math.Min(_lineCount + 1, Console.BufferHeight - 1);
 
+    /// <summary>Kurzfassung für umgeleitete Ausgabe (Protokoll statt Bildschirm).</summary>
+    private static string BuildStatusLine(SimulationEngine engine)
+    {
+        var charger = engine.Charger;
+        string simTime = engine.SimulationTime?.ToString("yyyy-MM-dd HH:mm", Culture) ?? "--";
+        return F($"{simTime}  Lauf {engine.RunId}  {charger.TotalPowerKW:N1} kW  {charger.TotalEnergyKWh:N1} kWh  | {engine.Time.StatusText}  | {engine.Message}");
+    }
+
     private static List<string> BuildLines(SimulationEngine engine)
     {
         var charger = engine.Charger;
         var config = engine.Config;
+        var time = engine.Time;
         string mode = engine.IsAutoMode ? "AUTO" : "MANUELL";
-        string pause = engine.IsPaused ? " | PAUSE" : "";
+        string pause = time.IsRunning ? "" : " | ZEIT STEHT";
         double loadRatio = charger.PowerLimitKW > 0 ? charger.TotalPowerKW / charger.PowerLimitKW : 0;
+        string simTime = engine.SimulationTime?.ToString("ddd yyyy-MM-dd HH:mm", Culture) ?? "– (noch keine Zeit vom Master)";
+        string end = engine.EndTime is { } endTime ? F($"   Ende: {endTime:yyyy-MM-dd HH:mm}") : "";
 
         var lines = new List<string>
         {
             $"=== Dual-Charger {charger.Id} | {mode}{pause} ===",
-            F($"Simulationszeit: {engine.SimulationTime:yyyy-MM-dd HH:mm}   Schritt: {config.StepMinutes:0.##} min   Tempo: {engine.Speed:0.##}x   Ende: {config.StartTime + config.Duration:yyyy-MM-dd HH:mm}"),
+            F($"Simulationszeit: {simTime}   Lauf: {engine.RunId}   Schritt: {config.StepMinutes:0.##} min{end}"),
+            "Zeitquelle:      " + time.StatusText,
             "",
             F($"Säule: {(charger.IsOn ? "EIN" : "AUS")}   Limit: {charger.PowerLimitKW:N0} kW   Abgewiesen: {charger.RejectedVehicles}   Warteschlange: {charger.QueueLength}"),
             F($"Leistung: {charger.TotalPowerKW,7:N1} kW [{Bar(loadRatio)}] {loadRatio * 100,3:N0} %   Energie: {charger.TotalEnergyKWh:N1} kWh"),
@@ -117,8 +145,11 @@ public class ConsoleRenderer
         lines.Add("");
         lines.Add("Meldung: " + engine.Message);
         lines.Add("");
-        lines.Add("Tasten: P Pause | A Auto | N Fahrzeug kommt (Manuell) | 1/2 Punkt wählen | C Anstecken | D Abstecken | S Start/Stop");
-        lines.Add("        F Störung | R Reset | +/- Limit ±10 kW | </> Tempo ÷2/×2 | O Säule ein/aus | Q Beenden");
+        lines.Add("Tasten: A Auto | N Fahrzeug kommt (Manuell) | 1/2 Punkt wählen | C Anstecken | D Abstecken | S Start/Stop");
+        lines.Add("        F Störung | R Reset | +/- Limit ±10 kW | O Säule ein/aus | Q Beenden");
+        lines.Add(time.IsStandalone
+            ? "        P Pause | </> Tempo ÷2/×2 (lokale Uhr)"
+            : "        Pause, Tempo und Neustart steuert der Simulations-Master");
         return lines;
     }
 

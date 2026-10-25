@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="../SimCore.Contracts/SimCore.Contracts.csproj" />
+    <ProjectReference Include="../SimCore.Time/SimCore.Time.csproj" />
+  </ItemGroup>
+
+</Project>

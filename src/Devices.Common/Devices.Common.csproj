@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="../SimCore.Contracts/SimCore.Contracts.csproj" />
     <ProjectReference Include="../SimCore.Time/SimCore.Time.csproj" />
+    <ProjectReference Include="../SimCore.TimeSync/SimCore.TimeSync.csproj" />
     <ProjectReference Include="../Modbus.Contracts/Modbus.Contracts.csproj" />
     <ProjectReference Include="../Shared.Config/Shared.Config.csproj" />
   </ItemGroup>

@@ -1,4 +1,5 @@
 using System.Globalization;
+using Devices.Common;
 using DualChargerSim.Models;
 using DualChargerSim.Simulation;
 
@@ -9,6 +10,7 @@ namespace DualChargerSim.IO;
 /// </summary>
 public class InputHandler
 {
+    private static readonly TimeSpan QuitPollInterval = TimeSpan.FromMilliseconds(50);
     private const double PowerStepKW = 10;
     private const double SpeedFactor = 2;
 
@@ -21,7 +23,31 @@ public class InputHandler
         _renderer = renderer;
     }
 
-    public void Handle(ConsoleKeyInfo key)
+    /// <summary>Verarbeitet alle bereits gedrückten Tasten, ohne auf neue zu warten.</summary>
+    /// <returns><c>true</c>, wenn mindestens eine Taste verarbeitet wurde.</returns>
+    public async Task<bool> HandlePendingKeysAsync(CancellationToken cancellationToken)
+    {
+        bool handled = false;
+        while (_engine.IsRunning && AsyncConsole.TryReadKey() is { } key)
+        {
+            await HandleAsync(key, cancellationToken);
+            handled = true;
+        }
+        return handled;
+    }
+
+    /// <summary>Wartet (ohne zu blockieren) auf Q; bei umgeleiteter Eingabe sofort fertig.</summary>
+    public async Task WaitForQuitAsync(CancellationToken cancellationToken)
+    {
+        while (AsyncConsole.HasKeyboard)
+        {
+            if (AsyncConsole.TryReadKey() is { Key: ConsoleKey.Q })
+                return;
+            await Task.Delay(QuitPollInterval, cancellationToken);
+        }
+    }
+
+    public async Task HandleAsync(ConsoleKeyInfo key, CancellationToken cancellationToken)
     {
         var charger = _engine.Charger;
         var point = _engine.SelectedPoint;
@@ -30,8 +56,7 @@ public class InputHandler
         switch (char.ToUpperInvariant(key.KeyChar))
         {
             case 'P':
-                _engine.IsPaused = !_engine.IsPaused;
-                _engine.Message = _engine.IsPaused ? "Pausiert – P zum Fortsetzen." : "Fortgesetzt.";
+                _engine.Message = _engine.Time.TogglePause();
                 break;
             case 'A':
                 _engine.IsAutoMode = !_engine.IsAutoMode;
@@ -51,7 +76,7 @@ public class InputHandler
                 _engine.Message = $"Punkt {key.KeyChar} gewählt.";
                 break;
             case 'C':
-                ConnectVehicle(point);
+                await ConnectVehicleAsync(point, cancellationToken);
                 break;
             case 'D':
                 _engine.Message = point.Disconnect()
@@ -79,10 +104,10 @@ public class InputHandler
                 ChangePowerLimit(charger, -PowerStepKW);
                 break;
             case '>':
-                ChangeSpeed(SpeedFactor);
+                _engine.Message = _engine.Time.ChangeSpeed(SpeedFactor);
                 break;
             case '<':
-                ChangeSpeed(1 / SpeedFactor);
+                _engine.Message = _engine.Time.ChangeSpeed(1 / SpeedFactor);
                 break;
             case 'O':
                 if (charger.IsOn) charger.SwitchOff(); else charger.SwitchOn();
@@ -104,16 +129,6 @@ public class InputHandler
             : $"Gesamtleistung auf {charger.PowerLimitKW:0} kW gesetzt.";
     }
 
-    private void ChangeSpeed(double factor)
-    {
-        double before = _engine.Speed;
-        _engine.Speed *= factor;
-
-        _engine.Message = _engine.Speed == before
-            ? $"Tempo bleibt bei {before:0.##}x (erlaubt: {SimulationConfig.MinSpeed:0}–{SimulationConfig.MaxSpeed:0}x)."
-            : $"Tempo auf {_engine.Speed:0.##}x gesetzt ({_engine.RealDelay.TotalSeconds:0.###} s pro Schritt).";
-    }
-
     private void ToggleCharging(ChargingPoint point, string name)
     {
         if (point.State == ChargingPointState.Charging)
@@ -130,7 +145,7 @@ public class InputHandler
     }
 
     /// <summary>Modell und Start-SOC wählen; die maximale Ladeleistung gehört zum Modell.</summary>
-    private void ConnectVehicle(ChargingPoint point)
+    private async Task ConnectVehicleAsync(ChargingPoint point, CancellationToken cancellationToken)
     {
         string name = $"Punkt {point.Number}";
         if (!point.IsFree)
@@ -142,18 +157,18 @@ public class InputHandler
         var models = VehicleCatalog.Models;
         var info = models
             .Select((m, i) => $"  {i + 1}) {m.Name,-22} {m.BatteryCapacityKWh,4:0} kWh  {m.MaxChargePowerKW,4:0} kW")
-            .Prepend($"Fahrzeug an {name} anstecken (leere Eingabe = Abbruch):")
+            .Prepend($"Fahrzeug an {name} anstecken (leere Eingabe oder Esc = Abbruch):")
             .ToList();
 
-        string choice = _renderer.Prompt("Modell Nr.:", info);
+        string choice = await _renderer.PromptAsync("Modell Nr.:", cancellationToken, info);
         if (!int.TryParse(choice, out int index) || index < 1 || index > models.Count)
         {
             _engine.Message = "Anstecken abgebrochen.";
             return;
         }
 
-        double? soc = AskPercent("Start-SOC in % [20]:", 20);
-        double? target = soc is null ? null : AskPercent("Ziel-SOC in % [100]:", 100);
+        double? soc = await AskPercentAsync("Start-SOC in % [20]:", 20, cancellationToken);
+        double? target = soc is null ? null : await AskPercentAsync("Ziel-SOC in % [100]:", 100, cancellationToken);
         if (soc is null || target is null)
         {
             _engine.Message = "Ungültiger SOC – Anstecken abgebrochen.";
@@ -172,9 +187,9 @@ public class InputHandler
         }
     }
 
-    private double? AskPercent(string question, double defaultValue)
+    private async Task<double?> AskPercentAsync(string question, double defaultValue, CancellationToken cancellationToken)
     {
-        string input = _renderer.Prompt(question);
+        string input = await _renderer.PromptAsync(question, cancellationToken);
         if (input.Length == 0)
             return defaultValue;
 
