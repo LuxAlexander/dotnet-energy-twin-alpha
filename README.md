@@ -12,7 +12,7 @@ Anlagen, ein Modbus-Diagnose-Client liest und schreibt Register. Alles läuft lo
 | Wettersimulator, PV-Anlage | Alexander Lux | [`src/WeatherSimulator/README.md`](src/WeatherSimulator/README.md), [`src/Devices/PvSimulator/README.md`](src/Devices/PvSimulator/README.md) |
 | Batteriespeicher | Dominik Zach | [`src/Devices/BatterySimulator/README.md`](src/Devices/BatterySimulator/README.md) |
 | DC-Ladesäule (2 Ladepunkte), Modbus-Diagnose-Client, `Modbus.Contracts`, `Devices.Common` | Susanne Lastowicka | [`src/Devices/DualPortCharger/README.md`](src/Devices/DualPortCharger/README.md), [`src/ModbusDiagnosticClient/README.md`](src/ModbusDiagnosticClient/README.md), [`src/Modbus.Contracts/README.md`](src/Modbus.Contracts/README.md), [`src/Devices.Common/README.md`](src/Devices.Common/README.md) |
-| Industrieverbraucher (Kühlhaus, viertes Feldgerät) | Dominik Zach (LB01-Modell); LB02-Umbau mit ihm abzustimmen | [`src/Devices/Verbraucher/README.md`](src/Devices/Verbraucher/README.md) |
+| Industrieverbraucher (Kühlhaus, viertes Feldgerät) | Dominik Zach (LB01-Modell); LB02-Umbau mit ihm abzustimmen | [`src/Devices/KuehlhausSimulator/README.md`](src/Devices/KuehlhausSimulator/README.md) |
 
 ## Aufbau
 
@@ -30,7 +30,7 @@ src/
   Devices/PvSimulator/       PV-Anlage
   Devices/BatterySimulator/  Batteriespeicher
   Devices/DualPortCharger/   DC-Ladesäule mit zwei Ladepunkten
-  Devices/Verbraucher/       Kühlhaus (Industrieverbraucher, viertes Feldgerät)
+  Devices/KuehlhausSimulator/       Kühlhaus (Industrieverbraucher, viertes Feldgerät)
   Devices/WindSimulator/     Platzhalter (Wind noch nicht umgesetzt)
 tests/
   SimCore.Tests/            Zeit, Uhrenabgleich, TCP (54)
@@ -58,14 +58,14 @@ dotnet run --project src/SimulationMaster -- --speed 600
 dotnet run --project src/Devices/PvSimulator -- --id PV-01
 dotnet run --project src/Devices/BatterySimulator -- --id BAT-01 --modbus-port 1503
 dotnet run --project src/Devices/DualPortCharger -- --id DC-01 --modbus-port 1504
-dotnet run --project src/Devices/Verbraucher -- --id KH-01 --modbus-port 1505
+dotnet run --project src/Devices/KuehlhausSimulator -- --id KH-01
 
 # 4. Modbus-Diagnose-Client
 dotnet run --project src/ModbusDiagnosticClient -- --port 1502
 ```
 
-Die Standardports sind 1502 (PV, Charger), 1503 (Batterie) und 1504 (Kühlhaus). Für die Demo mit allen Geräten
-gleichzeitig bekommt der Charger hier 1504 und das Kühlhaus 1505, sonst kollidieren die Ports.
+Die Standardports sind 1502 (PV und Charger), 1503 (Batterie) und 1505 (Kühlhaus). In der Demo mit allen Geräten
+gleichzeitig bekommt der Charger 1504, sonst kollidiert er mit der PV.
 
 Im Master mit **Leertaste** starten; danach `+`/`-` für das Tempo, `1`–`4` für Jahreszeiten-Neustart, `Q` zum Beenden.
 Die Geräte verbinden sich beim Start mit `127.0.0.1:5100` und wiederholen das automatisch, solange der Master fehlt.

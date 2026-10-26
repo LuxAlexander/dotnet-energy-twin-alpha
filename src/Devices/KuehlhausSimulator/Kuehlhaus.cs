@@ -1,4 +1,4 @@
-﻿namespace Verbraucher;
+namespace KuehlhausSimulator;
 
 /// <summary>
 /// Physikalisches Modell eines Kühlhauses (Kühlzelle mit einem Kompressor). Kennt weder Konsole noch Uhr

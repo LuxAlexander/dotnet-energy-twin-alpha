@@ -1,9 +1,9 @@
 using System.Globalization;
 using Devices.Common;
 using SimCore.Contracts;
-using Verbraucher.IO;
+using KuehlhausSimulator.IO;
 
-namespace Verbraucher.Simulation;
+namespace KuehlhausSimulator.Simulation;
 
 /// <summary>
 /// Hauptschleife des Kühlhauses: holt die virtuelle Zeit von der Zeitquelle (Master oder lokal), rechnet die fälligen

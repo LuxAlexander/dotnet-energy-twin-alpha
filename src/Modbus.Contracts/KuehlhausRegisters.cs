@@ -46,6 +46,6 @@ public static class KuehlhausRegisters
                 "Kompressorlaufzeit seit Programmstart"),
         };
 
-        return new RegisterPlan(DeviceType.IndustrialConsumer, "Verbraucher", specific);
+        return new RegisterPlan(DeviceType.IndustrialConsumer, "KuehlhausSimulator", specific);
     }
 }

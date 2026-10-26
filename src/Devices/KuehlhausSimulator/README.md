@@ -6,7 +6,7 @@ und DC-Ladesäule) und nimmt am verteilten System teil:
 
 - **virtuelle Zeit** vom Simulations-Master (`127.0.0.1:5100`) oder standalone von einer lokalen Uhr,
 - **Außentemperatur** vom Wettersimulator (HTTP, `127.0.0.1:8080`), sonst aus einem lokalen Tagesprofil,
-- **Modbus-TCP-Server** mit gemeinsamem Registerkopf 0–19 und Geräteregistern 20–31 (Standardport **1504**),
+- **Modbus-TCP-Server** mit gemeinsamem Registerkopf 0–19 und Geräteregistern 20–31 (Standardport **1505**),
 - **CSV-Verlauf** je Lauf, Anzeige und Tasten wie bei den anderen Geräten.
 
 **Verantwortlich:** Dominik Zach (LB01-Modell); LB02-Umbau (Zeit, Modbus, Wetter, Ein-/Ausgabe, Tests, Doku) am 2026-10-26,
@@ -22,7 +22,7 @@ mit Dominik abzustimmen.
 - Windows-Konsole (Windows Terminal, Eingabeaufforderung oder VS-Debugging-Konsole), mindestens 80 Zeichen breit und
   ~20 Zeilen hoch. Die Konsole muss **interaktiv** sein; bei umgeleiteter Ausgabe erscheint statt der Anzeige alle 5 s
   eine Datenzeile und eine Statuszeile.
-- Modbus-Port **1504** frei (1502 nutzen PV und Charger, 1503 die Batterie).
+- Modbus-Port **1505** frei (1502 nutzen PV und Charger, 1503 die Batterie).
 
 ## Starten
 
@@ -35,24 +35,24 @@ dotnet run --project src/WeatherSimulator
 # 2. Simulations-Master (TCP 5100, startet pausiert)
 dotnet run --project src/SimulationMaster -- --speed 600
 
-# 3. Kühlhaus (Modbus 127.0.0.1:1504), dann im Master mit Leertaste starten
-dotnet run --project src/Devices/Verbraucher -- --id KH-01
+# 3. Kühlhaus (Modbus 127.0.0.1:1505), dann im Master mit Leertaste starten
+dotnet run --project src/Devices/KuehlhausSimulator -- --id KH-01
 
 # 4. Modbus-Diagnose-Client
-dotnet run --project src/ModbusDiagnosticClient -- --port 1504
+dotnet run --project src/ModbusDiagnosticClient -- --port 1505
 ```
 
 Ohne Master läuft das Gerät nur mit `--standalone` (lokale Uhr), z. B. für einen 24-h-Lauf:
 
 ```bash
-dotnet run --project src/Devices/Verbraucher -- --standalone --speed 6000 --duration 24 --weather off --seed 42
+dotnet run --project src/Devices/KuehlhausSimulator -- --standalone --speed 6000 --duration 24 --weather off --seed 42
 ```
 
 Programmausgaben:
 
 ```bash
-dotnet run --project src/Devices/Verbraucher -- --help            # Optionen
-dotnet run --project src/Devices/Verbraucher -- --register-plan   # Registerplan als Markdown
+dotnet run --project src/Devices/KuehlhausSimulator -- --help            # Optionen
+dotnet run --project src/Devices/KuehlhausSimulator -- --register-plan   # Registerplan als Markdown
 ```
 
 ### Kommandozeilenoptionen
@@ -72,7 +72,7 @@ dotnet run --project src/Devices/Verbraucher -- --register-plan   # Registerplan
 | `--start <zeit>` | nur standalone, `yyyy-MM-dd HH:mm` | heute 00:00 |
 | `--speed <x>` | nur standalone, Tempo 1 … 100 000 | 600 |
 | `--duration <h>` | nur standalone, Dauer; ohne Angabe endlos | endlos |
-| `--modbus-port <port>` | Modbus-TCP-Port, 1024–65535 | 1504 |
+| `--modbus-port <port>` | Modbus-TCP-Port, 1024–65535 | 1505 |
 | `--modbus-bind <ip>` | Adresse, auf der der Server lauscht | `127.0.0.1` |
 | `--unit-id <n>` | Modbus-Unit-ID | 1 |
 | `--no-modbus` | keinen Modbus-Server starten | aus |
@@ -117,7 +117,7 @@ C · dT/dt = k · (T_aus − T) + Q_Tür − Q_Kühl
 |---|---|---|
 | `C` | Wärmekapazität von Raum, Ware und Bauwerk | 1,0 kWh/K |
 | `k` | Wärmedurchgang der Hülle | 0,05 kW/K |
-| `Q_Tür` | zusätzlicher Wärmeeintrag bei offener Tür | 3,0 kW |
+| `Q_Tür` | zusätzlicher Wärmeeintrag bei offener Tür | 1,5 kW |
 | `Q_Kühl` | thermische Kälteleistung des Kompressors | 6,0 kW |
 
 Der Schritt wird **exakt** gelöst (keine Euler-Näherung), deshalb bleibt das Modell auch bei großen Schrittweiten stabil:
@@ -129,7 +129,7 @@ T_∞   = T_aus + (Q_Tür − Q_Kühl) / k
 ```
 
 Ohne Kühlung und mit geschlossener Tür erwärmt sich der Raum also mit 20 h Zeitkonstante in Richtung Außentemperatur;
-mit offener Tür auf ein Gleichgewicht von `T_aus + 60 K` (bei 20 °C außen: 80 °C), mit laufendem Kompressor auf
+mit offener Tür auf ein Gleichgewicht von `T_aus + 30 K` (bei 20 °C außen: 50 °C), mit laufendem Kompressor auf
 `T_aus − 120 K`.
 
 ### Kompressor und Hysterese
@@ -221,7 +221,7 @@ Dezimalkomma (de-AT). Beim Start, bei jedem Neustart im Master und nach jedem Mo
 
 ## Registerplan
 
-Holding Registers (Funktionscode 03 lesen, 06/16 schreiben). Standard: Host `127.0.0.1`, Port `1504`, Unit-ID `1` –
+Holding Registers (Funktionscode 03 lesen, 06/16 schreiben). Standard: Host `127.0.0.1`, Port `1505`, Unit-ID `1` –
 alle drei sind konfigurierbar. Adressen sind Protokolladressen (0-basiert, Referenzadresse = 40001 + Adresse).
 Pro Register Big-Endian; mehrteilige Werte (`UInt32`, `Float32`) belegen zwei Register, das höherwertige Wort steht
 zuerst (Float32 = IEEE 754, Byte-Folge ABCD). Mehrteilige Werte müssen mit **einem** Schreibzugriff (FC16) auf beide
@@ -272,8 +272,8 @@ Besonderheiten des Kühlhauses:
 Prüfen mit dem Diagnose-Client:
 
 ```bash
-dotnet run --project src/ModbusDiagnosticClient -- --port 1504 --once
-dotnet run --project src/ModbusDiagnosticClient -- --port 1504 --write "Solltemperatur=-15"
+dotnet run --project src/ModbusDiagnosticClient -- --port 1505 --once
+dotnet run --project src/ModbusDiagnosticClient -- --port 1505 --write "Solltemperatur=-15"
 ```
 
 ## Schnittstellen
@@ -282,14 +282,14 @@ dotnet run --project src/ModbusDiagnosticClient -- --port 1504 --write "Solltemp
 |---|---|---|---|
 | Simulations-Master (Zeit, Pause, Tempo, Neustart) | benötigt | TCP, JSON-Zeilen | `127.0.0.1:5100` |
 | Wettersimulator (Außentemperatur je Modellstunde) | optional | HTTP GET `/weather` | `http://127.0.0.1:8080` |
-| Modbus-Server (Register lesen/schreiben) | angeboten | Modbus TCP, Holding Registers | `127.0.0.1:1504` |
+| Modbus-Server (Register lesen/schreiben) | angeboten | Modbus TCP, Holding Registers | `127.0.0.1:1505` |
 | CSV-Verlauf | angeboten | Datei | `docs/data/` |
 
 ## Aufbau
 
 ```
-src/Devices/Verbraucher/
-├── Verbraucher.csproj          # Einstellungen aus src/Directory.Build.props
+src/Devices/KuehlhausSimulator/
+├── KuehlhausSimulator.csproj   # Einstellungen aus src/Directory.Build.props
 ├── Program.cs                  # Einstieg: Hilfe, --register-plan, Strg+C, Zusammenfassung
 ├── Kuehlhaus.cs                # Modell (exakte Exponentiallösung, Hysterese, COP, Störungen)
 ├── KuehlhausConfig.cs          # Modellparameter (Einheit im Namen)
@@ -322,7 +322,7 @@ Enthalten (`ConsumerTests.cs`, 28 Tests):
 |---|---|
 | Modell | exakte Exponentiallösung, Stabilität bei sehr großen Schritten, Hysterese ein/aus, COP und Energie, Sollwertgrenzen, Aus-Zustand, Kompressorausfall, Übertemperatur-Latch |
 | Modbus | Registerkopf (Typ 5, Geräte-Nummer, Zustand, Zeitstatus), Soll-/Raum-/Außentemperatur, Tür, Kompressor, Kälteleistung, Sollwert gültig/ungültig, Ein/Aus, Reset |
-| Optionen | Standardwerte (Port 1504), Wetter-Standard mit/ohne Master, Punkt und Komma, ungültige Werte, `--duration` nur standalone |
+| Optionen | Standardwerte (Port 1505), Wetter-Standard mit/ohne Master, Punkt und Komma, ungültige Werte, `--duration` nur standalone |
 | Engine | Standalone-Lauf schreibt CSV ab `--start`, Kopfzeile, `Lauf`-Spalte, lokale Außenquelle, Kompressor kühlt |
 | Anzeige | interaktives Layout (`BuildLines`) enthält Kopf, Außentemperatur und Tastenhilfe |
 | Automatik | Tagesprofil (Tag > Nacht), gleicher Seed ⇒ gleiche Türöffnungen |
@@ -347,9 +347,7 @@ Probeläufe am 2026-10-26 (umgeleitete Ausgabe):
   Modellzeit springt auf den neuen Lauf.
 - **Wetter für die anderen Geräte** (Charger, Batterie) ist nicht angebunden; sie nutzen feste Umgebungstemperaturen.
   Das Kühlhaus fragt nur die Temperatur ab, nicht Strahlung oder Niederschlag.
-- **Projektname:** `Verbraucher` ist der Arbeitsname; eine Umbenennung in `KuehlhausSimulator` ist im Team offen.
-- **`ZusatzwaermeKW` = 3 kW** (Wärmeeintrag bei offener Tür) ist ein plausibler, aber willkürlicher Wert und im Team
-  abzustimmen.
+- **Projektname und Ports sind entschieden (2026-10-26):** Projekt `KuehlhausSimulator`, Modbus-Standardport **1505**
+  (1502 = PV/Charger, 1503 = Batterie, 1504 = Charger in der Demo), Wärmeeintrag bei offener Tür 1,5 kW.
 - **Modellvereinfachungen:** ein Kompressor ohne Vereisung, keine Ware, kein Abtauen, kein Lastprofil außer der Tür;
   der COP hängt nur von der Außentemperatur ab.
-- Der Modbus-Standardport **1504** ist im Team abzustimmen (Charger und PV nutzen standardmäßig 1502).

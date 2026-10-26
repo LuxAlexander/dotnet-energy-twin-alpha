@@ -44,14 +44,15 @@ Eingabeaufforderung (`modbus>`), Befehle:
 | `connect <host[:port]> [unit]` | mit einem anderen Gerät verbinden |
 | `help`, `quit` | Hilfe, Beenden (auch Strg+C) |
 
-Der Registerplan wird aus Register 0 (Gerätetyp) gewählt (`RegisterPlans.For`). Hinterlegt sind Ladesäule, PV-Anlage und Batteriespeicher; für andere
-Gerätetypen (Wind) zeigt der Client den Kopf dekodiert und die übrigen Register mit `raw`.
+Der Registerplan wird aus Register 0 (Gerätetyp) gewählt (`RegisterPlans.For`). Hinterlegt sind Ladesäule, PV-Anlage, Batteriespeicher
+und das Kühlhaus (Industrieverbraucher); für andere Gerätetypen (Wind) zeigt der Client den Kopf dekodiert und die übrigen Register mit `raw`.
 
 | Gerät | Standardport (Vorschlag) | Sollwert zum Testen |
 |---|---|---|
 | PV-Anlage | 1502 | `write Leistungsbegrenzung 50` |
 | Batteriespeicher | 1503 | `write Leistungssollwert -2,5` |
-| Ladesäule | 1504 | `write Leistungsgrenze 200` |
+| Ladesäule | 1502 (in der Demo mit allen Geräten 1504) | `write Leistungsgrenze 200` |
+| Kühlhaus | 1505 | `write Solltemperatur -15` |
 
 ### Schreiben und Prüfen
 Nach jedem Schreibzugriff wartet der Client 200 ms (das Gerät setzt Befehle im nächsten Schleifendurchlauf um) und liest dann Register 18/19

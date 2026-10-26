@@ -1,22 +1,22 @@
 # Kühlhaus als viertes Feldgerät – Schritt-für-Schritt-Umsetzung
 
-**Ziel:** `src/Devices/Verbraucher` vom LB01-Testprogramm zum LB02-Feldgerät umbauen:
+**Ziel:** `src/Devices/KuehlhausSimulator` vom LB01-Testprogramm zum LB02-Feldgerät umbauen:
 virtuelle Zeit vom Master, async-Schleife, Modbus-Server mit Registerplan, CSV, README.
 Der Dual-Port-Charger (`src/Devices/DualPortCharger`) ist die Vorlage – gleiche Klassen, gleiche Reihenfolge.
 
 **Entschieden:**
 - Außentemperatur kommt vom **Wettersimulator** (`GET /weather`, Feld `TemperatureC`); ohne Master bzw. mit
   `--weather off` rechnet ein lokales, geseedetes Tagesprofil.
-- Modbus-Standardport **1504** (1502 ist bei PV/Charger belegt, 1503 bei der Batterie).
+- Modbus-Standardport **1505** (1502 ist bei PV/Charger belegt, 1503 bei der Batterie, 1504 nutzt der Charger in der Demo).
 - Neuer Gerätetyp **5 = Industrieverbraucher** (4 bleibt Wind).
-- Gerätename: `KH-01`. Empfehlung: Ordner/Projekt in `KuehlhausSimulator` umbenennen (wie `PvSimulator`,
-  `BatterySimulator`, `DualPortCharger`); `Verbraucher` funktioniert auch, ist aber als Projektname unscharf.
+- Gerätename: `KH-01`. Projekt/Ordner heißen `KuehlhausSimulator` (wie `PvSimulator`, `BatterySimulator`,
+  `DualPortCharger`) – entschieden und am 2026-10-26 umbenannt.
 
 **Stand vor dem Umbau:** `Kuehlhaus.cs` und `KuehlhausConfig.cs` enthalten das Modell, `Program.cs` ist ein
 LB01-Testmenü mit `ReadLine` und kompiliert nicht (`SetDoor(bool)` fehlt). Das Projekt ist nicht in `EnergyTwin.sln`
 und hat keine Referenz auf `Devices.Common`.
 
-**Stand 2026-10-26 (umgesetzt):** **alle neun Schritte sind fertig.** `Verbraucher` steht in `EnergyTwin.sln`
+**Stand 2026-10-26 (umgesetzt):** **alle neun Schritte sind fertig.** `KuehlhausSimulator` steht in `EnergyTwin.sln`
 (unter `Devices`), das Modell ist repariert (exakte Exponentiallösung, `SetDoor(bool)`, Einheiten, `ResetFault()`),
 `DeviceType.IndustrialConsumer = 5`, `KuehlhausRegisters.cs` und der Eintrag in `RegisterPlans.For` sind da.
 Dazu kommen `SimulationConfig`, `SimulationEngine` (Master-Zeit, feste Schritte, CSV je Lauf), `AutoModeController`
@@ -27,8 +27,8 @@ Fehler nach 3 Fehlversuchen sichtbar, Wiederholung alle 10 s), `ArgsParser`/`Csv
 Registertabelle aus. Probeläufe: 24 h standalone (289 CSV-Zeilen, 20,7 kWh, Tür 25 Schritte offen), mit Master
 (Zeitstatus „synchron“, Tempo 600), nach Master-Abbruch „Master verloren“ im Register 12, Sollwert über den
 Diagnose-Client gesetzt (`-20 → -15 °C`) und `force 5` vom Gerät abgelehnt (Register 18 = 2, Adresse 20).
-**Offen:** nur Team-Abstimmungen (Projektname `Verbraucher` ↔ `KuehlhausSimulator`, `ZusatzwaermeKW`, Port 1504),
-echte Terminalfenster und der Journal-Eintrag im eigenen Journal.
+**Entschieden (2026-10-26):** Projektname `KuehlhausSimulator`, `ZusatzwaermeKW` = 1,5 kW, Modbus-Standardport 1505.
+**Offen:** echte Terminalfenster (Anzeige, Tasten, `S`-Eingabe).
 
 ---
 
@@ -50,7 +50,7 @@ echte Terminalfenster und der Journal-Eintrag im eigenen Journal.
 
 ## Schritt 1 – Projekt in die Solution (10 min)
 
-`src/Devices/Verbraucher/Verbraucher.csproj` (bzw. `KuehlhausSimulator.csproj`) auf das Minimum kürzen:
+`src/Devices/KuehlhausSimulator/KuehlhausSimulator.csproj` (bzw. `KuehlhausSimulator.csproj`) auf das Minimum kürzen:
 `TargetFramework`, `ImplicitUsings`, `Nullable` und `TreatWarningsAsErrors` kommen schon aus
 `src/Directory.Build.props` – doppelt definiert ist es zwar kein Fehler, aber inkonsistent.
 
@@ -72,7 +72,7 @@ echte Terminalfenster und der Journal-Eintrag im eigenen Journal.
 keine weiteren Referenzen.
 
 ```bash
-dotnet sln EnergyTwin.sln add src/Devices/Verbraucher/Verbraucher.csproj --solution-folder Devices
+dotnet sln EnergyTwin.sln add src/Devices/KuehlhausSimulator/KuehlhausSimulator.csproj --solution-folder Devices
 dotnet build EnergyTwin.sln
 ```
 
@@ -101,6 +101,7 @@ Wenn `--solution-folder` den Eintrag nicht unter `Devices` einsortiert: in Visua
 
    `ZusatzwaermekW` wird heute wie kW verwendet (fließt in `heatGainKW`), deshalb umbenennen **und** den Wert
    gedanklich prüfen (3 kW Türverlust ist viel für ein Kühlhaus; 0,5–1,5 kW sind plausibler).
+   **Umgesetzt (2026-10-26):** `ZusatzwaermeKW` = **1,5 kW** (offene Tür: Gleichgewicht Außen + 30 K).
 3. **Exakte Exponentiallösung** statt Euler – sonst schwingt der Raum bei `--step 5` und großer Kühlleistung.
    Das Charger-Muster (`ChargingPoint.UpdateTemperature`) 1:1:
 
@@ -162,7 +163,7 @@ Wenn `--solution-folder` den Eintrag nicht unter `Devices` einsortiert: in Visua
 6. **`State`** in `UpdateState()` wie bisher mappen; `DeviceState.Off/Idle/Cooling/Fault` passt 1:1 auf
    `OperatingState.Off/Standby/Running/Fault` im Registerkopf.
 
-**Prüfung:** `dotnet build src/Devices/Verbraucher` – 0 Fehler, 0 Warnungen.
+**Prüfung:** `dotnet build src/Devices/KuehlhausSimulator` – 0 Fehler, 0 Warnungen.
 
 ---
 
@@ -242,7 +243,7 @@ Gerät wie PV und Batterie, und der Diagnose-Client zeigt ihn ohne Sonderfall.
 DeviceType.IndustrialConsumer => KuehlhausRegisters.Plan,
 ```
 
-**Prüfung:** `dotnet run --project src/Devices/Verbraucher -- --register-plan` gibt die Markdown-Tabelle aus
+**Prüfung:** `dotnet run --project src/Devices/KuehlhausSimulator -- --register-plan` gibt die Markdown-Tabelle aus
 (dafür in Schritt 5 den Zweig in `Program.cs` einbauen).
 
 ---
@@ -266,7 +267,7 @@ public class SimulationConfig
     public int? Seed { get; init; }
     public string OutputDirectory { get; init; } = OutputPaths.CsvDirectory;
     public TimeSyncOptions TimeSync { get; init; } = new() { StandaloneSpeed = DefaultStandaloneSpeed };
-    public ModbusOptions Modbus { get; init; } = new() { Port = 1504 };   // eigener Standardport!
+    public ModbusOptions Modbus { get; init; } = new() { Port = 1505 };   // eigener Standardport!
     public string? WeatherUrl { get; init; }            // null = lokales Tagesprofil
     public string Location { get; init; } = "salzburg";
 
@@ -285,7 +286,7 @@ public class SimulationConfig
 |---|---|
 | `Charger = new DualCharger(...)` | `Room = new Kuehlhaus(config.ToModelConfig())` |
 | `_autoMode = new AutoModeController(Charger, _random)` | `_autoMode = new AutoModeController(Room, _random)` |
-| `DeviceTimeSource.Create(..., "Charger")` | `..., "Verbraucher")` – erscheint so in der Master-Liste |
+| `DeviceTimeSource.Create(..., "Charger")` | `..., "Kühlhaus")` – erscheint so in der Master-Liste |
 | `new ChargerModbus(Charger, Time, config.Modbus, …)` | `new KuehlhausModbus(Room, Time, config.Modbus, …)` |
 | `_autoMode.Step(stepStart, Step); Charger.Tick(stepStart, Step);` | Wetter holen (Schritt 6), `_autoMode.Step(stepStart, Step)`, `Room.Update(Step, outsideC)` |
 | `SelectedPointIndex`, `SelectedPoint`, `VehicleArrives` | `Türe offen/zu`, Sollwert ändern – oder ganz streichen (Bedienung in `InputHandler`) |
@@ -447,8 +448,8 @@ an `KuehlhausModbus` übergeben (Konstruktorparameter oder Property `OutsideTemp
 
 ## Schritt 6 – Wetteranbindung (1 h)
 
-1. `src/Devices/PvSimulator/Simulation/WeatherClient.cs` nach `src/Devices/Verbraucher/Simulation/WeatherClient.cs`
-   kopieren, Namespace auf `Verbraucher.Simulation` ändern. Beide Klassen (`WeatherUnavailableException`,
+1. `src/Devices/PvSimulator/Simulation/WeatherClient.cs` nach `src/Devices/KuehlhausSimulator/Simulation/WeatherClient.cs`
+   kopieren, Namespace auf `KuehlhausSimulator.Simulation` ändern. Beide Klassen (`WeatherUnavailableException`,
    `WeatherClient`) sind geräteunabhängig und benutzen nur `SimCore.Contracts.WeatherData`.
    **Nicht** in `Devices.Common` verschieben, solange die PV ihre eigene Kopie hat – das wäre ein eigener Umbau.
 2. In `SimulationEngine` genau das PV-Muster übernehmen (`src/Devices/PvSimulator/Simulation/SimulationEngine.cs`,
@@ -492,13 +493,13 @@ Tasten (bewusst andere als beim Charger, damit sie nicht verwechselt werden):
 (`Console.Write(KuehlhausRegisters.Plan.ToMarkdown())`), `ArgsParser.Parse`, `Console.CancelKeyPress`,
 `engine.RunAsync`, `IOException`/`UnauthorizedAccessException` → Meldung, Exit-Code 1.
 Das alte Testmenü entfällt – die fünf Szenarien werden Tests (Schritt 8) oder ein separates
-`docs/devices/Verbraucher/`-Dokument.
+`docs/devices/KuehlhausSimulator/`-Dokument.
 
 ---
 
 ## Schritt 8 – Tests
 
-`tests/FieldDevices.Tests` um `Verbraucher` erweitern (Projekt-Referenz ergänzen) oder ein eigenes
+`tests/FieldDevices.Tests` um `KuehlhausSimulator` erweitern (Projekt-Referenz ergänzen) oder ein eigenes
 `tests/Consumer.Tests` anlegen. Wiederverwendbar: `ModbusTestBase` aus `FieldDeviceTests.cs`
 (freier Port, `Connect`, `ReadFloat`, `WriteFloat`, `WaitUntil`).
 
@@ -528,7 +529,7 @@ Tests deshalb immer mit `WaitUntil(() => { _modbus.ProcessCommands(); return …
 
 ## Schritt 9 – Doku und Journal
 
-1. `src/Devices/Verbraucher/README.md`: Zweck, Verantwortliche/r, Basis aus LB01, Start und Optionen, Bedienung,
+1. `src/Devices/KuehlhausSimulator/README.md`: Zweck, Verantwortliche/r, Basis aus LB01, Start und Optionen, Bedienung,
    Tasten, Modellformeln (inkl. Exponentiallösung und COP), CSV-Format, **Registerplan** (aus `--register-plan`
    übernehmen), Schnittstellen (Master, Wetter, Modbus), Tests, bekannte Probleme.
 2. `README.md` (zentral): Gerät in die Architekturtabelle, Startreihenfolge, Zuständigkeiten, Testliste.
@@ -536,7 +537,7 @@ Tests deshalb immer mit `WaitUntil(() => { _modbus.ProcessCommands(); return …
    offene vierte Gerät), `§3` (Struktur), `§6` (Build-Status).
 4. `docs/development-journal/<eigene Person>.md`: ein Tageseintrag mit `**Done:**`, `**KI:**`, `**Artefact:**`,
    `**Test:**`, `**Comment:**` – **nur die eigene Datei** bearbeiten.
-5. `docs/devices/Verbraucher/`: optional `design-notes.md` mit Herleitung von τ und COP.
+5. `docs/devices/KuehlhausSimulator/`: optional `design-notes.md` mit Herleitung von τ und COP.
 
 ---
 
@@ -549,11 +550,11 @@ dotnet test tests/FieldDevices.Tests                                            
 # 1. Master + Wetter + Kühlhaus + Client
 dotnet run --project src/SimulationMaster -- --speed 600
 dotnet run --project src/WeatherSimulator
-dotnet run --project src/Devices/Verbraucher -- --id KH-01                      # Modbus 1504
-dotnet run --project src/ModbusDiagnosticClient -- --port 1504                  # read, write Solltemperatur -18
+dotnet run --project src/Devices/KuehlhausSimulator -- --id KH-01                      # Modbus 1505
+dotnet run --project src/ModbusDiagnosticClient -- --port 1505                  # read, write Solltemperatur -18
 
 # 2. Standalone ohne Wetter
-dotnet run --project src/Devices/Verbraucher -- --standalone --speed 6000 --duration 24 --weather off --seed 42
+dotnet run --project src/Devices/KuehlhausSimulator -- --standalone --speed 6000 --duration 24 --weather off --seed 42
 ```
 
 Abzunehmen ist:

@@ -3,7 +3,7 @@ using Devices.Common.Modbus;
 using Modbus.Contracts;
 using static Modbus.Contracts.KuehlhausRegisters;
 
-namespace Verbraucher.Simulation;
+namespace KuehlhausSimulator.Simulation;
 
 /// <summary>
 /// Modbus-Anbindung des Kühlhauses: Registerplan, Zustand veröffentlichen, Schreibzugriffe auf das Modell anwenden.

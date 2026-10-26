@@ -1,9 +1,9 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Text;
-using Verbraucher.IO;
-using Verbraucher.Simulation;
+using KuehlhausSimulator.IO;
+using KuehlhausSimulator.Simulation;
 
-namespace Verbraucher;
+namespace KuehlhausSimulator;
 
 /// <summary>
 /// Einstiegspunkt des Kühlhauses. Aufbau wie beim Dual-Port-Charger: Argumente lesen, Modbus-Server und Simulation

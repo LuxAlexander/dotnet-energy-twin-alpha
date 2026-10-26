@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using SimCore.Contracts;
 
-namespace Verbraucher.Simulation;
+namespace KuehlhausSimulator.Simulation;
 
 /// <summary>Fehler beim Abruf des Wetters (nicht erreichbar, ungültige Antwort, unbekannter Standort).</summary>
 public sealed class WeatherUnavailableException : Exception

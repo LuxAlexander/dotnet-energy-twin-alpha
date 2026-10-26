@@ -1,4 +1,4 @@
-namespace Verbraucher.Simulation;
+namespace KuehlhausSimulator.Simulation;
 
 /// <summary>
 /// Automatikbetrieb: öffnet und schließt die Kühlhaustür nach Tageszeit (Lieferverkehr, Schichtwechsel).

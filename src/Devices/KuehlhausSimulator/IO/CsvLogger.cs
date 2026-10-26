@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.Text;
 
-namespace Verbraucher.IO;
+namespace KuehlhausSimulator.IO;
 
 /// <summary>
 /// Schreibt pro Simulationsschritt eine Zeile in die CSV-Datei (asynchron).

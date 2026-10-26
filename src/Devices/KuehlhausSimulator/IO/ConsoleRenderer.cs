@@ -1,9 +1,9 @@
 using System.Globalization;
 using System.Text;
 using Devices.Common;
-using Verbraucher.Simulation;
+using KuehlhausSimulator.Simulation;
 
-namespace Verbraucher.IO;
+namespace KuehlhausSimulator.IO;
 
 /// <summary>
 /// Flackerfreie Statusausgabe des Kühlhauses. Die Zeilen werden ab (0,0) überschrieben, statt mit

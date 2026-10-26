@@ -1,4 +1,4 @@
-namespace Verbraucher;
+namespace KuehlhausSimulator;
 
 /// <summary>Zustand des Kühlhauses, wie er in der Anzeige und im Registerkopf erscheint.</summary>
 public enum DeviceState

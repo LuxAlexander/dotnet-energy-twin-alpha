@@ -1,17 +1,17 @@
 using System.Globalization;
 using Devices.Common;
 using Devices.Common.Modbus;
-using Verbraucher.Simulation;
+using KuehlhausSimulator.Simulation;
 
-namespace Verbraucher.IO;
+namespace KuehlhausSimulator.IO;
 
 /// <summary>Liest die Kommandozeilenargumente in eine <see cref="SimulationConfig"/>.</summary>
 public static class ArgsParser
 {
     public static readonly string Usage = $"""
-        Verbraucher – Kühlhaus (Industrieverbraucher)
+        KuehlhausSimulator – Kühlhaus (Industrieverbraucher)
 
-        Aufruf: dotnet run --project src/Devices/Verbraucher -- [Optionen]
+        Aufruf: dotnet run --project src/Devices/KuehlhausSimulator -- [Optionen]
 
           --id <text>            Geräte-ID                             (Standard: KH-01)
           --setpoint <°C>        Solltemperatur -30…0 °C               (Standard: -20)
@@ -35,9 +35,9 @@ public static class ArgsParser
           --register-plan       Registerplan als Markdown ausgeben und beenden
 
         Beispiele:
-          dotnet run --project src/Devices/Verbraucher -- --id KH-01 --setpoint -18 --weather off
-          dotnet run --project src/Devices/Verbraucher -- --standalone --speed 6000 --duration 24 --seed 42
-          dotnet run --project src/Devices/Verbraucher -- --register-plan
+          dotnet run --project src/Devices/KuehlhausSimulator -- --id KH-01 --setpoint -18 --weather off
+          dotnet run --project src/Devices/KuehlhausSimulator -- --standalone --speed 6000 --duration 24 --seed 42
+          dotnet run --project src/Devices/KuehlhausSimulator -- --register-plan
         """;
 
     public static bool IsHelpRequested(string[] args) => args.Any(a => a is "--help" or "-h" or "/?");

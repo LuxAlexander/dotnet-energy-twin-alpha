@@ -45,7 +45,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModbusDiagnosticClient.Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FieldDevices.Tests", "tests\FieldDevices.Tests\FieldDevices.Tests.csproj", "{2BB7C69F-07EF-4381-812C-FE8DAC805CDA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Verbraucher", "src\Devices\Verbraucher\Verbraucher.csproj", "{E8DF5A6C-A896-48D5-8435-8FDB6A675250}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KuehlhausSimulator", "src\Devices\KuehlhausSimulator\KuehlhausSimulator.csproj", "{E8DF5A6C-A896-48D5-8435-8FDB6A675250}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

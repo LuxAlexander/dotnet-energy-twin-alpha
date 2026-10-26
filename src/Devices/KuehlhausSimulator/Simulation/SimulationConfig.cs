@@ -2,7 +2,7 @@ using Devices.Common;
 using Devices.Common.Modbus;
 using Shared.Config;
 
-namespace Verbraucher.Simulation;
+namespace KuehlhausSimulator.Simulation;
 
 /// <summary>
 /// Startparameter der Simulation (Geräte-ID, Solltemperatur, Kälteleistung, Schrittweite, Dauer, Seed,
@@ -18,8 +18,8 @@ public class SimulationConfig
     /// <summary>Wettersimulator; mit Master vorbelegt, standalone bleibt das Wetter lokal.</summary>
     public const string DefaultWeatherUrl = "http://127.0.0.1:8080";
 
-    /// <summary>Eigener Modbus-Standardport; 1502 nutzen PV und Charger, 1503 die Batterie.</summary>
-    public const int DefaultModbusPort = 1504;
+    /// <summary>Eigener Modbus-Standardport; 1502 nutzen PV und Charger, 1503 die Batterie, 1504 der Charger in der Demo.</summary>
+    public const int DefaultModbusPort = 1505;
 
     public string DeviceId { get; init; } = "KH-01";
 

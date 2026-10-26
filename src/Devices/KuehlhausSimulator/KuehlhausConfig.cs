@@ -1,4 +1,4 @@
-﻿namespace Verbraucher;
+namespace KuehlhausSimulator;
 
 /// <summary>
 /// Parameter des Kühlhaus-Modells. Die Einheit steht im Namen: <c>…C</c> Grad Celsius, <c>…K</c> Kelvin,
@@ -24,8 +24,8 @@ public class KuehlhausConfig
     /// <summary>Thermische Kälteleistung des Kompressors in kW (elektrisch = Kälteleistung / COP).</summary>
     public double KaelteleistungKW { get; set; } = 6;
 
-    /// <summary>Zusätzlicher Wärmeeintrag bei offener Tür in kW.</summary>
-    public double ZusatzwaermeKW { get; set; } = 3.0;
+    /// <summary>Zusätzlicher Wärmeeintrag bei offener Tür in kW (Gleichgewicht bei 1,5 kW: Außen + 30 K).</summary>
+    public double ZusatzwaermeKW { get; set; } = 1.5;
 
     /// <summary>Raumtemperatur in °C, ab der der Übertemperatur-Alarm gespeichert wird.</summary>
     public double AlarmTempC { get; set; } = -10.0;

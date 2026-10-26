@@ -1,8 +1,8 @@
 using Devices.Common.Modbus;
 using Modbus.Contracts;
-using Verbraucher;
-using Verbraucher.IO;
-using Verbraucher.Simulation;
+using KuehlhausSimulator;
+using KuehlhausSimulator.IO;
+using KuehlhausSimulator.Simulation;
 
 namespace FieldDevices.Tests;
 
@@ -49,27 +49,31 @@ public class KuehlhausModelTests
 
         // Aufwärmen mit offener Tür, bis der Kompressor bei Soll + Hysterese einschaltet.
         room.SetDoor(true);
+        double beforeSwitchOn = room.RoomTempC;
         for (int i = 0; i < 200 && !room.CompressorOn; i++)
         {
             time = time.AddMinutes(5);
+            beforeSwitchOn = room.RoomTempC;
             room.Update(TimeSpan.FromMinutes(5), 20);
         }
 
         Assert.True(room.CompressorOn, "Der Kompressor muss bei Soll + Hysterese einschalten.");
-        // Die Hysterese wird vor dem Temperaturschritt geprüft, der Schritt selbst kann etwas überschwingen.
-        Assert.True(room.RoomTempC >= room.SetpointC + 1.9, $"eingeschaltet bei {room.RoomTempC:0.00} °C");
+        // Die Hysterese wird vor dem Temperaturschritt geprüft, deshalb zählt die Temperatur davor.
+        Assert.True(beforeSwitchOn >= room.SetpointC + 1.9, $"eingeschaltet bei {beforeSwitchOn:0.00} °C");
 
         // Kühlen, bis er bei Soll − Hysterese wieder abschaltet.
         room.SetDoor(false);
+        double beforeSwitchOff = room.RoomTempC;
         for (int i = 0; i < 2000 && room.CompressorOn; i++)
         {
             time = time.AddMinutes(5);
+            beforeSwitchOff = room.RoomTempC;
             room.Update(TimeSpan.FromMinutes(5), 20);
         }
 
         Assert.False(room.CompressorOn, "Der Kompressor muss bei Soll − Hysterese abschalten.");
-        // Abschalten wird vor dem Temperaturschritt geprüft, der Schritt selbst kann etwas zurückerwärmen.
-        Assert.True(room.RoomTempC <= room.SetpointC - 1.7, $"abgeschaltet bei {room.RoomTempC:0.00} °C");
+        // Auch das Abschalten wird vor dem Temperaturschritt geprüft.
+        Assert.True(beforeSwitchOff <= room.SetpointC - 1.9, $"abgeschaltet bei {beforeSwitchOff:0.00} °C");
         Assert.Equal(DeviceState.Idle, room.State);
     }
 
@@ -307,7 +311,7 @@ public class KuehlhausArgsTests
         Assert.Null(config.Seed);
         Assert.Null(config.WeatherUrl);                            // standalone: lokales Tagesprofil
         Assert.Equal(SimulationConfig.DefaultModbusPort, config.Modbus.Port);
-        Assert.Equal(1504, config.Modbus.Port);
+        Assert.Equal(1505, config.Modbus.Port);
         Assert.True(config.TimeSync.Standalone);
     }
 

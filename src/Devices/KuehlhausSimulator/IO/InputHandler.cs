@@ -1,8 +1,8 @@
 using System.Globalization;
 using Devices.Common;
-using Verbraucher.Simulation;
+using KuehlhausSimulator.Simulation;
 
-namespace Verbraucher.IO;
+namespace KuehlhausSimulator.IO;
 
 /// <summary>
 /// Verarbeitet Tastaturbefehle während der laufenden Simulation. Die Tasten sind bewusst andere als beim
