@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../../Devices.Common/Devices.Common.csproj" />
+    <ProjectReference Include="../../Shared/Shared.csproj" />
   </ItemGroup>
 
 </Project>

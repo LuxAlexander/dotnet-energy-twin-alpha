@@ -1,5 +1,6 @@
 using Devices.Common;
 using Devices.Common.Modbus;
+using Devices.Common.Weather;
 using Shared.Config;
 
 namespace KuehlhausSimulator.Simulation;
@@ -14,9 +15,6 @@ public class SimulationConfig
 
     /// <summary>Tempo im Standalone-Betrieb; ein Kühlhaus reagiert langsam, deshalb kein allzu hoher Wert.</summary>
     public const double DefaultStandaloneSpeed = 600;
-
-    /// <summary>Wettersimulator; mit Master vorbelegt, standalone bleibt das Wetter lokal.</summary>
-    public const string DefaultWeatherUrl = "http://127.0.0.1:8080";
 
     /// <summary>Eigener Modbus-Standardport; 1502 nutzen PV und Charger, 1503 die Batterie, 1504 der Charger in der Demo.</summary>
     public const int DefaultModbusPort = 1505;
@@ -45,11 +43,8 @@ public class SimulationConfig
     /// <summary>Host, Port und Unit-ID des Modbus-Servers.</summary>
     public ModbusOptions Modbus { get; init; } = new() { Port = DefaultModbusPort };
 
-    /// <summary>Basis-URL des Wettersimulators; <c>null</c> = lokales Tagesprofil (<c>--weather off</c>).</summary>
-    public string? WeatherUrl { get; init; }
-
-    /// <summary>Standortkennung für die Wetterabfrage (siehe Wettersimulator).</summary>
-    public string Location { get; init; } = "salzburg";
+    /// <summary>Wetterbezug (optional; ohne Angabe mit Master der Wettersimulator, standalone aus).</summary>
+    public WeatherOptions Weather { get; init; } = new();
 
     public TimeSpan Step => TimeSpan.FromMinutes(StepMinutes);
     public TimeSpan? Duration => DurationHours is { } hours ? TimeSpan.FromHours(hours) : null;

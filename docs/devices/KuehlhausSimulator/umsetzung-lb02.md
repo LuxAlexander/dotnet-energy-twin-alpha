@@ -20,9 +20,11 @@ und hat keine Referenz auf `Devices.Common`.
 (unter `Devices`), das Modell ist repariert (exakte Exponentiallösung, `SetDoor(bool)`, Einheiten, `ResetFault()`),
 `DeviceType.IndustrialConsumer = 5`, `KuehlhausRegisters.cs` und der Eintrag in `RegisterPlans.For` sind da.
 Dazu kommen `SimulationConfig`, `SimulationEngine` (Master-Zeit, feste Schritte, CSV je Lauf), `AutoModeController`
-(Tür nach Tageszeit), `KuehlhausModbus` (Register 20–31), `WeatherClient` (Außentemperatur je Modellstunde,
-Fehler nach 3 Fehlversuchen sichtbar, Wiederholung alle 10 s), `ArgsParser`/`CsvLogger`, `ConsoleRenderer`/`InputHandler`
-(Anzeige und Tasten `T/S/F/R/O/A/P/</>/Q`), 28 Tests in `tests/FieldDevices.Tests/ConsumerTests.cs` und das Geräte-README.
+(Tür nach Tageszeit), `KuehlhausModbus` (Register 20–31), Wetterbezug über die gemeinsamen Bausteine aus
+`Devices.Common` (`WeatherClient`, `WeatherFeed`, `WeatherOptions`; Außentemperatur je Modellstunde, Fehler nach
+3 Fehlversuchen sichtbar, Wiederholung alle 10 s), `ArgsParser`/`CsvLogger` (auf `Shared.Data.CsvFileWriter`),
+`ConsoleRenderer`/`InputHandler` (Anzeige und Tasten `T/S/F/R/O/A/P/</>/Q`), 28 Tests in
+`tests/FieldDevices.Tests/ConsumerTests.cs` und das Geräte-README.
 `dotnet build EnergyTwin.sln` läuft mit 0 Warnungen, `tests/FieldDevices.Tests` 62/62, `--register-plan` gibt die
 Registertabelle aus. Probeläufe: 24 h standalone (289 CSV-Zeilen, 20,7 kWh, Tür 25 Schritte offen), mit Master
 (Zeitstatus „synchron“, Tempo 600), nach Master-Abbruch „Master verloren“ im Register 12, Sollwert über den
@@ -268,8 +270,7 @@ public class SimulationConfig
     public string OutputDirectory { get; init; } = OutputPaths.CsvDirectory;
     public TimeSyncOptions TimeSync { get; init; } = new() { StandaloneSpeed = DefaultStandaloneSpeed };
     public ModbusOptions Modbus { get; init; } = new() { Port = 1505 };   // eigener Standardport!
-    public string? WeatherUrl { get; init; }            // null = lokales Tagesprofil
-    public string Location { get; init; } = "salzburg";
+    public WeatherOptions Weather { get; init; } = new();   // --weather/--location, Standard-URL nur mit Master
 
     public TimeSpan Step => TimeSpan.FromMinutes(StepMinutes);
     public TimeSpan? Duration => DurationHours is { } h ? TimeSpan.FromHours(h) : null;
@@ -448,23 +449,28 @@ an `KuehlhausModbus` übergeben (Konstruktorparameter oder Property `OutsideTemp
 
 ## Schritt 6 – Wetteranbindung (1 h)
 
-1. `src/Devices/PvSimulator/Simulation/WeatherClient.cs` nach `src/Devices/KuehlhausSimulator/Simulation/WeatherClient.cs`
-   kopieren, Namespace auf `KuehlhausSimulator.Simulation` ändern. Beide Klassen (`WeatherUnavailableException`,
-   `WeatherClient`) sind geräteunabhängig und benutzen nur `SimCore.Contracts.WeatherData`.
-   **Nicht** in `Devices.Common` verschieben, solange die PV ihre eigene Kopie hat – das wäre ein eigener Umbau.
-2. In `SimulationEngine` genau das PV-Muster übernehmen (`src/Devices/PvSimulator/Simulation/SimulationEngine.cs`,
-   `UpdateWeatherAsync`, Zeilen 222–259):
-   - Abfrage **je Modellstunde**: `hour = new DateTime(t.Year, t.Month, t.Day, t.Hour, 0, 0, DateTimeKind.Utc)`
-   - nur holen, wenn `_lastWeather is null || _lastWeather.SimTimeUtc != hour || _lastWeather.RunId != RunId`
-   - Erfolg: `_lastWeather = data`, `_weatherFailures = 0`, Statuszeile mit `data.TemperatureC`,
-     `data.WindSpeedMs`, `data.Condition`
-   - Fehler (`WeatherUnavailableException`): Zähler++, `_nextWeatherAttempt = DateTime.UtcNow.AddSeconds(10)`,
-     Meldung „… – n. Fehlversuch, letztes Wetter bleibt“; ab 3 Fehlversuchen einmal eine sichtbare Meldung
-   - immer `outsideC = _lastWeather?.TemperatureC ?? LocalOutsideTemperature(stepEnd)`
-3. Default-Regel wie bei der PV: **mit Master** `http://127.0.0.1:8080`, **standalone** lokal.
-   Im `ArgsParser` umsetzen (`--weather <url|off>`, `--location`, Standard `salzburg`).
-4. Anzeige: eigene Zeile „Wetter“ (Standort, Temperatur, Zustand, letzte Abfrage) im `ConsoleRenderer`,
-   Status auch in der einzeiligen Ausgabe für umgeleitete Protokolle.
+**Seit 2026-10-26 umgesetzt über `Devices.Common`** – die frühere Kopie des PV-`WeatherClient` ist gelöscht.
+
+1. Kein eigener HTTP-Client: `Devices.Common/Weather` liefert `WeatherClient` (async, 5 s Timeout, deutsche Fehler),
+   `WeatherOptions` (`--weather <url|off>`, `--location`, `WithDefaultUrl(standalone)`) und `WeatherFeed`
+   (Abfrage höchstens je Modellstunde, Retry 10 s, letztes Wetter bleibt, Meldung nach 3 Fehlversuchen).
+2. In `SimulationConfig` ein `WeatherOptions Weather { get; init; } = new();`, im `ArgsParser` den Block
+   `|| WeatherOptions.TryApply(...)` wie bei Charger/Batterie und als Ergebnis `Weather = weather.WithDefaultUrl(timeSync.Standalone)`.
+3. In der Engine:
+   ```csharp
+   if (config.Weather.Url is { } url)
+       _weather = new WeatherFeed(new WeatherClient(url), config.Weather.Location, message => Message = message);
+   ...
+   double outsideC = _weather is not null && await _weather.UpdateAsync(stepStart, RunId, ct) is { } weather
+       ? weather.TemperatureC
+       : LocalOutsideTemperature(stepStart);
+   ```
+   `WeatherStatus => _weather?.Status ?? "aus (--weather off), lokales Tagesprofil"`, `OutsideSource` über `_weather.Last`.
+   Eigene Zähler, Retry-Felder und `German(...)` entfallen.
+4. Anzeige: Zeile „Wetter“ mit `engine.WeatherStatus` (Standort, Zustand, Temperatur, Wind, Strahlung) im `ConsoleRenderer`.
+
+Messwerte (2026-10-26): Wettersimulator + Kühlhaus standalone mit `--weather http://127.0.0.1:8080` ⇒ Spalte
+`Aussenquelle` = `Wettersimulator`, Außentemperatur 5,6 → 4,9 °C, zwei Abfragen in einer Stunde.
 
 ---
 
@@ -473,7 +479,7 @@ an `KuehlhausModbus` übergeben (Konstruktorparameter oder Property `OutsideTemp
 | Datei | Vorlage | Änderungen |
 |---|---|---|
 | `IO/ArgsParser.cs` | `DualPortCharger/IO/ArgsParser.cs` | eigene Optionen: `--id`, `--setpoint`, `--cooling`, `--alarm`, `--step`, `--seed`, `--output`; `TimeSyncOptions.TryApply` und `ModbusOptions.TryApply` übernehmen; `--duration`/`--start`/`--speed` nur mit `--standalone`; `--register-plan` in `Program.cs` behandeln |
-| `IO/CsvLogger.cs` | Charger | Spalten: `Zeit;Lauf;Modus;Anlage_Ein;Soll_C;Raum_C;Aussen_C;Kompressor;Kaelte_kW;Leistung_kW;Energie_kWh;Tuer;Fehler`; de-AT, UTF-8 mit BOM, `Lauf`-Spalte |
+| `IO/CsvLogger.cs` | Charger | Spalten: `Zeit;Lauf;Modus;Anlage_Ein;Soll_C;Raum_C;Aussen_C;Aussenquelle;Kompressor;Kaelte_kW;Leistung_kW;Energie_kWh;Laufzeit_h;Tuer;Zustand;Fehler`; de-AT, `Lauf`-Spalte; Datei/BOM/Maskierung über `Shared.Data.CsvFileWriter` |
 | `IO/ConsoleRenderer.cs` | Charger | Zeilen: Kopf, Simulationszeit/Lauf/Schritt, Zeitquelle, Modbus, Wetter, Anlage, Raumtemperatur mit Balken gegenüber Soll, Kompressor, Leistung/Energie, Tür, Meldung, Tastenhilfe; Fallback eine Zeile bei umgeleiteter Ausgabe |
 | `IO/InputHandler.cs` | Charger | Tasten unten |
 

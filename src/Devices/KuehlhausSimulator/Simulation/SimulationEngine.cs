@@ -1,6 +1,6 @@
 using System.Globalization;
 using Devices.Common;
-using SimCore.Contracts;
+using Devices.Common.Weather;
 using KuehlhausSimulator.IO;
 
 namespace KuehlhausSimulator.Simulation;
@@ -16,28 +16,20 @@ public sealed class SimulationEngine
     private static readonly TimeSpan PollInterval = TimeSpan.FromMilliseconds(50);
     private static readonly TimeSpan RenderInterval = TimeSpan.FromMilliseconds(200);
     private static readonly TimeSpan RedirectedRenderInterval = TimeSpan.FromSeconds(5);
-    private static readonly TimeSpan RetryInterval = TimeSpan.FromSeconds(10);
     private static readonly CultureInfo Culture = CultureInfo.GetCultureInfo("de-AT");
 
-    private readonly SimulationConfig _config;
     private readonly Kuehlhaus _room;
     private readonly AutoModeController _autoMode;
     private readonly ConsoleRenderer _renderer;
     private readonly InputHandler _input;
     private readonly StepScheduler _scheduler;
     private readonly KuehlhausModbus? _modbus;
-    private readonly WeatherClient? _weather;
+    private readonly WeatherFeed? _weather;
 
-    private string _weatherStatus;
-    private WeatherData? _lastWeather;
-    private int _weatherFailures;
-    private DateTime _nextWeatherAttempt = DateTime.MinValue;
-    private bool _weatherErrorReported;
     private DateTime? _endTime;
 
     public SimulationEngine(SimulationConfig config)
     {
-        _config = config;
         Config = config;
         _room = new Kuehlhaus(config.ToModelConfig());
 
@@ -53,15 +45,8 @@ public sealed class SimulationEngine
         if (!config.Modbus.Disabled)
             _modbus = new KuehlhausModbus(_room, Time, config.Modbus, message => Message = message);
 
-        if (config.WeatherUrl is { } url)
-        {
-            _weather = new WeatherClient(url);
-            _weatherStatus = $"warte auf {url} …";
-        }
-        else
-        {
-            _weatherStatus = "aus (--weather off), lokales Tagesprofil";
-        }
+        if (config.Weather.Url is { } weatherUrl)
+            _weather = new WeatherFeed(new WeatherClient(weatherUrl), config.Weather.Location, message => Message = message);
     }
 
     public SimulationConfig Config { get; }
@@ -75,7 +60,7 @@ public sealed class SimulationEngine
     public string? ModbusStatus => _modbus?.StatusText;
 
     /// <summary>Zustand der Wetteranbindung für Anzeige und Tests.</summary>
-    public string WeatherStatus => _weatherStatus;
+    public string WeatherStatus => _weather?.Status ?? "aus (--weather off), lokales Tagesprofil";
 
     /// <summary>Virtuelle Zeit des dargestellten Zustands (nach dem letzten Schritt); <c>null</c> bis zur ersten Zeit.</summary>
     public DateTime? SimulationTime { get; private set; }
@@ -100,7 +85,7 @@ public sealed class SimulationEngine
     /// <summary>Herkunft der Außentemperatur für die CSV-Spalte und die Anzeige.</summary>
     public string OutsideSource => _weather is null
         ? "lokal"
-        : _lastWeather is null ? "lokal (kein Wetter)" : "Wettersimulator";
+        : _weather.Last is null ? "lokal (kein Wetter)" : "Wettersimulator";
 
     public void Quit() => IsRunning = false;
 
@@ -245,11 +230,11 @@ public sealed class SimulationEngine
         {
             var stepStart = update.FirstStepAt + Config.Step * i;
 
-            await UpdateWeatherAsync(stepStart, cancellationToken);
+            double outsideC = await UpdateWeatherAsync(stepStart, cancellationToken);
             if (IsAutoMode)
                 _autoMode.Step(stepStart, Config.Step);
 
-            _room.Update(Config.Step, CurrentOutsideTemperature(stepStart));
+            _room.Update(Config.Step, outsideC);
             SimulationTime = stepStart + Config.Step;
 
             await logger.WriteAsync(SimulationTime.Value, RunId, IsAutoMode, _room, OutsideSource, cancellationToken);
@@ -268,54 +253,22 @@ public sealed class SimulationEngine
             _endTime = modelTime + duration;
 
         Message = $"{reason}: Lauf {RunId} ab {modelTime.ToString("dd.MM.yyyy HH:mm", Culture)}.";
-        await UpdateWeatherAsync(modelTime, cancellationToken);
-        _room.Update(TimeSpan.Zero, CurrentOutsideTemperature(modelTime));   // nur Außentemperatur/Zustand setzen, keine Zeit vergeht
+        _room.Update(TimeSpan.Zero, await UpdateWeatherAsync(modelTime, cancellationToken));   // nur Außentemperatur/Zustand setzen, keine Zeit vergeht
         await logger.WriteAsync(modelTime, RunId, IsAutoMode, _room, OutsideSource, cancellationToken);
         await logger.FlushAsync(cancellationToken);
     }
 
     /// <summary>
-    /// Holt das Wetter je Modellstunde beim Wettersimulator. Fehler werden sichtbar gemeldet
-    /// (ab 3 Fehlversuchen in Folge), das letzte gültige Wetter bleibt aktiv, neue Versuche alle 10 s.
+    /// Außentemperatur des Schritts: vom Wettersimulator (höchstens eine Abfrage je Modellstunde; <see cref="WeatherFeed"/>
+    /// behält bei einem Fehler das letzte Wetter und meldet den Ausfall nach 3 Fehlversuchen), sonst aus dem lokalen Tagesprofil.
     /// </summary>
-    private async Task UpdateWeatherAsync(DateTime time, CancellationToken cancellationToken)
+    private async Task<double> UpdateWeatherAsync(DateTime time, CancellationToken cancellationToken)
     {
-        if (_weather is null)
-            return;
+        if (_weather is not null && await _weather.UpdateAsync(time, RunId, cancellationToken) is { } weather)
+            return weather.TemperatureC;
 
-        var hour = new DateTime(time.Year, time.Month, time.Day, time.Hour, 0, 0, DateTimeKind.Utc);
-        bool needsFetch = _lastWeather is null || _lastWeather.SimTimeUtc != hour || _lastWeather.RunId != RunId;
-
-        if (!needsFetch || DateTime.UtcNow < _nextWeatherAttempt)
-            return;
-
-        try
-        {
-            var data = await _weather.GetAsync(_config.Location, hour, RunId, cancellationToken);
-            _lastWeather = data;
-            _weatherFailures = 0;
-            _weatherErrorReported = false;
-            _weatherStatus = string.Create(Culture,
-                $"{data.Location}: {German(data.Condition)} · {data.TemperatureC:0.0} °C · " +
-                $"{data.WindSpeedMs:0.0} m/s · {data.IrradiationWm2:0} W/m²");
-        }
-        catch (WeatherUnavailableException ex) when (!cancellationToken.IsCancellationRequested)
-        {
-            _weatherFailures++;
-            _nextWeatherAttempt = DateTime.UtcNow + RetryInterval;
-            _weatherStatus = $"{ex.Message} – {_weatherFailures}. Fehlversuch " +
-                             (_lastWeather is null ? "(lokales Profil)" : ", letztes Wetter bleibt");
-            if (_weatherFailures >= 3 && !_weatherErrorReported)
-            {
-                _weatherErrorReported = true;
-                Message = $"WETTER: {ex.Message} – {_config.Location} (Versuche alle {RetryInterval.TotalSeconds:0} s)";
-            }
-        }
+        return LocalOutsideTemperature(time);
     }
-
-    /// <summary>Außentemperatur des Schritts: vom Wettersimulator, sonst (oder solange keine Antwort da ist) lokal.</summary>
-    private double CurrentOutsideTemperature(DateTime time) =>
-        _lastWeather?.TemperatureC ?? LocalOutsideTemperature(time);
 
     /// <summary>
     /// Lokales Tagesprofil der Außentemperatur in °C: Minimum 5 °C um 3 Uhr, Maximum 23 °C um 15 Uhr.
@@ -323,14 +276,4 @@ public sealed class SimulationEngine
     /// </summary>
     public static double LocalOutsideTemperature(DateTime time) =>
         14 + 9 * Math.Sin(2 * Math.PI * (time.Hour + time.Minute / 60.0 - 9) / 24);
-
-    private static string German(WeatherCondition condition) => condition switch
-    {
-        WeatherCondition.Sunny => "SONNIG",
-        WeatherCondition.PartlyCloudy => "BEWÖLKT",
-        WeatherCondition.Overcast => "DICHT BEWÖLKT",
-        WeatherCondition.Storm => "GEWITTER",
-        WeatherCondition.Snow => "SCHNEE",
-        _ => "NACHT"
-    };
 }

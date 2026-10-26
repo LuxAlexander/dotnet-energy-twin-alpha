@@ -60,3 +60,15 @@
   - Der Hysterese-Test war auf den alten Türverlust kalibriert (er prüfte die Temperatur **nach** dem Schritt und erlaubte 1,9 K Überschwingen; bei 1,5 kW sind es nur noch 1,8 K). Er prüft jetzt die Temperatur **vor** dem Schritt, also den tatsächlichen Schaltpunkt, und ist damit vom Türverlust unabhängig.
   - Die Umbenennung erfolgte mit `Rename-Item`, nicht mit `git mv`; in Git erscheinen die Dateien deshalb als gelöscht und neu.
   - Nicht committet.
+
+### Nachtrag 2026-10-26 – Kühlhaus auf die gemeinsamen Bausteine umgestellt
+
+- **Done:** Als letztes Feldgerät hatte mein Kühlhaus noch eigene Kopien der Wetterlogik. Jetzt nutzt es – wie PV, Batterie und Ladesäule – `Devices.Common` und `Shared`: eigener `Simulation/WeatherClient.cs` gelöscht (80 Zeilen, inklusive zweiter `WeatherUnavailableException`), stattdessen `WeatherClient`/`WeatherFeed`/`WeatherOptions` aus `Devices.Common` (Abfrage höchstens je Modellstunde, Retry 10 s, letztes Wetter bleibt, Meldung nach 3 Fehlversuchen), `--weather`/`--location` über `WeatherOptions.TryApply` mit `WithDefaultUrl(standalone)`, und der CSV-Grundwriter `Shared.Data.CsvFileWriter` (Datei, Kopfzeile, BOM, Maskierung) statt eigenem `StreamWriter`. Entfallen sind `_lastWeather`, `_weatherFailures`, `_nextWeatherAttempt`, `_weatherErrorReported`, `RetryInterval`, `German(...)`, `CurrentOutsideTemperature` sowie `DefaultWeatherUrl`, `WeatherUrl` und `Location` in `SimulationConfig`; die Engine holt die Außentemperatur nur noch über eine Methode. Rund 170 Zeilen Duplikat weniger, keine Zeile Fachlogik verloren, Bedienung unverändert.
+- **KI:** opencode (big-pickle) => Analyse der Doppelungen, Umstellung auf die gemeinsamen Bausteine, Anpassung von Tests und Doku, Build und Probelauf.
+- **Artefact:** `src/Devices/KuehlhausSimulator/KuehlhausSimulator.csproj` (`ProjectReference Shared`), `Simulation/SimulationConfig.cs`, `Simulation/SimulationEngine.cs`, `IO/ArgsParser.cs`, `IO/CsvLogger.cs`; gelöscht: `Simulation/WeatherClient.cs`; `tests/FieldDevices.Tests/ConsumerTests.cs`; `README.md` (Gerät), zentrale `README.md`, `AGENTS.md` (§0.3, §0.9, §0.10, §0.11, §0.14), Anleitung `docs/devices/KuehlhausSimulator/umsetzung-lb02.md`.
+- **Test:** `dotnet build EnergyTwin.sln` 0 Warnungen; `dotnet test tests/FieldDevices.Tests` 62/62. Probelauf mit Wettersimulator: Kühlhaus standalone mit `--weather http://127.0.0.1:8080`, Spalte `Aussenquelle` = `Wettersimulator`, Außentemperatur 5,6 → 4,9 °C, genau eine Abfrage je Modellstunde; `--weather off` bleibt beim lokalen Tagesprofil (`WeatherStatus` = „aus (--weather off), lokales Tagesprofil“); `--help` zeigt den gemeinsamen Wetterblock.
+- **Comment:**
+  - Einzige sichtbare Änderung: Die Fehlerzeile sagt bei fehlender Antwort jetzt wie bei den anderen Geräten „… – n. Fehlversuch, letztes Wetter bleibt“ statt „(lokales Profil)“; die Startzeile nennt den Standort („warte auf salzburg …“) statt der URL.
+  - Der zweite Typ `WeatherUnavailableException` ist damit weg – es gilt nur noch der aus `Devices.Common.Weather`.
+  - Die 16 CSV-Spalten und das de-AT-Zahlenformat bleiben unverändert, damit das Abgabeformat gleich ist.
+  - Nicht committet.

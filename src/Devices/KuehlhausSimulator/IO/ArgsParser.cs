@@ -1,6 +1,7 @@
 using System.Globalization;
 using Devices.Common;
 using Devices.Common.Modbus;
+using Devices.Common.Weather;
 using KuehlhausSimulator.Simulation;
 
 namespace KuehlhausSimulator.IO;
@@ -19,8 +20,6 @@ public static class ArgsParser
           --step <min>           Schrittweite in Minuten              (Standard: 5)
           --seed <zahl>          Zufalls-Seed für wiederholbare Läufe (optional)
           --output <ordner>      Zielordner der CSV-Datei             (Standard: docs/data im Repo)
-          --weather <url|off>    Wettersimulator (Standard mit Master: {SimulationConfig.DefaultWeatherUrl}; standalone: lokales Tagesprofil)
-          --location <kennung>   Standort für die Wetterabfrage       (Standard: salzburg)
           --help                 Diese Hilfe anzeigen
 
         Virtuelle Zeit (Standard: vom Simulations-Master):
@@ -33,6 +32,9 @@ public static class ArgsParser
           --unit-id <1-247>     Modbus-Unit-ID (Standard: 1)
           --no-modbus           Modbus-Server nicht starten
           --register-plan       Registerplan als Markdown ausgeben und beenden
+
+        Wetter (optional; Außentemperatur des Kühlraums):
+        {WeatherOptions.Usage}
 
         Beispiele:
           dotnet run --project src/Devices/KuehlhausSimulator -- --id KH-01 --setpoint -18 --weather off
@@ -53,11 +55,9 @@ public static class ArgsParser
         double? duration = null;
         int? seed = null;
         string output = defaults.OutputDirectory;
-        string location = defaults.Location;
-        string? weatherUrl = defaults.WeatherUrl;
-        bool weatherSpecified = false;
         var timeSync = defaults.TimeSync;
         var modbus = defaults.Modbus;
+        var weather = defaults.Weather;
 
         for (int i = 0; i < args.Length; i++)
         {
@@ -69,7 +69,8 @@ public static class ArgsParser
                 continue;
             }
 
-            if (ModbusOptions.TryApply(name, () => NextValue(args, ref index, name), modbus, out modbus))
+            if (ModbusOptions.TryApply(name, () => NextValue(args, ref index, name), modbus, out modbus)
+                || WeatherOptions.TryApply(name, () => NextValue(args, ref index, name), weather, out weather))
             {
                 i = index;
                 continue;
@@ -115,22 +116,6 @@ public static class ArgsParser
                         throw new ArgumentException($"--output ist kein gültiger Ordner: '{output}'.");
                     break;
 
-                case "--weather":
-                    string weather = NextValue(args, ref i, name);
-                    weatherSpecified = true;
-                    weatherUrl = weather.Equals("off", StringComparison.OrdinalIgnoreCase)
-                        || weather.Equals("none", StringComparison.OrdinalIgnoreCase)
-                        || weather.Equals("lokal", StringComparison.OrdinalIgnoreCase)
-                        ? null
-                        : weather;
-                    break;
-
-                case "--location":
-                    location = NextValue(args, ref i, name);
-                    if (string.IsNullOrWhiteSpace(location))
-                        throw new ArgumentException("--location darf nicht leer sein.");
-                    break;
-
                 default:
                     throw new ArgumentException($"Unbekanntes Argument: '{args[i]}'.");
             }
@@ -139,10 +124,6 @@ public static class ArgsParser
         if (!timeSync.Standalone && (duration is not null || timeSync.HasStandaloneSettings))
             throw new ArgumentException(
                 "--duration, --start und --speed gelten nur mit --standalone; mit Master bestimmt der Simulations-Master Zeit und Tempo.");
-
-        // Mit Master kommt die Außentemperatur standardmäßig vom Wettersimulator; standalone bleibt sie lokal.
-        if (!weatherSpecified && !timeSync.Standalone)
-            weatherUrl = SimulationConfig.DefaultWeatherUrl;
 
         return new SimulationConfig
         {
@@ -155,8 +136,7 @@ public static class ArgsParser
             OutputDirectory = output,
             TimeSync = timeSync,
             Modbus = modbus,
-            WeatherUrl = weatherUrl,
-            Location = location,
+            Weather = weather.WithDefaultUrl(timeSync.Standalone),
         };
     }
 

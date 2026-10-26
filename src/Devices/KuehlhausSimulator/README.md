@@ -184,9 +184,11 @@ Automatik eine von Hand geöffnete Tür nicht beim nächsten Schritt wieder schl
 ### Außentemperatur
 
 Mit Master und ohne `--weather off` fragt das Gerät **je Modellstunde** den Wettersimulator
-(`GET /weather?location=…&simTime=…&run=…`) und übernimmt `TemperatureC` als Außentemperatur. Fehler werden sichtbar
-gemeldet (ab 3 Fehlversuchen in Folge als Meldung), das letzte gültige Wetter bleibt aktiv, neue Versuche alle 10 s.
-Ohne Wettersimulator (standalone oder `--weather off`) gilt das lokale Tagesprofil:
+(`GET /weather?location=…&simTime=…&run=…`) und übernimmt `TemperatureC` als Außentemperatur. Den Bezug übernimmt
+der gemeinsame `WeatherFeed` aus `Devices.Common` (wie bei PV, Batterie und Ladesäule): höchstens eine Abfrage je
+Modellstunde, neue Versuche alle 10 s, das letzte gültige Wetter bleibt aktiv, ein anhaltender Ausfall wird nach
+3 Fehlversuchen in Folge sichtbar gemeldet. Ohne Wettersimulator (standalone oder `--weather off`) gilt das lokale
+Tagesprofil:
 
 ```
 T_lokal(t) = 14 °C + 9 K · sin(2π · (Stunde + Minute/60 − 9) / 24)
@@ -298,17 +300,22 @@ src/Devices/KuehlhausSimulator/
 │   ├── SimulationConfig.cs     # Optionen (Soll, Kälte, Schritt, Dauer, Seed, Zeit, Modbus, Wetter)
 │   ├── SimulationEngine.cs     # Hauptschleife: Zeit, Schritte, Wetter, CSV, Modbus, Tasten, Anzeige
 │   ├── KuehlhausModbus.cs      # Register veröffentlichen, Schreibzugriffe anwenden
-│   ├── WeatherClient.cs        # HTTP-Abfrage je Modellstunde
 │   └── AutoModeController.cs   # Türöffnungen nach Tageszeit
 └── IO/
     ├── ArgsParser.cs           # Kommandozeile und Hilfe
-    ├── CsvLogger.cs            # CSV je Lauf (async, de-AT, BOM)
+    ├── CsvLogger.cs            # CSV je Lauf (16 Spalten, de-AT)
     ├── ConsoleRenderer.cs      # flackerfreie Anzeige, Fallback bei umgeleiteter Ausgabe
     └── InputHandler.cs         # Tasten T/S/F/R/O/A/P/</>/Q
 ```
 
 `Kuehlhaus` kennt weder Konsole noch Uhr noch Netzwerk: die Außentemperatur kommt als Parameter, die Zeit als
 Schrittweite. Ein-/Ausgabe liegt in `IO/`, die Verdrahtung in `Simulation/`.
+
+Wiederverwendet werden die gemeinsamen Bausteine: `DeviceTimeSource`, `StepScheduler`, `TimeSyncOptions`,
+`ModbusDeviceServer`, `ModbusOptions`, `AsyncConsole` sowie `WeatherClient`/`WeatherFeed`/`WeatherOptions`
+(alle `Devices.Common`), `WeatherData` (`SimCore.Contracts`), Registerkopf/Plan/Codec (`Modbus.Contracts`),
+`CsvFileWriter` (`Shared`) und `OutputPaths` (`Shared.Config`). Das Gerät selbst enthält nur Modell, Register,
+Anzeige und Tasten.
 
 ## Tests
 
@@ -345,8 +352,8 @@ Probeläufe am 2026-10-26 (umgeleitete Ausgabe):
   Abgelehnte Werte erkennt man an Register 18/19 und in der Konsole, nicht als Modbus-Exception.
 - **Neustart im Master** setzt den Gerätezustand nicht zurück (Raumtemperatur, Energie, Störungen bleiben); nur die
   Modellzeit springt auf den neuen Lauf.
-- **Wetter für die anderen Geräte** (Charger, Batterie) ist nicht angebunden; sie nutzen feste Umgebungstemperaturen.
-  Das Kühlhaus fragt nur die Temperatur ab, nicht Strahlung oder Niederschlag.
+- **Wetter wird nur teilweise genutzt:** Das Kühlhaus fragt nur die Temperatur ab, nicht Strahlung oder Niederschlag.
+  Die anderen Feldgeräte (PV, Batterie, Ladesäule) sind inzwischen ebenfalls am Wettersimulator.
 - **Projektname und Ports sind entschieden (2026-10-26):** Projekt `KuehlhausSimulator`, Modbus-Standardport **1505**
   (1502 = PV/Charger, 1503 = Batterie, 1504 = Charger in der Demo), Wärmeeintrag bei offener Tür 1,5 kW.
 - **Modellvereinfachungen:** ein Kompressor ohne Vereisung, keine Ware, kein Abtauen, kein Lastprofil außer der Tür;

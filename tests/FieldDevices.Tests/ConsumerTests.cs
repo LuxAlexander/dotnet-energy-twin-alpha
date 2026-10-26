@@ -1,4 +1,5 @@
 using Devices.Common.Modbus;
+using Devices.Common.Weather;
 using Modbus.Contracts;
 using KuehlhausSimulator;
 using KuehlhausSimulator.IO;
@@ -309,7 +310,7 @@ public class KuehlhausArgsTests
         Assert.Equal(5.0, config.StepMinutes);
         Assert.Null(config.DurationHours);
         Assert.Null(config.Seed);
-        Assert.Null(config.WeatherUrl);                            // standalone: lokales Tagesprofil
+        Assert.Null(config.Weather.Url);                           // standalone: lokales Tagesprofil
         Assert.Equal(SimulationConfig.DefaultModbusPort, config.Modbus.Port);
         Assert.Equal(1505, config.Modbus.Port);
         Assert.True(config.TimeSync.Standalone);
@@ -320,15 +321,15 @@ public class KuehlhausArgsTests
     {
         var config = ArgsParser.Parse([]);
 
-        Assert.Equal(SimulationConfig.DefaultWeatherUrl, config.WeatherUrl);
-        Assert.Equal("salzburg", config.Location);
+        Assert.Equal(WeatherOptions.DefaultUrl, config.Weather.Url);
+        Assert.Equal("salzburg", config.Weather.Location);
     }
 
     [Fact]
     public void WeatherOff_DisablesTheWeatherSimulator()
     {
-        Assert.Null(ArgsParser.Parse(["--weather", "off"]).WeatherUrl);
-        Assert.Null(ArgsParser.Parse(["--weather", "off", "--standalone"]).WeatherUrl);
+        Assert.Null(ArgsParser.Parse(["--weather", "off"]).Weather.Url);
+        Assert.Null(ArgsParser.Parse(["--weather", "off", "--standalone"]).Weather.Url);
     }
 
     [Fact]

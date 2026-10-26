@@ -1,11 +1,12 @@
 using System.Globalization;
-using System.Text;
+using Shared.Data;
 
 namespace KuehlhausSimulator.IO;
 
 /// <summary>
-/// Schreibt pro Simulationsschritt eine Zeile in die CSV-Datei (asynchron).
-/// Semikolon als Trenner, Zahlen fix im de-AT-Format (Dezimalkomma) – unabhängig vom System.
+/// Schreibt pro Simulationsschritt eine Zeile in die CSV-Datei (asynchron). Die Datei – Name mit Geräte-ID und
+/// Zeitstempel, Semikolon, UTF-8 mit BOM – legt <see cref="CsvFileWriter"/> an; die Zahlen stehen fix im
+/// de-AT-Format (Dezimalkomma) – unabhängig vom System.
 /// </summary>
 public sealed class CsvLogger : IAsyncDisposable
 {
@@ -15,35 +16,21 @@ public sealed class CsvLogger : IAsyncDisposable
         "Zeit;Lauf;Modus;Anlage_Ein;Soll_C;Raum_C;Aussen_C;Aussenquelle;Kompressor;Kaelte_kW;Leistung_kW;" +
         "Energie_kWh;Laufzeit_h;Tuer;Zustand;Fehler";
 
-    private readonly StreamWriter _writer;
+    private readonly CsvFileWriter _writer;
 
-    public string FilePath { get; }
+    public string FilePath => _writer.FilePath;
 
-    private CsvLogger(string filePath, StreamWriter writer)
-    {
-        FilePath = filePath;
-        _writer = writer;
-    }
+    private CsvLogger(CsvFileWriter writer) => _writer = writer;
 
     /// <summary>Legt Ordner und Datei an und schreibt die Kopfzeile.</summary>
     public static async Task<CsvLogger> CreateAsync(string deviceId, string directory, CancellationToken cancellationToken)
     {
-        Directory.CreateDirectory(directory);
-
-        string safeId = string.Concat(deviceId.Select(c => Path.GetInvalidFileNameChars().Contains(c) ? '_' : c));
-        string filePath = Path.Combine(directory, $"{safeId}_{DateTime.Now:yyyy-MM-dd_HHmmss}.csv");
-
-        // UTF-8 mit BOM, damit Excel die Datei korrekt erkennt; FileOptions.Asynchronous für echtes async-I/O
-        var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read, 4096, FileOptions.Asynchronous);
-        var writer = new StreamWriter(stream, new UTF8Encoding(encoderShouldEmitUTF8Identifier: true));
-        var logger = new CsvLogger(filePath, writer);
-        await writer.WriteLineAsync(Header.AsMemory(), cancellationToken);
-        await writer.FlushAsync(cancellationToken);
-        return logger;
+        var writer = await CsvFileWriter.CreateAsync(deviceId, directory, Header, cancellationToken);
+        return new CsvLogger(writer);
     }
 
     /// <summary>Eine Zeile; geschrieben wird gepuffert, <see cref="FlushAsync"/> nach jedem Schleifendurchlauf.</summary>
-    public async Task WriteAsync(
+    public Task WriteAsync(
         DateTime time, int runId, bool autoMode, Kuehlhaus room, string outsideSource, CancellationToken cancellationToken)
     {
         var fields = new List<string>
@@ -66,7 +53,7 @@ public sealed class CsvLogger : IAsyncDisposable
             room.ActiveFault.ToString(),
         };
 
-        await _writer.WriteLineAsync(string.Join(';', fields).AsMemory(), cancellationToken);
+        return _writer.WriteRowAsync(fields, cancellationToken);
     }
 
     public Task FlushAsync(CancellationToken cancellationToken) => _writer.FlushAsync(cancellationToken);

@@ -59,7 +59,7 @@ Vor dem Commit `dotnet build EnergyTwin.sln` und alle fünf Testprojekte laufen 
 | `PvSimulator` | ✅ an Master-Zeit (`StepScheduler`, `--model-step`), Modbus (Registerplan 20–38) und Wettersimulator (`--weather`, `--location`, Abfrage je Modellstunde) angebunden, async, CSV je Lauf; Tasten `Q`/`C`/`R`/`F`/`T`/`G` immer, `P`/`M`/`0–4`/`5–9` nur standalone (mit Master ignoriert und im Footer ausgeblendet, siehe §0.13); Statuszeilen umbrochen, Adresse/Standort farbig; nutzt `WeatherClient` aus `Devices.Common` und die gemeinsamen Bausteine aus `Shared` | `Simulation/SimulationEngine.cs`, `PvModbus.cs`, `Output/ConsoleDisplay.cs` |
 | `BatterySimulator` | ✅ an Master-Zeit, Modbus (Registerplan 20–43, Sollwert in konfigurierter Leistung) und optional Wetter (Außentemperatur) angebunden, async, Einstellungsmenü `S` statt Pausenmenü | `Simulator.cs`, `BatteryModbus.cs` |
 | `WeatherSimulator` | ✅ HTTP-Dienst (`/weather`, `/locations`), deterministisch aus WeatherSynth + eigenem Modell, 3 Standorte, manuelle Übersteuerung, Fehler 404/400 | `Program.cs`, `Simulation/WeatherModel.cs`, README |
-| `Devices/KuehlhausSimulator` (Kühlhaus) | ✅ **fertig (Schritte 1–9, 2026-10-26)**: in der Solution, Modell mit exakter Exponentiallösung (`SetDoor(bool)`, `ResetFault()`, `AlarmTempC`), `DeviceType.IndustrialConsumer = 5`, `KuehlhausRegisters` (20–31), `SimulationConfig`/`SimulationEngine` (Master-Zeit, feste Schritte, CSV je Lauf, Wetter je Modellstunde, Modbus auch in der Pause), `KuehlhausModbus`, `WeatherClient`, Automatik (`AutoModeController`), Anzeige/Tasten (`ConsoleRenderer`, `InputHandler`), 28 Tests, Geräte-README mit Registerplan | `Simulation/SimulationEngine.cs`, `Simulation/KuehlhausModbus.cs`, `IO/ConsoleRenderer.cs`, `IO/InputHandler.cs`, `README.md`, Anleitung `docs/devices/KuehlhausSimulator/umsetzung-lb02.md` |
+| `Devices/KuehlhausSimulator` (Kühlhaus) | ✅ **fertig (Schritte 1–9, 2026-10-26)**: in der Solution, Modell mit exakter Exponentiallösung (`SetDoor(bool)`, `ResetFault()`, `AlarmTempC`), `DeviceType.IndustrialConsumer = 5`, `KuehlhausRegisters` (20–31), `SimulationConfig`/`SimulationEngine` (Master-Zeit, feste Schritte, CSV je Lauf, Wetter je Modellstunde über `Devices.Common` (§0.14), Modbus auch in der Pause), `KuehlhausModbus`, Automatik (`AutoModeController`), Anzeige/Tasten (`ConsoleRenderer`, `InputHandler`), 28 Tests, Geräte-README mit Registerplan | `Simulation/SimulationEngine.cs`, `Simulation/KuehlhausModbus.cs`, `IO/ConsoleRenderer.cs`, `IO/InputHandler.cs`, `README.md`, Anleitung `docs/devices/KuehlhausSimulator/umsetzung-lb02.md` |
 | `WindSimulator` | ❌ entfällt: Platzhalterprojekt am 2026-10-26 gelöscht (Ordner, Solution-Eintrag); `DeviceType.Wind = 4` bleibt im Enum reserviert | – |
 
 ### 0.4 Nächste Schritte (Vorschlag, Reihenfolge)
@@ -207,10 +207,10 @@ Die vollständige Anleitung mit Code-Skizzen steht in `docs/devices/KuehlhausSim
 | `Kuehlhaus.cs` | `SetDoor(bool)` (behebt die Build-Fehler), **exakte Exponentiallösung** statt Euler, validierte Solltemperatur (−30…0 °C), `Id`, `OutsideTempC`, `RuntimeHours`, `CoolingPowerKW`, `ResetAlarmBelowC`, boolesches `ResetFault()`, Config-Prüfung im Konstruktor | 0 Warnungen; Zahlen unverändert (1,95 K/h ohne Kühlung, 4,9 K/h mit Tür) |
 | `KuehlhausConfig.cs` | Einheiten im Namen: `WaermekapazitaetKWhProK`, `WaermedurchgangKWProK`, `KaelteleistungKW`, `ZusatzwaermeKW`, neu `AlarmHystereseK`; `DeviceId` Standard `KH-01` | – |
 | `Emums.cs` | → `Enums.cs` umbenannt (Namespace `KuehlhausSimulator`) | – |
-| `Simulation/SimulationConfig.cs` | Optionen (Soll, Kälteleistung, Schritt, Dauer, Seed, Zeit, Modbus, Wetter, Standort), `DefaultModbusPort = 1505`, `DefaultWeatherUrl`, `ToModelConfig()` | – |
+| `Simulation/SimulationConfig.cs` | Optionen (Soll, Kälteleistung, Schritt, Dauer, Seed, Zeit, Modbus, `WeatherOptions`), `DefaultModbusPort = 1505`, `ToModelConfig()` | – |
 | `Simulation/SimulationEngine.cs` | Schleife mit `StepScheduler`, `Started`/`Restarted`, CSV je Lauf, Wetter je Modellstunde, Modbus in **jedem** Durchlauf (auch Pause), lokales Tagesprofil 5–23 °C; bis Schritt 7 Statuszeile je Modellschritt statt Anzeige | 24 h standalone: 289 Zeilen, 20,7 kWh, 25 Schritte Tür offen; mit Master synchron (x600), nach Master-Abbruch Register 12 = 3 |
 | `Simulation/KuehlhausModbus.cs` | Solltemperatur, Tür, Ein/Aus, Reset; Register 20–31 veröffentlichen; Fehlercode 1/2, Betriebszustand aus Kompressor | Diagnose-Client: Sollwert `-20 → -15 °C` angenommen, `force 5` abgelehnt (Register 18 = 2, Adresse 20) |
-| `Simulation/WeatherClient.cs` | HTTP-Client wie bei der PV (`/weather?location…`), deutsche Fehler, 5 s Timeout | Probelauf mit Wettersimulator: 5,6 → 4,4 °C in der Nacht übernommen |
+| `Simulation/WeatherClient.cs` | HTTP-Client wie bei der PV (`/weather?location…`), deutsche Fehler, 5 s Timeout – **am 2026-10-26 gelöscht**, ersetzt durch `Devices.Common.Weather` (§0.14) | Probelauf mit Wettersimulator: 5,6 → 4,4 °C in der Nacht übernommen |
 | `Simulation/AutoModeController.cs` | Türöffnungen nach Tageszeit (Rate je Stunde, 1–10 min offen), geseedet | 24-h-Lauf: 25 Schritte offen |
 | `IO/ArgsParser.cs`, `IO/CsvLogger.cs` | Optionen (`--id --setpoint --cooling --step --seed --output --weather --location --duration`), CSV mit 16 Spalten (de-AT, BOM, Spalte `Lauf`) | `--help`, Probeläufe |
 | `Program.cs` | LB01-Testmenü **ersetzt**: Hilfe, `--register-plan` (Port 1505), Strg+C geordnet, `IOException` → Exit 1 | `dotnet run -- --register-plan` |
@@ -269,13 +269,14 @@ Gebaut (0 Warnungen) und getestet, **nicht committet**.
 **Entscheidungen:** Interface in `SimCore.Contracts`, HTTP-Client und Feed in `Devices.Common` – Code teilen über eine Assembly
 (Komposition/Referenz), **nicht** über Vererbung. Batterie und Charger bleiben ohne Wettersimulator lauffähig (`--weather off`,
 standalone) und rechnen dann mit 20 °C. Kein neues NuGet-Paket (HttpClient aus der BCL).
-Das Kühlhaus (Abschnitt 0.9) bringt noch einen eigenen `WeatherClient` mit; die Umstellung auf `Devices.Common` ist offen.
+Das Kühlhaus (Abschnitt 0.9) brachte noch einen eigenen `WeatherClient` mit; es ist am 2026-10-26 ebenfalls
+auf `Devices.Common` umgestellt (§0.14).
 
 **Probelauf (umgeleitete Ausgabe):** Wettersimulator + Batterie standalone (x600, 1 h) und Charger standalone (x600, 1 h, 1-min-Schritte):
 beide zeigen „Wetter salzburg: NACHT · 5,6 °C …“, der Wettersimulator zählt genau eine Abfrage je Modellstunde.
 `dotnet build EnergyTwin.sln` ⇒ 0 Warnungen; alle fünf Testprojekte zusammen 206/206 (einzeln gestartet).
 
-**Offen:** echte Terminalfenster; Wind (Zeit, Modbus, Wetter); Kühlhaus auf den gemeinsamen `WeatherClient` umstellen;
+**Offen:** echte Terminalfenster; Wind (Zeit, Modbus, Wetter);
 `start-all.ps1`; Abgabe-Tag `lb02-2026`.
 
 ---
@@ -298,7 +299,7 @@ CSV-Spalten; wiederverwendbare Grundlagen liegen in der neuen Bibliothek `src/Sh
 und dieselben Geräte sie zusammen brauchen. Nur generische Teile wandern; PV-Layout und CSV-Schema bleiben in der PV,
 damit die Anzeige und das Abgabeformat unverändert bleiben. Keine neuen NuGet-Pakete.
 
-**Noch offen:** echte Terminalfenster; Wind; Kühlhaus auf den gemeinsamen `WeatherClient` umstellen;
+**Noch offen:** echte Terminalfenster; Wind;
 Abgabe-Tag `lb02-2026`.
 
 ---
@@ -344,6 +345,37 @@ ohne `P`/`M`/Wetter/Tempo, standalone mit allen Tasten und `MANUELL`; Zeitquelle
 weiterhin offen.
 
 **Noch offen:** Test in einem echten Terminal; Abgabe-Tag `lb02-2026`.
+
+---
+
+### 0.14 Sitzung 2026-10-26: Kühlhaus auf die gemeinsamen Bausteine umgestellt
+
+Gebaut (0 Warnungen) und getestet, **nicht committet**. Das Kühlhaus hatte als letztes Gerät noch eigene Kopien der
+Wetterlogik; jetzt nutzt es – wie PV, Batterie und Charger – `Devices.Common` und `Shared`. Verhalten für die
+Bedienung unverändert, nur die Fehlerzeile sagt jetzt wie bei den anderen Geräten „letztes Wetter bleibt“.
+
+| Bereich | Neu / geändert |
+|---|---|
+| `KuehlhausSimulator.csproj` | zusätzlich `ProjectReference Shared` (für den CSV-Grundwriter) |
+| `Simulation/WeatherClient.cs` | **gelöscht** (80 Zeilen, inklusive zweiter `WeatherUnavailableException`); es gilt `Devices.Common.Weather.WeatherClient` |
+| `Simulation/SimulationConfig.cs` | `DefaultWeatherUrl`, `WeatherUrl` und `Location` entfallen, dafür `WeatherOptions Weather` (Standard-URL nur mit Master) |
+| `IO/ArgsParser.cs` | `--weather`/`--location` über `WeatherOptions.TryApply`, Hilfe über `WeatherOptions.Usage`, Ergebnis `weather.WithDefaultUrl(timeSync.Standalone)` (gleiche Regeln wie bei Charger/Batterie) |
+| `Simulation/SimulationEngine.cs` | `WeatherFeed` statt eigener Felder (`_lastWeather`, `_weatherFailures`, `_nextWeatherAttempt`, `_weatherErrorReported`, `RetryInterval`, `German(...)`); `UpdateWeatherAsync` liefert nur noch die Außentemperatur, `WeatherStatus`/`OutsideSource` kommen aus dem Feed; `_config` entfernt |
+| `IO/CsvLogger.cs` | Datei, Kopfzeile, BOM und Maskierung über `Shared.Data.CsvFileWriter`; die 16 Spalten und das de-AT-Format bleiben |
+| Tests | `ConsumerTests` prüfen `config.Weather.Url`/`config.Weather.Location` und `WeatherOptions.DefaultUrl`; unverändert 62/62 |
+| Doku | Geräte-README (Wetterabschnitt, Aufbau, gemeinsame Bausteine, „Bekannte Probleme“), Anleitung Schritt 6/7, zentrale `README.md` (keine Änderung nötig), `AGENTS.md`, Journal |
+
+**Entscheidungen:** Kein eigenes Wetter mehr im Gerät – eine Quelle der Wahrheit für Meldungen, Retry und Cache.
+Der CSV-Grundwriter wird geteilt, das Gerät behält aber seine Spalten und sein Zahlenformat; damit bleibt das
+Abgabeformat identisch. Gelöscht wurden rund 170 Zeilen Duplikat, ohne eine Zeile Fachlogik zu verlieren.
+
+**Test:** `dotnet build EnergyTwin.sln` ⇒ 0 Warnungen; `dotnet test tests/FieldDevices.Tests` 62/62; Probelauf
+Wettersimulator + Kühlhaus standalone mit `--weather http://127.0.0.1:8080`: Spalte `Aussenquelle` =
+`Wettersimulator`, Außentemperatur 5,6 → 4,9 °C, der Wettersimulator zählt genau eine Abfrage je Modellstunde;
+`--weather off` bleibt beim lokalen Tagesprofil (`WeatherStatus` = „aus (--weather off), lokales Tagesprofil“);
+`--help` zeigt den gemeinsamen Wetterblock.
+
+**Noch offen:** echte Terminalfenster; Abgabe-Tag `lb02-2026` (Wind ist am 2026-10-26 entfallen).
 
 ---
 
