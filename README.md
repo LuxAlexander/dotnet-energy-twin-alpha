@@ -32,7 +32,6 @@ src/
   Devices/BatterySimulator/  Batteriespeicher
   Devices/DualPortCharger/   DC-Ladesäule mit zwei Ladepunkten
   Devices/KuehlhausSimulator/       Kühlhaus (Industrieverbraucher, viertes Feldgerät)
-  Devices/WindSimulator/     Platzhalter (Wind noch nicht umgesetzt)
 tests/
   SimCore.Tests/            Zeit, Uhrenabgleich, TCP (54)
   Devices.Common.Tests/     Gerätezeit, Modbus-Server, Registercodec, Wetter-Feed (51)
@@ -148,7 +147,7 @@ Teamregeln und Architekturdetails: [`AGENTS.md`](AGENTS.md).
 
 ## Bekannte Einschränkungen
 
-- Der Wind-Simulator ist noch nicht umgesetzt (Platzhalter); das Kühlhaus ist das vierte Feldgerät. Das Wetter ist
+- Das Kühlhaus ist das vierte Feldgerät. Das Wetter ist
   für PV, Batterie, Ladesäule und Kühlhaus angebunden; ohne Wettersimulator rechnen sie mit festen Werten
   (PV lokales Wetter, sonst 20 °C, Kühlhaus lokales Tagesprofil).
 - Die Registerpläne stehen in den READMEs der Geräte; Änderungen daran mit den jeweiligen Verantwortlichen abstimmen.

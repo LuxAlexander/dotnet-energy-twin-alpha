@@ -6,7 +6,7 @@ Modbus-Server-Baustein in `Devices.Common` (51 Tests), **Charger, PV, Batterie u
 (`FieldDevices.Tests` 62), **Diagnose-Client** (28 Tests), **Wettersimulator mit gemeinsamem Wetterbezug von PV, Batterie und Charger**
 (`Weather.Tests` 11); **viertes Feldgerät Kühlhaus** (`Devices/KuehlhausSimulator`) ist als LB02-Feldgerät **fertig** (Modell, Registerplan, Engine,
 Modbus, Wetter, Anzeige/Tasten, 28 Tests, README) – damit ist
-„+ ein viertes Feldgerät“ erfüllt, Wind bleibt optionaler Platzhalter; zusammen 206 Tests
+„+ ein viertes Feldgerät“ erfüllt, Wind wird nicht umgesetzt (Platzhalterprojekt am 2026-10-26 gelöscht); zusammen 206 Tests
 
 Pflichtlektüre für jeden Agenten in diesem Repo. Sie fasst die drei LB01-Projekte und den LB02-Plan
 zusammen, damit nicht alles neu analysiert werden muss. Details:
@@ -60,7 +60,7 @@ Vor dem Commit `dotnet build EnergyTwin.sln` und alle fünf Testprojekte laufen 
 | `BatterySimulator` | ✅ an Master-Zeit, Modbus (Registerplan 20–43, Sollwert in konfigurierter Leistung) und optional Wetter (Außentemperatur) angebunden, async, Einstellungsmenü `S` statt Pausenmenü | `Simulator.cs`, `BatteryModbus.cs` |
 | `WeatherSimulator` | ✅ HTTP-Dienst (`/weather`, `/locations`), deterministisch aus WeatherSynth + eigenem Modell, 3 Standorte, manuelle Übersteuerung, Fehler 404/400 | `Program.cs`, `Simulation/WeatherModel.cs`, README |
 | `Devices/KuehlhausSimulator` (Kühlhaus) | ✅ **fertig (Schritte 1–9, 2026-10-26)**: in der Solution, Modell mit exakter Exponentiallösung (`SetDoor(bool)`, `ResetFault()`, `AlarmTempC`), `DeviceType.IndustrialConsumer = 5`, `KuehlhausRegisters` (20–31), `SimulationConfig`/`SimulationEngine` (Master-Zeit, feste Schritte, CSV je Lauf, Wetter je Modellstunde, Modbus auch in der Pause), `KuehlhausModbus`, `WeatherClient`, Automatik (`AutoModeController`), Anzeige/Tasten (`ConsoleRenderer`, `InputHandler`), 28 Tests, Geräte-README mit Registerplan | `Simulation/SimulationEngine.cs`, `Simulation/KuehlhausModbus.cs`, `IO/ConsoleRenderer.cs`, `IO/InputHandler.cs`, `README.md`, Anleitung `docs/devices/KuehlhausSimulator/umsetzung-lb02.md` |
-| `WindSimulator` | ⚪ optionaler Platzhalter (`Program.cs`), Lösung baut; durch das Kühlhaus nicht mehr nötig | – |
+| `WindSimulator` | ❌ entfällt: Platzhalterprojekt am 2026-10-26 gelöscht (Ordner, Solution-Eintrag); `DeviceType.Wind = 4` bleibt im Enum reserviert | – |
 
 ### 0.4 Nächste Schritte (Vorschlag, Reihenfolge)
 1. **Master und Charger in einem echten Terminal testen** (Anzeige, Tasten, Strg+C). Bisher liefen nur Probeläufe mit umgeleiteter Ausgabe.
@@ -141,7 +141,7 @@ ob ein Neustart im Master den Gerätezustand zurücksetzt (Charger behält derze
 
 ### 0.7 Sitzung 2026-10-25 (abends): Modbus, Diagnose-Client, PV und Batterie (Claude Sonnet 5.5)
 
-Alles unten ist gebaut (0 Warnungen) und getestet, aber **nicht committet**.
+Alles unten ist gebaut (0 Warnungen) und getestet.
 
 | Bereich | Neu / geändert | Test |
 |---|---|---|
@@ -153,7 +153,7 @@ Alles unten ist gebaut (0 Warnungen) und getestet, aber **nicht committet**.
 | `BatterySimulator` | Zeit vom Master, async `Simulator`, `BatteryModbus`, `ArgsParser`/`SimulatorOptions`, `CsvLogger` async mit Datum und `Lauf`, Einstellungsmenü `S` statt Pausenmenü, `Batterie.Update(TimeSpan)`, `DailyProfile` mit Seed | `FieldDevices.Tests` |
 | Doku | READMEs von `Modbus.Contracts`, `Devices.Common`, Charger, PV, Batterie, Diagnose-Client und drei Testprojekten; Journal (4 Nachträge) | – |
 
-**Geänderte Bedienung (mit Alexander und Dominik abstimmen):** PV `--timescale` entfällt, `-s/-d` nur noch Kürzel für `--speed/--start` (standalone), `--start` mit Uhrzeit;
+**Geänderte Bedienung:** PV `--timescale` entfällt, `-s/-d` nur noch Kürzel für `--speed/--start` (standalone), `--start` mit Uhrzeit;
 Batterie `--duration` Standard endlos, `--start` mit Datum, `S` statt Pausenmenü; neue CSV-Namen.
 **Entscheidungen:** Registerkopf 0–19 statt 0–9 (reichte für Pflichtfelder plus Zeit und Steuerung nicht); Registerplan im README des Geräts (verlangt die Aufgabenstellung), `--register-plan`
 erzeugt ihn aus dem Code; ungültige Schreibwerte werden abgelehnt (nicht begrenzt), Fehler über Register 18/19.
@@ -478,7 +478,6 @@ src/
   Devices/PvSimulator/        exe → Devices.Common, Shared   enthält LB01-Code von Alex (seit 2026-10-25 mit Master-Zeit und Modbus)
   Devices/BatterySimulator/   exe → Devices.Common   enthält LB01-Code von Domi (seit 2026-10-25 mit Master-Zeit und Modbus)
   Devices/DualPortCharger/    exe → Devices.Common   enthält LB01-Code von Susi
-  Devices/WindSimulator/      exe → Devices.Common   leer
   Devices/KuehlhausSimulator/ exe → Devices.Common   Kühlhaus (4. Feldgerät), Stand 2026-10-26: Modell, Registerplan, Engine, Modbus, Wetter, Anzeige/Tasten
 tests/
   SimCore.Tests/           xUnit → SimCore.Time, SimCore.TimeSync
@@ -701,7 +700,6 @@ dotnet run --project src/ModbusDiagnosticClient -- --port 1505 --write "Solltemp
 | `Devices/BatterySimulator` | ✅ baut; 2026-10-25 mit Master synchron, Modbus geprüft (Sollwert −2,5 kW angenommen, 9 kW abgelehnt, Modus Auto/Manuell); 2026-10-26 Wetter übernommen („Wetter salzburg …“) |
 | `WeatherSimulator` | ✅ baut; Probelauf 2026-10-26: liefert für dieselbe Stunde identische Werte, 404 bei unbekanntem Standort, PV zeigt die gelieferten Werte |
 | `tests/Weather.Tests` | ✅ 11/11 (2026-10-26) |
-| `Devices/WindSimulator` | ⚪ nur Platzhalter (`Program.cs`), baut mit 0 Warnungen; durch das Kühlhaus optional geworden |
 | `Devices/KuehlhausSimulator` (Kühlhaus) | ✅ baut mit 0 Warnungen (2026-10-26): standalone 24 h (289 CSV-Zeilen, 20,7 kWh, Tür 25 Schritte offen), mit Master synchron (x600), Master-Abbruch ⇒ Register 12 = 3, Wetter vom Wettersimulator übernommen, Sollwert per Diagnose-Client `-20 → -15 °C`, `force 5` abgelehnt (Register 18 = 2, Adresse 20); Anzeige, Tasten und Eingabe der Solltemperatur nur mit umgeleiteter Ausgabe geprüft |
 | `tests/FieldDevices.Tests` | ✅ 62/62 (2026-10-26; 34 PV/Batterie + 28 Kühlhaus) |
 | alle Testprojekte zusammen | ✅ 206/206 (2026-10-26) |
