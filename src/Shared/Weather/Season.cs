@@ -1,4 +1,4 @@
-namespace EnergySimulator.Simulation;
+namespace Shared.Weather;
 
 public enum Season
 {

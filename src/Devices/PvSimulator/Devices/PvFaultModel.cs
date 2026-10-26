@@ -1,4 +1,4 @@
-using EnergySimulator.Simulation;
+using Shared.Weather;
 
 namespace EnergySimulator.Devices;
 

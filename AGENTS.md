@@ -51,10 +51,11 @@ Vor dem Commit `dotnet build EnergyTwin.sln` und alle fünf Testprojekte laufen 
 | `SimulationMaster` | ✅ lauffähig (Optionen `--bind --port --start --speed --lead --heartbeat --tolerance --autostart`) | `Program.cs`, `MasterOptions.cs`, `MasterConsole.cs` |
 | `Modbus.Contracts` | ✅ gemeinsamer Registerkopf 0–19, `RegisterDefinition`, `RegisterPlan` (+ Markdown), `RegisterCodec`, `ChargerRegisters`/`PvRegisters`/`BatteryRegisters`, `RegisterPlans.For(DeviceType)` | `CommonRegisters.cs`, README mit Kopftabelle |
 | `Devices.Common` | ✅ Zeitanbindung: `DeviceTimeSource`, `StepScheduler`, `TimeSyncOptions`, `AsyncConsole`; ✅ Modbus: `ModbusDeviceServer`, `ModbusOptions`, `HeaderValues`; ✅ Wetter: `WeatherClient`, `WeatherOptions`, `WeatherFeed` | README mit Codemustern |
+| `Shared` | ✅ geräteunabhängige Bausteine: `CsvFileWriter`, `BarChart`, `Season`/`SeasonInfo`, `WeatherCondition`, `IrradiationCalculator` | `Data/CsvFileWriter.cs`, `Output/BarChart.cs`, `Weather/*`, README |
 | `DualPortCharger` | ✅ an den Master angebunden, async, CSV-Spalte `Lauf`, Profile „Master“ und „Standalone“; ✅ Modbus-Server mit Registerplan im README; ✅ optional Wetter (Außentemperatur) | `Simulation/SimulationEngine.cs` + `Simulation/ChargerModbus.cs` = **Vorlage für alle Geräte** |
 | `ModbusDiagnosticClient` | ✅ Eingabeaufforderung + `--once`/`--write`; Kopf und Geräteregister lesen (Rohwert + Deutung), Sollwert schreiben und beim Gerät prüfen (Register 18/19), `force`, `watch`, Verbindungsabbruch mit Wiederverbindung | `DiagnosticSession.cs`, README |
 | Tests | ✅ `SimCore.Tests` 54/54, `Devices.Common.Tests` 51/51, `ModbusDiagnosticClient.Tests` 28/28, `FieldDevices.Tests` 62/62 (PV, Batterie, Kühlhaus), `Weather.Tests` 11/11 – zusammen 206 | – |
-| `PvSimulator` | ✅ an Master-Zeit (`StepScheduler`, `--model-step`), Modbus (Registerplan 20–38) und Wettersimulator (`--weather`, `--location`, Abfrage je Modellstunde) angebunden, async, CSV je Lauf; nutzt den gemeinsamen `WeatherClient` aus `Devices.Common` | `Simulation/SimulationEngine.cs`, `PvModbus.cs` |
+| `PvSimulator` | ✅ an Master-Zeit (`StepScheduler`, `--model-step`), Modbus (Registerplan 20–38) und Wettersimulator (`--weather`, `--location`, Abfrage je Modellstunde) angebunden, async, CSV je Lauf; nutzt `WeatherClient` aus `Devices.Common` und die gemeinsamen Bausteine aus `Shared` | `Simulation/SimulationEngine.cs`, `PvModbus.cs` |
 | `BatterySimulator` | ✅ an Master-Zeit, Modbus (Registerplan 20–43, Sollwert in konfigurierter Leistung) und optional Wetter (Außentemperatur) angebunden, async, Einstellungsmenü `S` statt Pausenmenü | `Simulator.cs`, `BatteryModbus.cs` |
 | `WeatherSimulator` | ✅ HTTP-Dienst (`/weather`, `/locations`), deterministisch aus WeatherSynth + eigenem Modell, 3 Standorte, manuelle Übersteuerung, Fehler 404/400 | `Program.cs`, `Simulation/WeatherModel.cs`, README |
 | `Devices/KuehlhausSimulator` (Kühlhaus) | ✅ **fertig (Schritte 1–9, 2026-10-26)**: in der Solution, Modell mit exakter Exponentiallösung (`SetDoor(bool)`, `ResetFault()`, `AlarmTempC`), `DeviceType.IndustrialConsumer = 5`, `KuehlhausRegisters` (20–31), `SimulationConfig`/`SimulationEngine` (Master-Zeit, feste Schritte, CSV je Lauf, Wetter je Modellstunde, Modbus auch in der Pause), `KuehlhausModbus`, `WeatherClient`, Automatik (`AutoModeController`), Anzeige/Tasten (`ConsoleRenderer`, `InputHandler`), 28 Tests, Geräte-README mit Registerplan | `Simulation/SimulationEngine.cs`, `Simulation/KuehlhausModbus.cs`, `IO/ConsoleRenderer.cs`, `IO/InputHandler.cs`, `README.md`, Anleitung `docs/devices/KuehlhausSimulator/umsetzung-lb02.md` |
@@ -276,6 +277,29 @@ beide zeigen „Wetter salzburg: NACHT · 5,6 °C …“, der Wettersimulator z�
 
 ---
 
+### 0.11 Sitzung 2026-10-26: gemeinsame Bausteine aus der PV nach `src/Shared` (opencode/deepseek-v4.1)
+
+Gebaut (0 Warnungen) und getestet, **nicht committet**. Die PV enthält nur noch ihr Gerät, ihre Anzeige und ihre
+CSV-Spalten; wiederverwendbare Grundlagen liegen in der neuen Bibliothek `src/Shared`.
+
+| Bereich | Neu / geändert |
+|---|---|
+| `src/Shared` | neues Projekt ohne Abhängigkeiten (in `EnergyTwin.sln` unter `src`), README |
+| `Shared.Data.CsvFileWriter` | asynchroner CSV-Grundwriter: Datei `<Präfix>_<Datum_Uhrzeit>.csv`, Kopfzeile, Zeilen, Maskierung von Trennzeichen/Anführungszeichen/Zeilenumbrüchen, BOM optional |
+| `Shared.Output.BarChart` | unverändert aus `PvSimulator/Output` verschoben |
+| `Shared.Weather` | `Season`/`SeasonInfo`, `WeatherCondition`, `IrradiationCalculator` aus der PV verschoben |
+| `PvSimulator` | `PvSimulator.csproj` referenziert `Shared`; `CsvExporter` nutzt `CsvFileWriter` und behält seine 18 Spalten; `ConsoleDisplay` (PV-Layout) bleibt im Gerät; alle `using` nachgezogen |
+| Tests | unverändert 206/206 (54 + 51 + 28 + 62 + 11), einzeln gestartet; `Pv_RunsStandalone_WritesCsvAndStopsOnCancel` prüft weiterhin CSV und Energie |
+
+**Entscheidungen:** Eine gemeinsame Bibliothek `Shared` (nicht mehrere kleine Projekte), weil die Bausteine klein sind
+und dieselben Geräte sie zusammen brauchen. Nur generische Teile wandern; PV-Layout und CSV-Schema bleiben in der PV,
+damit die Anzeige und das Abgabeformat unverändert bleiben. Keine neuen NuGet-Pakete.
+
+**Noch offen:** echte Terminalfenster; Wind; Kühlhaus auf den gemeinsamen `WeatherClient` umstellen; `start-all.ps1`;
+Abgabe-Tag `lb02-2026`.
+
+---
+
 ## 1. Kontext
 
 - „.NET-Programmierung 2026“, Team **Alpha**, 3 Personen. Sprache für UI, Kommentare, Doku, CSV: **Deutsch**.
@@ -399,11 +423,12 @@ src/
   SimCore.TimeSync/        lib   → Contracts, Time          (TCP: TimeSyncServer/TimeSyncClient, seit 2026-10-25)
   Modbus.Contracts/        lib   → Contracts                (Registerkopf, RegisterPlan, RegisterCodec; seit 2026-10-25)
   Shared.Config/           lib   → Contracts                (ursprünglich geplant: Shared/DeviceConfig); enthält OutputPaths
+  Shared/                  lib   keine Abhängigkeiten        (CSV-Writer, Balken, Jahreszeiten/Wetter/Einstrahlung; seit 2026-10-26)
   Devices.Common/          lib   → Contracts, Time, TimeSync, Modbus.Contracts, Shared.Config + EasyModbusTCP.NETCore (Zeit + Modbus-Server)
   SimulationMaster/        exe   → Contracts, Time, TimeSync, Shared.Config   (lauffähig seit 2026-10-25)
   WeatherSimulator/        exe   → Contracts, Shared.Config, Devices.Common + WeatherSynth (HTTP-Wetterdienst)
   ModbusDiagnosticClient/  exe   → Contracts, Modbus.Contracts, Shared.Config + EasyModbusTCP.NETCore   (lauffähig seit 2026-10-25)
-  Devices/PvSimulator/        exe → Devices.Common   enthält LB01-Code von Alex (seit 2026-10-25 mit Master-Zeit und Modbus)
+  Devices/PvSimulator/        exe → Devices.Common, Shared   enthält LB01-Code von Alex (seit 2026-10-25 mit Master-Zeit und Modbus)
   Devices/BatterySimulator/   exe → Devices.Common   enthält LB01-Code von Domi (seit 2026-10-25 mit Master-Zeit und Modbus)
   Devices/DualPortCharger/    exe → Devices.Common   enthält LB01-Code von Susi
   Devices/WindSimulator/      exe → Devices.Common   leer
@@ -490,6 +515,8 @@ Umgesetzt in `SimCore.Contracts` (`TimeState`, `SimMode`, `ISimClock`) und `SimC
 ## 5. Die drei LB01-Projekte im Detail
 
 Dateipfade in diesem Abschnitt sind relativ zum jeweiligen Geräteordner unter `src/Devices/`.
+Seit 2026-10-26 liegen `Season`, `WeatherCondition`, `IrradiationCalculator` und `BarChart` in `src/Shared`
+(Pfade unten nennen den historischen LB01-Ort).
 
 ### Alex – PV-Anlage (`src/Devices/PvSimulator/`)
 Start: `dotnet run --project src/Devices/PvSimulator -- [-s 60] [-t 15] [-r 400] [-p 10.0] [-o docs/data] [-d 2026-01-15]`
@@ -615,7 +642,8 @@ dotnet run --project src/ModbusDiagnosticClient -- --port 1505 --write "Solltemp
 
 | Projekt | Ergebnis |
 |---|---|
-| alle Bibliotheken, Testprojekte | ✅ bauen (2026-10-25 erneut geprüft, 0 Warnungen) |
+| alle Bibliotheken, Testprojekte | ✅ bauen (2026-10-26 erneut geprüft, 0 Warnungen) |
+| `src/Shared` | ✅ baut mit 0 Warnungen (2026-10-26); von der PV referenziert, Verhalten unverändert |
 | `tests/SimCore.Tests` | ✅ 54/54 Tests grün (2026-10-25, 5 Wiederholungen ohne Ausfall) |
 | `SimulationMaster` | ✅ baut, Probelauf mit umgeleiteter Ausgabe + PowerShell-TCP-Client ok (2026-10-25); echtes Terminal noch ungetestet |
 | `Devices/PvSimulator` | ✅ baut; 2026-10-25 mit Master (x600) synchron, Modbus per Diagnose-Client geprüft; 2026-10-26 Wetter vom Wettersimulator übernommen und in der Anzeige sichtbar; standalone unverändert grün |

@@ -5,6 +5,7 @@ using WeatherData = SimCore.Contracts.WeatherData;
 using EnergySimulator.Data;
 using EnergySimulator.Devices;
 using EnergySimulator.Output;
+using Shared.Weather;
 
 namespace EnergySimulator.Simulation;
 

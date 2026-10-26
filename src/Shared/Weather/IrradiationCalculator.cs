@@ -1,6 +1,4 @@
-using EnergySimulator.Simulation;
-
-namespace EnergySimulator.Devices;
+namespace Shared.Weather;
 
 public static class IrradiationCalculator
 {

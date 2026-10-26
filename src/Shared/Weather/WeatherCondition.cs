@@ -1,4 +1,4 @@
-namespace EnergySimulator.Devices;
+namespace Shared.Weather;
 
 public enum WeatherCondition
 {

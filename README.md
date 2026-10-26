@@ -9,7 +9,7 @@ Anlagen, ein Modbus-Diagnose-Client liest und schreibt Register. Alles läuft lo
 | Baustein | Verantwortlich | Dokumentation |
 |---|---|---|
 | Simulations-Master, `SimCore.Contracts`, `SimCore.Time`, `SimCore.TimeSync` | Susanne Lastowicka | [`src/SimulationMaster/README.md`](src/SimulationMaster/README.md), [`src/SimCore.Time/README.md`](src/SimCore.Time/README.md), [`src/SimCore.TimeSync/README.md`](src/SimCore.TimeSync/README.md) |
-| Wettersimulator, PV-Anlage | Alexander Lux | [`src/WeatherSimulator/README.md`](src/WeatherSimulator/README.md), [`src/Devices/PvSimulator/README.md`](src/Devices/PvSimulator/README.md) |
+| Wettersimulator, PV-Anlage, gemeinsame Bausteine (`Shared`) | Alexander Lux | [`src/WeatherSimulator/README.md`](src/WeatherSimulator/README.md), [`src/Devices/PvSimulator/README.md`](src/Devices/PvSimulator/README.md), [`src/Shared/README.md`](src/Shared/README.md) |
 | Batteriespeicher | Dominik Zach | [`src/Devices/BatterySimulator/README.md`](src/Devices/BatterySimulator/README.md) |
 | DC-Ladesäule (2 Ladepunkte), Modbus-Diagnose-Client, `Modbus.Contracts`, `Devices.Common` | Susanne Lastowicka | [`src/Devices/DualPortCharger/README.md`](src/Devices/DualPortCharger/README.md), [`src/ModbusDiagnosticClient/README.md`](src/ModbusDiagnosticClient/README.md), [`src/Modbus.Contracts/README.md`](src/Modbus.Contracts/README.md), [`src/Devices.Common/README.md`](src/Devices.Common/README.md) |
 | Industrieverbraucher (Kühlhaus, viertes Feldgerät) | Dominik Zach (LB01-Modell); LB02-Umbau mit ihm abzustimmen | [`src/Devices/KuehlhausSimulator/README.md`](src/Devices/KuehlhausSimulator/README.md) |
@@ -23,6 +23,7 @@ src/
   SimCore.TimeSync/        TCP-Zeitverteilung (JSON-Zeilen, Port 5100)
   Modbus.Contracts/        gemeinsamer Registerkopf 0–19, Registerpläne je Gerät, Codec
   Shared.Config/           Pfade (docs/data), Konfigurationshilfen
+  Shared/                  geräteunabhängig: CSV-Writer, Balken, Jahreszeiten/Wetter/Einstrahlung
   Devices.Common/          Zeitanbindung, StepScheduler, Modbus-Server, Wetter-Client/Feed, Konsolenhilfen
   SimulationMaster/        Master: Pause, Tempo, Neustart, Status
   WeatherSimulator/        HTTP-Wetterdienst (deterministisch, WeatherSynth-Basis)

@@ -1,4 +1,4 @@
-using EnergySimulator.Simulation;
+using Shared.Weather;
 using ContractWeather = SimCore.Contracts.WeatherCondition;
 using WeatherData = SimCore.Contracts.WeatherData;
 

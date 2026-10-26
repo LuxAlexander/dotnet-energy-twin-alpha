@@ -1,4 +1,4 @@
-namespace EnergySimulator.Output;
+namespace Shared.Output;
 
 public static class BarChart
 {

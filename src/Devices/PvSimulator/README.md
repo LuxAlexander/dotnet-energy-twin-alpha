@@ -9,7 +9,8 @@ Konsolensimulator für eine PV-Anlage im Rahmen von .NET-Programmierung 2026, LB
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download) – Projekt zielt auf `net10.0`
 - Teil der Solution `EnergyTwin.sln` im Repository-Hauptordner. Das Projekt verweist auf `src/Devices.Common`
-  (bringt EasyModbusTCP.NETCore mit, wird beim ersten Build aus NuGet geladen). Der LB01-Code nutzt das noch nicht.
+  (bringt EasyModbusTCP.NETCore mit, wird beim ersten Build aus NuGet geladen) und auf `src/Shared`
+  (gemeinsame Bausteine für Ausgabe, CSV, Wetter und Jahreszeiten).
 
 ## Starten
 
@@ -203,27 +204,32 @@ src/Devices/PvSimulator/
 ├── Simulation/
 │   ├── SimulationEngine.cs           # Tick-Loop, Eingaben, Tageswechsel
 │   ├── SimulationConfig.cs           # Konfiguration
-│   ├── SimulationMode.cs             # AUTO / MANUELL / PAUSE
-│   └── Season.cs                     # Jahreszeiten und Saisonparameter
+│   └── SimulationMode.cs             # AUTO / MANUELL / PAUSE
 ├── Devices/
 │   ├── IDevice.cs                    # Geräte-Interface
 │   ├── PvSystem.cs                   # PV-Anlage
 │   ├── PvFaultModel.cs               # Störungen, Temperatur, Spannung, Verschmutzung
-│   ├── IrradiationCalculator.cs      # Einstrahlung aus Zeit, Wetter, Saison
-│   ├── WeatherCondition.cs           # Wetterzustände
 │   ├── FaultType.cs                  # Störungsarten
 │   └── InverterStatus.cs             # Wechselrichter-Status (unbenutzt)
 ├── Output/
-│   ├── ConsoleDisplay.cs             # Rahmen, Farben, Bestätigungen
-│   └── BarChart.cs                   # Balkenberechnung
+│   └── ConsoleDisplay.cs             # PV-spezifisches Layout, Farben, Bestätigungen
 └── Data/
-    └── CsvExporter.cs                # CSV-Export
+    └── CsvExporter.cs                # PV-spezifische Spalten; nutzt Shared.Data.CsvFileWriter
+
+src/Shared/                           # geräteunabhängige Bausteine
+├── Output/BarChart.cs                # Balkenberechnung
+├── Data/CsvFileWriter.cs             # CSV-Datei anlegen, Kopfzeile, Zeilen, Maskierung
+└── Weather/                          # Season, WeatherCondition, IrradiationCalculator
 
 docs/                                 # zentral im Repository
 ├── data/pv-simulation.csv            # CSV-Ausgabe
 ├── screenshots/PvSimulator/          # Screenshots
 └── development-journal/alexander-lux.md   # Entwicklungsjournal
 ```
+
+Jahreszeiten, Wetterzustände, Einstrahlung, Balkenberechnung und der CSV-Grundwriter liegen in
+`src/Shared`; die PV-spezifische Anzeige und die CSV-Spalten bleiben in diesem Projekt. Damit können
+andere Geräte dieselben Bausteine verwenden, ohne Code zu kopieren.
 
 ## Annahmen
 
@@ -252,6 +258,7 @@ docs/                                 # zentral im Repository
 | async Schleife, CSV angehängt statt komplett neu geschrieben (kein `Thread.Sleep`, kein `File.WriteAllText`) | ✅ |
 | Modbus-Server mit Registerplan, Server bleibt in der Pause erreichbar | ✅ |
 | Wetter vom Wettersimulator (HTTP, je Modellstunde, Fehleranzeige) | ✅ 2026-10-26 |
+| Gemeinsame Bausteine (Jahreszeiten/Wetter/Einstrahlung, Balken, CSV-Writer) nach `src/Shared` ausgelagert | ✅ 2026-10-26 |
 
 ### Konfiguration
 

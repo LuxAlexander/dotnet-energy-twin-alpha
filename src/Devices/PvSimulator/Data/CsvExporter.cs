@@ -1,7 +1,8 @@
 using System.Globalization;
-using System.Text;
 using EnergySimulator.Devices;
 using EnergySimulator.Simulation;
+using Shared.Data;
+using Shared.Weather;
 
 namespace EnergySimulator.Data;
 
@@ -19,29 +20,17 @@ public sealed class CsvExporter : IAsyncDisposable
         "Modultemperatur_C;Aussentemperatur_C;Netzspannung_V;Verschmutzung_pct;Alterung_pct;Fehler;Anlagenstatus;" +
         "Lauf;Leistungsbegrenzung_pct";
 
-    private readonly StreamWriter _writer;
+    private readonly CsvFileWriter _writer;
 
-    public string FilePath { get; }
+    public string FilePath => _writer.FilePath;
 
-    private CsvExporter(string filePath, StreamWriter writer)
-    {
-        FilePath = filePath;
-        _writer = writer;
-    }
+    private CsvExporter(CsvFileWriter writer) => _writer = writer;
 
     /// <summary>Legt Ordner und Datei an und schreibt die Kopfzeile.</summary>
     public static async Task<CsvExporter> CreateAsync(string deviceId, string directory, CancellationToken cancellationToken)
     {
-        Directory.CreateDirectory(directory);
-
-        string safeId = string.Concat(deviceId.Select(c => Path.GetInvalidFileNameChars().Contains(c) ? '_' : c));
-        string filePath = Path.Combine(directory, $"{safeId}_{DateTime.Now:yyyy-MM-dd_HHmmss}.csv");
-
-        var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read, 4096, FileOptions.Asynchronous);
-        var writer = new StreamWriter(stream, new UTF8Encoding(encoderShouldEmitUTF8Identifier: true));
-        await writer.WriteLineAsync(Header.AsMemory(), cancellationToken);
-        await writer.FlushAsync(cancellationToken);
-        return new CsvExporter(filePath, writer);
+        var writer = await CsvFileWriter.CreateAsync(deviceId, directory, Header, cancellationToken);
+        return new CsvExporter(writer);
     }
 
     public async Task WriteRowAsync(DateTime now, SimulationMode mode, int runId, PvSystem pv, CancellationToken cancellationToken)
@@ -56,7 +45,8 @@ public sealed class CsvExporter : IAsyncDisposable
 
         string status = !pv.IsEnabled ? "AUS" : pv.ActiveFault != FaultType.None ? "STOERUNG" : "AKTIV";
 
-        string line = string.Join(';',
+        string[] values =
+        [
             now.ToString("yyyy-MM-dd", Invariant),
             now.ToString("HH:mm", Invariant),
             SeasonInfo.FromMonth(now.Month).ToGerman(),
@@ -74,9 +64,10 @@ public sealed class CsvExporter : IAsyncDisposable
             pv.ActiveFault.ToGString(),
             status,
             runId.ToString(Invariant),
-            pv.PowerLimitPercent.ToString("F1", Invariant));
+            pv.PowerLimitPercent.ToString("F1", Invariant)
+        ];
 
-        await _writer.WriteLineAsync(line.AsMemory(), cancellationToken);
+        await _writer.WriteRowAsync(values, cancellationToken);
     }
 
     public Task FlushAsync(CancellationToken cancellationToken) => _writer.FlushAsync(cancellationToken);

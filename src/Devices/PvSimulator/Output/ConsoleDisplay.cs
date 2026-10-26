@@ -1,6 +1,8 @@
 using System.Text;
 using EnergySimulator.Devices;
 using EnergySimulator.Simulation;
+using Shared.Output;
+using Shared.Weather;
 
 namespace EnergySimulator.Output;
 
