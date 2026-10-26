@@ -2,7 +2,7 @@
 
 **Zweck:** Vertrag der Modbus-Register aller Geräte: gemeinsamer Registerkopf (Adressen 0–19), Bereich für gerätespezifische
 Register (20–49), Datentypen und Codierung, `RegisterPlan` mit Prüfung und Markdown-Ausgabe. Keine Netzwerkabhängigkeit.
-**Verantwortlich:** Susanne Lastowicka (Entwurf 2026-10-25, im Team zu bestätigen – der Kopf ist die Schnittstelle zu den Geräten der anderen)
+**Verantwortlich:** Susanne Lastowicka
 **Basis aus LB01:** –
 
 ## Bausteine

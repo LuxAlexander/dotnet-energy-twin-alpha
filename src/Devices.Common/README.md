@@ -3,7 +3,7 @@
 **Zweck:** Gemeinsame Bausteine aller Feldgeräte (Charger, PV, Batterie nutzen sie seit 2026-10-25). Enthalten: Anbindung an die gemeinsame virtuelle Zeit,
 feste Modellschritte, Konsoleneingabe ohne blockierendes Warten, Modbus-Server-Hosting (Registerkopf, Schreibprüfung) und seit 2026-10-26 der Wetterbezug
 (HTTP-Client, Stunden-Cache, Fehlerbehandlung). Geplant: Thermik/Derating, Energiezähler, CSV, Konsolen-UI.
-**Verantwortlich:** _offen_. Zeitanbindung am 2026-10-25 von Susanne Lastowicka umgesetzt.
+**Verantwortlich:** Susanne Lastowicka Zeit, Alexander Lux Wetter.
 **Basis aus LB01:** Susi Pausen-/Tempo-Tasten und Prompt (jetzt async), Domi Zeitkonto mit festen Schritten (jetzt `StepScheduler`).
 **Abhängigkeiten:** `SimCore.Contracts`, `SimCore.Time`, `SimCore.TimeSync`, `Modbus.Contracts`, `Shared.Config`, EasyModbusTCP.NETCore.
 

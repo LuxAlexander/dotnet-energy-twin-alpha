@@ -3,7 +3,7 @@
 **Zweck:** Konsolenprogramm zum Testen und Debuggen der Feldgeräte über Modbus TCP: liest den gemeinsamen Registerkopf und die
 gerätespezifischen Register (Rohwert und gedeuteter Wert), schreibt Sollwerte und prüft beim Gerät nach, ob sie angenommen wurden,
 und zeigt Verbindungs-, Protokoll- und Wertefehler verständlich an. Vorbereitung für LB03.
-**Verantwortlich:** Susanne Lastowicka (im Team zu bestätigen)
+**Verantwortlich:** Susanne Lastowicka
 **Basis aus LB01:** –
 **Abhängigkeiten:** `Modbus.Contracts` (Registerkopf, Registerpläne, Codec), EasyModbusTCP.NETCore.
 

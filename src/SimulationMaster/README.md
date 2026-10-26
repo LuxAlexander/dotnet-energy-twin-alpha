@@ -2,7 +2,7 @@
 
 **Zweck:** Besitzt die virtuelle Zeit des Gesamtsystems und verteilt sie per TCP an alle Simulatoren: Start, Pause,
 Fortsetzen, Tempo, Neustart mit neuer Zeit, Statusanzeige mit allen verbundenen Simulatoren.
-**Verantwortlich:** Alexander Lux. Erste Version am 2026-10-25 von Susanne Lastowicka.
+**Verantwortlich:** Susanne Lastowicka.
 **Basis aus LB01:** Idee der Tastensteuerung (Alex `SimulationEngine`), flackerfreie Anzeige (Susi `ConsoleRenderer`).
 **Abhängigkeiten:** `SimCore.Contracts`, `SimCore.Time` (`MasterClock`), `SimCore.TimeSync` (`TimeSyncServer`), `Shared.Config`.
 

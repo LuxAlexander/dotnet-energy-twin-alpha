@@ -248,7 +248,7 @@ andere Geräte dieselben Bausteine verwenden, ohne Code zu kopieren.
 ## LB02 – Umbau zum Modbus-Feldgerät
 
 **Zweck:** PV-Anlage als Feldgerät im Gesamtsystem: virtuelle Zeit vom Simulations-Master, Zustand und Sollwert über Modbus TCP.
-**Verantwortlich:** Alexander Lux (LB01-Gerät); Umbau auf Master-Zeit und Modbus am 2026-10-25 von Susanne Lastowicka (mit Alexander abzustimmen)
+**Verantwortlich:** Alexander Lux (LB01-Gerät); Umbau auf Master-Zeit und Modbus am 2026-10-25 von Susanne Lastowicka
 **Basis aus LB01:** Alex PvSystem, PvFaultModel
 
 ### Stand (2026-10-26)

@@ -3,8 +3,8 @@
 > Gerüst – wird mit der Umsetzung gefüllt (LB02-Pflichtinhalte siehe `AGENTS.md` §2).
 
 **Zweck:** Laden der Konfiguration (JSON + Umgebungsvariablen) für alle Programme.
-**Verantwortlich:** _offen_
-**Basis aus LB01:** Susi ArgsParser (Validierung)
+**Verantwortlich:** Alexander Lux
+**Basis aus LB01:** Susi ArgsParser (Validierung), 
 
 ## Konfiguration
 _offen_

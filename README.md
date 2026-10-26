@@ -8,11 +8,11 @@ Anlagen, ein Modbus-Diagnose-Client liest und schreibt Register. Alles läuft lo
 
 | Baustein | Verantwortlich | Dokumentation |
 |---|---|---|
-| Simulations-Master, `SimCore.Contracts`, `SimCore.Time`, `SimCore.TimeSync` | Susanne Lastowicka | [`src/SimulationMaster/README.md`](src/SimulationMaster/README.md), [`src/SimCore.Time/README.md`](src/SimCore.Time/README.md), [`src/SimCore.TimeSync/README.md`](src/SimCore.TimeSync/README.md) |
+| Simulations-Master, `SimCore.Contracts`, `SimCore.Time`, `SimCore.TimeSync` | Alexander Lux (erste Umsetzung 2026-10-25: Susanne Lastowicka) | [`src/SimulationMaster/README.md`](src/SimulationMaster/README.md), [`src/SimCore.Time/README.md`](src/SimCore.Time/README.md), [`src/SimCore.TimeSync/README.md`](src/SimCore.TimeSync/README.md) |
 | Wettersimulator, PV-Anlage, gemeinsame Bausteine (`Shared`) | Alexander Lux | [`src/WeatherSimulator/README.md`](src/WeatherSimulator/README.md), [`src/Devices/PvSimulator/README.md`](src/Devices/PvSimulator/README.md), [`src/Shared/README.md`](src/Shared/README.md) |
 | Batteriespeicher | Dominik Zach | [`src/Devices/BatterySimulator/README.md`](src/Devices/BatterySimulator/README.md) |
 | DC-Ladesäule (2 Ladepunkte), Modbus-Diagnose-Client, `Modbus.Contracts`, `Devices.Common` | Susanne Lastowicka | [`src/Devices/DualPortCharger/README.md`](src/Devices/DualPortCharger/README.md), [`src/ModbusDiagnosticClient/README.md`](src/ModbusDiagnosticClient/README.md), [`src/Modbus.Contracts/README.md`](src/Modbus.Contracts/README.md), [`src/Devices.Common/README.md`](src/Devices.Common/README.md) |
-| Industrieverbraucher (Kühlhaus, viertes Feldgerät) | Dominik Zach (LB01-Modell); LB02-Umbau mit ihm abzustimmen | [`src/Devices/KuehlhausSimulator/README.md`](src/Devices/KuehlhausSimulator/README.md) |
+| Industrieverbraucher (Kühlhaus, viertes Feldgerät) | Dominik Zach (LB01-Modell und LB02-Umbau) | [`src/Devices/KuehlhausSimulator/README.md`](src/Devices/KuehlhausSimulator/README.md) |
 
 ## Aufbau
 
@@ -127,8 +127,15 @@ Umgebungsvariablen und keine Secrets**; `.env`-Dateien werden nicht benötigt. C
 
 ```bash
 dotnet build EnergyTwin.sln
-dotnet test EnergyTwin.sln
+dotnet test tests/SimCore.Tests
+dotnet test tests/Devices.Common.Tests
+dotnet test tests/FieldDevices.Tests
+dotnet test tests/ModbusDiagnosticClient.Tests
+dotnet test tests/Weather.Tests
 ```
+
+Die Testprojekte werden **einzeln** gestartet: Mehrere binden echte TCP-Ports, deshalb kann `dotnet test EnergyTwin.sln`
+wegen der parallelen Ausführung scheitern, obwohl der Code in Ordnung ist. Zusammen sind es 206 Tests.
 
 Pflicht-Tests laut Aufgabenstellung: Zeitsteuerung des Masters (`tests/SimCore.Tests`) und Reproduzierbarkeit des
 Wetters (`tests/Weather.Tests`). Dazu Gerätezeit/Modbus (`Devices.Common.Tests`), PV/Batterie/Kühlhaus
@@ -144,5 +151,6 @@ Teamregeln und Architekturdetails: [`AGENTS.md`](AGENTS.md).
 - Der Wind-Simulator ist noch nicht umgesetzt (Platzhalter); das Kühlhaus ist das vierte Feldgerät. Das Wetter ist
   für PV, Batterie, Ladesäule und Kühlhaus angebunden; ohne Wettersimulator rechnen sie mit festen Werten
   (PV lokales Wetter, sonst 20 °C, Kühlhaus lokales Tagesprofil).
-- Registerpläne und geänderte Optionen der Geräte sind im Team abzustimmen (siehe `AGENTS.md`).
+- Die Registerpläne stehen in den READMEs der Geräte; Änderungen daran mit den jeweiligen Verantwortlichen abstimmen.
 - Interaktive Anzeigen wurden bisher überwiegend mit umgeleiteter Ausgabe geprüft; echte Terminalfenster sind zu testen.
+- Das Abgabe-Tag `lb02-2026` ist noch nicht gesetzt (setzt Alexander laut `docs/adr/0004-prozess-abgabe.md`).

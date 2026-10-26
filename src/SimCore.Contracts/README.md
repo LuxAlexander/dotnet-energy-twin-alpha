@@ -1,7 +1,7 @@
 # SimCore.Contracts
 
 **Zweck:** Gemeinsame Verträge (Interfaces und DTOs) aller Programme. Keine Abhängigkeiten, keine Logik außer reinen Formeln.
-**Verantwortlich:** Alexander Lux (Zeitvertrag am 2026-10-25 von Susanne Lastowicka umgesetzt). Zeitvertrag am 2026-10-25 von Susanne Lastowicka umgesetzt.
+**Verantwortlich:** Alexander Lux / Susanne Lastowicka
 **Basis aus LB01:** –
 
 ## Inhalt

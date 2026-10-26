@@ -264,7 +264,7 @@ docs/                                 # zentral im Repository
 ## LB02 – Umbau zum Modbus-Feldgerät
 
 **Zweck:** Batteriespeicher als Feldgerät im Gesamtsystem: virtuelle Zeit vom Simulations-Master, Zustand und Sollwert über Modbus TCP.
-**Verantwortlich:** Dominik Zach (LB01-Gerät); Umbau auf Master-Zeit und Modbus am 2026-10-25 von Susanne Lastowicka (mit Dominik abzustimmen)
+**Verantwortlich:** Dominik Zach (LB01-Gerät); Umbau auf Master-Zeit und Modbus am 2026-10-25 von Susanne Lastowicka
 **Basis aus LB01:** Domi Batterie, BatterieConfig, DailyProfile
 
 ### Stand (2026-10-25)

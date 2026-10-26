@@ -409,7 +409,7 @@ dotnet run --project src/ModbusDiagnosticClient -- --port 1502
 ## LB02 – Umbau zum Feldgerät im Gesamtsystem
 
 **Zweck:** Dual-Port-DC-Ladesäule als Feldgerät, das der gemeinsamen virtuellen Zeit folgt (mit Modbus-Server).
-**Verantwortlich:** Susanne Lastowicka (Gerät aus LB01; im Team noch zu bestätigen)
+**Verantwortlich:** Susanne Lastowicka (Gerät aus LB01)
 **Basis aus LB01:** Susi DualCharger, ChargingPoint, Vehicle, VehicleCatalog, AutoModeController
 
 ### Stand (2026-10-25)
