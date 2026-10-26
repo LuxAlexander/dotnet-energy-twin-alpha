@@ -54,7 +54,8 @@ public static class ConsoleDisplay
         double dayProgress,
         string timeStatus,
         string? modbusStatus,
-        string? weatherStatus = null)
+        string? weatherStatus = null,
+        bool localControls = false)
     {
         // Ohne Zeit (Master noch nicht erreicht) zeigt die Anzeige Platzhalter statt Datum und Uhrzeit
         DateTime now = nowOrNull ?? DateTime.MinValue;
@@ -128,9 +129,11 @@ public static class ConsoleDisplay
 
         Sep();
 
-        Info("Zeitquelle ", timeStatus);
-        Info("Modbus     ", modbusStatus ?? "aus (--no-modbus)");
-        Info("Wetter     ", weatherStatus ?? "lokal");
+        string modbusText = modbusStatus ?? "aus (--no-modbus)";
+        string weatherText = weatherStatus ?? "lokal";
+        Info("Zeitquelle ", timeStatus, DIM, FirstSegmentLength(timeStatus));
+        Info("Modbus     ", modbusText, DIM, FirstSegmentLength(modbusText));
+        Info("Wetter     ", weatherText, DIM, LocationLength(weatherText));
 
         Sep();
 
@@ -169,7 +172,7 @@ public static class ConsoleDisplay
         }
 
         Bottom();
-        Footer();
+        Footer(localControls);
 
         Apply();
     }
@@ -386,13 +389,85 @@ public static class ConsoleDisplay
         );
     }
 
-    /// <summary>Beschriftete Textzeile, auf die Boxbreite gekürzt.</summary>
-    private static void Info(string label, string text)
+    /// <summary>
+    /// Beschriftete Statuszeile. Lange Texte werden an den Trennern umbrochen, damit nichts abgeschnitten wird;
+    /// der erste Teil (Adresse bzw. Standort) wird farbig hervorgehoben.
+    /// </summary>
+    private static void Info(string label, string text, string color, int highlightLength)
     {
         int room = InnerWidth - 2 - label.Length;
-        if (text.Length > room)
-            text = text[..(room - 1)] + "…";
-        Row(("  ", ""), (label, B), (text, DIM));
+        var lines = Wrap(text, room);
+
+        for (int i = 0; i < lines.Count; i++)
+        {
+            string prefix = i == 0 ? label : new string(' ', label.Length);
+            string line = lines[i];
+
+            if (i == 0 && highlightLength > 0)
+            {
+                int highlight = Math.Min(highlightLength, line.Length);
+                Row(("  ", ""), (prefix, B), (line[..highlight], CYAN), (line[highlight..], color));
+            }
+            else
+            {
+                Row(("  ", ""), (prefix, i == 0 ? B : ""), (line, color));
+            }
+        }
+    }
+
+    /// <summary>Bricht an den Status-Trennern um und notfalls an Leerzeichen.</summary>
+    private static List<string> Wrap(string text, int width)
+    {
+        var lines = new List<string>();
+        string current = "";
+
+        foreach (string raw in text.Split(" · "))
+        {
+            string part = raw;
+            while (part.Length > width)
+            {
+                if (current.Length > 0)
+                {
+                    lines.Add(current);
+                    current = "";
+                }
+
+                int split = part.LastIndexOf(' ', Math.Min(width, part.Length - 1));
+                if (split <= 0)
+                    split = width;
+
+                lines.Add(part[..split].TrimEnd());
+                part = part[split..].TrimStart();
+            }
+
+            string candidate = current.Length == 0 ? part : current + " · " + part;
+            if (candidate.Length <= width)
+            {
+                current = candidate;
+            }
+            else
+            {
+                lines.Add(current);
+                current = part;
+            }
+        }
+
+        if (current.Length > 0 || lines.Count == 0)
+            lines.Add(current);
+
+        return lines;
+    }
+
+    private static int FirstSegmentLength(string text)
+    {
+        int index = text.IndexOf(" · ", StringComparison.Ordinal);
+        return index > 0 ? index : 0;
+    }
+
+    private static int LocationLength(string text)
+    {
+        int index = text.IndexOf(':');
+        return index > 0 ? index : 0;
     }
 
     private static void Top() =>
@@ -404,13 +479,21 @@ public static class ConsoleDisplay
     private static void Bottom() =>
         _frame.Add("  " + DIM + "╰" + new string('─', BorderWidth) + "╯" + R);
 
-    private static void Footer()
+    private static void Footer(bool localControls)
     {
         _frame.Add(string.Empty);
-        _frame.Add("  " + DIM + "P Pause (nur standalone)   M Modus   Q Beenden   C Module reinigen" + R);
+        if (localControls)
+        {
+            _frame.Add("  " + DIM + "P Pause   M Modus AUTO/MANUELL   Q Beenden   C Module reinigen" + R);
+            _frame.Add("  " + DIM + "Wetter:   0 Nacht  1 Sonnig  2 Bewölkt  3 Dicht  4 Gewitter" + R);
+            _frame.Add("  " + DIM + "Tempo:    5 x1  6 x15  7 x60  8 x300  9 x1800" + R);
+            _frame.Add("  " + DIM + "Anzeige:  R ruhiger / schneller" + R);
+        }
+        else
+        {
+            _frame.Add("  " + DIM + "Q Beenden   C Module reinigen   R Anzeige ruhiger / schneller" + R);
+            _frame.Add("  " + DIM + "Zeit, Wetter und Tempo steuert der Simulations-Master." + R);
+        }
         _frame.Add("  " + DIM + "Störung:  F Inverter   T Überhitzung   G Netzspannung" + R);
-        _frame.Add("  " + DIM + "Wetter:   0 Nacht  1 Sonnig  2 Bewölkt  3 Dicht  4 Gewitter" + R);
-        _frame.Add("  " + DIM + "Tempo:    5 x1  6 x15  7 x60  8 x300  9 x1800  (nur standalone, sonst steuert der Master)" + R);
-        _frame.Add("  " + DIM + "Anzeige:  R ruhiger / schneller" + R);
     }
 }

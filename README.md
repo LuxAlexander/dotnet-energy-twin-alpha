@@ -48,6 +48,26 @@ Keine Zyklen; nur Geräte und der Diagnose-Client verwenden EasyModbusTCP.NETCor
 
 Alle Befehle aus dem Repository-Hauptordner (`dotnet-energy-twin-alpha/`). Jedes Programm in einem eigenen Terminal.
 
+**Ein Befehl für alles** (Windows, PowerShell 5.1 oder 7):
+
+```powershell
+# baut die Solution und öffnet sieben Fenster: Wetter, Master, PV, Batterie, Ladesäule, Kühlhaus, Diagnose-Client
+.\start-all.ps1
+
+# Alternativ mit sofort laufendem Master und ohne Diagnose-Client
+.\start-all.ps1 -Autostart -NoClient
+```
+
+Das Skript baut zuerst, wartet auf Wetter (8080) und Master (5100) und startet dann die Geräte. Ohne
+`-Autostart` startet der Master pausiert; die Leertaste im Master-Fenster setzt die Zeit in Gang. Ist ein Port
+bereits belegt, wird das zugehörige Programm nicht doppelt gestartet. Wenn die Ausführung von Skripten gesperrt ist:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\start-all.ps1
+```
+
+Manuell (ohne Skript), jeweils in einem eigenen Terminal:
+
 ```bash
 # 1. Wettersimulator (HTTP 8080)
 dotnet run --project src/WeatherSimulator

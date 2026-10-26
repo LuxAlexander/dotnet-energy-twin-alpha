@@ -52,8 +52,8 @@ Ab LB02 kommen Datum und Tempo vom Simulations-Master; alle Optionen stehen im A
 
 | Taste | Funktion |
 |-------|---------|
-| `P` | Pause / Fortsetzen (nur standalone, sonst steuert der Master) |
-| `M` | Modus wechseln (AUTO / MANUELL) |
+| `P` | Pause / Fortsetzen (nur standalone) |
+| `M` | Modus wechseln: AUTO / MANUELL (nur standalone) |
 | `Q` | Beenden |
 | `C` | Module reinigen (Verschmutzung zurücksetzen) |
 | `R` | Bildschirm ruhiger / schneller (100 – 3000 ms) |
@@ -66,10 +66,11 @@ Ab LB02 kommen Datum und Tempo vom Simulations-Master; alle Optionen stehen im A
 | `T` | Überhitzung erzwingen / aufheben |
 | `G` | Netzspannungsstörung ein-/ausschalten |
 
-**Wetter** (manueller Modus): `0` Nacht, `1` Sonnig, `2` Bewölkt, `3` Dicht bewölkt, `4` Gewitter
+**Wetter** (nur standalone, manueller Modus): `0` Nacht, `1` Sonnig, `2` Bewölkt, `3` Dicht bewölkt, `4` Gewitter
 
 **Zeitraffer** (nur standalone): `5` x1, `6` x15, `7` x60, `8` x300, `9` x1800
 
+Mit Master sind Pause, Modus, Wetter und Tempo ausgeblendet; sie kommen dann vom Master bzw. Wettersimulator.
 Jede Aktion wird im Display bestätigt.
 
 ## Modellbeschreibung
@@ -165,6 +166,7 @@ Der Lastfaktor hat Spitzen am Morgen und am Abend. Liegt die Spannung außerhalb
 Mit exakt ausgerichteten Rahmen:
 
 - Datum, Uhrzeit, Jahreszeit, Modus, Betriebszustand, Zeitraffer
+- Zeitquelle, Modbus und Wetter in eigenen, farblich hervorgehobenen Statuszeilen (lange Texte werden umbrochen)
 - Tagesfortschritt als Balken über 24 h
 - Wirkleistung (kW), Tagesenergie (kWh), Gesamtenergie (kWh)
 - Wetter, Einstrahlung (W/m²), Fehlerursache
@@ -254,11 +256,12 @@ andere Geräte dieselben Bausteine verwenden, ohne Code zu kopieren.
 | Schritt | Stand |
 |---|---|
 | Zeit vom Simulations-Master (`DeviceTimeSource`, `StepScheduler`, feste Schritte `--model-step`, Standard 1 min) | ✅ |
-| Standalone mit lokaler Uhr (`--standalone`, Tasten `P`, `5–9` wirken nur dort) | ✅ |
+| Standalone mit lokaler Uhr (`--standalone`; Tasten `P`, `M` und `5–9` wirken nur dort und sind mit Master ausgeblendet) | ✅ |
 | async Schleife, CSV angehängt statt komplett neu geschrieben (kein `Thread.Sleep`, kein `File.WriteAllText`) | ✅ |
 | Modbus-Server mit Registerplan, Server bleibt in der Pause erreichbar | ✅ |
 | Wetter vom Wettersimulator (HTTP, je Modellstunde, Fehleranzeige) | ✅ 2026-10-26 |
 | Gemeinsame Bausteine (Jahreszeiten/Wetter/Einstrahlung, Balken, CSV-Writer) nach `src/Shared` ausgelagert | ✅ 2026-10-26 |
+| Tasten `P`/`M`/`0–4`/`5–9` nur standalone, mit Master ausgeblendet; Statuszeilen umbrochen und farbig | ✅ 2026-10-26 |
 
 ### Konfiguration
 
@@ -294,8 +297,9 @@ dotnet run --project src/SimulationMaster -- --speed 600        # 2. Master
 dotnet run --project src/Devices/PvSimulator -- --id PV-01      # 3. PV-Anlage (Modbus 1502)
 dotnet run --project src/Devices/PvSimulator -- --standalone -s 300 -d "2026-06-21 05:00"   # ohne Master
 ```
-Tasten wie oben; `P` (Pause) und `5–9` (Tempo) wirken nur standalone, mit Master steuert der Master. Die Anzeige hat zwei neue Zeilen
-„Zeitquelle“ und „Modbus“. Bei umgeleiteter Ausgabe erscheint alle 5 s eine Statuszeile.
+Tasten wie oben; mit Master sind Pause, Modus, Wetter und Tempo ausgeblendet und werden vom Master bzw.
+Wettersimulator gesteuert. Die Anzeige hat Statuszeilen für „Zeitquelle“, „Modbus“ und „Wetter“; lange Texte werden
+umbrochen, Adresse und Standort sind farbig hervorgehoben. Bei umgeleiteter Ausgabe erscheint alle 5 s eine Statuszeile.
 
 ### Wetteranbindung (seit 2026-10-26)
 
@@ -309,7 +313,7 @@ Fehlerverhalten: 5 s Zeitlimit je Anfrage; nach 3 Fehlversuchen in Folge erschei
 „WETTER: NICHT ERREICHBAR“ (Meldung und Statuszeile), das letzte gültige Wetter bleibt aktiv,
 weitere Versuche alle 10 s. Unbekannter Standort (HTTP 404) wird als ungültige Antwort gemeldet.
 Mit `--weather off` (oder `--standalone` ohne `--weather`) rechnet die PV mit ihrem lokalen Auto-Wetter;
-nur dann wirken die manuellen Wettertasten `0–4`.
+nur dann und nur standalone wirken die manuellen Wettertasten `0–4`. Reproduzierbar ist der Lauf über `--seed`.
 
 ### Modbus-Registerplan
 

@@ -30,9 +30,11 @@ public static class ArgsParser
         Modbus-TCP-Server (jede Anlage braucht einen eigenen Port):
         {ModbusOptions.Usage}
 
-        Tasten: P Pause (nur standalone) · M Modus AUTO/MANUELL · Q Beenden · C Module reinigen
-                F Inverterfehler · T Überhitzung · G Netzstörung · 0–4 Wetter (manuell)
-                5–9 Tempo x1/x15/x60/x300/x1800 (nur standalone) · R Bild ruhiger/schneller
+        Tasten: Q Beenden · C Module reinigen · R Bild ruhiger/schneller
+                F Inverterfehler · T Überhitzung · G Netzstörung
+        Nur standalone: P Pause · M Modus AUTO/MANUELL
+                        0–4 Wetter (manuell) · 5–9 Tempo x1/x15/x60/x300/x1800
+        Mit Master sind diese Tasten ausgeblendet; Zeit, Wetter und Tempo steuert der Master.
 
         Beispiele:
           dotnet run --project src/Devices/PvSimulator -- --id PV-01 -p 10

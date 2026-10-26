@@ -52,10 +52,11 @@ Vor dem Commit `dotnet build EnergyTwin.sln` und alle fünf Testprojekte laufen 
 | `Modbus.Contracts` | ✅ gemeinsamer Registerkopf 0–19, `RegisterDefinition`, `RegisterPlan` (+ Markdown), `RegisterCodec`, `ChargerRegisters`/`PvRegisters`/`BatteryRegisters`, `RegisterPlans.For(DeviceType)` | `CommonRegisters.cs`, README mit Kopftabelle |
 | `Devices.Common` | ✅ Zeitanbindung: `DeviceTimeSource`, `StepScheduler`, `TimeSyncOptions`, `AsyncConsole`; ✅ Modbus: `ModbusDeviceServer`, `ModbusOptions`, `HeaderValues`; ✅ Wetter: `WeatherClient`, `WeatherOptions`, `WeatherFeed` | README mit Codemustern |
 | `Shared` | ✅ geräteunabhängige Bausteine: `CsvFileWriter`, `BarChart`, `Season`/`SeasonInfo`, `WeatherCondition`, `IrradiationCalculator` | `Data/CsvFileWriter.cs`, `Output/BarChart.cs`, `Weather/*`, README |
+| `start-all.ps1` | ✅ baut die Solution und öffnet Wetter, Master, alle vier Feldgeräte und den Diagnose-Client in eigenen Fenstern; wartet auf Ports, überspringt belegte, `-Autostart`, `-NoClient`, `-Speed`, `-WhatIf` | `start-all.ps1`, zentrale `README.md` |
 | `DualPortCharger` | ✅ an den Master angebunden, async, CSV-Spalte `Lauf`, Profile „Master“ und „Standalone“; ✅ Modbus-Server mit Registerplan im README; ✅ optional Wetter (Außentemperatur) | `Simulation/SimulationEngine.cs` + `Simulation/ChargerModbus.cs` = **Vorlage für alle Geräte** |
 | `ModbusDiagnosticClient` | ✅ Eingabeaufforderung + `--once`/`--write`; Kopf und Geräteregister lesen (Rohwert + Deutung), Sollwert schreiben und beim Gerät prüfen (Register 18/19), `force`, `watch`, Verbindungsabbruch mit Wiederverbindung | `DiagnosticSession.cs`, README |
 | Tests | ✅ `SimCore.Tests` 54/54, `Devices.Common.Tests` 51/51, `ModbusDiagnosticClient.Tests` 28/28, `FieldDevices.Tests` 62/62 (PV, Batterie, Kühlhaus), `Weather.Tests` 11/11 – zusammen 206 | – |
-| `PvSimulator` | ✅ an Master-Zeit (`StepScheduler`, `--model-step`), Modbus (Registerplan 20–38) und Wettersimulator (`--weather`, `--location`, Abfrage je Modellstunde) angebunden, async, CSV je Lauf; nutzt `WeatherClient` aus `Devices.Common` und die gemeinsamen Bausteine aus `Shared` | `Simulation/SimulationEngine.cs`, `PvModbus.cs` |
+| `PvSimulator` | ✅ an Master-Zeit (`StepScheduler`, `--model-step`), Modbus (Registerplan 20–38) und Wettersimulator (`--weather`, `--location`, Abfrage je Modellstunde) angebunden, async, CSV je Lauf; Tasten `Q`/`C`/`R`/`F`/`T`/`G` immer, `P`/`M`/`0–4`/`5–9` nur standalone (mit Master ignoriert und im Footer ausgeblendet, siehe §0.13); Statuszeilen umbrochen, Adresse/Standort farbig; nutzt `WeatherClient` aus `Devices.Common` und die gemeinsamen Bausteine aus `Shared` | `Simulation/SimulationEngine.cs`, `PvModbus.cs`, `Output/ConsoleDisplay.cs` |
 | `BatterySimulator` | ✅ an Master-Zeit, Modbus (Registerplan 20–43, Sollwert in konfigurierter Leistung) und optional Wetter (Außentemperatur) angebunden, async, Einstellungsmenü `S` statt Pausenmenü | `Simulator.cs`, `BatteryModbus.cs` |
 | `WeatherSimulator` | ✅ HTTP-Dienst (`/weather`, `/locations`), deterministisch aus WeatherSynth + eigenem Modell, 3 Standorte, manuelle Übersteuerung, Fehler 404/400 | `Program.cs`, `Simulation/WeatherModel.cs`, README |
 | `Devices/KuehlhausSimulator` (Kühlhaus) | ✅ **fertig (Schritte 1–9, 2026-10-26)**: in der Solution, Modell mit exakter Exponentiallösung (`SetDoor(bool)`, `ResetFault()`, `AlarmTempC`), `DeviceType.IndustrialConsumer = 5`, `KuehlhausRegisters` (20–31), `SimulationConfig`/`SimulationEngine` (Master-Zeit, feste Schritte, CSV je Lauf, Wetter je Modellstunde, Modbus auch in der Pause), `KuehlhausModbus`, `WeatherClient`, Automatik (`AutoModeController`), Anzeige/Tasten (`ConsoleRenderer`, `InputHandler`), 28 Tests, Geräte-README mit Registerplan | `Simulation/SimulationEngine.cs`, `Simulation/KuehlhausModbus.cs`, `IO/ConsoleRenderer.cs`, `IO/InputHandler.cs`, `README.md`, Anleitung `docs/devices/KuehlhausSimulator/umsetzung-lb02.md` |
@@ -81,7 +82,9 @@ Vor dem Commit `dotnet build EnergyTwin.sln` und alle fünf Testprojekte laufen 
    Noch offen: **Wind** (Zeit + Modbus nach dem Muster von `PvModbus`/`BatteryModbus`, Plan in `Modbus.Contracts`, in `RegisterPlans.For` eintragen;
    Wetterbezug analog zu Batterie/Charger); Diagnose-Client ist fertig (siehe 3.).
 6. ✅ **Zentrale `README.md`** (Architektur, Startreihenfolge, Demo, Zuständigkeiten, Schnittstellen, Tests, Konfiguration) am 2026-10-26 angelegt;
-   **`.env.example` entfällt** (keine Umgebungsvariablen, keine Secrets – nur Kommandozeilenoptionen). Noch offen: **`start-all.ps1`**, Abgabe-Tag `lb02-2026`.
+   **`.env.example` entfällt** (keine Umgebungsvariablen, keine Secrets – nur Kommandozeilenoptionen).
+   ✅ **`start-all.ps1`** (2026-10-26): baut, startet Wetter und Master, wartet auf die Ports, öffnet dann alle vier Feldgeräte
+   und den Diagnose-Client in eigenen Fenstern (`-Autostart`, `-NoClient`, `-Speed`, `-WhatIf`). Noch offen: Abgabe-Tag `lb02-2026`.
 7. ✅ **Kühlhaus als viertes Feldgerät** (`src/Devices/KuehlhausSimulator`, 2026-10-26): alle neun Schritte umgesetzt (Solution, Modell, Registerplan,
    Engine mit Master-Zeit, CSV und Wetter, `KuehlhausModbus`, `ArgsParser`/`CsvLogger`, `ConsoleRenderer`, `InputHandler`, 28 Tests,
    Geräte-README mit Registerplan). Reihenfolge und Code-Skizzen stehen in `docs/devices/KuehlhausSimulator/umsetzung-lb02.md`.
@@ -295,8 +298,52 @@ CSV-Spalten; wiederverwendbare Grundlagen liegen in der neuen Bibliothek `src/Sh
 und dieselben Geräte sie zusammen brauchen. Nur generische Teile wandern; PV-Layout und CSV-Schema bleiben in der PV,
 damit die Anzeige und das Abgabeformat unverändert bleiben. Keine neuen NuGet-Pakete.
 
-**Noch offen:** echte Terminalfenster; Wind; Kühlhaus auf den gemeinsamen `WeatherClient` umstellen; `start-all.ps1`;
+**Noch offen:** echte Terminalfenster; Wind; Kühlhaus auf den gemeinsamen `WeatherClient` umstellen;
 Abgabe-Tag `lb02-2026`.
+
+---
+
+### 0.12 Sitzung 2026-10-26: ein Startbefehl für alle Programme (`start-all.ps1`)
+
+Gebaut und mit `-WhatIf` geprüft, **nicht committet**.
+
+| Bereich | Neu / geändert |
+|---|---|
+| `start-all.ps1` | PowerShell-Skript im Repo-Root: baut `EnergyTwin.sln`, startet Wetter und Master, wartet auf Port 8080/5100, öffnet PV, Batterie, Ladesäule (Port 1504 wegen PV), Kühlhaus und Diagnose-Client in eigenen Fenstern; belegte Ports werden übersprungen; `-Speed`, `-Autostart`, `-NoClient`, `-WhatIf` |
+| `README.md` | Startreihenfolge um den Ein-Befehl-Start und den Hinweis auf `ExecutionPolicy Bypass` ergänzt |
+| `AGENTS.md` | §0.3/§0.4/§0.11/§0.12 nachgezogen |
+
+**Entscheidungen:** Jedes Programm bleibt in einem eigenen Fenster, damit die interaktiven Anzeigen und Tasten sichtbar
+bleiben. Der Master startet ohne `-Autostart` weiterhin pausiert (Demo-Anforderung); `-Autostart` ist nur eine Abkürzung.
+Das Skript baut zuerst einmal und startet danach mit `--no-build`, damit parallele `dotnet run` nicht um die Build-Ausgabe
+konkurrieren. Belegte Ports werden erkannt und nicht doppelt belegt.
+
+**Noch offen:** das Skript in einem echten Benutzerfenster durchspielen (der Agent darf keine fremden Konsolenfenster
+starten); Abgabe-Tag `lb02-2026`.
+
+---
+
+### 0.13 Sitzung 2026-10-26: PV-Tasten nur standalone, bessere Statuszeilen
+
+| Bereich | Neu / geändert |
+|---|---|
+| `SimulationEngine` | `P` (Pause), `M` (Modus), `0–4` (Wetter) und `5–9` (Tempo) bleiben im Standalone-Betrieb; mit Master werden sie ignoriert. `SimulationMode.Manual` und `_mode` sind wieder da, `Mode` liefert standalone `AUTO`/`MANUELL`/`PAUSE`, mit Master nur `AUTO`/`PAUSE`. Auto-Wetter läuft standalone nur im Modus `AUTO`; ohne Wettersimulator unverändert lokal |
+| `ConsoleDisplay` | Statuszeilen `Zeitquelle`, `Modbus`, `Wetter` umbrechen lange Texte statt sie mit `…` abzuschneiden; Adresse bzw. Standort (`Master 127.0.0.1:5100`, `127.0.0.1:1502`, `salzburg`) werden cyan hervorgehoben; Footer zeigt `P`/`M`/Wetter/Tempo nur standalone, mit Master `Q`/`C`/`R`, Störungen und Hinweis auf Master-Steuerung |
+| `CsvExporter`, `SimulationMode` | Modusspalte `AUTO`/`MANUELL`/`PAUSE`; `Manual` wieder enthalten |
+| `ArgsParser`, README | Tastenhilfe und Bedienungstabellen: `P`/`M`/`0–4`/`5–9` als „nur standalone“ gekennzeichnet, mit Master ausgeblendet |
+
+**Entscheidungen:** Pause, Modus, Wetter und Tempo sind nur sinnvoll, wenn die PV ihre eigene Uhr und ihr lokales
+Wetter nutzt (standalone). Mit Master bleiben diese Tasten wirkungslos und werden im Footer ausgeblendet; die Zeit
+kommt vom Master, das Wetter vom Wettersimulator. Die Statuszeilen werden an den Trennern ` · ` umbrochen, damit
+die Boxbreite 76 Zeichen bleibt und auch bei langen Master-Meldungen nichts abgeschnitten wird.
+
+**Test:** `dotnet build EnergyTwin.sln` ⇒ 0 Warnungen; alle fünf Testprojekte einzeln 206/206
+(54 + 51 + 28 + 62 + 11). Anzeige mit einem temporären Prüfprogramm in beiden Modi gerendert: mit Master Footer
+ohne `P`/`M`/Wetter/Tempo, standalone mit allen Tasten und `MANUELL`; Zeitquelle zweizeilig ohne Abschneiden
+(keine `…`, Zeilenbreite 76), `Master …`, `127.0.0.1:1502` und `salzburg` mit ANSI-Cyan. Echte Terminalfenster
+weiterhin offen.
+
+**Noch offen:** Test in einem echten Terminal; Abgabe-Tag `lb02-2026`.
 
 ---
 
@@ -541,8 +588,10 @@ Läuft **endlos**, um 00:00 wird die Tagesenergie zurückgesetzt. `ENERGYSIM_REN
   (`InnerWidth = 70`, `BorderWidth = 72`, nicht ohne Test ändern), Fallback bei umgeleiteter Ausgabe, `Release()` am Ende.
   `Output/BarChart.cs` – `Split(value, max, width)` → (`█…`, `░…`).
 
-Tasten: `P` Pause, `M` Auto/Manuell, `Q` Ende, `C` Module reinigen, `R` Refresh-Rate, `F` Inverterfehler, `T` Überhitzung,
-`G` Netzstörung, `0–4` Wetter (manuell), `5–9` Zeitraffer x1/x15/x60/x300/x1800.
+Tasten (LB02): `Q` Ende, `C` Module reinigen, `R` Refresh-Rate, `F` Inverterfehler, `T` Überhitzung, `G` Netzstörung
+immer; nur standalone: `P` Pause, `M` Auto/Manuell, `0–4` Wetter und `5–9` Zeitraffer x1/x15/x60/x300/x1800.
+Mit Master werden diese Tasten ignoriert und im Footer ausgeblendet; Zeit, Wetter und Tempo kommen dann vom Master
+bzw. Wettersimulator (§0.13).
 
 ### Domi – Batteriespeicher (`src/Devices/BatterySimulator/`)
 Start: `dotnet run --project src/Devices/BatterySimulator -- --id BAT-01 --capacity 20 --max-charge 5 --max-discharge 5 --soc-min 10

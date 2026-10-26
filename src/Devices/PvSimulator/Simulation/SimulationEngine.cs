@@ -53,7 +53,13 @@ public sealed class SimulationEngine
     public DateTime? SimulationTime { get; private set; }
 
     public int RunId => _scheduler.RunId;
-    public SimulationMode Mode => _mode;
+
+    /// <summary>
+    /// Standalone liefert den lokalen Modus (AUTO/MANUELL), pausiert PAUSE; mit Master gilt nur die Master-Zeit.
+    /// </summary>
+    public SimulationMode Mode => !Time.IsRunning
+        ? SimulationMode.Paused
+        : Time.IsStandalone ? _mode : SimulationMode.Auto;
 
     public SimulationEngine(SimulationConfig config)
     {
@@ -136,7 +142,7 @@ public sealed class SimulationEngine
             _weather?.Dispose();
             await syncTask;                                       // meldet sich beim Master ab
             if (SimulationTime is { } last)
-                await csv.WriteRowAsync(last, _mode, RunId, _pv, CancellationToken.None);
+                await csv.WriteRowAsync(last, Mode, RunId, _pv, CancellationToken.None);
             await csv.FlushAsync(CancellationToken.None);
         }
 
@@ -178,7 +184,7 @@ public sealed class SimulationEngine
                 }
 
                 _pv.StepContinuous(update.ModelTime, 0.0);        // Anzeigewerte zur Startzeit, ohne Zeitfortschritt
-                await csv.WriteRowAsync(update.ModelTime, _mode, RunId, _pv, cancellationToken);
+                await csv.WriteRowAsync(update.ModelTime, Mode, RunId, _pv, cancellationToken);
                 return;
         }
 
@@ -205,14 +211,14 @@ public sealed class SimulationEngine
             if (stepEnd.Date != _currentDay)
             {
                 SetNotification($"Neuer Tag · {stepEnd:dd.MM.yyyy} · {_pv.DailyEnergyKwh.ToString("F1", Culture)} kWh Vortag");
-                await csv.WriteRowAsync(stepEnd, _mode, RunId, _pv, cancellationToken);
+                await csv.WriteRowAsync(stepEnd, Mode, RunId, _pv, cancellationToken);
                 _pv.ResetDailyEnergy();
                 _currentDay = stepEnd.Date;
                 _lastCsvAt = stepEnd;
             }
             else if (stepEnd - _lastCsvAt >= TimeSpan.FromMinutes(_config.StepMinutes))
             {
-                await csv.WriteRowAsync(stepEnd, _mode, RunId, _pv, cancellationToken);
+                await csv.WriteRowAsync(stepEnd, Mode, RunId, _pv, cancellationToken);
                 _lastCsvAt = stepEnd;
             }
         }
@@ -285,6 +291,12 @@ public sealed class SimulationEngine
 
     private void HandleKey(ConsoleKey key)
     {
+        bool localOnly = key == ConsoleKey.P || key == ConsoleKey.M
+            || key is >= ConsoleKey.D0 and <= ConsoleKey.D9
+            || key is >= ConsoleKey.NumPad0 and <= ConsoleKey.NumPad9;
+        if (localOnly && !Time.IsStandalone)
+            return;
+
         switch (key)
         {
             case ConsoleKey.P: SetNotification(Time.TogglePause()); break;
@@ -319,24 +331,6 @@ public sealed class SimulationEngine
 
         _config.RefreshMs = RefreshSteps[(index + 1) % RefreshSteps.Length];
         SetNotification($"Bild-Aktualisierung → {_config.RefreshMs} ms");
-    }
-
-    private void ToggleMode()
-    {
-        _mode = _mode == SimulationMode.Auto ? SimulationMode.Manual : SimulationMode.Auto;
-        SetNotification($"Modus → {(_mode == SimulationMode.Auto ? "AUTO" : "MANUELL")}");
-    }
-
-    private void SetWeather(WeatherCondition weather)
-    {
-        if (_weather is not null)
-        {
-            SetNotification("Wetter kommt vom Wettersimulator (lokales Wetter: --weather off).");
-            return;
-        }
-
-        _pv.SetWeather(weather);
-        SetNotification($"Wetter → {weather.ToGerman()}");
     }
 
     private void ToggleFault()
@@ -410,7 +404,7 @@ public sealed class SimulationEngine
         ConsoleDisplay.Render(
             time,
             SeasonInfo.FromMonth((time ?? _config.TimeSync.StandaloneStart).Month),
-            Time.IsRunning ? _mode : SimulationMode.Paused,
+            Mode,
             _pv,
             _config.PeakPowerKw,
             Time.HasTime ? Time.Clock.Speed : 0,
@@ -418,7 +412,8 @@ public sealed class SimulationEngine
             time?.TimeOfDay.TotalHours / 24.0 ?? 0.0,
             Time.StatusText,
             _modbus?.StatusText,
-            _weatherStatus);
+            _weatherStatus,
+            Time.IsStandalone);
     }
 
     /// <summary>Kurzfassung für umgeleitete Ausgabe (Protokoll statt Bildschirm).</summary>
@@ -426,6 +421,24 @@ public sealed class SimulationEngine
     {
         string time = SimulationTime?.ToString("yyyy-MM-dd HH:mm", Culture) ?? "--";
         return FormattableString.Invariant($"{time}  Lauf {RunId}  {_pv.PowerKw:F2} kW  {_pv.TotalEnergyKwh:F2} kWh  {_pv.Weather.ToGerman()}  | {Time.StatusText}  | Modbus {_modbus?.StatusText ?? "aus"}  | Wetter {_weatherStatus}  | {_note.Text}");
+    }
+
+    private void ToggleMode()
+    {
+        _mode = _mode == SimulationMode.Auto ? SimulationMode.Manual : SimulationMode.Auto;
+        SetNotification($"Modus → {(_mode == SimulationMode.Auto ? "AUTO" : "MANUELL")}");
+    }
+
+    private void SetWeather(WeatherCondition weather)
+    {
+        if (_weather is not null)
+        {
+            SetNotification("Wetter kommt vom Wettersimulator (lokales Wetter: --weather off).");
+            return;
+        }
+
+        _pv.SetWeather(weather);
+        SetNotification($"Wetter → {weather.ToGerman()}");
     }
 
     private void SetNotification(string message) => _note = new Note(message, DateTime.Now);
