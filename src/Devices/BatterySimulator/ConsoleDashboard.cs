@@ -43,6 +43,7 @@ public sealed class ConsoleDashboard
             $" Simulationszeit : {simTime}   Lauf {sim.RunId}   Tempo: {speed}   Schritt: {sim.StepSeconds.ToString("0.##", Culture)} s{running}",
             $" Zeitquelle      : {sim.Time.StatusText}",
             $" Modbus          : {sim.ModbusStatus ?? "aus (--no-modbus)"}",
+            $" Wetter          : {sim.WeatherStatus ?? "aus (feste 20 °C)"}",
             $" Modus           : {sim.Mode}   Zustand: {battery.State}   {(battery.IsOn ? "EIN" : "AUS")}",
             $" Sollwert        : {battery.SetpointKW.ToString("F2", Culture)} kW",
             $" Ist-Leistung    : {battery.ActualKW.ToString("F2", Culture)} kW",
@@ -81,7 +82,7 @@ public sealed class ConsoleDashboard
     public static string StatusLine(Simulator sim, Batterie battery)
     {
         string time = sim.SimulationTime?.ToString("yyyy-MM-dd HH:mm", Culture) ?? "--";
-        return FormattableString.Invariant($"{time}  Lauf {sim.RunId}  {battery.ActualKW:F2} kW  SOC {battery.SocPercent:F1} %  {battery.State}  | {sim.Time.StatusText}  | Modbus {sim.ModbusStatus ?? "aus"}  | {sim.Message}");
+        return FormattableString.Invariant($"{time}  Lauf {sim.RunId}  {battery.ActualKW:F2} kW  SOC {battery.SocPercent:F1} %  {battery.State}  | {sim.Time.StatusText}  | Modbus {sim.ModbusStatus ?? "aus"}  | Wetter {sim.WeatherStatus ?? "aus"}  | {sim.Message}");
     }
 
     private static string BuildBar(double percent, int barWidth = 20)

@@ -6,7 +6,7 @@ namespace DualChargerSim.Models;
 public class ChargingPoint
 {
     // Temperaturmodell (Kabel/Stecker) – plausible Annahmen, keine Normwerte
-    public const double AmbientTemperatureC = 20.0;
+    public const double DefaultAmbientTemperatureC = 20.0;
     public const double TemperatureRiseAtRatedPowerC = 35.0;   // 20 + 35 = 55 °C bei 150 kW
     public const double RatedPowerKW = 150.0;
     public const double DeratingStartC = 60.0;
@@ -28,7 +28,10 @@ public class ChargingPoint
     public ChargingPointState State { get; private set; } = ChargingPointState.Available;
     public Vehicle? Vehicle { get; private set; }
     public double PowerKW { get; private set; }
-    public double TemperatureC { get; private set; } = AmbientTemperatureC;
+    public double TemperatureC { get; private set; } = DefaultAmbientTemperatureC;
+
+    /// <summary>Aussentemperatur in °C (Standard 20; kommt mit Wetterbezug vom Wettersimulator).</summary>
+    public double AmbientTemperatureC { get; set; } = DefaultAmbientTemperatureC;
     public double EnergyKWh { get; private set; }
 
     public bool IsFree => State == ChargingPointState.Available;

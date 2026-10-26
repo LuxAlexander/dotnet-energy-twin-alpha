@@ -1,5 +1,6 @@
 using Devices.Common;
 using Devices.Common.Modbus;
+using Devices.Common.Weather;
 using Shared.Config;
 
 namespace DualChargerSim.Simulation;
@@ -28,6 +29,9 @@ public class SimulationConfig
 
     /// <summary>Host, Port und Unit-ID des Modbus-Servers.</summary>
     public ModbusOptions Modbus { get; init; } = new();
+
+    /// <summary>Wetterbezug (optional; ohne Angabe mit Master der Wettersimulator, standalone aus).</summary>
+    public WeatherOptions Weather { get; init; } = new();
 
     public TimeSpan Step => TimeSpan.FromMinutes(StepMinutes);
     public TimeSpan? Duration => DurationHours is { } hours ? TimeSpan.FromHours(hours) : null;

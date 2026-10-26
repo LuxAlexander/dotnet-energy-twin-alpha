@@ -1,5 +1,6 @@
 using System.Globalization;
 using Devices.Common;
+using Devices.Common.Weather;
 using DualChargerSim.IO;
 using DualChargerSim.Models;
 
@@ -22,6 +23,7 @@ public class SimulationEngine
     private readonly StepScheduler _scheduler;
     private readonly Random _random;
     private readonly ChargerModbus? _modbus;
+    private readonly WeatherFeed? _weather;
     private DateTime? _endTime;
 
     public SimulationConfig Config { get; }
@@ -30,6 +32,9 @@ public class SimulationEngine
 
     /// <summary>Zustand des Modbus-Servers für die Anzeige; <c>null</c> mit <c>--no-modbus</c>.</summary>
     public string? ModbusStatus => _modbus?.StatusText;
+
+    /// <summary>Status des Wetterbezugs; <c>null</c> ohne Wetter (feste 20 °C).</summary>
+    public string? WeatherStatus => _weather?.Status;
 
     /// <summary>Virtuelle Zeit des dargestellten Zustands (nach dem letzten Schritt); <c>null</c> bis zur ersten Zeit.</summary>
     public DateTime? SimulationTime { get; private set; }
@@ -63,6 +68,9 @@ public class SimulationEngine
 
         if (!config.Modbus.Disabled)
             _modbus = new ChargerModbus(Charger, Time, config.Modbus, message => Message = message);
+
+        if (config.Weather.Url is { } weatherUrl)
+            _weather = new WeatherFeed(new WeatherClient(weatherUrl), config.Weather.Location, message => Message = message);
     }
 
     public void Quit() => IsRunning = false;
@@ -143,6 +151,7 @@ public class SimulationEngine
         {
             await stop.CancelAsync();
             _modbus?.Dispose();
+            _weather?.Dispose();
             await syncTask;                                       // meldet sich beim Master ab
             await _renderer.ShutdownAsync();
         }
@@ -182,6 +191,8 @@ public class SimulationEngine
         for (int i = 0; i < update.StepCount && !IsFinished; i++)
         {
             var stepStart = update.FirstStepAt + Config.Step * i;
+            if (_weather is not null && await _weather.UpdateAsync(stepStart, RunId, cancellationToken) is { } weather)
+                Charger.AmbientTemperatureC = weather.TemperatureC;
             if (IsAutoMode)
                 _autoMode.Step(stepStart, Config.Step);
             Charger.Tick(stepStart, Config.Step);

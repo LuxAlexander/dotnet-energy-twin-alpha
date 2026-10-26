@@ -1,5 +1,6 @@
 using Devices.Common;
 using Devices.Common.Modbus;
+using Devices.Common.Weather;
 
 namespace Batterie_Sim;
 
@@ -23,6 +24,9 @@ public sealed class SimulatorOptions
 
     /// <summary>Host, Port und Unit-ID des Modbus-Servers.</summary>
     public ModbusOptions Modbus { get; init; } = new();
+
+    /// <summary>Wetterbezug (optional; ohne Angabe mit Master der Wettersimulator, standalone aus).</summary>
+    public WeatherOptions Weather { get; init; } = new();
 
     public TimeSpan Step => TimeSpan.FromSeconds(StepSeconds);
 }

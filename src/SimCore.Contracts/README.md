@@ -1,7 +1,7 @@
 # SimCore.Contracts
 
 **Zweck:** Gemeinsame Verträge (Interfaces und DTOs) aller Programme. Keine Abhängigkeiten, keine Logik außer reinen Formeln.
-**Verantwortlich:** _offen_ (laut `AGENTS1.md` Alexander Lux). Zeitvertrag am 2026-10-25 von Susanne Lastowicka umgesetzt.
+**Verantwortlich:** Alexander Lux (Zeitvertrag am 2026-10-25 von Susanne Lastowicka umgesetzt). Zeitvertrag am 2026-10-25 von Susanne Lastowicka umgesetzt.
 **Basis aus LB01:** –
 
 ## Inhalt
@@ -12,9 +12,11 @@
 | `SimMode` | enum | `Paused`, `Running` |
 | `SyncMessage` (`HelloMessage`, `StatesMessage`, `PingMessage`, `PongMessage`, `ByeMessage`) | records | Nachrichten der Zeitsynchronisation, Ablauf siehe `src/SimCore.Time/README.md` und `src/SimCore.TimeSync/README.md` |
 | `SyncProtocol` | static | Protokollversion (1), Standard-Port 5100, JSON-(De-)Serialisierung mit Prüfung (`InvalidDataException`) |
-| `ISimClock` | interface | Lesender Zugriff auf die virtuelle Zeit (`Now`, `Mode`, `Speed`, `RunId`). Ersetzt das in `AGENTS1.md` geplante `ITimeProvider` (Verwechslungsgefahr mit `System.TimeProvider`). |
+| `ISimClock` | interface | Lesender Zugriff auf die virtuelle Zeit (`Now`, `Mode`, `Speed`, `RunId`). Ersetzt das ursprünglich geplante `ITimeProvider` (Verwechslungsgefahr mit `System.TimeProvider`). |
+| `WeatherData`, `WeatherCondition` | record, enum | Wetter für (Standort, virtuelle Zeit, Lauf): Sonnenhöhe, Bedeckung, Temperatur, Niederschlag, Wind, Strahlung, Zustand. Alle Zeiten UTC. |
+| `IWeatherService` | interface | `GetAsync(location, simTimeUtc, runId, ct)`; implementiert vom `WeatherClient` in `Devices.Common`, damit Geräte nur vom Vertrag abhängen. |
 
-Noch offen: `IWeatherService`, `WeatherData`, `DeviceConfig`.
+Noch offen: `DeviceConfig`.
 
 ## Zeitvertrag `TimeState`
 

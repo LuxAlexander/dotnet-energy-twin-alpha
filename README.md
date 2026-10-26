@@ -8,7 +8,7 @@ Anlagen, ein Modbus-Diagnose-Client liest und schreibt Register. Alles läuft lo
 
 | Baustein | Verantwortlich | Dokumentation |
 |---|---|---|
-| Simulations-Master, `SimCore.Contracts`, `SimCore.Time`, `SimCore.TimeSync` | Alexander Lux | [`src/SimulationMaster/README.md`](src/SimulationMaster/README.md), [`src/SimCore.Time/README.md`](src/SimCore.Time/README.md), [`src/SimCore.TimeSync/README.md`](src/SimCore.TimeSync/README.md) |
+| Simulations-Master, `SimCore.Contracts`, `SimCore.Time`, `SimCore.TimeSync` | Susanne Lastowicka | [`src/SimulationMaster/README.md`](src/SimulationMaster/README.md), [`src/SimCore.Time/README.md`](src/SimCore.Time/README.md), [`src/SimCore.TimeSync/README.md`](src/SimCore.TimeSync/README.md) |
 | Wettersimulator, PV-Anlage | Alexander Lux | [`src/WeatherSimulator/README.md`](src/WeatherSimulator/README.md), [`src/Devices/PvSimulator/README.md`](src/Devices/PvSimulator/README.md) |
 | Batteriespeicher | Dominik Zach | [`src/Devices/BatterySimulator/README.md`](src/Devices/BatterySimulator/README.md) |
 | DC-Ladesäule (2 Ladepunkte), Modbus-Diagnose-Client, `Modbus.Contracts`, `Devices.Common` | Susanne Lastowicka | [`src/Devices/DualPortCharger/README.md`](src/Devices/DualPortCharger/README.md), [`src/ModbusDiagnosticClient/README.md`](src/ModbusDiagnosticClient/README.md), [`src/Modbus.Contracts/README.md`](src/Modbus.Contracts/README.md), [`src/Devices.Common/README.md`](src/Devices.Common/README.md) |
@@ -18,12 +18,12 @@ Anlagen, ein Modbus-Diagnose-Client liest und schreibt Register. Alles läuft lo
 
 ```
 src/
-  SimCore.Contracts/       DTOs und Interfaces (WeatherData, TimeState, ISimClock, DeviceConfig) – keine Abhängigkeiten
+  SimCore.Contracts/       DTOs und Interfaces (WeatherData, IWeatherService, TimeState, ISimClock) – keine Abhängigkeiten
   SimCore.Time/            virtuelle Zeit, Uhrenabgleich (MasterClock, SyncedClock, TimeState als Gerade)
   SimCore.TimeSync/        TCP-Zeitverteilung (JSON-Zeilen, Port 5100)
   Modbus.Contracts/        gemeinsamer Registerkopf 0–19, Registerpläne je Gerät, Codec
   Shared.Config/           Pfade (docs/data), Konfigurationshilfen
-  Devices.Common/          Zeitanbindung der Geräte, StepScheduler, Modbus-Server, Konsolenhilfen
+  Devices.Common/          Zeitanbindung, StepScheduler, Modbus-Server, Wetter-Client/Feed, Konsolenhilfen
   SimulationMaster/        Master: Pause, Tempo, Neustart, Status
   WeatherSimulator/        HTTP-Wetterdienst (deterministisch, WeatherSynth-Basis)
   ModbusDiagnosticClient/  Register lesen/schreiben, Fehler anzeigen
@@ -34,7 +34,7 @@ src/
   Devices/WindSimulator/     Platzhalter (Wind noch nicht umgesetzt)
 tests/
   SimCore.Tests/            Zeit, Uhrenabgleich, TCP (54)
-  Devices.Common.Tests/     Gerätezeit, Modbus-Server, Registercodec (44)
+  Devices.Common.Tests/     Gerätezeit, Modbus-Server, Registercodec, Wetter-Feed (51)
   FieldDevices.Tests/       PV, Batterie und Kühlhaus: Modbus, Optionen, Standalone-Lauf (62)
   ModbusDiagnosticClient.Tests/  Client gegen echten Modbus-Server (28)
   Weather.Tests/            Reproduzierbarkeit und Plausibilität des Wetters (11)
@@ -77,7 +77,7 @@ Die Geräte verbinden sich beim Start mit `127.0.0.1:5100` und wiederholen das a
 3. Im Master Tempo ändern (`+`/`-`) und pausieren – alle Geräte folgen ohne Zeitsprung, Modbus bleibt erreichbar.
 4. Client: `read`, `write leistungsgrenze 60`, im PV-Gerät prüfen; `watch` zeigt wechselnde Werte.
 5. Master `N` oder `1`–`4`: alle Geräte übernehmen die neue virtuelle Zeit (neuer Lauf).
-6. Wettersimulator beenden ⇒ PV und Kühlhaus melden nach 3 Fehlversuchen sichtbar „WETTER: NICHT ERREICHBAR“, letztes
+6. Wettersimulator beenden ⇒ PV, Batterie, Ladesäule und Kühlhaus melden nach 3 Fehlversuchen sichtbar „WETTER: NICHT ERREICHBAR“, letztes
    Wetter bleibt.
 7. Kühlhaus: `T` öffnet die Tür (Temperatur steigt), `S` ändert die Solltemperatur, `F` löst einen Kompressorausfall
    aus, `R` quittiert ihn; der Diagnose-Client `--port 1505` zeigt dieselben Werte.
@@ -121,6 +121,7 @@ Teamregeln und Architekturdetails: [`AGENTS.md`](AGENTS.md).
 ## Bekannte Einschränkungen
 
 - Der Wind-Simulator ist noch nicht umgesetzt (Platzhalter); das Kühlhaus ist das vierte Feldgerät. Das Wetter ist
-  für PV und Kühlhaus angebunden, Charger und Batterie nutzen noch feste Umgebungstemperaturen.
+  für PV, Batterie, Ladesäule und Kühlhaus angebunden; ohne Wettersimulator rechnen sie mit festen Werten
+  (PV lokales Wetter, sonst 20 °C, Kühlhaus lokales Tagesprofil).
 - Registerpläne und geänderte Optionen der Geräte sind im Team abzustimmen (siehe `AGENTS.md`).
 - Interaktive Anzeigen wurden bisher überwiegend mit umgeleiteter Ausgabe geprüft; echte Terminalfenster sind zu testen.

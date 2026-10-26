@@ -1,4 +1,8 @@
-# AGENTS.md — dotnet-energy-sim-lb02
+> **OBSOLET (2026-10-26):** Dieses Dokument ist der Planungsstand vom 2026-10-10. Sein Inhalt ist
+> vollständig in AGENTS.md (Repository-Hauptordner) überführt und fortgeschrieben. Es dient nur
+> noch als historische Quelle und ist **keine Anweisung**; maßgeblich ist ausschließlich AGENTS.md.
+
+# Archiv: LB02-Planungsdokument (dotnet-energy-sim-lb02, 2026-10-10)
 
 **Last updated:** 2026-10-10  
 **Phase:** Design & planning (no code yet)  

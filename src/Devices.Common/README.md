@@ -1,8 +1,8 @@
 # Devices.Common
 
-**Zweck:** Gemeinsame Bausteine aller Feldgeräte (Charger, PV, Batterie nutzen sie seit 2026-10-25). Bisher (2026-10-25): Anbindung an die gemeinsame virtuelle Zeit,
-feste Modellschritte, Konsoleneingabe ohne blockierendes Warten, Modbus-Server-Hosting (Registerkopf, Schreibprüfung). Geplant: Thermik/Derating,
-Batteriemodell, Energiezähler, CSV, Konsolen-UI.
+**Zweck:** Gemeinsame Bausteine aller Feldgeräte (Charger, PV, Batterie nutzen sie seit 2026-10-25). Enthalten: Anbindung an die gemeinsame virtuelle Zeit,
+feste Modellschritte, Konsoleneingabe ohne blockierendes Warten, Modbus-Server-Hosting (Registerkopf, Schreibprüfung) und seit 2026-10-26 der Wetterbezug
+(HTTP-Client, Stunden-Cache, Fehlerbehandlung). Geplant: Thermik/Derating, Energiezähler, CSV, Konsolen-UI.
 **Verantwortlich:** _offen_. Zeitanbindung am 2026-10-25 von Susanne Lastowicka umgesetzt.
 **Basis aus LB01:** Susi Pausen-/Tempo-Tasten und Prompt (jetzt async), Domi Zeitkonto mit festen Schritten (jetzt `StepScheduler`).
 **Abhängigkeiten:** `SimCore.Contracts`, `SimCore.Time`, `SimCore.TimeSync`, `Modbus.Contracts`, `Shared.Config`, EasyModbusTCP.NETCore.
@@ -19,6 +19,9 @@ Batteriemodell, Energiezähler, CSV, Konsolen-UI.
 | `Modbus.ModbusDeviceServer.ValueValidator` | Optionale gerätespezifische Prüfung für Werte, deren Grenzen nicht im Registerplan stehen können (z. B. Sollwert innerhalb der konfigurierten Leistung der Batterie) |
 | `Modbus.HeaderValues`, `RegisterWriter`, `ModbusCommand` | Werte des Registerkopfs, Schreiber für gerätespezifische Register (prüft Adresse und Typ), angenommener Schreibzugriff |
 | `AsyncConsole` | `TryReadKey()` ohne Warten, `ReadLineAsync(max, ct)` mit Echo, Rücktaste und Esc; bei umgeleiteter Eingabe `Console.In.ReadLineAsync` |
+| `Weather.WeatherOptions` | Startoptionen `--weather <url\|off>`, `--location <ort>` (`TryApply`, `Usage`); `WithDefaultUrl(standalone)` setzt die Standard-URL nur mit Master |
+| `Weather.WeatherClient` | HTTP-Client auf den Wettersimulator, implementiert `IWeatherService`; 5-s-Timeout, deutsche Fehler in `WeatherUnavailableException` |
+| `Weather.WeatherFeed` | Wetter je Modellstunde: fragt höchstens einmal pro Stunde, Retry nach 10 s, behält das letzte Wetter, meldet nach 3 Fehlversuchen einmalig sichtbar |
 
 ## Verwendung in einem Gerät (Muster: `src/Devices/DualPortCharger/Simulation/SimulationEngine.cs`)
 
@@ -69,6 +72,20 @@ Die Prüfung der Schreibzugriffe (Adresse, Bereich, Typ, unvollständige Floats)
 bekommt nur gültige Werte. Ungültiges wird zurückgesetzt und in den Registern 18/19 vermerkt, weil die Bibliothek erst nach dem Schreiben
 meldet (Details im Charger-README). Der Server läuft in Threads der Bibliothek, die Modelllogik bleibt einthreadig.
 
+## Wetter im Gerät (Muster: `src/Devices/BatterySimulator/Simulator.cs`; ebenso Charger, PV)
+
+```csharp
+var feed = new WeatherFeed(new WeatherClient(url), location, message => Message = message);
+// je Modellschritt vor der Physik:
+if (await feed.UpdateAsync(stepStart, runId, ct) is { } weather)
+    device.AmbientTemperatureC = weather.TemperatureC;
+```
+
+- Die Abfrage erfolgt je Modellstunde, auch wenn die Schrittweite kleiner ist (`WeatherFeed` cached).
+- `--weather off` (oder standalone ohne Angabe) ⇒ kein HTTP-Verkehr, das Gerät rechnet mit festen 20 °C.
+- Ausfall: letztes Wetter bleibt aktiv; nach 3 Fehlversuchen erscheint „WETTER: NICHT ERREICHBAR“ in der Meldungszeile, neue Versuche alle 10 s.
+- Der Client gehört nach `Devices.Common`, nicht in `SimCore.Contracts` (Contracts bleibt abhängigkeitsfrei).
+
 ## Konfiguration
 Über die Kommandozeile des jeweiligen Geräts (`TimeSyncOptions.Usage`):
 
@@ -83,9 +100,11 @@ meldet (Details im Charger-README). Der Server läuft in Threads der Bibliothek,
 | `--unit-id <n>` | 1 | Modbus-Unit-ID, 1–247 |
 | `--no-modbus` | aus | Server nicht starten |
 | `--register-plan` | | Registerplan ausgeben und beenden (im Gerät auszuwerten) |
+| `--weather <url\|off>` | mit Master `http://127.0.0.1:8080`, standalone aus | Wettersimulator; `off` = feste 20 °C |
+| `--location <ort>` | salzburg | Standort für die Wetterabfrage |
 
 ## Tests
-`tests/Devices.Common.Tests` (44 Tests, alle grün am 2026-10-25).
+`tests/Devices.Common.Tests` (51 Tests, alle grün am 2026-10-26; neu: `WeatherFeed` und `WeatherOptions`).
 
 ## Bekannte Probleme
 - Modbus: Bibliotheksgrenze, Schreibfehler werden nicht als Modbus-Ausnahme gemeldet; die Bibliothek bindet den Port in einem eigenen Thread, deshalb prüft `Start()` vorher selbst (kleines Zeitfenster zwischen Prüfung und Bindung).

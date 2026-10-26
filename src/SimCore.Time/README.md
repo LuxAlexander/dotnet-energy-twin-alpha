@@ -2,7 +2,7 @@
 
 **Zweck:** Logik der gemeinsamen virtuellen Zeit für Master und Geräte: Pause, Fortsetzen und Tempowechsel ohne Zeitsprung,
 Neustart mit neuer Zeit, Uhrenabgleich, Erkennen eines verlorenen Masters. Kein Netzwerk, keine Konsole.
-**Verantwortlich:** _offen_ (laut `AGENTS1.md` Alexander Lux). Am 2026-10-25 von Susanne Lastowicka umgesetzt.
+**Verantwortlich:** Alexander Lux. Am 2026-10-25 von Susanne Lastowicka umgesetzt.
 **Basis aus LB01:** Tempo-Grenzen 1–100 000 (Susi); Idee „Pause ohne Zeitsprung“ (Alex/Domi), hier über Anker statt `_lastTick`.
 **Abhängigkeiten:** `SimCore.Contracts`.
 

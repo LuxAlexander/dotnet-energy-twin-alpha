@@ -59,6 +59,8 @@ dotnet run --project src/Devices/DualPortCharger -- --help
 | `--unit-id <n>` | Modbus-Unit-ID | `1` | 1–247 |
 | `--no-modbus` | Modbus-Server nicht starten | aus | |
 | `--register-plan` | Registerplan als Markdown ausgeben und beenden | | |
+| `--weather <url\|off>` | Wettersimulator; mit Master Standard `http://127.0.0.1:8080`, standalone aus | mit Master `http://127.0.0.1:8080` | |
+| `--location <ort>` | Standort für die Wetterabfrage | `salzburg` | |
 
 Ungültige Werte oder unbekannte Argumente führen zu einer Fehlermeldung mit Hilfetext (Exit-Code 1).
 `--start`, `--speed` und `--duration` ohne `--standalone` sind ein Fehler: Mit Master bestimmt der Master Zeit und Tempo.
@@ -240,7 +242,7 @@ Faulted: aus jedem Zustand (F oder automatisch ab 80 °C)
 
 | Parameter | Wert |
 |---|---|
-| Umgebung | 20 °C |
+| Umgebung | 20 °C (Standard; mit Wetterbezug vom Wettersimulator) |
 | Beharrungstemperatur bei 150 kW | 55 °C |
 | Zeitkonstante τ (normal / Kühlungsdefekt) | 10 min / 30 min |
 | Derating | ab 60 °C linear bis 0 % bei 80 °C |
@@ -248,13 +250,13 @@ Faulted: aus jedem Zustand (F oder automatisch ab 80 °C)
 | Reset | manuell (`R`) unter 60 °C, automatisch unter 50 °C |
 
 ```
-T_ziel = 20 °C + 35 °C · (P / 150 kW)²       (Verluste ∝ I²)
+T_ziel = T_außen + 35 °C · (P / 150 kW)²       (Verluste ∝ I²; T_außen standardmäßig 20 °C)
 T_neu  = T_ziel + (T_alt − T_ziel) · e^(−Δt / τ)
 ```
 
 Die exakte Lösung statt eines Euler-Schritts bleibt bei jeder Schrittweite stabil. Bei normalen Fahrzeugen verhindert das Derating eine Störung: Die Leistung geht bei 80 °C auf 0, die Temperatur nähert sich 80 °C nur an. Wurde vor der Störung geladen, lädt der Punkt nach dem Reset weiter.
 
-**Kia EV6 (defekt):** Der Temperatursensor der Ladebuchse ist ausgefallen, es gibt **kein Derating**. Dazu erwärmt der erhöhte Übergangswiderstand den Stecker doppelt so stark (`T_ziel = 20 °C + 70 °C · (P / 150 kW)²`). Ab ca. 140 kW steigt die Temperatur über 80 °C und nur die Abschaltung der Säule schützt. Mit 150 kW allein am Punkt ist er nach ca. 20 min `FAULTED`, kühlt ab, setzt sich unter 50 °C zurück und lädt weiter. Teilt er sich die 150 kW mit dem anderen Punkt, bleibt er kühl.
+**Kia EV6 (defekt):** Der Temperatursensor der Ladebuchse ist ausgefallen, es gibt **kein Derating**. Dazu erwärmt der erhöhte Übergangswiderstand den Stecker doppelt so stark (`T_ziel = T_außen + 70 °C · (P / 150 kW)²`). Ab ca. 140 kW steigt die Temperatur über 80 °C und nur die Abschaltung der Säule schützt. Mit 150 kW allein am Punkt ist er nach ca. 20 min `FAULTED`, kühlt ab, setzt sich unter 50 °C zurück und lädt weiter. Teilt er sich die 150 kW mit dem anderen Punkt, bleibt er kühl.
 
 ### Auto-Modus
 
@@ -418,10 +420,10 @@ dotnet run --project src/ModbusDiagnosticClient -- --port 1502
 | Standalone-Betrieb mit lokaler Uhr (`--standalone`) | ✅ |
 | async Schleife, CSV, Tastatur (kein `Thread.Sleep`, kein `ReadLine`) | ✅ |
 | Modbus-Server, Registerplan (Kopf 0–19, Säule 20–38; Server bleibt in der Pause erreichbar) | ✅ (2026-10-25) |
-| Umgebungstemperatur aus dem Wetter | offen |
+| Umgebungstemperatur aus dem Wetter (`--weather`, `--location`; Standard mit Master) | ✅ (2026-10-26) |
 
 ### Schnittstellen
-- **Benötigt:** Simulations-Master (TCP, Standard `127.0.0.1:5100`, Protokoll in `src/SimCore.TimeSync/README.md`).
+- **Benötigt:** Simulations-Master (TCP, Standard `127.0.0.1:5100`, Protokoll in `src/SimCore.TimeSync/README.md`); optional Wettersimulator (HTTP, Standard `127.0.0.1:8080`).
 - **Angeboten:** CSV-Datei; Modbus-TCP-Server (Registerplan oben, Standardport 1502); Gegenstück: `src/ModbusDiagnosticClient`.
 
 ### Tests
@@ -434,6 +436,7 @@ dotnet run --project src/ModbusDiagnosticClient -- --port 1502
     Master hart beendet ⇒ beide melden nach 3 s „MASTER NICHT ERREICHBAR – Zeit steht“.
 
 ### Bekannte Probleme
+- Mit Master fragt die Säule standardmäßig den Wettersimulator; läuft er nicht, erscheint nach 3 Fehlversuchen „WETTER: NICHT ERREICHBAR“, die Säule rechnet mit dem letzten Wetter (bzw. 20 °C) weiter.
 - Modbus-Schreibfehler werden nicht mit einer Modbus-Ausnahmeantwort gemeldet, sondern über Register 18/19 (Grenze der Bibliothek, siehe oben).
 - Interaktive Anzeige und Tasten nach dem Umbau noch nicht in einem echten Terminalfenster getestet.
 - Ein Neustart im Master behält den Zustand der Säule (Fahrzeuge bleiben angesteckt); ob das gewünscht ist, im Team klären.

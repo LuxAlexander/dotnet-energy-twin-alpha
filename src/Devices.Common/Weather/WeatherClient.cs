@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using SimCore.Contracts;
 
-namespace EnergySimulator.Simulation;
+namespace Devices.Common.Weather;
 
 /// <summary>Fehler beim Abruf des Wetters (nicht erreichbar, ungültige Antwort, unbekannter Standort).</summary>
 public sealed class WeatherUnavailableException : Exception
@@ -19,7 +19,7 @@ public sealed class WeatherUnavailableException : Exception
 /// <c>GET /weather?location=…&amp;simTime=…&amp;run=…</c>) und übersetzt alle Fehler in
 /// <see cref="WeatherUnavailableException"/> mit einer deutschen Meldung.
 /// </summary>
-public sealed class WeatherClient : IDisposable
+public sealed class WeatherClient : IWeatherService, IDisposable
 {
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
     {

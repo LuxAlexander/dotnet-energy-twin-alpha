@@ -145,10 +145,10 @@ Nur beim Laden: Bis 80 % SOC volle Leistung, danach sinkt die erlaubte Ladeleist
 Die Temperatur ändert sich pro Simulationsminute um
 
 ```
-ΔT = ( 0,06 × |Ist-Leistung|  −  0,02 × (T − 20 °C)  +  Störungswärme ) × Δt[min]
+ΔT = ( 0,06 × |Ist-Leistung|  −  0,02 × (T − T_außen)  +  Störungswärme ) × Δt[min]
 ```
 
-Bei dauerhaft 5 kW pendelt sich die Temperatur bei etwa 35 °C ein.
+`T_außen` ist standardmäßig 20 °C. Mit Wetterbezug (siehe LB02) kommt sie je Modellstunde vom Wettersimulator. Bei dauerhaft 5 kW und 20 °C pendelt sich die Temperatur bei etwa 35 °C ein.
 
 | Temperatur | Verhalten |
 |---|---|
@@ -293,6 +293,8 @@ docs/                                 # zentral im Repository
 | `--unit-id <n>` | Modbus-Unit-ID | 1 |
 | `--no-modbus` | Server nicht starten | aus |
 | `--register-plan` | Registerplan als Markdown ausgeben | |
+| `--weather <url\|off>` | Wettersimulator; mit Master Standard `http://127.0.0.1:8080`, standalone aus | |
+| `--location <ort>` | Standort für die Wetterabfrage (salzburg, wien, innsbruck) | salzburg |
 
 Zusätzlich geprüft: `--max-charge`/`--max-discharge` > 0, `0 ≤ --soc-min < --soc-max ≤ 100`, `--soc-start` dazwischen. Dezimalzahlen mit Punkt **oder** Komma.
 
@@ -307,7 +309,11 @@ dotnet run --project src/Devices/BatterySimulator -- --standalone --speed 3600 -
 Tasten: Leertaste Pause (nur standalone, sonst Master), `<` / `>` Tempo ÷2 / ×2 (nur standalone), `M`, `↑`/`↓`, `0`, `E`, `N`, `H`, `R`, `Q` wie in LB01.
 **`S` öffnet die Einstellungen** unter der Anzeige (löst das Pausenmenü ab): 1 Sollwert, 2 max. Ladeleistung, 3 max. Entladeleistung, 4 SOC-Min, 5 SOC-Max.
 Die Zeit läuft währenddessen weiter, die Modbus-Register auch. Tempo und Schrittweite lassen sich nicht mehr im Programm ändern (Tempo: Master, Schritt: `--step`).
-Die Anzeige hat neue Zeilen „Zeitquelle“, „Modbus“ und „Meldung“. Bei umgeleiteter Ausgabe erscheint alle 5 s eine Statuszeile.
+Die Anzeige hat neue Zeilen „Zeitquelle“, „Modbus“, „Wetter“ und „Meldung“. Bei umgeleiteter Ausgabe erscheint alle 5 s eine Statuszeile.
+
+Der Wetterbezug ist optional: Mit Master fragt die Batterie standardmäßig den Wettersimulator je Modellstunde und übernimmt dessen Temperatur als
+Außentemperatur; standalone oder mit `--weather off` rechnet sie mit festen 20 °C. Fehlt der Wettersimulator, bleibt das letzte Wetter aktiv und nach
+3 Fehlversuchen erscheint „WETTER: NICHT ERREICHBAR“ in der Meldungszeile (neue Versuche alle 10 s).
 
 ### Modbus-Registerplan
 

@@ -1,6 +1,7 @@
 using System.Globalization;
 using Devices.Common;
 using Devices.Common.Modbus;
+using Devices.Common.Weather;
 
 namespace Batterie_Sim;
 
@@ -30,6 +31,9 @@ public static class ArgsParser
         Modbus-TCP-Server (jeder Speicher braucht einen eigenen Port):
         {ModbusOptions.Usage}
 
+        Wetter (optional; Aussentemperatur für das Temperaturmodell):
+        {WeatherOptions.Usage}
+
         Tasten: Leertaste Pause (nur standalone) · M Auto/Manuell · ↑/↓ Sollwert ±0,5 kW · 0 Sollwert 0 · E Ein/Aus
                 N Not-Aus · H Überhitzung · R Störung zurücksetzen · S Einstellungen · < > Tempo (nur standalone) · Q Ende
 
@@ -50,6 +54,7 @@ public static class ArgsParser
         int? seed = null;
         var timeSync = defaults.TimeSync;
         var modbus = defaults.Modbus;
+        var weather = defaults.Weather;
 
         for (int i = 0; i < args.Length; i++)
         {
@@ -57,7 +62,8 @@ public static class ArgsParser
             int index = i;
 
             if (TimeSyncOptions.TryApply(name, () => NextValue(args, ref index, name), timeSync, out timeSync)
-                || ModbusOptions.TryApply(name, () => NextValue(args, ref index, name), modbus, out modbus))
+                || ModbusOptions.TryApply(name, () => NextValue(args, ref index, name), modbus, out modbus)
+                || WeatherOptions.TryApply(name, () => NextValue(args, ref index, name), weather, out weather))
             {
                 i = index;
                 continue;
@@ -105,6 +111,7 @@ public static class ArgsParser
             Seed = seed,
             TimeSync = timeSync,
             Modbus = modbus,
+            Weather = weather.WithDefaultUrl(timeSync.Standalone),
         };
     }
 

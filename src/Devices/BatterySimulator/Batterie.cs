@@ -16,7 +16,7 @@ namespace Batterie_Sim
         private const double DeadbandKW = 0.01;
 
         //Bremsen wenn batterie heiß wird
-        private const double AmbientC = 20.0;
+        public const double DefaultAmbientC = 20.0;
         private const double HeatFactor = 0.06;
         private const double CoolFactor = 0.02;
         private const double DerateStartC = 45.0;
@@ -34,6 +34,9 @@ namespace Batterie_Sim
         public double SetpointKW { get; private set; }
         public double ActualKW { get; private set; }
         public double TemperaturC { get; private set; }
+
+        /// <summary>Aussentemperatur in °C (Standard 20; kommt mit Wetterbezug vom Wettersimulator).</summary>
+        public double AmbientTemperatureC { get; set; } = DefaultAmbientC;
         public DeviceState State { get; private set; }
         public FaultType ActiveFault { get; private set; }
 
@@ -47,7 +50,7 @@ namespace Batterie_Sim
             _config = config;
             SocPercent = config.StartSocPercent;
             State = DeviceState.Standby;
-            TemperaturC = AmbientC;
+            TemperaturC = AmbientTemperatureC;
             ActiveFault = FaultType.None;
         }
 
@@ -169,7 +172,7 @@ namespace Batterie_Sim
                 faultheat = FaultHeatPerMin;
             }
             double heating = HeatFactor * Math.Abs(ActualKW);
-            double cooling = CoolFactor * (TemperaturC - AmbientC);
+            double cooling = CoolFactor * (TemperaturC - AmbientTemperatureC);
             TemperaturC += (heating+faultheat - cooling) * dtminutes;
         }
 

@@ -1,5 +1,6 @@
 using System.Globalization;
 using Devices.Common;
+using Devices.Common.Weather;
 using WeatherData = SimCore.Contracts.WeatherData;
 using EnergySimulator.Data;
 using EnergySimulator.Devices;

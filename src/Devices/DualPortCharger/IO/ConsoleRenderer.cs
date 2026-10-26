@@ -114,7 +114,7 @@ public class ConsoleRenderer
     {
         var charger = engine.Charger;
         string simTime = engine.SimulationTime?.ToString("yyyy-MM-dd HH:mm", Culture) ?? "--";
-        return F($"{simTime}  Lauf {engine.RunId}  {charger.TotalPowerKW:N1} kW  {charger.TotalEnergyKWh:N1} kWh  | {engine.Time.StatusText}  | Modbus {engine.ModbusStatus ?? "aus"}  | {engine.Message}");
+        return F($"{simTime}  Lauf {engine.RunId}  {charger.TotalPowerKW:N1} kW  {charger.TotalEnergyKWh:N1} kWh  | {engine.Time.StatusText}  | Modbus {engine.ModbusStatus ?? "aus"}  | Wetter {engine.WeatherStatus ?? "aus"}  | {engine.Message}");
     }
 
     private static List<string> BuildLines(SimulationEngine engine)
@@ -134,6 +134,7 @@ public class ConsoleRenderer
             F($"Simulationszeit: {simTime}   Lauf: {engine.RunId}   Schritt: {config.StepMinutes:0.##} min{end}"),
             "Zeitquelle:      " + time.StatusText,
             "Modbus:          " + (engine.ModbusStatus ?? "aus (--no-modbus)"),
+            "Wetter:          " + (engine.WeatherStatus ?? "aus (feste 20 °C)"),
             "",
             F($"Säule: {(charger.IsOn ? "EIN" : "AUS")}   Limit: {charger.PowerLimitKW:N0} kW   Abgewiesen: {charger.RejectedVehicles}   Warteschlange: {charger.QueueLength}"),
             F($"Leistung: {charger.TotalPowerKW,7:N1} kW [{Bar(loadRatio)}] {loadRatio * 100,3:N0} %   Energie: {charger.TotalEnergyKWh:N1} kWh"),

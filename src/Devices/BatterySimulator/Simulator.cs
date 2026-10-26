@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Globalization;
 using Devices.Common;
+using Devices.Common.Weather;
 
 namespace Batterie_Sim;
 
@@ -21,6 +22,7 @@ public sealed class Simulator
     private readonly SimulatorOptions _options;
     private readonly StepScheduler _scheduler;
     private readonly BatteryModbus? _modbus;
+    private readonly WeatherFeed? _weather;
     private readonly ConcurrentQueue<Action> _pending = new();
     private DateTime? _endTime;
     private Task? _menuTask;
@@ -46,6 +48,9 @@ public sealed class Simulator
 
     public string? ModbusStatus => _modbus?.StatusText;
 
+    /// <summary>Status des Wetterbezugs; <c>null</c> ohne Wetter (feste 20 °C).</summary>
+    public string? WeatherStatus => _weather?.Status;
+
     public Simulator(Batterie battery, DailyProfile profile, SimulatorOptions options)
     {
         _battery = battery;
@@ -58,6 +63,9 @@ public sealed class Simulator
 
         if (!options.Modbus.Disabled)
             _modbus = new BatteryModbus(this, battery, Time, options.Modbus, message => Message = message);
+
+        if (options.Weather.Url is { } weatherUrl)
+            _weather = new WeatherFeed(new WeatherClient(weatherUrl), options.Weather.Location, message => Message = message);
     }
 
     /// <returns>Pfad der geschriebenen CSV-Datei.</returns>
@@ -114,6 +122,7 @@ public sealed class Simulator
         {
             await stop.CancelAsync();
             _modbus?.Dispose();
+            _weather?.Dispose();
             await syncTask;                                       // meldet sich beim Master ab
             if (_menuTask is not null)
             {
@@ -159,6 +168,8 @@ public sealed class Simulator
         for (int i = 0; i < update.StepCount && !IsFinished; i++)
         {
             var stepStart = update.FirstStepAt + _options.Step * i;
+            if (_weather is not null && await _weather.UpdateAsync(stepStart, RunId, cancellationToken) is { } weather)
+                _battery.AmbientTemperatureC = weather.TemperatureC;
             if (Mode == ControlMode.Auto)
                 _battery.SetPower(_profile.GetSetpoint(new TimeSpan(stepStart.Hour, stepStart.Minute, stepStart.Second)));
 

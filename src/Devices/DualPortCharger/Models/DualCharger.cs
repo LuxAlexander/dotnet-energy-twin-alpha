@@ -28,6 +28,16 @@ public class DualCharger
         set => _powerLimitKW = Math.Clamp(value, MinPowerLimitKW, MaxPowerLimitKW);
     }
 
+    /// <summary>Aussentemperatur beider Ladepunkte (kommt mit Wetterbezug vom Wettersimulator).</summary>
+    public double AmbientTemperatureC
+    {
+        set
+        {
+            foreach (var point in Points)
+                point.AmbientTemperatureC = value;
+        }
+    }
+
     public double TotalPowerKW => Points.Sum(p => p.PowerKW);
     public double TotalEnergyKWh => Points.Sum(p => p.EnergyKWh);
 

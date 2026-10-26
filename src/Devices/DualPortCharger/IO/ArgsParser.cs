@@ -1,6 +1,7 @@
 using System.Globalization;
 using Devices.Common;
 using Devices.Common.Modbus;
+using Devices.Common.Weather;
 using DualChargerSim.Models;
 using DualChargerSim.Simulation;
 
@@ -28,6 +29,9 @@ public static class ArgsParser
         Modbus-TCP-Server (jede Säule braucht einen eigenen Port):
         {ModbusOptions.Usage}
 
+        Wetter (optional; Aussentemperatur für das Temperaturmodell):
+        {WeatherOptions.Usage}
+
         Beispiele:
           dotnet run --project src/Devices/DualPortCharger -- --id DC-01 --power 150 --step 1 --seed 42
           dotnet run --project src/Devices/DualPortCharger -- --standalone --speed 300 --duration 24 --seed 42
@@ -49,6 +53,7 @@ public static class ArgsParser
         string output = defaults.OutputDirectory;
         var timeSync = defaults.TimeSync;
         var modbus = defaults.Modbus;
+        var weather = defaults.Weather;
 
         for (int i = 0; i < args.Length; i++)
         {
@@ -60,7 +65,8 @@ public static class ArgsParser
                 continue;
             }
 
-            if (ModbusOptions.TryApply(name, () => NextValue(args, ref index, name), modbus, out modbus))
+            if (ModbusOptions.TryApply(name, () => NextValue(args, ref index, name), modbus, out modbus)
+                || WeatherOptions.TryApply(name, () => NextValue(args, ref index, name), weather, out weather))
             {
                 i = index;
                 continue;
@@ -115,6 +121,7 @@ public static class ArgsParser
             OutputDirectory = output,
             TimeSync = timeSync,
             Modbus = modbus,
+            Weather = weather.WithDefaultUrl(timeSync.Standalone),
         };
     }
 
