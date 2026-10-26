@@ -2,8 +2,11 @@
 
 **Stand:** 2026-10-26 · **Phase:** LB01 abgeschlossen (3 Einzelsimulatoren), LB02-Projektstruktur angelegt (`EnergyTwin.sln`, `src/`, `tests/`),
 Zeitlogik + TCP-Zeitverteilung umgesetzt (`SimCore.*`, 54 Tests), `SimulationMaster` lauffähig, Zeitanbindung der Geräte und
-Modbus-Server-Baustein in `Devices.Common` (44 Tests), **Charger, PV und Batterie an Master und Modbus angebunden** (`FieldDevices.Tests` 34),
-**Diagnose-Client** (28 Tests), **Wettersimulator mit PV-Wetteranbindung** (`Weather.Tests` 11); Wind noch offen
+Modbus-Server-Baustein in `Devices.Common` (44 Tests), **Charger, PV, Batterie und Kühlhaus an Master und Modbus angebunden**
+(`FieldDevices.Tests` 62), **Diagnose-Client** (28 Tests), **Wettersimulator mit PV-Wetteranbindung** (`Weather.Tests` 11);
+**viertes Feldgerät Kühlhaus** (`Devices/Verbraucher`) ist als LB02-Feldgerät **fertig** (Modell, Registerplan, Engine,
+Modbus, Wetter, Anzeige/Tasten, 28 Tests, README) – damit ist
+„+ ein viertes Feldgerät“ erfüllt, Wind bleibt optionaler Platzhalter
 
 Pflichtlektüre für jeden Agenten in diesem Repo. Sie fasst die drei LB01-Projekte und den LB02-Plan
 zusammen, damit nicht alles neu analysiert werden muss. Details:
@@ -49,11 +52,12 @@ Vor dem Commit `dotnet build EnergyTwin.sln` und alle fünf Testprojekte laufen 
 | `Devices.Common` | ✅ Zeitanbindung: `DeviceTimeSource`, `StepScheduler`, `TimeSyncOptions`, `AsyncConsole`; ✅ Modbus: `ModbusDeviceServer`, `ModbusOptions`, `HeaderValues` | README mit Codemustern |
 | `DualPortCharger` | ✅ an den Master angebunden, async, CSV-Spalte `Lauf`, Profile „Master“ und „Standalone“; ✅ Modbus-Server mit Registerplan im README | `Simulation/SimulationEngine.cs` + `Simulation/ChargerModbus.cs` = **Vorlage für alle Geräte** |
 | `ModbusDiagnosticClient` | ✅ Eingabeaufforderung + `--once`/`--write`; Kopf und Geräteregister lesen (Rohwert + Deutung), Sollwert schreiben und beim Gerät prüfen (Register 18/19), `force`, `watch`, Verbindungsabbruch mit Wiederverbindung | `DiagnosticSession.cs`, README |
-| Tests | ✅ `SimCore.Tests` 54/54, `Devices.Common.Tests` 44/44, `ModbusDiagnosticClient.Tests` 28/28, `FieldDevices.Tests` 34/34, `Weather.Tests` 11/11 | – |
+| Tests | ✅ `SimCore.Tests` 54/54, `Devices.Common.Tests` 44/44, `ModbusDiagnosticClient.Tests` 28/28, `FieldDevices.Tests` 62/62 (PV, Batterie, Kühlhaus), `Weather.Tests` 11/11 – zusammen 199 | – |
 | `PvSimulator` | ✅ an Master-Zeit (`StepScheduler`, `--model-step`), Modbus (Registerplan 20–38) und Wettersimulator (`--weather`, `--location`, Abfrage je Modellstunde) angebunden, async, CSV je Lauf | `Simulation/SimulationEngine.cs`, `WeatherClient.cs`, `PvModbus.cs` |
 | `BatterySimulator` | ✅ an Master-Zeit und Modbus (Registerplan 20–43, Sollwert in konfigurierter Leistung) angebunden, async, Einstellungsmenü `S` statt Pausenmenü | `Simulator.cs`, `BatteryModbus.cs` |
 | `WeatherSimulator` | ✅ HTTP-Dienst (`/weather`, `/locations`), deterministisch aus WeatherSynth + eigenem Modell, 3 Standorte, manuelle Übersteuerung, Fehler 404/400 | `Program.cs`, `Simulation/WeatherModel.cs`, README |
-| `WindSimulator` | ❌ nur Platzhalter (`Program.cs`), Lösung lässt die Solution bauen | – |
+| `Devices/Verbraucher` (Kühlhaus) | ✅ **fertig (Schritte 1–9, 2026-10-26)**: in der Solution, Modell mit exakter Exponentiallösung (`SetDoor(bool)`, `ResetFault()`, `AlarmTempC`), `DeviceType.IndustrialConsumer = 5`, `KuehlhausRegisters` (20–31), `SimulationConfig`/`SimulationEngine` (Master-Zeit, feste Schritte, CSV je Lauf, Wetter je Modellstunde, Modbus auch in der Pause), `KuehlhausModbus`, `WeatherClient`, Automatik (`AutoModeController`), Anzeige/Tasten (`ConsoleRenderer`, `InputHandler`), 28 Tests, Geräte-README mit Registerplan | `Simulation/SimulationEngine.cs`, `Simulation/KuehlhausModbus.cs`, `IO/ConsoleRenderer.cs`, `IO/InputHandler.cs`, `README.md`, Anleitung `docs/devices/Verbraucher/umsetzung-lb02.md` |
+| `WindSimulator` | ⚪ optionaler Platzhalter (`Program.cs`), Lösung baut; durch das Kühlhaus nicht mehr nötig | – |
 
 ### 0.4 Nächste Schritte (Vorschlag, Reihenfolge)
 1. **Master und Charger in einem echten Terminal testen** (Anzeige, Tasten, Strg+C). Bisher liefen nur Probeläufe mit umgeleiteter Ausgabe.
@@ -76,6 +80,10 @@ Vor dem Commit `dotnet build EnergyTwin.sln` und alle fünf Testprojekte laufen 
    Wetter für Batterie/Charger (derzeit feste Umgebungstemperatur); Diagnose-Client ist fertig (siehe 3.).
 6. ✅ **Zentrale `README.md`** (Architektur, Startreihenfolge, Demo, Zuständigkeiten, Schnittstellen, Tests, Konfiguration) am 2026-10-26 angelegt;
    **`.env.example` entfällt** (keine Umgebungsvariablen, keine Secrets – nur Kommandozeilenoptionen). Noch offen: **`start-all.ps1`**, Abgabe-Tag `lb02-2026`.
+7. ✅ **Kühlhaus als viertes Feldgerät** (`src/Devices/Verbraucher`, 2026-10-26): alle neun Schritte umgesetzt (Solution, Modell, Registerplan,
+   Engine mit Master-Zeit, CSV und Wetter, `KuehlhausModbus`, `ArgsParser`/`CsvLogger`, `ConsoleRenderer`, `InputHandler`, 28 Tests,
+   Geräte-README mit Registerplan). Reihenfolge und Code-Skizzen stehen in `docs/devices/Verbraucher/umsetzung-lb02.md`.
+   Damit ist das vierte Feldgerät abgedeckt; Wind bleibt optional. Offen bleiben nur Team-Abstimmungen (Projektname, `ZusatzwaermeKW`, Ports).
 
 **Hinweis Wetter:** Die PV fragt mit Master standardmäßig den Wettersimulator (`http://127.0.0.1:8080`); standalone oder mit `--weather off` rechnet sie mit dem lokalen Auto-Wetter (nur mit `--seed` wiederholbar).
 
@@ -175,6 +183,53 @@ mit Python `newline=''` neu bearbeitet werden.
 
 **Noch offen:** Wind; Wetter für Batterie und Charger; echte Terminalfenster für Wetter, PV und die übrigen Geräte; `start-all.ps1`;
 Abstimmung der Wetter-Optionen und Registerpläne mit Alexander und Dominik; Abgabe-Tag `lb02-2026`.
+
+---
+
+### 0.9 Sitzung 2026-10-26: Kühlhaus als viertes Feldgerät, Schritte 1–9 (opencode/big-pickle)
+
+Das Projekt `src/Devices/Verbraucher` (Kühlhaus, Industrieverbraucher) ist jetzt ein **fertiges LB02-Feldgerät** mit
+allen neun Schritten: Solution, Modell, Registerplan, Engine mit Master-Zeit und CSV, Modbus-Server, Wetteranbindung,
+Anzeige/Tasten, 28 Tests und Geräte-README.
+Die vollständige Anleitung mit Code-Skizzen steht in `docs/devices/Verbraucher/umsetzung-lb02.md`.
+
+| Bereich | Neu / geändert | Test |
+|---|---|---|
+| `EnergyTwin.sln` | `Verbraucher` unter dem Solution-Ordner `Devices` eingetragen | `dotnet build EnergyTwin.sln` |
+| `src/Devices/Verbraucher/Verbraucher.csproj` | nur noch `OutputType` + `ProjectReference Devices.Common`; Rest kommt aus `src/Directory.Build.props` | – |
+| `Kuehlhaus.cs` | `SetDoor(bool)` (behebt die Build-Fehler), **exakte Exponentiallösung** statt Euler, validierte Solltemperatur (−30…0 °C), `Id`, `OutsideTempC`, `RuntimeHours`, `CoolingPowerKW`, `ResetAlarmBelowC`, boolesches `ResetFault()`, Config-Prüfung im Konstruktor | 0 Warnungen; Zahlen unverändert (1,95 K/h ohne Kühlung, 4,9 K/h mit Tür) |
+| `KuehlhausConfig.cs` | Einheiten im Namen: `WaermekapazitaetKWhProK`, `WaermedurchgangKWProK`, `KaelteleistungKW`, `ZusatzwaermeKW`, neu `AlarmHystereseK`; `DeviceId` Standard `KH-01` | – |
+| `Emums.cs` | → `Enums.cs` umbenannt, Namespace `Verbraucher` | – |
+| `Simulation/SimulationConfig.cs` | Optionen (Soll, Kälteleistung, Schritt, Dauer, Seed, Zeit, Modbus, Wetter, Standort), `DefaultModbusPort = 1504`, `DefaultWeatherUrl`, `ToModelConfig()` | – |
+| `Simulation/SimulationEngine.cs` | Schleife mit `StepScheduler`, `Started`/`Restarted`, CSV je Lauf, Wetter je Modellstunde, Modbus in **jedem** Durchlauf (auch Pause), lokales Tagesprofil 5–23 °C; bis Schritt 7 Statuszeile je Modellschritt statt Anzeige | 24 h standalone: 289 Zeilen, 20,7 kWh, 25 Schritte Tür offen; mit Master synchron (x600), nach Master-Abbruch Register 12 = 3 |
+| `Simulation/KuehlhausModbus.cs` | Solltemperatur, Tür, Ein/Aus, Reset; Register 20–31 veröffentlichen; Fehlercode 1/2, Betriebszustand aus Kompressor | Diagnose-Client: Sollwert `-20 → -15 °C` angenommen, `force 5` abgelehnt (Register 18 = 2, Adresse 20) |
+| `Simulation/WeatherClient.cs` | HTTP-Client wie bei der PV (`/weather?location…`), deutsche Fehler, 5 s Timeout | Probelauf mit Wettersimulator: 5,6 → 4,4 °C in der Nacht übernommen |
+| `Simulation/AutoModeController.cs` | Türöffnungen nach Tageszeit (Rate je Stunde, 1–10 min offen), geseedet | 24-h-Lauf: 25 Schritte offen |
+| `IO/ArgsParser.cs`, `IO/CsvLogger.cs` | Optionen (`--id --setpoint --cooling --step --seed --output --weather --location --duration`), CSV mit 16 Spalten (de-AT, BOM, Spalte `Lauf`) | `--help`, Probeläufe |
+| `Program.cs` | LB01-Testmenü **ersetzt**: Hilfe, `--register-plan` (Port 1504), Strg+C geordnet, `IOException` → Exit 1 | `dotnet run -- --register-plan` |
+| `Modbus.Contracts` | `DeviceType.IndustrialConsumer = 5`, Labels/Beschreibung; neu `KuehlhausRegisters.cs` (20–31); `RegisterPlans.For`; README nachgezogen | `FieldDevices.Tests` 34/34 |
+
+**Entscheidungen:** Gerätetyp 5 = Industrieverbraucher (Wind bleibt 4); Modbus-Standardport **1504** (1502 = PV/Charger, 1503 = Batterie);
+Fehlercode im Kopf (1 Kompressorausfall, 2 Übertemperatur); Wirkleistung positiv; Wetter nur mit Master vorbelegt,
+standalone lokales Tagesprofil (wie bei der PV, damit Standalone-Läufe nicht am ersten Verbindungsversuch hängen).
+**Gefundener Fehler in der eigenen Anleitung:** Der dort vorgeschlagene Reset (`return false`, solange der Raum zu warm ist) sperrt sich selbst aus –
+ohne Kompressor kühlt nichts, der Raum wird nur wärmer. Umgesetzt ist deshalb: Kompressorausfall immer quittieren,
+Übertemperatur-Alarm erst unter `AlarmTempC − AlarmHystereseK`. Die Anleitung ist korrigiert.
+**Kleinere Korrekturen beim Testen:** Die Startzeile zeigte „außen −20 °C“ (Konstruktorwert); die Engine setzt die
+Außentemperatur jetzt mit einem Nullschritt, bevor sie die erste CSV-Zeile schreibt. Die Wetterzeile sagt bei fehlender
+Antwort und ohne letztes Wetter „(lokales Profil)“ statt „letztes Wetter bleibt“.
+**Nachtrag: Schritte 7–9 (2026-10-26):** `IO/ConsoleRenderer.cs` (flackerfrei, Balken Soll → Alarm, Zeilen für Wetter,
+Tür, Modbus und Meldung, `PromptAsync`, bei umgeleiteter Ausgabe zwei Zeilen je 5 s) und `IO/InputHandler.cs`
+(Tasten `T` Tür, `S` Solltemperatur, `F` Kompressorausfall, `R` Reset, `O` Ein/Aus, `A` Automatik, `P`/`<`/`>` nur
+standalone, `Q`). `T` schaltet zuerst auf Handbetrieb, damit die Automatik die Tür nicht wieder schließt.
+Die Engine zeichnet interaktiv sofort bei Tastenänderung, schreibt am Ende eine Zusammenfassung und wartet auf `Q`;
+`Kuehlhaus.AlarmTempC` und `TurnOff` (Leistung sofort 0) ergänzt. `tests/FieldDevices.Tests/ConsumerTests.cs`:
+28 Tests (Modell, Modbus, Optionen, Engine/CSV, Anzeige, Automatik), `FieldDevices.Tests` 62/62.
+Geräte-README mit Registerplan, zentrale `README.md` und dieser Abschnitt nachgezogen.
+**Kleinere Korrekturen dabei:** Hysterese und Abschalten werden vor dem Temperaturschritt geprüft (Tests erlauben
+deshalb ~0,2 K Überschwingen); die CSV-Zeit ist ein Feld (`yyyy-MM-dd HH:mm`), nicht Datum und Uhrzeit getrennt.
+**Noch offen:** Journal-Eintrag, Abstimmung, ob das Projekt in `KuehlhausSimulator` umbenannt wird, ob
+`ZusatzwaermeKW` (3 kW) kleiner wird und ob der Standardport 1504 bleibt (Charger nutzt in der Demo 1504).
 
 ---
 
@@ -309,6 +364,7 @@ src/
   Devices/BatterySimulator/   exe → Devices.Common   enthält LB01-Code von Domi (seit 2026-10-25 mit Master-Zeit und Modbus)
   Devices/DualPortCharger/    exe → Devices.Common   enthält LB01-Code von Susi
   Devices/WindSimulator/      exe → Devices.Common   leer
+  Devices/Verbraucher/        exe → Devices.Common   Kühlhaus (4. Feldgerät), Stand 2026-10-26: Modell, Registerplan, Engine, Modbus, Wetter, Anzeige/Tasten
 tests/
   SimCore.Tests/           xUnit → SimCore.Time, SimCore.TimeSync
   Devices.Common.Tests/    xUnit → Devices.Common          (seit 2026-10-25)
@@ -505,6 +561,11 @@ dotnet run --project src/WeatherSimulator                         # Wettersimula
 dotnet run --project src/Devices/BatterySimulator -- --id BAT-01 --modbus-port 1503   # Batterie (Modbus 1503)
 dotnet test tests/FieldDevices.Tests                            # PV + Batterie: Modbus, Optionen, Standalone-Lauf
 dotnet test tests/Weather.Tests                                 # Wetter: Reproduzierbarkeit und Plausibilität
+dotnet run --project src/Devices/Verbraucher -- --id KH-01     # Kühlhaus (Master, Modbus 127.0.0.1:1504, Wetter 8080)
+dotnet run --project src/Devices/Verbraucher -- --register-plan       # Registerplan des Kühlhauses als Markdown
+dotnet run --project src/Devices/Verbraucher -- --standalone --speed 20000 --duration 24 --weather off --seed 42   # ohne Master
+dotnet run --project src/ModbusDiagnosticClient -- --port 1504 --once                # Kühlhaus-Register lesen
+dotnet run --project src/ModbusDiagnosticClient -- --port 1504 --write "Solltemperatur=-15"
 ```
 
 `dotnet build EnergyTwin.sln` (nach dem Verschieben):
@@ -521,9 +582,16 @@ dotnet test tests/Weather.Tests                                 # Wetter: Reprod
 | `tests/FieldDevices.Tests` | ✅ 34/34 Tests grün (2026-10-25) |
 | `WeatherSimulator` | ✅ baut; Probelauf 2026-10-26: liefert für dieselbe Stunde identische Werte, 404 bei unbekanntem Standort, PV zeigt die gelieferten Werte |
 | `tests/Weather.Tests` | ✅ 11/11 (2026-10-26) |
-| `Devices/WindSimulator` | ⚠️ nur Platzhalter (`Program.cs`), baut mit 0 Warnungen; Wind fehlt noch |
+| `Devices/WindSimulator` | ⚪ nur Platzhalter (`Program.cs`), baut mit 0 Warnungen; durch das Kühlhaus optional geworden |
+| `Devices/Verbraucher` (Kühlhaus) | ✅ baut mit 0 Warnungen (2026-10-26): standalone 24 h (289 CSV-Zeilen, 20,7 kWh, Tür 25 Schritte offen), mit Master synchron (x600), Master-Abbruch ⇒ Register 12 = 3, Wetter vom Wettersimulator übernommen, Sollwert per Diagnose-Client `-20 → -15 °C`, `force 5` abgelehnt (Register 18 = 2, Adresse 20); Anzeige, Tasten und Eingabe der Solltemperatur nur mit umgeleiteter Ausgabe geprüft |
+| `tests/FieldDevices.Tests` | ✅ 62/62 (2026-10-26; 34 PV/Batterie + 28 Kühlhaus) |
 
 Die Probeläufe liefen mit umgeleiteter Ausgabe. Die Konsolenausgabe von Alex formatiert Zahlen mit Komma, die CSV mit Punkt.
+
+**Testläufe:** `dotnet test EnergyTwin.sln` startet alle Testprojekte **parallel**; mehrere davon binden echte TCP-Ports
+(Modbus-Server, Zeitverteilung). Dabei können 1–2 Tests scheitern, obwohl alles in Ordnung ist. Deshalb die Projekte
+einzeln starten (`dotnet test tests/<Projekt>`) – so waren am 2026-10-26 alle 199 Tests grün
+(54 + 44 + 62 + 11 + 28).
 
 ## 7. Bekannte Probleme
 

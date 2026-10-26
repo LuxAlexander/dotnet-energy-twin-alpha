@@ -294,7 +294,7 @@ public class RegisterPlanRequirementTests
     [Fact]
     public void EveryDevicePlan_HasSetpointAndAtLeastThreeSpecificValues()
     {
-        foreach (var plan in new[] { ChargerRegisters.Plan, PvRegisters.Plan, BatteryRegisters.Plan })
+        foreach (var plan in new[] { ChargerRegisters.Plan, PvRegisters.Plan, BatteryRegisters.Plan, KuehlhausRegisters.Plan })
         {
             var specific = plan.Definitions.Where(d => d.Address >= CommonRegisters.SpecificStart).ToList();
             Assert.True(specific.Count(d => !d.IsWritable) >= 3, plan.DeviceName);

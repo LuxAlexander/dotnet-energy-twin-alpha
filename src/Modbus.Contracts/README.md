@@ -11,8 +11,8 @@ Register (20–49), Datentypen und Codierung, `RegisterPlan` mit Prüfung und Ma
 |---|---|
 | `CommonRegisters` | Adressen und Definitionen des Kopfs 0–19, Bereichsgrenzen (`SpecificStart` 20, `SpecificEnd` 50) |
 | `RegisterDefinition` | Ein Eintrag: Adresse, Name, Typ (`UInt16`, `UInt32`, `Float32`), Zugriff, Einheit, Skalierung, Schreibbereich, `Labels` (Klartext zu Zahlenwerten); `Validate(wert)` |
-| `ChargerRegisters`, `PvRegisters`, `BatteryRegisters` | Adressen und `RegisterPlan` der Geräte (Säule 20–37, PV 20–38, Batterie 20–43); gemeinsam von Gerät und Diagnose-Client benutzt |
-| `RegisterPlans` | `For(DeviceType)` liefert den Plan zum Gerätetyp (Charger, PV, Batterie); neue Geräte (Wind) dort eintragen |
+| `ChargerRegisters`, `PvRegisters`, `BatteryRegisters`, `KuehlhausRegisters` | Adressen und `RegisterPlan` der Geräte (Säule 20–37, PV 20–38, Batterie 20–43, Kühlhaus 20–31); gemeinsam von Gerät und Diagnose-Client benutzt |
+| `RegisterPlans` | `For(DeviceType)` liefert den Plan zum Gerätetyp (Charger, PV, Batterie, Industrieverbraucher); neue Geräte (Wind) dort eintragen |
 | `RegisterPlan` | Kopf + gerätespezifische Register; prüft Überschneidungen, `Find(adresse)`, `ToMarkdown()` für die Geräte-README |
 | `RegisterCodec` | Wert ↔ Register: Float32/UInt32 Big-Endian, höherwertiges Wort zuerst; Modellzeit als Sekunden seit 1970 |
 | `DeviceType`, `OperatingState`, `TimeStatus`, `WriteError` | Enums der Kopfregister |
@@ -21,7 +21,7 @@ Register (20–49), Datentypen und Codierung, `RegisterPlan` mit Prüfung und Ma
 
 | Adresse | Name | Typ | Zugriff |
 |---|---|---|---|
-| 0 | Gerätetyp (1 PV, 2 Batterie, 3 Charger, 4 Wind) | UInt16 | lesen |
+| 0 | Gerätetyp (1 PV, 2 Batterie, 3 Charger, 4 Wind, 5 Industrieverbraucher) | UInt16 | lesen |
 | 1 | Geräte-Nummer (Zahl am Ende der Geräte-ID) | UInt16 | lesen |
 | 2 | Betriebszustand (0 Aus, 1 Bereit, 2 Betrieb, 3 Störung) | UInt16 | lesen |
 | 3 | Fehlercode (0 = kein Fehler, sonst gerätespezifisch) | UInt16 | lesen |

@@ -9,6 +9,7 @@ public static class RegisterPlans
         DeviceType.Charger => ChargerRegisters.Plan,
         DeviceType.PvPlant => PvRegisters.Plan,
         DeviceType.Battery => BatteryRegisters.Plan,
+        DeviceType.IndustrialConsumer => KuehlhausRegisters.Plan,
         _ => null
     };
 }

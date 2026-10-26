@@ -5,7 +5,8 @@ public enum DeviceType : ushort
     PvPlant = 1,
     Battery = 2,
     Charger = 3,
-    Wind = 4
+    Wind = 4,
+    IndustrialConsumer = 5
 }
 
 /// <summary>Betriebszustand im gemeinsamen Registerkopf.</summary>
@@ -76,8 +77,8 @@ public static class CommonRegisters
     public static IReadOnlyList<RegisterDefinition> Header { get; } =
     [
         new(DeviceType, "Gerätetyp", RegisterType.UInt16, RegisterAccess.ReadOnly, "",
-            "1 PV, 2 Batterie, 3 Charger, 4 Wind",
-            Labels: ["unbekannt", "PV-Anlage", "Batteriespeicher", "Charger", "Windkraftanlage"]),
+            "1 PV, 2 Batterie, 3 Charger, 4 Wind, 5 Industrieverbraucher",
+            Labels: ["unbekannt", "PV-Anlage", "Batteriespeicher", "Charger", "Windkraftanlage", "Industrieverbraucher"]),
         new(DeviceInstance, "Geräte-Nummer", RegisterType.UInt16, RegisterAccess.ReadOnly, "",
             "Zahl am Ende der Geräte-ID (DC-02 → 2), 0 wenn keine"),
         new(OperatingState, "Betriebszustand", RegisterType.UInt16, RegisterAccess.ReadOnly, "",

@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="../../src/Devices/PvSimulator/PvSimulator.csproj" />
     <ProjectReference Include="../../src/Devices/BatterySimulator/BatterySimulator.csproj" />
+    <ProjectReference Include="../../src/Devices/Verbraucher/Verbraucher.csproj" />
     <ProjectReference Include="../../src/Devices.Common/Devices.Common.csproj" />
   </ItemGroup>
 

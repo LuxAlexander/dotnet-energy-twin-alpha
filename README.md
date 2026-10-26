@@ -1,8 +1,8 @@
 # EnergyTwin – verteiltes Energiesystem (LB02, Team Alpha)
 
 Simulation eines Energiesystems aus mehreren getrennten Programmen: ein Simulations-Master gibt die virtuelle Zeit vor,
-ein Wettersimulator liefert deterministisches Wetter, drei Feldgeräte (PV, Batterie, DC-Ladesäule) simulieren Anlagen,
-ein Modbus-Diagnose-Client liest und schreibt Register. Alles läuft lokal, ohne Internet zur Laufzeit.
+ein Wettersimulator liefert deterministisches Wetter, vier Feldgeräte (PV, Batterie, DC-Ladesäule, Kühlhaus) simulieren
+Anlagen, ein Modbus-Diagnose-Client liest und schreibt Register. Alles läuft lokal, ohne Internet zur Laufzeit.
 
 ## Zuständigkeiten
 
@@ -12,7 +12,7 @@ ein Modbus-Diagnose-Client liest und schreibt Register. Alles läuft lokal, ohne
 | Wettersimulator, PV-Anlage | Alexander Lux | [`src/WeatherSimulator/README.md`](src/WeatherSimulator/README.md), [`src/Devices/PvSimulator/README.md`](src/Devices/PvSimulator/README.md) |
 | Batteriespeicher | Dominik Zach | [`src/Devices/BatterySimulator/README.md`](src/Devices/BatterySimulator/README.md) |
 | DC-Ladesäule (2 Ladepunkte), Modbus-Diagnose-Client, `Modbus.Contracts`, `Devices.Common` | Susanne Lastowicka | [`src/Devices/DualPortCharger/README.md`](src/Devices/DualPortCharger/README.md), [`src/ModbusDiagnosticClient/README.md`](src/ModbusDiagnosticClient/README.md), [`src/Modbus.Contracts/README.md`](src/Modbus.Contracts/README.md), [`src/Devices.Common/README.md`](src/Devices.Common/README.md) |
-| Industrieverbraucher (viertes Feldgerät) | von Dominik Zach zu dokumentieren | noch nicht im Repository (in Arbeit) |
+| Industrieverbraucher (Kühlhaus, viertes Feldgerät) | Dominik Zach (LB01-Modell); LB02-Umbau mit ihm abzustimmen | [`src/Devices/Verbraucher/README.md`](src/Devices/Verbraucher/README.md) |
 
 ## Aufbau
 
@@ -30,11 +30,12 @@ src/
   Devices/PvSimulator/       PV-Anlage
   Devices/BatterySimulator/  Batteriespeicher
   Devices/DualPortCharger/   DC-Ladesäule mit zwei Ladepunkten
+  Devices/Verbraucher/       Kühlhaus (Industrieverbraucher, viertes Feldgerät)
   Devices/WindSimulator/     Platzhalter (Wind noch nicht umgesetzt)
 tests/
   SimCore.Tests/            Zeit, Uhrenabgleich, TCP (54)
   Devices.Common.Tests/     Gerätezeit, Modbus-Server, Registercodec (44)
-  FieldDevices.Tests/       PV und Batterie: Modbus, Optionen, Standalone-Lauf (34)
+  FieldDevices.Tests/       PV, Batterie und Kühlhaus: Modbus, Optionen, Standalone-Lauf (62)
   ModbusDiagnosticClient.Tests/  Client gegen echten Modbus-Server (28)
   Weather.Tests/            Reproduzierbarkeit und Plausibilität des Wetters (11)
 ```
@@ -53,14 +54,18 @@ dotnet run --project src/WeatherSimulator
 # 2. Simulations-Master (TCP 5100, startet pausiert)
 dotnet run --project src/SimulationMaster -- --speed 600
 
-# 3. Feldgeräte (Modbus-Ports 1502–1504, je Gerät eigener Port)
+# 3. Feldgeräte (Modbus-Ports ab 1502, je Gerät eigener Port)
 dotnet run --project src/Devices/PvSimulator -- --id PV-01
 dotnet run --project src/Devices/BatterySimulator -- --id BAT-01 --modbus-port 1503
 dotnet run --project src/Devices/DualPortCharger -- --id DC-01 --modbus-port 1504
+dotnet run --project src/Devices/Verbraucher -- --id KH-01 --modbus-port 1505
 
 # 4. Modbus-Diagnose-Client
 dotnet run --project src/ModbusDiagnosticClient -- --port 1502
 ```
+
+Die Standardports sind 1502 (PV, Charger), 1503 (Batterie) und 1504 (Kühlhaus). Für die Demo mit allen Geräten
+gleichzeitig bekommt der Charger hier 1504 und das Kühlhaus 1505, sonst kollidieren die Ports.
 
 Im Master mit **Leertaste** starten; danach `+`/`-` für das Tempo, `1`–`4` für Jahreszeiten-Neustart, `Q` zum Beenden.
 Die Geräte verbinden sich beim Start mit `127.0.0.1:5100` und wiederholen das automatisch, solange der Master fehlt.
@@ -72,8 +77,11 @@ Die Geräte verbinden sich beim Start mit `127.0.0.1:5100` und wiederholen das a
 3. Im Master Tempo ändern (`+`/`-`) und pausieren – alle Geräte folgen ohne Zeitsprung, Modbus bleibt erreichbar.
 4. Client: `read`, `write leistungsgrenze 60`, im PV-Gerät prüfen; `watch` zeigt wechselnde Werte.
 5. Master `N` oder `1`–`4`: alle Geräte übernehmen die neue virtuelle Zeit (neuer Lauf).
-6. Wettersimulator beenden ⇒ PV meldet nach 3 Fehlversuchen sichtbar „WETTER: NICHT ERREICHBAR“, letztes Wetter bleibt.
-7. Alle Programme mit `Q` bzw. Strg+C beenden.
+6. Wettersimulator beenden ⇒ PV und Kühlhaus melden nach 3 Fehlversuchen sichtbar „WETTER: NICHT ERREICHBAR“, letztes
+   Wetter bleibt.
+7. Kühlhaus: `T` öffnet die Tür (Temperatur steigt), `S` ändert die Solltemperatur, `F` löst einen Kompressorausfall
+   aus, `R` quittiert ihn; der Diagnose-Client `--port 1505` zeigt dieselben Werte.
+8. Alle Programme mit `Q` bzw. Strg+C beenden.
 
 ## Schnittstellen
 
@@ -102,8 +110,8 @@ dotnet test EnergyTwin.sln
 ```
 
 Pflicht-Tests laut Aufgabenstellung: Zeitsteuerung des Masters (`tests/SimCore.Tests`) und Reproduzierbarkeit des
-Wetters (`tests/Weather.Tests`). Dazu Gerätezeit/Modbus (`Devices.Common.Tests`), PV/Batterie (`FieldDevices.Tests`)
-und der Diagnose-Client (`ModbusDiagnosticClient.Tests`).
+Wetters (`tests/Weather.Tests`). Dazu Gerätezeit/Modbus (`Devices.Common.Tests`), PV/Batterie/Kühlhaus
+(`FieldDevices.Tests`) und der Diagnose-Client (`ModbusDiagnosticClient.Tests`).
 
 ## Entwicklungsjournale
 
@@ -112,7 +120,7 @@ Teamregeln und Architekturdetails: [`AGENTS.md`](AGENTS.md).
 
 ## Bekannte Einschränkungen
 
-- Wind-Simulator und Industrieverbraucher sind noch nicht umgesetzt; das Wetter der PV ist angebunden, die anderen
-  Geräte nutzen noch feste Umgebungstemperaturen.
+- Der Wind-Simulator ist noch nicht umgesetzt (Platzhalter); das Kühlhaus ist das vierte Feldgerät. Das Wetter ist
+  für PV und Kühlhaus angebunden, Charger und Batterie nutzen noch feste Umgebungstemperaturen.
 - Registerpläne und geänderte Optionen der Geräte sind im Team abzustimmen (siehe `AGENTS.md`).
 - Interaktive Anzeigen wurden bisher überwiegend mit umgeleiteter Ausgabe geprüft; echte Terminalfenster sind zu testen.
