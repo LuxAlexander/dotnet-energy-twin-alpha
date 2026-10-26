@@ -18,7 +18,9 @@ public static class ArgsParser
           --model-step <min>     feste Schrittweite des Modells     (Standard: 1)
           -r, --refresh <ms>     Bildschirm-Aktualisierung, mind. 50 (Standard: 400)
           -o, --output <ordner>  CSV-Ordner                         (Standard: docs/data im Repo)
-          --seed <zahl>          Zufalls-Seed für Auto-Wetter und Netzrauschen (optional)
+          --seed <zahl>          Zufalls-Seed für Netzrauschen und Störmodell (optional)
+          --weather <url|off>    Wettersimulator (Standard mit Master: http://127.0.0.1:8080; standalone: lokal)
+          --location <kennung>   Standort für die Wetterabfrage (Standard: salzburg)
           -h, --help             Diese Hilfe
 
         Virtuelle Zeit (Standard: vom Simulations-Master):
@@ -45,6 +47,7 @@ public static class ArgsParser
         var config = new SimulationConfig();
         var timeSync = config.TimeSync;
         var modbus = config.Modbus;
+        bool weatherSpecified = false;
 
         for (int i = 0; i < args.Length; i++)
         {
@@ -83,6 +86,20 @@ public static class ArgsParser
                     if (string.IsNullOrWhiteSpace(config.OutputDirectory) || config.OutputDirectory.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
                         throw new ArgumentException($"--output ist kein gültiger Ordner: '{config.OutputDirectory}'.");
                     break;
+                case "--weather":
+                    string weatherUrl = NextValue(args, ref i, name);
+                    weatherSpecified = true;
+                    config.WeatherUrl = weatherUrl.Equals("off", StringComparison.OrdinalIgnoreCase)
+                        || weatherUrl.Equals("none", StringComparison.OrdinalIgnoreCase)
+                        || weatherUrl.Equals("lokal", StringComparison.OrdinalIgnoreCase)
+                        ? null
+                        : weatherUrl;
+                    break;
+                case "--location":
+                    config.Location = NextValue(args, ref i, name);
+                    if (string.IsNullOrWhiteSpace(config.Location))
+                        throw new ArgumentException("--location darf nicht leer sein.");
+                    break;
                 case "--seed":
                     string value = NextValue(args, ref i, name);
                     if (!int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out int seed))
@@ -96,6 +113,10 @@ public static class ArgsParser
 
         if (!timeSync.Standalone && timeSync.HasStandaloneSettings)
             throw new ArgumentException("--start und --speed gelten nur mit --standalone; mit Master bestimmt der Simulations-Master Zeit und Tempo.");
+
+        // Mit Master kommt das Wetter standardmäßig vom Wettersimulator; standalone bleibt es lokal.
+        if (!weatherSpecified && !timeSync.Standalone)
+            config.WeatherUrl = SimulationConfig.DefaultWeatherUrl;
 
         config.TimeSync = timeSync;
         config.Modbus = modbus;

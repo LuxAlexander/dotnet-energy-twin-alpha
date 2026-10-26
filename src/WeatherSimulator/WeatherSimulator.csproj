@@ -5,8 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="WeatherSynth" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="../SimCore.Contracts/SimCore.Contracts.csproj" />
     <ProjectReference Include="../Shared.Config/Shared.Config.csproj" />
+    <ProjectReference Include="../Devices.Common/Devices.Common.csproj" />
   </ItemGroup>
 
 </Project>

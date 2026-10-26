@@ -1,5 +1,6 @@
 using System.Globalization;
 using Devices.Common;
+using WeatherData = SimCore.Contracts.WeatherData;
 using EnergySimulator.Data;
 using EnergySimulator.Devices;
 using EnergySimulator.Output;
@@ -30,6 +31,12 @@ public sealed class SimulationEngine
     private readonly Random _random;
     private readonly StepScheduler _scheduler;
     private readonly PvModbus? _modbus;
+    private readonly WeatherClient? _weather;
+    private string _weatherStatus = "aus (--weather off)";
+    private WeatherData? _lastWeather;
+    private int _weatherFailures;
+    private DateTime _nextWeatherAttempt = DateTime.MinValue;
+    private bool _weatherErrorReported;
 
     private SimulationMode _mode = SimulationMode.Auto;
     private bool _running = true;
@@ -59,9 +66,18 @@ public sealed class SimulationEngine
 
         if (!config.Modbus.Disabled)
             _modbus = new PvModbus(_pv, _faults, Time, config.Modbus, config.DeviceId, SetNotification);
+
+        if (config.WeatherUrl is { } url)
+        {
+            _weather = new WeatherClient(url);
+            _weatherStatus = $"warte auf {url} …";
+        }
     }
 
     public string? ModbusStatus => _modbus?.StatusText;
+
+    /// <summary>Zustand der Wetteranbindung für Anzeige und Tests.</summary>
+    public string WeatherStatus => _weatherStatus;
 
     /// <returns>Pfad der geschriebenen CSV-Datei.</returns>
     public async Task<string> RunAsync(CancellationToken cancellationToken)
@@ -115,6 +131,7 @@ public sealed class SimulationEngine
         {
             await stop.CancelAsync();
             _modbus?.Dispose();
+            _weather?.Dispose();
             await syncTask;                                       // meldet sich beim Master ab
             if (SimulationTime is { } last)
                 await csv.WriteRowAsync(last, _mode, RunId, _pv, CancellationToken.None);
@@ -148,8 +165,16 @@ public sealed class SimulationEngine
                 SimulationTime = update.ModelTime;
                 _currentDay = update.ModelTime.Date;
                 _lastCsvAt = update.ModelTime;
-                if (_mode == SimulationMode.Auto)
-                    UpdateAutoWeather(update.ModelTime, TimeSpan.Zero);
+                if (_weather is null)
+                {
+                    if (_mode == SimulationMode.Auto)
+                        UpdateAutoWeather(update.ModelTime, TimeSpan.Zero);
+                }
+                else
+                {
+                    await UpdateWeatherAsync(update.ModelTime, cancellationToken);
+                }
+
                 _pv.StepContinuous(update.ModelTime, 0.0);        // Anzeigewerte zur Startzeit, ohne Zeitfortschritt
                 await csv.WriteRowAsync(update.ModelTime, _mode, RunId, _pv, cancellationToken);
                 return;
@@ -162,8 +187,15 @@ public sealed class SimulationEngine
         for (int i = 0; i < update.StepCount; i++)
         {
             var stepEnd = update.FirstStepAt + step * (i + 1);
-            if (_mode == SimulationMode.Auto)
-                UpdateAutoWeather(stepEnd, step);
+            if (_weather is null)
+            {
+                if (_mode == SimulationMode.Auto)
+                    UpdateAutoWeather(stepEnd, step);
+            }
+            else
+            {
+                await UpdateWeatherAsync(stepEnd, cancellationToken);
+            }
 
             _pv.StepContinuous(stepEnd, step.TotalHours);
             SimulationTime = stepEnd;
@@ -186,6 +218,55 @@ public sealed class SimulationEngine
         if (update.StepCount > 0)
             await csv.FlushAsync(cancellationToken);
     }
+
+    /// <summary>
+    /// Holt das Wetter je Modellstunde beim Wettersimulator. Fehler werden sichtbar gemeldet
+    /// (ab 3 Fehlversuchen in Folge), das letzte gültige Wetter bleibt aktiv, neue Versuche alle 10 s.
+    /// </summary>
+    private async Task UpdateWeatherAsync(DateTime time, CancellationToken cancellationToken)
+    {
+        var hour = new DateTime(time.Year, time.Month, time.Day, time.Hour, 0, 0, DateTimeKind.Utc);
+        bool needsFetch = _lastWeather is null || _lastWeather.SimTimeUtc != hour || _lastWeather.RunId != RunId;
+
+        if (needsFetch && DateTime.UtcNow >= _nextWeatherAttempt)
+        {
+            try
+            {
+                var data = await _weather!.GetAsync(_config.Location, hour, RunId, cancellationToken);
+                _lastWeather = data;
+                _weatherFailures = 0;
+                _weatherErrorReported = false;
+                _weatherStatus = FormattableString.Invariant(
+                    $"{data.Location}: {German(data.Condition)} · {data.TemperatureC:0.0} °C · {data.WindSpeedMs:0.0} m/s · {data.IrradiationWm2:0} W/m²");
+                _pv.ApplyExternalWeather(data);
+            }
+            catch (WeatherUnavailableException ex) when (!cancellationToken.IsCancellationRequested)
+            {
+                _weatherFailures++;
+                _nextWeatherAttempt = DateTime.UtcNow.AddSeconds(10);
+                _weatherStatus = FormattableString.Invariant(
+                    $"{ex.Message} – {_weatherFailures}. Fehlversuch, letztes Wetter bleibt");
+                if (_weatherFailures >= 3 && !_weatherErrorReported)
+                {
+                    _weatherErrorReported = true;
+                    SetNotification($"WETTER: {ex.Message} – {_config.Location} (Versuche alle 10 s)");
+                }
+            }
+        }
+
+        if (_lastWeather is { } last)
+            _pv.ApplyExternalWeather(last);
+    }
+
+    private static string German(SimCore.Contracts.WeatherCondition condition) => condition switch
+    {
+        SimCore.Contracts.WeatherCondition.Sunny => "SONNIG",
+        SimCore.Contracts.WeatherCondition.PartlyCloudy => "BEWÖLKT",
+        SimCore.Contracts.WeatherCondition.Overcast => "DICHT BEWÖLKT",
+        SimCore.Contracts.WeatherCondition.Storm => "GEWITTER",
+        SimCore.Contracts.WeatherCondition.Snow => "SCHNEE",
+        _ => "NACHT"
+    };
 
     /// <summary>Verarbeitet alle anstehenden Tasten ohne zu warten.</summary>
     /// <returns><c>true</c>, wenn eine Taste gedrückt wurde (Anzeige sofort neu zeichnen).</returns>
@@ -246,6 +327,12 @@ public sealed class SimulationEngine
 
     private void SetWeather(WeatherCondition weather)
     {
+        if (_weather is not null)
+        {
+            SetNotification("Wetter kommt vom Wettersimulator (lokales Wetter: --weather off).");
+            return;
+        }
+
         _pv.SetWeather(weather);
         SetNotification($"Wetter → {weather.ToGerman()}");
     }
@@ -328,14 +415,15 @@ public sealed class SimulationEngine
             notification,
             time?.TimeOfDay.TotalHours / 24.0 ?? 0.0,
             Time.StatusText,
-            _modbus?.StatusText);
+            _modbus?.StatusText,
+            _weatherStatus);
     }
 
     /// <summary>Kurzfassung für umgeleitete Ausgabe (Protokoll statt Bildschirm).</summary>
     private string StatusLine()
     {
         string time = SimulationTime?.ToString("yyyy-MM-dd HH:mm", Culture) ?? "--";
-        return FormattableString.Invariant($"{time}  Lauf {RunId}  {_pv.PowerKw:F2} kW  {_pv.TotalEnergyKwh:F2} kWh  {_pv.Weather.ToGerman()}  | {Time.StatusText}  | Modbus {_modbus?.StatusText ?? "aus"}  | {_note.Text}");
+        return FormattableString.Invariant($"{time}  Lauf {RunId}  {_pv.PowerKw:F2} kW  {_pv.TotalEnergyKwh:F2} kWh  {_pv.Weather.ToGerman()}  | {Time.StatusText}  | Modbus {_modbus?.StatusText ?? "aus"}  | Wetter {_weatherStatus}  | {_note.Text}");
     }
 
     private void SetNotification(string message) => _note = new Note(message, DateTime.Now);

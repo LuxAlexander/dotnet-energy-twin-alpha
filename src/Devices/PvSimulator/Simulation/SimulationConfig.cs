@@ -17,6 +17,15 @@ public sealed class SimulationConfig
     public string OutputDirectory { get; set; } = OutputPaths.CsvDirectory;
     public int? Seed { get; set; }
 
+    /// <summary>Basis-URL des Wettersimulators; <c>null</c> = lokales Wetter (--weather off).</summary>
+    public string? WeatherUrl { get; set; }
+
+    /// <summary>Standard-Adresse des Wettersimulators, wenn kein Standalone-Lauf angefordert ist.</summary>
+    public const string DefaultWeatherUrl = "http://127.0.0.1:8080";
+
+    /// <summary>Standortkennung für die Wetterabfrage (salzburg, wien, innsbruck).</summary>
+    public string Location { get; set; } = "salzburg";
+
     /// <summary>Woher die virtuelle Zeit kommt (Master oder lokale Uhr).</summary>
     public TimeSyncOptions TimeSync { get; set; } = new() { StandaloneSpeed = DefaultStandaloneSpeed };
 

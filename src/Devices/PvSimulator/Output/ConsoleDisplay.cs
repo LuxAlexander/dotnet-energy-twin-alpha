@@ -51,7 +51,8 @@ public static class ConsoleDisplay
         string notification,
         double dayProgress,
         string timeStatus,
-        string? modbusStatus)
+        string? modbusStatus,
+        string? weatherStatus = null)
     {
         // Ohne Zeit (Master noch nicht erreicht) zeigt die Anzeige Platzhalter statt Datum und Uhrzeit
         DateTime now = nowOrNull ?? DateTime.MinValue;
@@ -127,6 +128,7 @@ public static class ConsoleDisplay
 
         Info("Zeitquelle ", timeStatus);
         Info("Modbus     ", modbusStatus ?? "aus (--no-modbus)");
+        Info("Wetter     ", weatherStatus ?? "lokal");
 
         Sep();
 

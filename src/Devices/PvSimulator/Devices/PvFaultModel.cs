@@ -79,16 +79,17 @@ public sealed class PvFaultModel
         GridDisturbanceForced = false;
     }
 
-    public void Step(double irradiation, DateTime now, Season season, double hour, double elapsedSimHours)
+    public void Step(double irradiation, DateTime now, Season season, double hour, double elapsedSimHours, double? ambientOverrideC = null)
     {
-        StepTemperature(irradiation, now, season, hour, elapsedSimHours);
+        StepTemperature(irradiation, now, season, hour, elapsedSimHours, ambientOverrideC);
         StepGridVoltage(irradiation, hour, elapsedSimHours);
         StepDegradation(elapsedSimHours);
     }
 
-    private void StepTemperature(double irradiation, DateTime now, Season season, double hour, double elapsedSimHours)
+    private void StepTemperature(double irradiation, DateTime now, Season season, double hour, double elapsedSimHours, double? ambientOverrideC)
     {
-        double ambient = AmbientTemperature(season, hour) + DailyOffsetC(now, season);
+        // Mit Wettersimulator kommt die Außentemperatur direkt von dort; sonst lokales Modell.
+        double ambient = ambientOverrideC ?? AmbientTemperature(season, hour) + DailyOffsetC(now, season);
         AmbientTemperatureC = Math.Round(ambient, 1);
 
         if (OverheatForced)

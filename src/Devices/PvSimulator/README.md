@@ -243,7 +243,7 @@ docs/                                 # zentral im Repository
 **Verantwortlich:** Alexander Lux (LB01-Gerät); Umbau auf Master-Zeit und Modbus am 2026-10-25 von Susanne Lastowicka (mit Alexander abzustimmen)
 **Basis aus LB01:** Alex PvSystem, PvFaultModel
 
-### Stand (2026-10-25)
+### Stand (2026-10-26)
 
 | Schritt | Stand |
 |---|---|
@@ -251,7 +251,7 @@ docs/                                 # zentral im Repository
 | Standalone mit lokaler Uhr (`--standalone`, Tasten `P`, `5–9` wirken nur dort) | ✅ |
 | async Schleife, CSV angehängt statt komplett neu geschrieben (kein `Thread.Sleep`, kein `File.WriteAllText`) | ✅ |
 | Modbus-Server mit Registerplan, Server bleibt in der Pause erreichbar | ✅ |
-| Wetter vom Wettersimulator | offen (bis dahin das lokale Auto-Wetter) |
+| Wetter vom Wettersimulator (HTTP, je Modellstunde, Fehleranzeige) | ✅ 2026-10-26 |
 
 ### Konfiguration
 
@@ -264,6 +264,8 @@ docs/                                 # zentral im Repository
 | `-r, --refresh <ms>` | Bildschirmaktualisierung, mind. 50 | 400 |
 | `-o, --output <ordner>` | CSV-Ordner | `docs/data` im Repo |
 | `--seed <zahl>` | Zufalls-Seed für Auto-Wetter und Netzrauschen | zufällig |
+| `--weather <url\|off>` | Wettersimulator; `off` = lokales Wetter | mit Master `http://127.0.0.1:8080`, standalone `off` |
+| `--location <kennung>` | Standort für die Wetterabfrage (`salzburg`, `wien`, `innsbruck`) | `salzburg` |
 | `--master <host:port>` | Simulations-Master | `127.0.0.1:5100` |
 | `--standalone` | ohne Master, lokale Uhr | aus |
 | `-d, --start <zeit>` | nur standalone, `yyyy-MM-dd HH:mm` | heute 00:00 |
@@ -280,12 +282,27 @@ Die Option `--timescale` gibt es nicht mehr; mit Master bestimmt der Master das 
 ### Bedienung / Start
 
 ```
-dotnet run --project src/SimulationMaster -- --speed 600        # 1. Master
-dotnet run --project src/Devices/PvSimulator -- --id PV-01      # 2. PV-Anlage (Modbus 1502)
+dotnet run --project src/WeatherSimulator                       # 1. Wettersimulator (HTTP 8080)
+dotnet run --project src/SimulationMaster -- --speed 600        # 2. Master
+dotnet run --project src/Devices/PvSimulator -- --id PV-01      # 3. PV-Anlage (Modbus 1502)
 dotnet run --project src/Devices/PvSimulator -- --standalone -s 300 -d "2026-06-21 05:00"   # ohne Master
 ```
 Tasten wie oben; `P` (Pause) und `5–9` (Tempo) wirken nur standalone, mit Master steuert der Master. Die Anzeige hat zwei neue Zeilen
 „Zeitquelle“ und „Modbus“. Bei umgeleiteter Ausgabe erscheint alle 5 s eine Statuszeile.
+
+### Wetteranbindung (seit 2026-10-26)
+
+Mit Master fragt die Anlage das Wetter je **Modellstunde** beim Wettersimulator ab
+(`--weather <url>`, Standard `http://127.0.0.1:8080`, `--location` Standard `salzburg`).
+Übernommen werden Einstrahlung, Zustand und Außentemperatur; die Modultemperatur rechnet dann mit der
+gelieferten Außentemperatur, das lokale Tagesgang-Modell entfällt. Bis zur ersten gültigen Antwort und
+bei Fehlern bleibt das lokale Wetter aktiv (Anzeige „Wetter …“).
+
+Fehlerverhalten: 5 s Zeitlimit je Anfrage; nach 3 Fehlversuchen in Folge erscheint sichtbar
+„WETTER: NICHT ERREICHBAR“ (Meldung und Statuszeile), das letzte gültige Wetter bleibt aktiv,
+weitere Versuche alle 10 s. Unbekannter Standort (HTTP 404) wird als ungültige Antwort gemeldet.
+Mit `--weather off` (oder `--standalone` ohne `--weather`) rechnet die PV mit ihrem lokalen Auto-Wetter;
+nur dann wirken die manuellen Wettertasten `0–4`.
 
 ### Modbus-Registerplan
 
@@ -335,7 +352,7 @@ Besonderheiten der PV-Anlage:
 - Fehlerverhalten bei Schreibzugriffen (Rückgängigmachen, Register 18/19): siehe `src/Devices/DualPortCharger/README.md`, Abschnitt „Fehlerverhalten bei Schreibzugriffen“.
 
 ### Schnittstellen
-- **Benötigt:** Simulations-Master (TCP, `127.0.0.1:5100`); später den Wettersimulator.
+- **Benötigt:** Simulations-Master (TCP, `127.0.0.1:5100`) und Wettersimulator (HTTP, Standard `http://127.0.0.1:8080`).
 - **Angeboten:** Modbus-TCP-Server (siehe Registerplan), CSV-Datei `<ID>_<Datum>_<Uhrzeit>.csv` mit neuen Spalten `Lauf` und `Leistungsbegrenzung_pct`.
   Prüfen mit `src/ModbusDiagnosticClient`.
 
@@ -345,7 +362,8 @@ Besonderheiten der PV-Anlage:
 - Probelauf 2026-10-25 mit Master (x600) zusammen mit Batterie und Charger: Zeitstatus „synchron“, drei Simulatoren im Master.
 
 ### Bekannte Probleme
-- Das Auto-Wetter ist lokal und nur mit `--seed` wiederholbar; es kommt später vom Wettersimulator.
+- Das lokale Auto-Wetter (nur `--weather off` bzw. standalone) ist nur mit `--seed` wiederholbar.
+- Die Wetterabfrage läuft über HTTP ohne Authentifizierung (nur lokales Netz, kein Internet nötig).
 - Die Modultemperatur startet immer bei 12 °C (Einschwingen dauert einige Stunden Modellzeit).
 - Ein Neustart im Master behält den Gerätezustand (Energie, Verschmutzung); nur die Tagesenergie wird bei einem Datumswechsel zurückgesetzt.
 - Die interaktive Anzeige und die Tasten sind nach dem Umbau nur mit umgeleiteter Ausgabe geprüft, noch nicht in einem echten Terminalfenster.

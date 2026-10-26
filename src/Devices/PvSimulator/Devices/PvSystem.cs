@@ -1,4 +1,6 @@
 using EnergySimulator.Simulation;
+using ContractWeather = SimCore.Contracts.WeatherCondition;
+using WeatherData = SimCore.Contracts.WeatherData;
 
 namespace EnergySimulator.Devices;
 
@@ -39,14 +41,41 @@ public sealed class PvSystem : IDevice
 
     public void SetWeather(WeatherCondition weather) => Weather = weather;
 
+    /// <summary>Aktuelles Wetter vom Wettersimulator; <c>null</c> = lokales Modell (Standalone/--weather off).</summary>
+    public WeatherData? ExternalWeather { get; private set; }
+
+    /// <summary>Übernimmt die Wetterwerte des Wettersimulators (Einstrahlung, Zustand, Außentemperatur).</summary>
+    public void ApplyExternalWeather(WeatherData weather)
+    {
+        ExternalWeather = weather;
+        Weather = weather.Condition switch
+        {
+            ContractWeather.Sunny => WeatherCondition.Sunny,
+            ContractWeather.PartlyCloudy => WeatherCondition.PartlyCloudy,
+            ContractWeather.Overcast => WeatherCondition.Overcast,
+            ContractWeather.Storm => WeatherCondition.Storm,
+            ContractWeather.Snow => WeatherCondition.Snow,
+            ContractWeather.Night => WeatherCondition.Night,
+            _ => WeatherCondition.Sunny
+        };
+    }
+
     public void StepContinuous(DateTime now, double elapsedSimHours)
     {
         double hour = now.Hour + now.Minute / 60.0 + now.Second / 3600.0;
         Season season = SeasonInfo.FromMonth(now.Month);
 
-        IrradiationWm2 = IrradiationCalculator.Calculate(hour, Weather, season);
-
-        _faults.Step(IrradiationWm2, now, season, hour, elapsedSimHours);
+        if (ExternalWeather is { } weather)
+        {
+            // Wetter vom Wettersimulator: Strahlung, Zustand und Außentemperatur kommen von dort
+            IrradiationWm2 = weather.IrradiationWm2;
+            _faults.Step(IrradiationWm2, now, season, hour, elapsedSimHours, weather.TemperatureC);
+        }
+        else
+        {
+            IrradiationWm2 = IrradiationCalculator.Calculate(hour, Weather, season);
+            _faults.Step(IrradiationWm2, now, season, hour, elapsedSimHours, null);
+        }
 
         if (!IsEnabled || _faults.HasFault || IrradiationWm2 <= 0)
         {

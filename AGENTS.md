@@ -1,9 +1,9 @@
 # AGENTS.md – dotnet-energy-twin-alpha
 
-**Stand:** 2026-10-25 · **Phase:** LB01 abgeschlossen (3 Einzelsimulatoren), LB02-Projektstruktur angelegt (`EnergyTwin.sln`, `src/`, `tests/`),
+**Stand:** 2026-10-26 · **Phase:** LB01 abgeschlossen (3 Einzelsimulatoren), LB02-Projektstruktur angelegt (`EnergyTwin.sln`, `src/`, `tests/`),
 Zeitlogik + TCP-Zeitverteilung umgesetzt (`SimCore.*`, 54 Tests), `SimulationMaster` lauffähig, Zeitanbindung der Geräte und
 Modbus-Server-Baustein in `Devices.Common` (44 Tests), **Charger, PV und Batterie an Master und Modbus angebunden** (`FieldDevices.Tests` 34),
-**Diagnose-Client** (28 Tests); Wind und Wetter noch offen
+**Diagnose-Client** (28 Tests), **Wettersimulator mit PV-Wetteranbindung** (`Weather.Tests` 11); Wind noch offen
 
 Pflichtlektüre für jeden Agenten in diesem Repo. Sie fasst die drei LB01-Projekte und den LB02-Plan
 zusammen, damit nicht alles neu analysiert werden muss. Details:
@@ -13,15 +13,15 @@ zusammen, damit nicht alles neu analysiert werden muss. Details:
 
 ---
 
-## 0. Übergabe – hier weitermachen (Stand 2026-10-25, Susanne Lastowicka)
+## 0. Übergabe – hier weitermachen (Stand 2026-10-26, Susanne Lastowicka)
 
 Dieser Abschnitt reicht, um an einem neuen Tag ohne Vorwissen weiterzuarbeiten. §1–§8 enthalten die Details.
 
-### 0.1 Arbeitsregeln für Agenten (von Susanne festgelegt, immer einhalten)
-- **Entwicklungsjournal:** Jede Änderung wird automatisch in `docs/development-journal/susanne-lastowicka.md` eingetragen.
-  Pro Tag gibt es einen Eintrag `## TT.MM.JJJJ – Titel`, weitere Arbeiten am selben Tag kommen als `### Nachtrag TT.MM.JJJJ – Titel` dazu.
+### 0.1 Arbeitsregeln für Agenten (von Alexander festgelegt, immer einhalten)
+- **Entwicklungsjournal:** Jede Änderung wird automatisch in `docs/development-journal/` unter der jeweiligen Person eingetragen.
+  Pro Tag gibt es einen Eintrag `## JJJJ-MM-TT – Titel`, weitere Arbeiten am selben Tag kommen als `### Nachtrag JJJJ-MM-TT – Titel` dazu.
   Felder: `**Done:**`, `**KI:**` (z. B. „Claude Opus 5.5 => …“), `**Artefact:**`, `**Test:**`, `**Comment:**`.
-  **Nur diese Datei bearbeiten**, nie die Journale von Alexander oder Dominik.
+  **Nur diese Datei bearbeiten**, nie die Journale von Susanne oder Dominik.
 - **Commits nur auf Anweisung.** Die Commit-Message der Userin wird **wörtlich** übernommen, **ohne** `Co-Authored-By`-Zeile.
   Nicht pushen, außer es wird ausdrücklich verlangt.
 - Die PDF der Aufgabenstellung (`dotNET Programmierung 2026 - Aufgabe 02.pdf`) liegt nur lokal im Repo-Root und ist in `.gitignore`.
@@ -31,11 +31,11 @@ Dieser Abschnitt reicht, um an einem neuen Tag ohne Vorwissen weiterzuarbeiten. 
   (Stand-Kopf, §0, §3, §6) und das Journal nachziehen.
 
 ### 0.2 Git-Stand
-`main`, lokal, **nicht gepusht**. Commits: `676502f` „Master Clock und Charger Zeit von Sim Master“ (Zeit, TCP, Master,
-Devices.Common, Charger) und `70711c8` „Aufgabenstellung-PDF in .gitignore“.
-**Nicht committet** (Arbeitsbaum, Stand 2026-10-25 abends): alles aus §0.7 – Modbus (`Modbus.Contracts`, `Devices.Common/Modbus`), Diagnose-Client,
-PV- und Batterie-Umbau, die Testprojekte `ModbusDiagnosticClient.Tests` und `FieldDevices.Tests`, geänderte READMEs, `AGENTS.md`, Journal.
-Vor dem Commit `dotnet build EnergyTwin.sln` und alle vier Testprojekte laufen lassen (Commit nur auf Anweisung, Message wörtlich, ohne Co-Author).
+`main`, lokal, **nicht gepusht**. Commits: `81e78a7` „Modbus, Diagnose-Client, PV und Batterie an Master“, `70711c8` „Aufgabenstellung-PDF in .gitignore“,
+`676502f` „Master Clock und Charger Zeit von Sim Master“.
+**Nicht committet** (Arbeitsbaum, Stand 2026-10-26): der Wettersimulator samt PV-Wetteranbindung aus §0.8, dazu die zentrale `README.md`,
+`SimCore.Contracts/WeatherData.cs`, das neue NuGet-Paket WeatherSynth, `Weather.Tests`, die Wind-Platzhalterdatei, geänderte READMEs, `AGENTS.md` und Journal.
+Vor dem Commit `dotnet build EnergyTwin.sln` und alle fünf Testprojekte laufen lassen (Commit nur auf Anweisung, Message wörtlich, ohne Co-Author).
 
 ### 0.3 Was fertig ist
 
@@ -49,11 +49,11 @@ Vor dem Commit `dotnet build EnergyTwin.sln` und alle vier Testprojekte laufen l
 | `Devices.Common` | ✅ Zeitanbindung: `DeviceTimeSource`, `StepScheduler`, `TimeSyncOptions`, `AsyncConsole`; ✅ Modbus: `ModbusDeviceServer`, `ModbusOptions`, `HeaderValues` | README mit Codemustern |
 | `DualPortCharger` | ✅ an den Master angebunden, async, CSV-Spalte `Lauf`, Profile „Master“ und „Standalone“; ✅ Modbus-Server mit Registerplan im README | `Simulation/SimulationEngine.cs` + `Simulation/ChargerModbus.cs` = **Vorlage für alle Geräte** |
 | `ModbusDiagnosticClient` | ✅ Eingabeaufforderung + `--once`/`--write`; Kopf und Geräteregister lesen (Rohwert + Deutung), Sollwert schreiben und beim Gerät prüfen (Register 18/19), `force`, `watch`, Verbindungsabbruch mit Wiederverbindung | `DiagnosticSession.cs`, README |
-| Tests | ✅ `SimCore.Tests` 54/54, `Devices.Common.Tests` 44/44, `ModbusDiagnosticClient.Tests` 28/28, `FieldDevices.Tests` 34/34 | – |
-| `PvSimulator` | ✅ an Master-Zeit (`StepScheduler`, `--model-step`) und Modbus (Registerplan 20–38, Leistungsbegrenzung) angebunden, async, CSV je Lauf | `Simulation/SimulationEngine.cs`, `PvModbus.cs` |
+| Tests | ✅ `SimCore.Tests` 54/54, `Devices.Common.Tests` 44/44, `ModbusDiagnosticClient.Tests` 28/28, `FieldDevices.Tests` 34/34, `Weather.Tests` 11/11 | – |
+| `PvSimulator` | ✅ an Master-Zeit (`StepScheduler`, `--model-step`), Modbus (Registerplan 20–38) und Wettersimulator (`--weather`, `--location`, Abfrage je Modellstunde) angebunden, async, CSV je Lauf | `Simulation/SimulationEngine.cs`, `WeatherClient.cs`, `PvModbus.cs` |
 | `BatterySimulator` | ✅ an Master-Zeit und Modbus (Registerplan 20–43, Sollwert in konfigurierter Leistung) angebunden, async, Einstellungsmenü `S` statt Pausenmenü | `Simulator.cs`, `BatteryModbus.cs` |
-| `WeatherSimulator`, `WindSimulator` | ❌ leer (`CS5001` erwartet) | – |
-| `Weather.Tests` | ❌ baut nicht, solange `WeatherSimulator` kein `Program.cs` hat | – |
+| `WeatherSimulator` | ✅ HTTP-Dienst (`/weather`, `/locations`), deterministisch aus WeatherSynth + eigenem Modell, 3 Standorte, manuelle Übersteuerung, Fehler 404/400 | `Program.cs`, `Simulation/WeatherModel.cs`, README |
+| `WindSimulator` | ❌ nur Platzhalter (`Program.cs`), Lösung lässt die Solution bauen | – |
 
 ### 0.4 Nächste Schritte (Vorschlag, Reihenfolge)
 1. **Master und Charger in einem echten Terminal testen** (Anzeige, Tasten, Strg+C). Bisher liefen nur Probeläufe mit umgeleiteter Ausgabe.
@@ -70,14 +70,17 @@ Vor dem Commit `dotnet build EnergyTwin.sln` und alle vier Testprojekte laufen l
    (PV: `--timescale` entfällt, `--start` mit Uhrzeit, neu `--id`, `--model-step`, `--seed`; Batterie: `--duration` Standard endlos, `--start` mit Datum),
    CSV je Lauf mit neuem Namen, Einstellungsmenü `S` statt Pausenmenü, Registerpläne (Vorzeichen: PV negativ). Wetter der PV noch lokal.
    Das sind die Projekte von Alexander bzw. Dominik, deshalb vorher abstimmen.
-5. **Wettersimulator** (deterministisch, HTTP-Tendenz, Tests in `Weather.Tests`) und **Wind** (Zeit + Modbus nach dem Muster von `PvModbus`/`BatteryModbus`,
-   Plan in `Modbus.Contracts`, in `RegisterPlans.For` eintragen); der Diagnose-Client ist fertig (siehe 3.).
-6. **Zentrale `README.md`** (Architektur, Startreihenfolge, Zuständigkeiten), **`.env.example`**, **`start-all.ps1`**, Abgabe-Tag `lb02-2026`.
+5. ✅ **Wettersimulator und Wetteranbindung der PV** (2026-10-26): HTTP-Dienst auf 8080, deterministisch aus WeatherSynth 0.3.0 plus eigenem Modell,
+   `WeatherData` in `SimCore.Contracts`, PV fragt je Modellstunde ab (`--weather`, `--location`), sichtbarer Fehler nach 3 Fehlversuchen, `Weather.Tests` 11. Details §0.8.
+   Noch offen: **Wind** (Zeit + Modbus nach dem Muster von `PvModbus`/`BatteryModbus`, Plan in `Modbus.Contracts`, in `RegisterPlans.For` eintragen);
+   Wetter für Batterie/Charger (derzeit feste Umgebungstemperatur); Diagnose-Client ist fertig (siehe 3.).
+6. ✅ **Zentrale `README.md`** (Architektur, Startreihenfolge, Demo, Zuständigkeiten, Schnittstellen, Tests, Konfiguration) am 2026-10-26 angelegt;
+   **`.env.example` entfällt** (keine Umgebungsvariablen, keine Secrets – nur Kommandozeilenoptionen). Noch offen: **`start-all.ps1`**, Abgabe-Tag `lb02-2026`.
 
-**Hinweis Wetter:** Die PV rechnet noch mit dem eigenen Auto-Wetter (nur mit `--seed` wiederholbar). Mit dem Wettersimulator wird es ersetzt (Susanne ist dafür nicht zuständig).
+**Hinweis Wetter:** Die PV fragt mit Master standardmäßig den Wettersimulator (`http://127.0.0.1:8080`); standalone oder mit `--weather off` rechnet sie mit dem lokalen Auto-Wetter (nur mit `--seed` wiederholbar).
 
 **Im Team zu klären:** Zuständigkeiten (B/C in §3), Toleranz (Vorschlag 10 ms · Tempo, offene Frage 3),
-ob ein Neustart im Master den Gerätezustand zurücksetzt (Charger behält derzeit angesteckte Fahrzeuge), Wetter-Transport.
+ob ein Neustart im Master den Gerätezustand zurücksetzt (Charger behält derzeit angesteckte Fahrzeuge).
 
 ### 0.5 Kurzreferenz Zeit-API (Details in den READMEs)
 - **Master:** `new MasterClock(timeProvider, startSimTime, speed = 1, leadTime = null)` (Vorlauf standardmäßig 200 ms) startet pausiert. `Resume()`, `Pause()`, `SetSpeed(x)` (1–100 000),
@@ -131,7 +134,7 @@ Alles unten ist gebaut (0 Warnungen) und getestet, aber **nicht committet**.
 | `Devices.Common/Modbus` | `ModbusDeviceServer` (Start mit Portprüfung, `Publish`, `TryDequeueCommand`, `ValueValidator`, Rückgängigmachen ungültiger Zugriffe), `ModbusOptions`, `HeaderValues`, `RegisterWriter`; `DeviceTimeSource.SetSpeed` | `Devices.Common.Tests` 44 |
 | `DualPortCharger` | `ChargerModbus`, Optionen `--modbus-*`, `--unit-id`, `--no-modbus`, `--register-plan`, Anzeige „Modbus“, Registerplan im README | Probelauf mit Master |
 | `ModbusDiagnosticClient` | `ClientOptions`, `DeviceConnection` (Fehlerübersetzung, Wiederverbindung), `DiagnosticSession` (read/header/watch/write/force/on/off/reset/raw/info/connect), `RegisterFormatter` | `ModbusDiagnosticClient.Tests` 28 |
-| `PvSimulator` | Zeit vom Master (`StepScheduler`, `--model-step`), async `SimulationEngine`, `PvModbus`, `ArgsParser`, async `CsvExporter` (je Lauf eine Datei, Spalten `Lauf`, `Leistungsbegrenzung_pct`), `PowerLimitPercent`, `ResetFaults`, Auto-Wetter nach Modellzeit, `SimulationClock` entfernt | `FieldDevices.Tests` 34 |
+| `PvSimulator` | ✅ an Master-Zeit (`StepScheduler`, `--model-step`), Modbus (Registerplan 20–38) und Wettersimulator (`--weather`, `--location`, Abfrage je Modellstunde) angebunden, async, CSV je Lauf | `Simulation/SimulationEngine.cs`, `WeatherClient.cs`, `PvModbus.cs` |
 | `BatterySimulator` | Zeit vom Master, async `Simulator`, `BatteryModbus`, `ArgsParser`/`SimulatorOptions`, `CsvLogger` async mit Datum und `Lauf`, Einstellungsmenü `S` statt Pausenmenü, `Batterie.Update(TimeSpan)`, `DailyProfile` mit Seed | `FieldDevices.Tests` |
 | Doku | READMEs von `Modbus.Contracts`, `Devices.Common`, Charger, PV, Batterie, Diagnose-Client und drei Testprojekten; Journal (4 Nachträge) | – |
 
@@ -144,6 +147,34 @@ unbehandelter Absturz bei belegtem Modbus-Port (Portprüfung vor dem Start); `Co
 Schreibzugriffen (Tests warten jetzt).
 **Noch offen:** echtes Terminal für Master, Charger, PV, Batterie, Client (interaktive Anzeige, Tasten, Einstellungsmenü); Wind; Wetter; zentrale `README.md`, `.env.example`, `start-all.ps1`;
 Abstimmung der Registerpläne und der geänderten Optionen im Team.
+
+---
+
+### 0.8 Sitzung 2026-10-26: Wettersimulator und Wetteranbindung der PV (opencode/deepseek-v4.1)
+
+Alles unten ist gebaut (0 Warnungen) und getestet, aber **nicht committet**.
+
+| Bereich | Neu / geändert | Test |
+|---|---|---|
+| `SimCore.Contracts` | `WeatherData` (Standort, UTC-Zeit, Lauf, Sonnenhöhe, Bedeckung, Temperatur, Niederschlag, Wind, Strahlung, Zustand) und `WeatherCondition` | `Weather.Tests` |
+| `WeatherSimulator` | Minimal-API (`/weather?location&simTime&run`, `/locations`, `/`), `--port` (8080), deterministisches Modell: WeatherSynth 0.3.0 (stündliche Strahlung/Wind) + eigene Temperatur/Bedeckung/Niederschlag/Sonnenhöhe/Zustand, Seed FNV-1a aus (Standort, Jahr, Lauf), Standorte salzburg/wien/innsbruck, 404/400, Anzeige mit letzter Abfrage, Tasten für manuelle Übersteuerung | `Weather.Tests` 11, Probelauf mit PV |
+| `Devices.Common` | `AsyncConsole` wird vom Wetter-Programm mitbenutzt (keine Änderung nötig) | – |
+| `PvSimulator` | `WeatherClient` (async, 5 s Timeout, deutsche Fehler), Abfrage je Modellstunde, `PvSystem.ApplyExternalWeather`, `PvFaultModel.Step(..., ambientOverrideC)`, Anzeigezeile „Wetter“, Fehler nach 3 Fehlversuchen sichtbar, letztes Wetter bleibt, Retry 10 s; Optionen `--weather <url\|off>`, `--location`; mit Master Standard-URL, standalone lokal; Wettertasten `0–4` nur lokal | `FieldDevices.Tests` 34, Probelauf |
+| `tests/Weather.Tests` | 11 Tests (Reproduzierbarkeit, Stunde konstant, Standorte/Läufe verschieden, Nacht, Sommer/Winter, manuelle Übersteuerung, Plausibilität) | – |
+| Doku | READMEs von `WeatherSimulator`, `Weather.Tests`, PV (Optionen/Status/Schnittstellen/Wetterabschnitt), zentrale `README.md`, `AGENTS.md`, Journal | – |
+
+**Entscheidungen:** HTTP als Transport (ADR-0001/0007); WeatherSynth nur als Strahlungs-/Windbasis, Rest eigenes Modell (ADR-0009);
+Standortkatalog mit `salzburg` als Standard, unbekannte Kennung 404 (ADR-0006/0010); Nieder­schlag als zusätzliches Feld;
+Zeit als UTC in Code und Schnittstelle, Ortszeit nur in der Anzeige (ADR-0012); Fehlerverhalten 5 s Timeout, 3 Fehlversuche, Retry 10 s (ADR-0008).
+Die ADRs liegen bewusst **nicht im Repo** (`docs/adr/`, `docs/glossary.md` sind ignoriert).
+
+**Gefundene Punkte:** Der Standalone-Lauf der PV darf nicht standardmäßig den Wettersimulator fragen (er hängt sonst am ersten
+Verbindungsversuch, der bestehende Test `Pv_RunsStandalone_WritesCsvAndStopsOnCancel` schlug fehl); deshalb ist die URL nur mit Master vorbelegt.
+PowerShell-`Get-Content`/`Set-Content` beschädigt UTF-8 ohne BOM – PvSystem/PvFaultModel/ArgsParser/SimulationConfig mussten zurückgesetzt und
+mit Python `newline=''` neu bearbeitet werden.
+
+**Noch offen:** Wind; Wetter für Batterie und Charger; echte Terminalfenster für Wetter, PV und die übrigen Geräte; `start-all.ps1`;
+Abstimmung der Wetter-Optionen und Registerpläne mit Alexander und Dominik; Abgabe-Tag `lb02-2026`.
 
 ---
 
@@ -227,8 +258,10 @@ ungültiger oder unerlaubter Schreibwert → abgelehnt mit Fehler · Beenden dur
 - **Zeitverteilung:** Master = TCP-Server, Geräte = TCP-Clients; Master pusht `TimeState` bei Änderung + Heartbeat.
   Verfahren (Gerade + Vorlaufzeit + Uhrenabgleich) siehe „Entscheidung 2026-10-25“ unten.
   Nicht erreichbare Geräte werden als offline markiert, die anderen laufen weiter.
-- **Wetter:** reine Funktion von (Ort, virtuelles Datum/Stunde), Seed aus Tagesindex + Ort (Muster: Alex' `DailyOffsetC`).
-  Antwort `WeatherData { IrradiationWm2, SunHeight, CloudCover, TemperatureC, WindSpeedMs, Condition }`.
+- **Wetter (umgesetzt 2026-10-26):** reine Funktion von (Ort, Stunde, Lauf), HTTP `GET /weather` auf Port 8080.
+  WeatherSynth 0.3.0 liefert stündliche Strahlung und Wind (offline), Temperatur/Bedeckung/Niederschlag/Sonnenhöhe/Zustand
+  sind eigenes Modell. Seed stabil aus Standort, Jahr und Lauf (FNV-1a). Antwort `WeatherData` (inkl. `PrecipitationMmPerHour`).
+  Standorte `salzburg` (Standard), `wien`, `innsbruck`; PV fragt je Modellstunde, Fehler nach 3 Fehlversuchen sichtbar.
   Basis: Alex' `Season` + `IrradiationCalculator`, erweitert um Wind.
 - **Async:** `async Task StartAsync(CancellationToken ct)` mit `await Task.Delay(…, ct)`; Tastatur über eine async-Task.
 - **Modbus (umgesetzt 2026-10-25):** Jedes Geräte-Programm hostet einen eigenen `EasyModbus.ModbusServer` (Ports ab 1502, `--modbus-port`).
@@ -270,7 +303,7 @@ src/
   Shared.Config/           lib   → Contracts                (in AGENTS1.md: Shared/DeviceConfig); enthält OutputPaths
   Devices.Common/          lib   → Contracts, Time, TimeSync, Modbus.Contracts, Shared.Config + EasyModbusTCP.NETCore (Zeit + Modbus-Server)
   SimulationMaster/        exe   → Contracts, Time, TimeSync, Shared.Config   (lauffähig seit 2026-10-25)
-  WeatherSimulator/        exe   → Contracts, Shared.Config
+  WeatherSimulator/        exe   → Contracts, Shared.Config, Devices.Common + WeatherSynth (HTTP-Wetterdienst)
   ModbusDiagnosticClient/  exe   → Contracts, Modbus.Contracts, Shared.Config + EasyModbusTCP.NETCore   (lauffähig seit 2026-10-25)
   Devices/PvSimulator/        exe → Devices.Common   enthält LB01-Code von Alex (seit 2026-10-25 mit Master-Zeit und Modbus)
   Devices/BatterySimulator/   exe → Devices.Common   enthält LB01-Code von Domi (seit 2026-10-25 mit Master-Zeit und Modbus)
@@ -281,7 +314,7 @@ tests/
   Devices.Common.Tests/    xUnit → Devices.Common          (seit 2026-10-25)
   ModbusDiagnosticClient.Tests/ xUnit → ModbusDiagnosticClient, Devices.Common   (seit 2026-10-25)
   FieldDevices.Tests/      xUnit → PvSimulator, BatterySimulator, Devices.Common         (seit 2026-10-25)
-  Weather.Tests/           xUnit → WeatherSimulator (Exe-Referenz; ggf. Wetterlogik später in eine lib auslagern)
+  Weather.Tests/           xUnit → WeatherSimulator (11 Tests, Modell direkt)
 docs/                      zentrale Doku und CSV-Ausgaben (Aufbau siehe §1)
 ```
 Jedes Projekt hat eine `README.md` als Gerüst (Zweck, Verantwortlich, Basis aus LB01, Konfiguration, Bedienung,
@@ -325,18 +358,18 @@ Umgesetzt in `SimCore.Contracts` (`TimeState`, `SimMode`, `ISimClock`) und `SimC
   (`--master host:port`, `--standalone`, `--start`, `--speed`; die letzten beiden nur standalone), `AsyncConsole`
   (Eingabe ohne `ReadLine`). Pause/Tempo-Tasten der Geräte wirken nur standalone. Bei `MasterLost` rechnet das Gerät nicht weiter.
   Muster: `src/Devices/DualPortCharger/Simulation/SimulationEngine.cs`, Anleitung: `src/Devices.Common/README.md`.
-- **Noch offen:** Wind auf `Devices.Common` und Modbus (Plan in `Modbus.Contracts` + `RegisterPlans.For`), Wetter-Anbindung der PV.
+- **Noch offen:** Wind auf `Devices.Common` und Modbus (Plan in `Modbus.Contracts` + `RegisterPlans.For`); Wetter für Batterie/Charger.
 
 ### Offene Fragen (müssen im Team entschieden werden)
 
 | # | Frage | Tendenz laut `AGENTS1.md` |
 |---|---|---|
-| 1 | Transport Wettersimulator | HTTP |
+| 1 | Transport Wettersimulator | ✅ umgesetzt 2026-10-26: HTTP, JSON, Port 8080 (`WeatherSimulator`) |
 | 2 | Transport Zeitverteilung | ✅ umgesetzt 2026-10-25: TCP, JSON-Zeilen, Port 5100 (`SimCore.TimeSync`) |
 | 3 | Drift-Toleranz | ~~250 ms Sim-Zeit~~ → Vorschlag 2026-10-25: 10 ms Echtzeit · Tempo (bei Tempo 600 sind 250 ms Sim-Zeit < 0,5 ms Echtzeit, nicht einhaltbar) |
 | 4 | Registeradressen je Gerät | ✅ umgesetzt 2026-10-25: 0–19 Kopf, 20–49 gerätespezifisch; Charger, PV, Batterie (Alexander/Dominik informieren) |
 | 5 | Wie finden Geräte den Master | Konfigurationsdatei (IP:Port); Standard `127.0.0.1:5100` (`SyncProtocol.DefaultPort`) |
-| 6 | Ort fürs Wetter | ein globaler Ort |
+| 6 | Ort fürs Wetter | ✅ umgesetzt 2026-10-26: Standortkatalog, Standard `salzburg` (auch wien, innsbruck) |
 | 7 | Komplexität des Batteriemodells | einfaches SOC-Modell |
 | 8 | Was lädt der Charger | „Batterie aus PV-Überschuss“ |
 
@@ -468,8 +501,10 @@ dotnet run --project src/ModbusDiagnosticClient -- --port 1502          # 3. Dia
 dotnet test tests/ModbusDiagnosticClient.Tests                  # Diagnose-Client gegen echten Modbus-Server
 dotnet run --project src/Devices/DualPortCharger -- --standalone --speed 300 --duration 24   # ohne Master
 dotnet run --project src/Devices/PvSimulator -- --id PV-01     # PV (Master, Modbus 127.0.0.1:1502; --modbus-port für weitere)
+dotnet run --project src/WeatherSimulator                         # Wettersimulator (HTTP 8080)
 dotnet run --project src/Devices/BatterySimulator -- --id BAT-01 --modbus-port 1503   # Batterie (Modbus 1503)
 dotnet test tests/FieldDevices.Tests                            # PV + Batterie: Modbus, Optionen, Standalone-Lauf
+dotnet test tests/Weather.Tests                                 # Wetter: Reproduzierbarkeit und Plausibilität
 ```
 
 `dotnet build EnergyTwin.sln` (nach dem Verschieben):
@@ -479,12 +514,14 @@ dotnet test tests/FieldDevices.Tests                            # PV + Batterie:
 | alle Bibliotheken, Testprojekte | ✅ bauen (2026-10-25 erneut geprüft, 0 Warnungen) |
 | `tests/SimCore.Tests` | ✅ 54/54 Tests grün (2026-10-25, 5 Wiederholungen ohne Ausfall) |
 | `SimulationMaster` | ✅ baut, Probelauf mit umgeleiteter Ausgabe + PowerShell-TCP-Client ok (2026-10-25); echtes Terminal noch ungetestet |
-| `Devices/PvSimulator` | ✅ baut; 2026-10-25 mit Master (x600) zusammen mit Batterie und Charger synchron, Modbus per Diagnose-Client geprüft (Leistungsbegrenzung, Ein/Aus, Reset) |
+| `Devices/PvSimulator` | ✅ baut; 2026-10-25 mit Master (x600) synchron, Modbus per Diagnose-Client geprüft; 2026-10-26 Wetter vom Wettersimulator übernommen und in der Anzeige sichtbar; standalone unverändert grün |
 | `tests/Devices.Common.Tests` | ✅ 44/44 Tests grün (2026-10-25; 24 Zeit, 20 Modbus/Registercodec) |
 | `Devices/DualPortCharger` | ✅ baut; 2026-10-25 mit Master: Master x600 + DC-01 + DC-02 synchron (Abweichung ≤ 0,2 s), Master beendet ⇒ „NICHT ERREICHBAR – Zeit steht“; standalone 24 h endet selbst (CSV 290 Zeilen); Modbus: Kopf und Sollwerte mit eigenem Testclient gelesen/geschrieben, ungültiger Sollwert abgelehnt, belegter Port ⇒ Fehlermeldung (2026-10-25) |
 | `Devices/BatterySimulator` | ✅ baut; 2026-10-25 mit Master synchron, Modbus geprüft (Sollwert −2,5 kW angenommen, 9 kW abgelehnt, Modus Auto/Manuell) |
 | `tests/FieldDevices.Tests` | ✅ 34/34 Tests grün (2026-10-25) |
-| `WeatherSimulator`, `Devices/WindSimulator` | ❌ `CS5001`, noch kein `Program.cs` (erwartet) |
+| `WeatherSimulator` | ✅ baut; Probelauf 2026-10-26: liefert für dieselbe Stunde identische Werte, 404 bei unbekanntem Standort, PV zeigt die gelieferten Werte |
+| `tests/Weather.Tests` | ✅ 11/11 (2026-10-26) |
+| `Devices/WindSimulator` | ⚠️ nur Platzhalter (`Program.cs`), baut mit 0 Warnungen; Wind fehlt noch |
 
 Die Probeläufe liefen mit umgeleiteter Ausgabe. Die Konsolenausgabe von Alex formatiert Zahlen mit Komma, die CSV mit Punkt.
 
@@ -496,7 +533,7 @@ Die Probeläufe liefen mit umgeleiteter Ausgabe. Die Konsolenausgabe von Alex fo
   versioniert und bleiben es. Änderungen daran (z. B. durch einen PV-Lauf) erscheinen in `git status`.
 - ~~Alex `CsvExporter` schrieb die komplette Datei neu~~ und ~~die Meldung „kWh Vortag“ war falsch~~: behoben 2026-10-25 (CSV angehängt, async; Meldung zeigt die Tagesenergie).
   `InverterStatus.cs` ist toter Code.
-- Alex' Auto-Wetter ist lokal (mit `--seed` wiederholbar, Wechsel nach Modellzeit); für LB02 kommt das Wetter vom Wettersimulator.
+- Alex' Auto-Wetter ist lokal (mit `--seed` wiederholbar); mit Master fragt die PV den Wettersimulator, standalone bleibt das lokale Wetter.
 - Domi: `BatterieConfig.Efficiency` wird nicht benutzt. Das Pausenmenü ist durch das Einstellungsmenü `S` ersetzt.
 
 ## 8. Konventionen und Stolperfallen
