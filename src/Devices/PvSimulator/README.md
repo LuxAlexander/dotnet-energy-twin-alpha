@@ -188,9 +188,12 @@ wirklich angefasst wurden (z. B. `diff;rows=20;written=4`).
 
 ## Artefakte
 
-- **CSV:** `docs/data/<ID>_<Datum>_<Uhrzeit>.csv` im Repository, egal aus welchem Ordner gestartet wird (Ordner per `-o` änderbar) – 18 Spalten, u. a. Datum, Jahreszeit, Wetter,
-  Einstrahlung, Leistung, Tages- und Gesamtenergie, Temperaturen, Netzspannung,
+- **CSV:** `docs/data/<ID>_<Datum>_<Uhrzeit>.csv` im Repository, egal aus welchem Ordner gestartet wird (Ordner per `-o` änderbar) – 19 Spalten, u. a. Gerät (Anlagenname),
+  Datum, Jahreszeit, Wetter, Einstrahlung, Leistung, Tages- und Gesamtenergie, Temperaturen, Netzspannung,
   Verschmutzung, Alterung, Fehlerursache, Anlagenstatus, Lauf, Leistungsbegrenzung.
+  Grundspalten über `Shared.Data.CsvSchema` (`Gerät;Datum;Zeit;Lauf`), Zahlen über `Shared.Data.CsvFormat`
+  im de-AT-Format mit **Dezimalkomma**, damit Excel sie nicht als Datum deutet
+  (z. B. `1.66` wurde früher als „Jan 66“ eingelesen); Datum und Uhrzeit bleiben ISO-förmig.
   Die Beispiel-CSV `docs/data/pv-simulation.csv` aus LB01 bleibt unverändert.
 - **Screenshots:** [`docs/screenshots/PvSimulator/`](../../../docs/screenshots/PvSimulator/)
 - **Entwicklungsjournal:** [`docs/development-journal/alexander-lux.md`](../../../docs/development-journal/alexander-lux.md)
@@ -216,7 +219,7 @@ src/Devices/PvSimulator/
 ├── Output/
 │   └── ConsoleDisplay.cs             # PV-spezifisches Layout, Farben, Bestätigungen
 └── Data/
-    └── CsvExporter.cs                # PV-spezifische Spalten; nutzt Shared.Data.CsvFileWriter
+    └── CsvExporter.cs                # PV-spezifische Spalten; nutzt Shared.Data.CsvFileWriter/CsvFormat/CsvSchema
 
 src/Shared/                           # geräteunabhängige Bausteine
 ├── Output/BarChart.cs                # Balkenberechnung

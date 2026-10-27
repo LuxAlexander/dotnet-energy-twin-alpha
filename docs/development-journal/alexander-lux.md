@@ -84,3 +84,24 @@ Optionale Tags bei Relevanz:
 - **Artefact:** `src/Devices/PvSimulator/Simulation/SimulationEngine.cs`, `Output/ConsoleDisplay.cs`, `Simulation/SimulationMode.cs`, `Data/CsvExporter.cs`, `Simulation/ArgsParser.cs`, `README.md`, zentrale `README.md`, `AGENTS.md`, Modul-READMEs, dieses Journal.
 - **Test:** `dotnet build EnergyTwin.sln` ⇒ 0 Warnungen, 0 Fehler. Testprojekte einzeln: `SimCore.Tests` 54/54, `Devices.Common.Tests` 51/51, `ModbusDiagnosticClient.Tests` 28/28, `FieldDevices.Tests` 62/62, `Weather.Tests` 11/11 – zusammen 206/206. Anzeige- und Tastenprüfung mit temporärem Prüfprogramm: mit Master Footer ohne `P`/`M`/Wetter/Tempo, standalone mit allen Tasten und `MANUELL`.
 - **Comment:** Pause, Modus, Wetter und Tempo gehören zur lokalen Uhr und zum lokalen Wetter; mit Master bleiben Zeit und Wetter zentral. Die Doku nennt jetzt die tatsächlichen Zuständigkeiten und den sicheren Testaufruf. Offen bleiben nur echte Terminalfenster und das Tag `lb02-2026`.
+
+## 2026-10-27 – PV-CSV: Dezimalkomma statt Punkt, Wetter-Quellliste, AGENTS.md gekürzt
+
+- **Done:**
+  - PV-CSV von Punkt auf **de-AT Dezimalkomma** umgestellt: Excel las Zahlen wie `1.66` als Datum („Jan 66").
+    Datum und Uhrzeit bleiben InvariantCulture/ISO. CSV-/Konsolen-Helfer nach `src/Shared` ausgelagert (`CsvFormat`,
+    `CsvSchema` mit Grundspalten `Gerät;Datum;Zeit;Lauf`, `ConsoleText.Fit`); PV-CSV jetzt 19 Spalten mit erster
+    Spalte `Gerät` = „PV-Anlage". Die Helfer stehen Charger/Batterie/Kühlhaus bereit, dort noch nicht umgestellt.
+  - Formeln des Wettersimulators auf **Quellen geprüft** und in dessen README dokumentiert: belegte Formeln
+    (Sonnenhöhe Cooper/Spencer/Duffie & Beckman, ISA-Lapse-Rate, WeatherSynth-DWD-Daten, LogLaw/IEC,
+    Beaufort-Schwelle 14 m/s, Rain-Snow-Übergang 0–2 °C, Okta) getrennt von eigener Heuristik (Jahresmittel/
+    Jahresgang, Tages-Offset ±3 K, Regenskala, Dämpfungsfaktor, Nachtwolken 40 %), ehrlich als „nicht kalibriert"
+    markiert.
+  - **AGENTS.md von 788 auf 410 Zeilen gekürzt:** Sitzungsprotokolle §0.7–§0.15, LB01-Migrationsplan und
+    LB01-Projektdetails komplett in das neue Archiv `docs/development-journal/AGENTS2-archiv-2026-10-27.md`
+    ausgelagert; in der AGENTS nur noch Verweise. §0.1 um Regel ergänzt: **Tests nur vor einem Commit oder
+    wenn ausdrücklich gewünscht**. Archiv folgt dem Muster von `AGENTS1-archiv-2026-10-10.md`.
+- **KI:** opencode · GLM 5.3 Flash => Ursachensuche, PV-Umstellung, Auslagerung nach `Shared`, Formel-quellen-Analyse, AGENTS-Kürzung per Skript, Doku und Journale nachgezogen.
+- **Artefact:** `src/Devices/PvSimulator/Data/CsvExporter.cs`, `src/Devices/PvSimulator/README.md`, `src/Shared/Data/CsvFormat.cs`, `src/Shared/Data/CsvSchema.cs`, `src/Shared/Output/ConsoleText.cs`, `src/Shared/README.md`, `src/WeatherSimulator/README.md`, `AGENTS.md`, neu `docs/development-journal/AGENTS2-archiv-2026-10-27.md`, `tests/FieldDevices.Tests/FieldDeviceTests.cs`.
+- **Test:** `dotnet build EnergyTwin.sln` 0 Warnungen; `dotnet test tests/FieldDevices.Tests` 62/62 (PV-Test prüft jetzt Gerät-Grundspalten und Startzeit).
+- **Comment:** Damit schreibt die PV wie Charger und Kühlhaus de-AT; die Batterie schreibt weiterhin mit Punkt (gleiche Excel-Falle dort noch offen, §0.4).

@@ -1,4 +1,3 @@
-using System.Globalization;
 using EnergySimulator.Devices;
 using EnergySimulator.Simulation;
 using Shared.Data;
@@ -12,13 +11,11 @@ namespace EnergySimulator.Data;
 /// </summary>
 public sealed class CsvExporter : IAsyncDisposable
 {
-    // InvariantCulture: Dezimaltrenner ist immer ".", unabhängig von der Regionseinstellung des Rechners.
-    private static readonly CultureInfo Invariant = CultureInfo.InvariantCulture;
-
+    // Zahlen über Shared.Data.CsvFormat (de-AT, Dezimalkomma); Datum und Uhrzeit bleiben InvariantCulture/ISO.
     private const string Header =
-        "Datum;Zeit;Jahreszeit;Modus;Wetter;Einstrahlung_W_m2;Leistung_kW;Tagesenergie_kWh;Gesamtenergie_kWh;" +
-        "Modultemperatur_C;Aussentemperatur_C;Netzspannung_V;Verschmutzung_pct;Alterung_pct;Fehler;Anlagenstatus;" +
-        "Lauf;Leistungsbegrenzung_pct";
+        CsvSchema.BaseHeader + ";Jahreszeit;Modus;Wetter;Einstrahlung_W_m2;Leistung_kW;Tagesenergie_kWh;" +
+        "Gesamtenergie_kWh;Modultemperatur_C;Aussentemperatur_C;Netzspannung_V;Verschmutzung_pct;Alterung_pct;" +
+        "Fehler;Anlagenstatus;Leistungsbegrenzung_pct";
 
     private readonly CsvFileWriter _writer;
 
@@ -47,24 +44,25 @@ public sealed class CsvExporter : IAsyncDisposable
 
         string[] values =
         [
-            now.ToString("yyyy-MM-dd", Invariant),
-            now.ToString("HH:mm", Invariant),
+            pv.Name,
+            now.ToString("yyyy-MM-dd", CsvFormat.Invariant),
+            now.ToString("HH:mm", CsvFormat.Invariant),
             SeasonInfo.FromMonth(now.Month).ToGerman(),
             modeStr,
             pv.Weather.ToGerman(),
-            pv.IrradiationWm2.ToString("F1", Invariant),
-            pv.PowerKw.ToString("F2", Invariant),
-            pv.DailyEnergyKwh.ToString("F3", Invariant),
-            pv.TotalEnergyKwh.ToString("F2", Invariant),
-            pv.ModuleTemperatureC.ToString("F1", Invariant),
-            pv.AmbientTemperatureC.ToString("F1", Invariant),
-            pv.GridVoltageV.ToString("F1", Invariant),
-            pv.SoilingLossPercent.ToString("F2", Invariant),
-            pv.AgingLossPercent.ToString("F2", Invariant),
+            pv.IrradiationWm2.Num("F1"),
+            pv.PowerKw.Num("F2"),
+            pv.DailyEnergyKwh.Num("F3"),
+            pv.TotalEnergyKwh.Num("F3"),
+            pv.ModuleTemperatureC.Num("F1"),
+            pv.AmbientTemperatureC.Num("F1"),
+            pv.GridVoltageV.Num("F1"),
+            pv.SoilingLossPercent.Num("F2"),
+            pv.AgingLossPercent.Num("F2"),
             pv.ActiveFault.ToGString(),
             status,
-            runId.ToString(Invariant),
-            pv.PowerLimitPercent.ToString("F1", Invariant)
+            runId.ToString(CsvFormat.Invariant),
+            pv.PowerLimitPercent.Num("F1")
         ];
 
         await _writer.WriteRowAsync(values, cancellationToken);

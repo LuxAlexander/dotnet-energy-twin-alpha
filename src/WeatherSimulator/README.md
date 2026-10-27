@@ -89,6 +89,35 @@ Zustände: `Sunny`, `PartlyCloudy`, `Overcast`, `Storm`, `Snow`, `Night`.
 
 Standorte: `salzburg` (Standard), `wien`, `innsbruck`.
 
+### Formeln und Quellen
+
+Belegt oder nahe an etablierten Standards:
+
+| Formel | Quelle |
+|---|---|
+| Sonnenhöhe aus Deklination und Stundenwinkel | Standard-Astronomie (Cooper 1969; Spencer 1971; Duffie & Beckman, „Solar Engineering of Thermal Processes“); identisch mit dem NOAA-Solarrechner |
+| Höhen-Abnahme der Temperatur `−0,0065 K/m` | Internationale Standardatmosphäre (ICAO/ISA, Doc 7488) – gemittelte Troposphärenrate |
+| Strahlung und Wind (1 h) | NuGet `WeatherSynth` 0.3.0 – DWD-Daten (CC BY 4.0) |
+| logarithmisches Windprofil | Monin-Obukhov-Bodenlogarithmengesetz; Standard in der Windenergie (IEC 61400-12-1) |
+| Sturm-Schwelle 14 m/s | Beaufortstufe 7/8 (13,9–17,1 m/s) |
+| Schnee bei ≤ 1,5 °C | Rain-Snow-Übergang liegt bei nasser Kugel-Temperatur ≈ 0–2 °C (z. B. Jennings et al. 2018) |
+| „dicht bewölkt“ ab 80 %, Bedeckungsgrad aus Strahlungsverhältnis | 8/8 Okta = 87,5 %; Zusammenhang Bewölkung ↔ Globalstrahlung z. B. Kasten & Czeplak 1980 |
+
+Eigene einfache Heuristik (deterministisch, offline – entsprechend der Aufgabenstellung, **nicht** aus Literatur kalibriert):
+
+| Formel | Anmerkung |
+|---|---|
+| Jahresmittel `10 °C − 0.0065 · (Höhe − 200 m)` | Referenzwert 10 °C ist eine Annahme; trifft zufällig gut auf die Klimanormale von Salzburg (≈ 9,5 °C, 1991–2020, DWD/AustroControl) |
+| Jahresgang `−9,5·cos(2π·(Tag−15)/365)` | Amplitude −9,5 K ist gefittet (Jan ≈ 0,5 / Jul ≈ 19,5 °C ≈ Salzburg); keine direkte Kalibrierung |
+| Tages-Offset ±3 K aus dem Seed | vereinfachend weißes Rauschen je Tag; reale Wetterlagen wandern über Tage |
+| Niederschlagswahrscheinlichkeit `Bedeckung → 0,25` | erfundene Skala, Wüste/Tropen unterschieden das nicht |
+| Bewölkungsmäßige Dämpfung des Tagesgangs (Faktor 0,3) | Richtung belegt (Wolken dämpfen die Amplitude), Faktor nicht kalibriert |
+| Nachts Bewölkung 40 % | Konvention |
+
+Die drei österreichischen Standorte liefern damit plausibel nah an den Klimanormalen liegende Werte;
+für Standorte mit anderem Klima (Wüste, Tropen, Pol) ist das Modell nicht kalibriert – ein Ausbau mit
+einer Klimatabelle pro Standort ist im Team besprochen, aber noch nicht umgesetzt.
+
 ## Tests
 
 ```bash
