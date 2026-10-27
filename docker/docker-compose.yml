@@ -1,0 +1,17 @@
+
+services:
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"         # AMQP Port für RabbitMQ
+      - "15672:15672"       # Management-UI Port für RabbitMQ
+      - "1883:1883"         # MQTT Port
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: userpassword
+    volumes:
+      - "./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf"  # Konfigurationsdatei für RabbitMQ einbinden
+    command: >
+      sh -c "rabbitmq-plugins enable --offline rabbitmq_mqtt &&
+             rabbitmq-server"
