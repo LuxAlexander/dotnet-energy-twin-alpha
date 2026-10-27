@@ -396,7 +396,7 @@ public class PvEngineTests
             Assert.True(lines.Length > 5, $"nur {lines.Length} Zeilen");
             Assert.EndsWith("Leistungsbegrenzung_pct", lines[0]);
             Assert.StartsWith("Gerät;Datum;Zeit;Lauf;", lines[0]);              // Gemeinsame Grundspalten
-            Assert.StartsWith("PV-Anlage;2026-06-21;08:00;", lines[1]);        // Gerät-Spalte, beginnt genau bei --start
+            Assert.StartsWith("PV-Anlage;2026-06-21;08:00;1;SOMMER;", lines[1]); // Gerät + Lauf 1, beginnt genau bei --start, dann Jahreszeit
             Assert.True(engine.Pv.TotalEnergyKwh > 0);
             Assert.Equal(1, engine.RunId);
         }

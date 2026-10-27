@@ -47,6 +47,7 @@ public sealed class CsvExporter : IAsyncDisposable
             pv.Name,
             now.ToString("yyyy-MM-dd", CsvFormat.Invariant),
             now.ToString("HH:mm", CsvFormat.Invariant),
+            runId.ToString(CsvFormat.Invariant),
             SeasonInfo.FromMonth(now.Month).ToGerman(),
             modeStr,
             pv.Weather.ToGerman(),
@@ -61,7 +62,6 @@ public sealed class CsvExporter : IAsyncDisposable
             pv.AgingLossPercent.Num("F2"),
             pv.ActiveFault.ToGString(),
             status,
-            runId.ToString(CsvFormat.Invariant),
             pv.PowerLimitPercent.Num("F1")
         ];
 
