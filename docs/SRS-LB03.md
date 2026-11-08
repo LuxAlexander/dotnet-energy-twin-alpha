@@ -1,7 +1,7 @@
 # SRS LB03 – Von Modbus zu RabbitMQ
 
 **Stand:** 2026-11-08 · **Status:** Entwurf; Abschnitte zu Gateway und Nachrichtenvertrag umgesetzt und geprüft,
-Broker von Alexander Lux eingerichtet und geprüft, Viewer noch ohne Zuständigkeit · **Erstellt von:** Susanne Lastowicka (mit Claude Opus 5.5)
+Broker und MQTT-Explorer-Viewer von Alexander Lux eingerichtet und lokal geprüft · **Erstellt von:** Susanne Lastowicka (mit Claude Opus 5.5)
 
 Knappe, projektspezifische Anforderungsbeschreibung für Aufgabe 03. Details stehen in den verlinkten Dokumenten und
 werden hier nicht wiederholt.
@@ -18,7 +18,7 @@ verpflichtenden Feldgeräte (PV, Batterie, DC-Ladesäule, Kühlhaus).
 fünf Standorte, Master-Zeit, manuelle Standortübersteuerung und einmalige Pausen-/Fortsetzungsstatus.
 Vertrag: [`Wetter-Nachrichtenvertrag-LB03.md`](Wetter-Nachrichtenvertrag-LB03.md),
 Prüfung: [`Wetter-MQTT-Nachweis`](nachweise/2026-11-08-wetter-mqtt/README.md).
-Master-Daten über RabbitMQ sind weiterhin nicht geplant. Ein interaktiver Viewer bleibt einzurichten.
+Master-Daten über RabbitMQ sind weiterhin nicht geplant. MQTT Explorer 0.3.5 portable ist eingerichtet; [Anleitung](viewer/README.md) und [Viewer-Nachweis](nachweise/2026-11-08-viewer/README.md).
 **Unverändert erhalten:** virtuelle Zeit (Master), Wettersimulator, Modbus-Server der Geräte, Diagnose-Client.
 
 ## 2. Datenweg und beteiligte Anwendungen
@@ -34,7 +34,7 @@ Feldgerät (Modbus-Server) → Gateway (Modbus-Client, MQTT-Publisher) → Rabbi
 | `ModbusRabbitGateway` (+ `Modbus.Client`) | liest Modbus, dekodiert, veröffentlicht per MQTT | Susanne Lastowicka | umgesetzt |
 | Nachrichtenvertrag | Format, Topics, Qualität | Susanne Lastowicka | umgesetzt, Teamzustimmung offen |
 | RabbitMQ unter Docker | Broker mit MQTT-Plugin | Alexander Lux | feste Version, `.env`, Healthcheck und Anleitung umgesetzt; lokaler Lauf geprüft |
-| Viewer | Empfang und Anzeige (MQTT-Werkzeug, z. B. MQTT Explorer) | offen | Anleitung offen |
+| Viewer | MQTT Explorer portable: Topic-Baum, JSON und Live-Verläufe | Alexander Lux | eingerichtet, Anleitung und textueller Probelauf vorhanden |
 
 **Protokollwahl: MQTT** (Entscheidung 2026-11-08). Gründe: Das MQTT-Plugin war in der Compose-Datei schon aktiv; ein
 fertiges MQTT-Werkzeug kann als Viewer dienen; Topics bilden Gerät und Nachrichtenart direkt ab.
@@ -57,7 +57,7 @@ fertiges MQTT-Werkzeug kann als Viewer dienen; Topics bilden Gerät und Nachrich
 | FA-GW-10 | Kontrolliert beenden (`Q`/Strg+C): Gateway-Status `offline` senden, Verbindungen trennen. Bei Absturz setzt der Broker `offline` (Last Will). |
 | FA-GW-11 | Ohne Broker betreibbar (`--console`) für Tests und Fehlersuche. |
 
-### 3.2 Viewer (Zuständigkeit offen)
+### 3.2 Viewer (Alexander Lux)
 
 | ID | Anforderung |
 |---|---|
@@ -65,7 +65,12 @@ fertiges MQTT-Werkzeug kann als Viewer dienen; Topics bilden Gerät und Nachrich
 | FA-VW-02 | Zeigt mindestens Geräte-ID, Simulationszeit, Messwerte mit Einheit, Sequenznummer und Qualitätsstatus (im Nachrichteninhalt erkennbar). |
 | FA-VW-03 | Verbindungseinstellungen und Abo sind so dokumentiert, dass der Empfang reproduzierbar eingerichtet werden kann. |
 
-### 3.3 Broker (Alexander Lux)
+Zusätzlich bestätigt: numerische JSON-Felder als Live-Verläufe; X-Achse reale Empfangszeit. Virtuelle Zeit und
+Qualität bleiben im JSON erkennbar. Dauerhafte Speicherung, eine eigene Simulationszeit-Achse und eine fertige
+Anlagenübersicht mit Statusampeln sind optionale spätere Erweiterungen. Textuelle Anleitung genügt für diesen
+Viewer-Einrichtungsauftrag; daraus folgt keine Änderung anderer Abgabeanforderungen.
+
+### 3.3 Broker (Alexander Lux und Susanne Lastowicka)
 
 | ID | Anforderung |
 |---|---|
@@ -114,9 +119,9 @@ Register (Einschränkung im Vertrag §6 dokumentiert).
 
 | ID | Kriterium | Stand 2026-11-08 | Beleg |
 |---|---|---|---|
-| AK-01 | Die Solution baut mit 0 Fehlern/0 Warnungen, alle bisherigen Tests bleiben grün. | ✅ 258/258 | Journal Susanne, Nachtrag „Gesamttestlauf“ |
+| AK-01 | Die Solution baut mit 0 Fehlern/0 Warnungen, alle bisherigen Tests bleiben grün. | Build geprüft; letzter dokumentierter Gesamt-Testlauf 258/258, erweiterter Wetter-Testbestand noch nicht neu ausgeführt | Journal Susanne „Gesamttestlauf“, Alexander-Journal; kein neuer Unit-Testlauf für Viewer |
 | AK-02 | RabbitMQ startet aus der versionierten Compose-Datei, ohne Zugangsdaten im Repo. | ✅ aktualisierte Compose-Datei lokal geprüft; Zugangsdaten nur in ignorierter `.env` (Änderung noch nicht committet) | `docs/nachweise/2026-11-08-docker-alexander/` |
-| AK-03 | Alle vier Pflicht-Geräte liefern Nachrichten an den Viewer. | ⚠️ alle vier mit echtem Master an MQTT-Testempfänger nachgewiesen; interaktiver Viewer noch offen | `docs/nachweise/2026-11-08-docker-alexander/` |
+| AK-03 | Alle vier Pflicht-Geräte liefern Nachrichten an den Viewer. | ✅ alle vier im sichtbaren MQTT Explorer mit echtem Master/Gateway empfangen; zusätzlich fünf Wetterorte | [Viewer-Nachweis](nachweise/2026-11-08-viewer/README.md) |
 | AK-04 | Jede Messwertnachricht enthält DeviceId, virtuelle Zeit, Sequenz, Qualität und Messwerte mit Einheit. | ✅ | Vertrag, `viewer.txt`, Tests `MessageBuilderTests` |
 | AK-05 | Ein über Modbus geschriebener Sollwert ist im Simulator, in den Modbus-Daten und in der nächsten Nachricht sichtbar. | ✅ (ein früherer Verlust nicht reproduzierbar, siehe Nachweis) | Nachweis 4 |
 | AK-06 | Während der Pause bleibt `simTime` stehen und die Qualität ist `paused`; nach dem Fortsetzen kein Zeitsprung. | ✅ | Nachweis 5 |
@@ -129,7 +134,9 @@ Register (Einschränkung im Vertrag §6 dokumentiert).
 
 ## 9. Offene Punkte
 
-1. Zuständigkeit und Einrichtung des interaktiven Viewers; Broker-Einrichtung durch Alexander abgeschlossen.
+1. Viewer durch Alexander eingerichtet und textuell dokumentiert; eine interaktive Gesamtvorführung aller Programmfenster bleibt getrennt offen.
 2. Zustimmung des Teams zum Nachrichtenvertrag (dann Status „Entwurf“ entfernen).
 3. Gesamtlauf mit allen vier Geräten und dem echten Master im Terminal (Screenshots für die Abgabe).
 4. Optional: Gateway in `start-all.ps1` aufnehmen.
+
+Vorheriger offener Viewer-Stand: [Archiv](archive/2026-11-08-viewer-einrichtung.md).

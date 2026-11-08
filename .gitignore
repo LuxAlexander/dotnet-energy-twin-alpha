@@ -440,3 +440,6 @@ docs/glossary.md
 # Lokale Agent-Konfiguration und generiertes Graphmodell
 /.claude/
 /.opencode/
+
+# Portabler MQTT-Viewer und lokale Profile
+/tools/local/mqtt-explorer/

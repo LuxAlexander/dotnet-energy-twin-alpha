@@ -51,6 +51,8 @@ Messwerte. Unbekannte Kürzel werden nicht auf den Typ geprüft.
 
 ## Bedienung / Start
 
+Fertiger Viewer-Einstieg mit Profil, Abos und PV-Verlauf: [MQTT Explorer](../../docs/viewer/README.md).
+
 ```bash
 # RabbitMQ und die Geräte wie in der zentralen README starten (Charger auf 1504), dann:
 dotnet run --project src/ModbusRabbitGateway

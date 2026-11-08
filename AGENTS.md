@@ -1,5 +1,11 @@
 # AGENTS.md – dotnet-energy-twin-alpha
 
+**Viewer (2026-11-08, Alexander):** MQTT Explorer 0.3.5 portable eingerichtet; 15 Topics und zwei JSON-Verläufe
+im sichtbaren Programm geprüft. Anleitung `docs/viewer/README.md`, textueller Nachweis
+`docs/nachweise/2026-11-08-viewer/`. Master-Verlust und Last Will beobachtet; keine neue Unit-Testausführung.
+Portable Datei ignoriert, Profil mit Zugangsdaten nur lokal in AppData. Eigene Prüfprozesse beendet, Broker/Viewer offen.
+
+
 **Davor, Phase LB02-Endstand:** alle Programme fertig und an Master, Modbus und Wettersimulator angebunden; viertes Feldgerät = Kühlhaus (Wind entfallen); zusammen 206 Tests (54 + 51 + 28 + 62 + 11); PV-CSV-Fehler behoben (de-AT Dezimalkomma) und CSV-/Konsolen-Helfer nach `src/Shared` ausgelagert (§0.6a im Archiv).
 
 Pflichtlektüre für jeden Agenten in diesem Repo. Sie fasst die drei LB01-Projekte und den LB02-Plan
@@ -35,6 +41,10 @@ Dieser Abschnitt reicht, um an einem neuen Tag ohne Vorwissen weiterzuarbeiten. 
   (Stand-Kopf, §0, §3, §6) und das Journal nachziehen.
 
 ### 0.2 Git-Stand
+
+**Viewer:** Zuständig Alexander Lux; MQTT Explorer portable mit 12 Abos und Live-Verläufen eingerichtet.
+Start und Interpretation: `docs/viewer/README.md`. Diagrammachse = reale Empfangszeit, keine dauerhafte Speicherung zugesagt.
+
 `main`,(Commit nur auf Anweisung, Message wörtlich, ohne Co-Author).
 
 **Wetter/MQTT (Alexander, 2026-11-08):** bestätigter Entwurf umgesetzt. Start `WeatherSimulator --mqtt` oder
@@ -43,6 +53,9 @@ Wetter-Abos für Retain. Neue Master-Sitzung/neuer Lauf löschen manuelle Vorgab
 7 neue Wetter-Prüffälle gebaut, noch kein neuer Unit-Testlauf; bisherige 258/258 sind der letzte dokumentierte Teststand.
 
 ### 0.3 Was fertig ist
+
+**LB03-Viewer:** eingerichtet und mit allen vier Geräten sowie fünf Wetterorten geprüft; kein Ersatz für die
+noch offene interaktive Gesamtvorführung aller Programme. Textueller Nachweis siehe Stand-Kopf.
 
 | Baustein | Stand | Wichtigste Dateien |
 |---|---|---|
@@ -70,7 +83,7 @@ Wetter-Abos für Retain. Neue Master-Sitzung/neuer Lauf löschen manuelle Vorgab
 2. **Im Team zu klären:** Zuständigkeiten (B/C in §3), Drift-Toleranz (Vorschlag 10 ms · Tempo), ob ein
    Neustart im Master den Gerätezustand zurücksetzt (Charger behält derzeit angesteckte Fahrzeuge).
 3. **Wetter-Erweiterung:** Sahara/Antarktis mit regionalen Profilen und MQTT-Sichtbarkeit umgesetzt (2026-11-08).
-   Tropen bleiben eine freiwillige spätere Idee. Interaktive Wetterbedienung und MQTT-Viewer noch live zu prüfen.
+   Tropen bleiben eine freiwillige spätere Idee. Interaktive Wetterbedienung noch live zu prüfen; MQTT-Viewer inzwischen geprüft (Nachweis im Stand-Kopf).
 
 ### 0.5 Kurzreferenz Zeit-API (Details in den READMEs)
 - **Master:** `new MasterClock(timeProvider, startSimTime, speed = 1, leadTime = null)` (Vorlauf standardmäßig 200 ms) startet pausiert. `Resume()`, `Pause()`, `SetSpeed(x)` (1–100 000),
@@ -195,6 +208,10 @@ ungültiger oder unerlaubter Schreibwert → abgelehnt mit Fehler · Beenden dur
 ---
 
 ## 3. LB02 – Architektur (Entscheidungen, fortgeschrieben bis 2026-10-26)
+
+**LB03-Viewer:** MQTT Explorer 0.3.5 portable als separater MQTT-Client an `127.0.0.1:1883`;
+`energytwin/#` plus konkrete Retain-Abos, eigene Client-ID. Keine Änderung des Geräte-/Wettervertrags.
+
 
 **Wetter/MQTT 2026-11-08:** WeatherSimulator veröffentlicht direkt über MQTTnet (nicht Modbus) mit eigenem Wettervertrag;
 HTTP bleibt Geräteversorgung. Master-Anbindung über `DeviceTimeSource`, Sitzungskennung lesend aus `SyncedClock`.
@@ -359,6 +376,10 @@ LB02 überholt; vollständige Tabelle im Archiv, `AGENTS2-archiv-2026-10-27.md`,
 ---
 
 ## 6. Build-Status (zuletzt 2026-11-08, .NET SDK 10)
+
+**Viewer-Einrichtung:** reiner Tool-/Dokumentationsauftrag ohne C#-Änderung. Abschließender Solution-Build
+0 Fehler/0 Warnungen; tatsächlich ausgeführte Prüfung im Alexander-Journal. Keine neuen Unit-Tests.
+
 
 **Wetter-Erweiterung:** Solution baut mit 0 Fehlern/0 Warnungen. Echter RabbitMQ-Probelauf mit fünf Standorten,
 HTTP/MQTT-Gleichheit, Pause/Manual/RunId/MasterSession, Retain, Broker-Ausfall und Last Will erfolgreich.

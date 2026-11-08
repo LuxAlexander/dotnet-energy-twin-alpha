@@ -55,6 +55,8 @@ docker compose --env-file docker/.env -f docker/docker-compose.yml logs --tail 6
 
 ## Simulatoren und Gateway
 
+Viewer-Profil, konkrete Abos und JSON-Verläufe: [MQTT Explorer](../docs/viewer/README.md).
+
 ```powershell
 dotnet build EnergyTwin.sln
 .\start-all.ps1 -Autostart -NoClient -WeatherMqtt

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "sourceSession": "41ba1e34a0734b99ab8a6d02adb8e8a6",
+  "seq": 1524,
+  "messageId": "41ba1e34a0734b99ab8a6d02adb8e8a6:1524",
+  "status": "masterLost",
+  "runId": 1,
+  "simTimeUtc": null,
+  "publishedAtUtc": "2026-11-08T20:20:14.3045314+00:00",
+  "isLastWill": false,
+  "masterSession": "681ffb2e-2aff-4bf6-8ede-f233ac8d0bf3"
+}

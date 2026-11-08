@@ -190,6 +190,9 @@ deren numerische Wetterbasis bleibt sonst unverändert.
 
 ## MQTT-Betrieb und Viewer
 
+Die eingerichtete Viewer-Anbindung einschließlich Temperaturdiagramm ist in der
+[MQTT-Explorer-Anleitung](../../docs/viewer/README.md) beschrieben.
+
 | Option | Standard | Wirkung |
 |---|---|---|
 | `--port <n>` | 8080 | HTTP-Port, 1–65535 |

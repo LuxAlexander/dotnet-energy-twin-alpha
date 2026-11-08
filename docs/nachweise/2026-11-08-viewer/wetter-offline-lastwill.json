@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "sourceSession": "41ba1e34a0734b99ab8a6d02adb8e8a6",
+  "seq": 1,
+  "messageId": "41ba1e34a0734b99ab8a6d02adb8e8a6:1",
+  "status": "offline",
+  "runId": null,
+  "simTimeUtc": null,
+  "publishedAtUtc": "2026-11-08T20:15:02.0146596+00:00",
+  "isLastWill": true,
+  "masterSession": null
+}

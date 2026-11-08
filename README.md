@@ -18,7 +18,7 @@ Anlagen, ein Modbus-Diagnose-Client liest und schreibt Register. In LB03 veröff
 ### Aufgabe 03 – Modbus zu RabbitMQ (neue Module)
 
 Entschieden: Übertragung per **MQTT** (RabbitMQ-MQTT-Plugin, Port 1883); als Viewer dient ein MQTT-Werkzeug
-(z. B. MQTT Explorer), ein eigener Viewer ist damit nicht nötig. Die Einrichtung des Viewers ist noch offen.
+**MQTT Explorer 0.3.5 portable**, eingerichtet und lokal geprüft; ein eigener Viewer ist damit nicht nötig.
 Leere Zuständigkeitsfelder bleiben unzugeteilt.
 
 | Baustein | Verantwortlich | Dokumentation |
@@ -32,7 +32,7 @@ Leere Zuständigkeitsfelder bleiben unzugeteilt.
 | Messwerte im Vertrag: Kühlhaus | | |
 | SRS `docs/SRS-LB03.md` | | [`docs/SRS-LB03.md`](docs/SRS-LB03.md) (Entwurf mit Gateway-Teil) |
 | RabbitMQ unter Docker (Compose, `.env.example`, Start/Status/Stopp) | Alexander Lux | [`docker/README.md`](docker/README.md), lokaler Lauf mit allen vier Geräten geprüft |
-| Viewer: Einrichtung und Anleitung MQTT-Werkzeug | | |
+| Viewer: MQTT Explorer portable, JSON und Live-Verläufe | Alexander Lux | [Anleitung](docs/viewer/README.md), [textueller Nachweis](docs/nachweise/2026-11-08-viewer/README.md) |
 | Funktionsnachweise 1–7 | | [`docs/nachweise/`](docs/nachweise/2026-11-08-gateway-mit-master/README.md) (Lauf mit Ladesäule und Master) |
 | Optional: zusätzliche TimeSim-Nachrichten über RabbitMQ | | Wetter-MQTT ist separat oben dokumentiert; Zeitsteuerung bleibt TCP |
 | Eigener Skill `readTask` | Susanne Lastowicka | [`skills/readTask/README.md`](skills/readTask/README.md) |
@@ -57,6 +57,9 @@ Zugangsdaten stehen ausschließlich in der lokalen `docker/.env`.
 Geräte verwenden weiterhin HTTP. Für gespeicherte Wetterstände im Viewer die sechs konkreten Topics aus dem
 [Wettervertrag](docs/Wetter-Nachrichtenvertrag-LB03.md) abonnieren. Ohne `-WeatherMqtt` bleibt der bisherige Wetterstart erhalten.
 Der [Docker-Funktionsnachweis](docs/nachweise/2026-11-08-docker-alexander/README.md) belegt den Empfang aller vier Geräte.
+
+Viewer einrichten und Werteverläufe auswählen: [MQTT-Explorer-Anleitung](docs/viewer/README.md).
+Die Diagramme verwenden reale Empfangszeit; virtuelle Zeit und Qualität stehen im JSON.
 
 ## Aufbau
 
@@ -221,3 +224,5 @@ Teamregeln und Architekturdetails: [`AGENTS.md`](AGENTS.md).
   (PV lokales Wetter, sonst 20 °C, Kühlhaus lokales Tagesprofil).
 - Die Registerpläne stehen in den READMEs der Geräte; Änderungen daran mit den jeweiligen Verantwortlichen abstimmen.
 - SRS und Geräte-Nachrichtenvertrag für LB03 sind Entwürfe; Teamabstimmung und abschließender Akzeptanzabgleich bleiben offen.
+
+Vorheriger Viewer-Planungsstand: [Archiv](docs/archive/2026-11-08-viewer-einrichtung.md).
