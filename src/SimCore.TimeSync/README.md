@@ -1,7 +1,7 @@
 # SimCore.TimeSync
 
 **Zweck:** TCP-Transport der gemeinsamen virtuellen Zeit: `TimeSyncServer` im Simulations-Master, `TimeSyncClient` in jedem
-Simulator (auch im Wettersimulator). Die Zeitlogik selbst liegt in `SimCore.Time`, das Nachrichtenformat in `SimCore.Contracts`.
+Simulator; im Wettersimulator nur bei aktiviertem MQTT-Ausgang (`--mqtt`). Die Zeitlogik selbst liegt in `SimCore.Time`, das Nachrichtenformat in `SimCore.Contracts`.
 **Verantwortlich:** Susanne Lastowicka
 **Basis aus LB01:** –
 **Abhängigkeiten:** `SimCore.Contracts`, `SimCore.Time` (nur .NET-Bibliotheken, kein NuGet).

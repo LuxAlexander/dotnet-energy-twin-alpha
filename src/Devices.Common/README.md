@@ -1,9 +1,13 @@
 # Devices.Common
 
-**Zweck:** Gemeinsame Bausteine aller Feldgeräte (Charger, PV, Batterie nutzen sie seit 2026-10-25). Enthalten: Anbindung an die gemeinsame virtuelle Zeit,
-feste Modellschritte, Konsoleneingabe ohne blockierendes Warten, Modbus-Server-Hosting (Registerkopf, Schreibprüfung) und seit 2026-10-26 der Wetterbezug
-(HTTP-Client, Stunden-Cache, Fehlerbehandlung). Geplant: Thermik/Derating, Energiezähler, CSV, Konsolen-UI.
-**Verantwortlich:** Susanne Lastowicka Zeit, Alexander Lux Wetter.
+**LB03-Ergänzung 2026-11-08:** `DeviceTimeSource.MasterSession` stellt die aktuelle Master-Sitzung lesend bereit.
+Damit kann der Wetter-Publisher einen vollständig neu gestarteten Master auch bei gleicher RunId erkennen.
+
+**Zweck:** Gemeinsame Bausteine aller vier Feldgeräte: virtuelle Zeit, feste Modellschritte, async Konsoleneingabe,
+Modbus-Server mit Registerkopf/Schreibprüfung sowie HTTP-Wetter mit Stunden-Cache und Fehlerbehandlung.
+CSV- und Ausgabehelfer liegen inzwischen in [Shared](../Shared/README.md); Thermik und Energiezähler verbleiben
+in den Gerätemodellen. Der Wetter-Publisher nutzt die Zeitquelle ebenfalls.
+**Verantwortlich:** Susanne Lastowicka für Zeit/Modbus und übrige gemeinsame Gerätebausteine; Alexander Lux für Wetter.
 **Basis aus LB01:** Susi Pausen-/Tempo-Tasten und Prompt (jetzt async), Domi Zeitkonto mit festen Schritten (jetzt `StepScheduler`).
 **Abhängigkeiten:** `SimCore.Contracts`, `SimCore.Time`, `SimCore.TimeSync`, `Modbus.Contracts`, `Shared.Config`, EasyModbusTCP.NETCore.
 
@@ -52,7 +56,7 @@ Regeln:
 - Das Gerät zählt die Zeit **nie selbst** hoch und wartet nie `Schritt / Tempo` ab. Es fragt die Uhr und rechnet die fälligen Schritte.
   Dadurch bleibt es bei jedem Tempo synchron, auch wenn die Schleife einmal langsamer ist.
 - Pause und Tempo bestimmt der Master. Die Geräte-Tasten dafür wirken nur standalone.
-- Bei `MasterLost` steht die Uhr, `StepCount` ist dann 0. Das Gerät rechnet nicht weiter, die Anzeige (und später Modbus) bleibt erreichbar.
+- Bei `MasterLost` steht die Uhr, `StepCount` ist dann 0. Das Gerät rechnet nicht weiter, Anzeige und Modbus bleiben erreichbar.
 - Standalone: Die erste Modellzeit ist genau `--start` (siehe Charger).
 
 ## Modbus im Gerät (Muster: `src/Devices/DualPortCharger/Simulation/ChargerModbus.cs`; weitere: `PvModbus`, `BatteryModbus`)
@@ -82,7 +86,8 @@ if (await feed.UpdateAsync(stepStart, runId, ct) is { } weather)
 ```
 
 - Die Abfrage erfolgt je Modellstunde, auch wenn die Schrittweite kleiner ist (`WeatherFeed` cached).
-- `--weather off` (oder standalone ohne Angabe) ⇒ kein HTTP-Verkehr, das Gerät rechnet mit festen 20 °C.
+- `--weather off` (oder standalone ohne Wetterangabe) ⇒ kein HTTP-Verkehr. Batterie und Charger verwenden 20 °C,
+  PV und Kühlhaus ihre lokalen Ersatzmodelle (siehe Geräte-READMEs).
 - Ausfall: letztes Wetter bleibt aktiv; nach 3 Fehlversuchen erscheint „WETTER: NICHT ERREICHBAR“ in der Meldungszeile, neue Versuche alle 10 s.
 - Der Client gehört nach `Devices.Common`, nicht in `SimCore.Contracts` (Contracts bleibt abhängigkeitsfrei).
 
@@ -100,7 +105,7 @@ if (await feed.UpdateAsync(stepStart, runId, ct) is { } weather)
 | `--unit-id <n>` | 1 | Modbus-Unit-ID, 1–247 |
 | `--no-modbus` | aus | Server nicht starten |
 | `--register-plan` | | Registerplan ausgeben und beenden (im Gerät auszuwerten) |
-| `--weather <url\|off>` | mit Master `http://127.0.0.1:8080`, standalone aus | Wettersimulator; `off` = feste 20 °C |
+| `--weather <url\|off>` | mit Master `http://127.0.0.1:8080`, standalone aus | Wettersimulator; `off` = gerätespezifisches Ersatzmodell |
 | `--location <ort>` | salzburg | Standort für die Wetterabfrage |
 
 ## Tests

@@ -17,7 +17,9 @@ Abhängigkeiten (Vertrag → Broker → Gateway → Viewer) vorher sichtbar sind
 
 ## Beispielaufruf mit Ergebnis (2026-11-08)
 Aufruf: `/readTask Aufgabe 03`. Vollständiges Ergebnis: [`docs/task-status/aufgabe-03.md`](../../docs/task-status/aufgabe-03.md)
-(28 Anforderungen: 3 erfüllt, 6 teilweise, 16 nicht erfüllt, 3 nicht nachgewiesen). Auszug:
+(28 Anforderungen: 3 erfüllt, 6 teilweise, 16 nicht erfüllt, 3 nicht nachgewiesen). **Historisches Beispiel vor
+Broker-/Gateway-/Wetter-Umsetzung und SRS-Entwurf**, kein aktueller Projektstatus. Ein neuer Abgleich muss die
+späteren Quellen und datierten Nachweise berücksichtigen. Unveränderter Auszug:
 
 | ID | Anforderung (Seite) | Art | Status | Beleg / Lücke |
 |---|---|---|---|---|
@@ -33,11 +35,13 @@ Vorgeschlagene Reihenfolge (Auszug): 1. SRS mit Nachrichtenformat und Akzeptanzk
 
 ## Aktivierung
 Claude Code lädt Skills aus `.claude/skills/`. Dieser Ordner `skills/` ist die versionierte Ablage im Repo. Zum Verwenden:
-`.claude/skills/readTask` auf `skills/readTask` kopieren (oder verlinken):
+`skills/readTask` nach `.claude/skills/readTask` kopieren (oder verlinken), sofern dort noch keine eigene Fassung liegt:
 ```
 New-Item -ItemType Directory -Force .claude/skills
 Copy-Item -Recurse skills/readTask .claude/skills/readTask
 ```
+
+`.claude/` ist lokal und ignoriert. Nach Änderungen an `skills/readTask` die aktive Kopie gezielt abgleichen.
 
 ## Quelle und Lizenz
 Eigenentwicklung für dieses Projekt, nicht aus einer fremden Vorlage übernommen. Inspiration: die Beschreibung des

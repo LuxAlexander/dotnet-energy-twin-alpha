@@ -1,8 +1,8 @@
 # Funktionsnachweis 2026-11-08: Selbsttest des Skills `probelauf` (Kühlhaus, Umfang A)
 
 **Durchgeführt von:** Dominik Zach mit opencode (Modell Big Pickle) – Ablauf skriptgesteuert, Protokolle unverändert.
-**Bezug:** Prüfung des Skills [`probelauf`](../../../.opencode/skills/probelauf/README.md), Umfang **A – Gerät**; gleichzeitig
-Nachweis der Punkte A1–A4 und A7 der Prüfliste [`probelauf/references/abnahmekriterien.md`](../../../.opencode/skills/probelauf/references/abnahmekriterien.md).
+**Bezug:** Prüfung des Skills [`probelauf`](../../../skills/probelauf/README.md), Umfang **A – Gerät**; gleichzeitig
+Nachweis der Punkte A1–A4 und A7 der Prüfliste [`probelauf/references/abnahmekriterien.md`](../../../skills/probelauf/references/abnahmekriterien.md).
 **Kein** LB02- oder LB03-Nachweis – was dieser Lauf nicht zeigen kann, steht unter „Nicht geprüft“.
 
 ## Aufbau
@@ -59,4 +59,4 @@ Gerätefunktion selbst ist im Geräte-README und in `tests/FieldDevices.Tests` a
 - **Echte Bedienung:** Anzeige und Tasten in einem echten Terminalfenster, Strg+C, Screenshots.
 - **Ungültige Schreibwerte** (`force`, Register 18/19) und **Wetter** (`--weather` mit Wettersimulator).
 
-Maßgeblich für die vollständigen Kriterien: [`probelauf/references/abnahmekriterien.md`](../../../.opencode/skills/probelauf/references/abnahmekriterien.md).
+Maßgeblich für die vollständigen Kriterien: [`probelauf/references/abnahmekriterien.md`](../../../skills/probelauf/references/abnahmekriterien.md).

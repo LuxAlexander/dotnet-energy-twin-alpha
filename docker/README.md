@@ -2,7 +2,7 @@
 
 **Verantwortlich:** Alexander Lux · **Stand:** 2026-11-08
 
-Lokaler Nachrichtenbroker für das Modbus–RabbitMQ-Gateway. Docker Desktop muss mit Linux-Containern laufen;
+Lokaler Nachrichtenbroker für das Modbus–RabbitMQ-Gateway und den optionalen Wetter-Publisher. Docker Desktop muss mit Linux-Containern laufen;
 die eigenen .NET-Programme laufen auf dem Host. Beim ersten Start wird das Image aus dem Internet geladen,
 der Simulationsbetrieb selbst benötigt kein Internet.
 
@@ -13,7 +13,7 @@ Alle folgenden Befehle werden im **Repository-Root** in PowerShell ausgeführt.
 1. Docker Desktop starten und auf die laufende Engine warten (`docker info`).
 2. Einmalig `Copy-Item docker/.env.example docker/.env` ausführen, sofern noch keine `.env` existiert.
 3. In `docker/.env` den Passwort-Platzhalter durch ein eigenes zufälliges Passwort ersetzen.
-   Benutzer und Passwort werden vom Broker und Gateway aus derselben Datei gelesen.
+   Benutzer und Passwort werden von Broker, Gateway und Wetter-MQTT aus derselben Datei gelesen.
    Für identische Auswertung in Compose und Gateway einfache Werte ohne Leerzeichen, `$` oder Inline-Kommentare
    verwenden (z. B. ein zufälliges Hex-Passwort). `.env` ist durch `.gitignore` ausgeschlossen.
 4. Konfiguration prüfen und Broker starten:
@@ -44,7 +44,9 @@ Die Beispielwerte sind Platzhalter und müssen vor dem Start ersetzt werden.
 
 Die Ports sind nur auf diesem Rechner erreichbar. Anmeldung in der Management-Oberfläche mit den Werten aus `.env`.
 Für einen MQTT-Viewer: Host `127.0.0.1`, Port `1883`, dieselben Zugangsdaten, kein TLS, Topic `energytwin/#`.
-Die Management-Oberfläche ist eine Broker-Verwaltung, kein Ersatz für den Messwert-Viewer.
+Die Management-Oberfläche ist eine Broker-Verwaltung, kein Ersatz für den Messwert-Viewer. Ein späteres Wildcard-Abo
+liefert bei dem hier geprüften RabbitMQ 4.4.0 keine gespeicherten Retain-Werte; die exakten Topics stehen in den
+[Geräte-](../docs/Nachrichtenvertrag-LB03.md) und [Wetterverträgen](../docs/Wetter-Nachrichtenvertrag-LB03.md).
 
 ```powershell
 docker compose --env-file docker/.env -f docker/docker-compose.yml exec rabbitmq rabbitmq-diagnostics listeners
@@ -101,3 +103,11 @@ an `.env` ändert bestehende RabbitMQ-Benutzer nicht automatisch. Passwort in Ra
 
 Grundlagen: [RabbitMQ MQTT-Konfiguration](https://www.rabbitmq.com/docs/mqtt),
 [Compose-Service-Konfiguration](https://docs.docker.com/reference/compose-file/services/).
+
+## Vorhandene Nachweise
+
+- [2026-11-08: Empfang aller vier Geräte](../docs/nachweise/2026-11-08-docker-alexander/README.md) über Master, Modbus, Gateway und RabbitMQ.
+- [2026-11-08: Wetter-MQTT](../docs/nachweise/2026-11-08-wetter-mqtt/README.md), unter anderem Retain, Pause, Master-/Broker-Ausfall und Wiederanlauf.
+
+Die Nachweise beschreiben ihren jeweiligen Aufbau; sie ersetzen keine interaktive Gesamtvorführung oder erneuten
+Unit-Testlauf nach späteren Codeänderungen.

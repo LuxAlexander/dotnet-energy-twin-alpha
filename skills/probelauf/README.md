@@ -11,7 +11,7 @@
 
 ## Nutzen und Wirkung
 
-Die Abgabe verlangt keinen Code, sondern einen **vorführbaren** Lauf: Zeitgleichheit, Pause, Tempowechsel, Neustart,
+Zur Abgabe gehört neben dem Code ein **vorführbarer** Lauf: Zeitgleichheit, Pause, Tempowechsel, Neustart,
 Wetterausfall, Modbus-Schreiben, Geräte- und Broker-Ausfall, geordnetes Beenden. Solche Läufe gehen selten beim ersten
 Mal glatt, und die teuersten Fehler sind stille: ein alter Master, der noch Port 5100 hält, ein `start-all.ps1`, das
 einen belegten Port überspringt, oder „angenommen“ im Client, obwohl das Gerät den Wert erst im nächsten Durchlauf
@@ -31,7 +31,7 @@ Drei Umfänge, damit der Aufwand zum Ziel passt:
 
 Aufruf: `@probelauf nur Kühlhaus, ohne Master` – Umfang **A**, Kühlhaus KH-01 standalone, Tempo 600, 8 Modellstunden,
 `--weather off`, Seed 42, Modbus 1505. Vollständiger Nachweis mit allen Protokollen:
-[`docs/nachweise/2026-11-08-probelauf-skill/`](../../../docs/nachweise/2026-11-08-probelauf-skill/README.md). Auszug:
+[`docs/nachweise/2026-11-08-probelauf-skill/`](../../docs/nachweise/2026-11-08-probelauf-skill/README.md). Auszug:
 
 | # | Prüfung | Beobachtung | Ergebnis |
 |---|---|---|---|
@@ -49,9 +49,17 @@ Der Lauf prüft den **Ablauf**; Master, Broker und echte Tastenbedienung sind au
 
 ## Ablage und Aktivierung
 
-Der Skill liegt in **`.opencode/skills/probelauf/`**. Seine ID ist `probelauf` (aus dem Ordnernamen; `name:` im
-Frontmatter ist nur das Anzeige-Label). OpenCode findet Projekt-Skills dort automatisch – kein Eintrag in
-`opencode.json`, kein Kopieren, kein Neustart: geänderte Skill-Dateien werden neu eingelesen.
+Die versionierte Fassung liegt in **`skills/probelauf/`**. `.opencode/` ist eine lokale, ignorierte Ablage.
+Für OpenCode aus dem Repository-Root kopieren, sofern dort noch keine eigene Fassung liegt:
+
+```powershell
+New-Item -ItemType Directory -Force .opencode/skills
+Copy-Item -Recurse skills/probelauf .opencode/skills/probelauf
+```
+
+Bei späteren Änderungen die lokale Kopie gezielt abgleichen. Der Skill-Einstieg und das Portskript enthalten noch
+Aufrufe über `.opencode/skills/probelauf/`; diese setzen die lokale Installation voraus. Das Portskript lässt sich
+aus der versionierten Ablage direkt mit `powershell -File skills/probelauf/scripts/pruefe-ports.ps1` aufrufen.
 
 Aufruf im Prompt:
 

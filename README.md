@@ -2,14 +2,15 @@
 
 Simulation eines Energiesystems aus mehreren getrennten Programmen: ein Simulations-Master gibt die virtuelle Zeit vor,
 ein Wettersimulator liefert deterministisches Wetter, vier Feldgeräte (PV, Batterie, DC-Ladesäule, Kühlhaus) simulieren
-Anlagen, ein Modbus-Diagnose-Client liest und schreibt Register. Alles läuft lokal, ohne Internet zur Laufzeit.
+Anlagen, ein Modbus-Diagnose-Client liest und schreibt Register. In LB03 veröffentlicht ein Gateway die Gerätedaten
+über MQTT an RabbitMQ; der Wetterdienst kann zusätzlich Wetterdaten veröffentlichen. Alles läuft lokal, ohne Internet zur Laufzeit.
 
 ## Zuständigkeiten
 
 | Baustein | Verantwortlich | Dokumentation |
 |---|---|---|
-| Simulations-Master, `SimCore.Contracts`, `SimCore.Time`, `SimCore.TimeSync` | Susanne Lastowicka | [`src/SimulationMaster/README.md`](src/SimulationMaster/README.md), [`src/SimCore.Time/README.md`](src/SimCore.Time/README.md), [`src/SimCore.TimeSync/README.md`](src/SimCore.TimeSync/README.md) |
-| Wettersimulator, PV-Anlage, gemeinsame Bausteine (`Shared`) | Alexander Lux | [`src/WeatherSimulator/README.md`](src/WeatherSimulator/README.md), [`src/Devices/PvSimulator/README.md`](src/Devices/PvSimulator/README.md), [`src/Shared/README.md`](src/Shared/README.md) |
+| Simulations-Master, `SimCore.Time`, `SimCore.TimeSync`; Zeit-/Sync-Verträge in `SimCore.Contracts` | Susanne Lastowicka | [`src/SimulationMaster/README.md`](src/SimulationMaster/README.md), [`src/SimCore.Time/README.md`](src/SimCore.Time/README.md), [`src/SimCore.TimeSync/README.md`](src/SimCore.TimeSync/README.md) |
+| Wettersimulator, Wetterverträge in `SimCore.Contracts`, PV-Anlage, gemeinsame Bausteine (`Shared`, `Shared.Config`) | Alexander Lux | [`src/WeatherSimulator/README.md`](src/WeatherSimulator/README.md), [`src/Devices/PvSimulator/README.md`](src/Devices/PvSimulator/README.md), [`src/Shared/README.md`](src/Shared/README.md) |
 | Batteriespeicher | Dominik Zach | [`src/Devices/BatterySimulator/README.md`](src/Devices/BatterySimulator/README.md) |
 | DC-Ladesäule (2 Ladepunkte), Modbus-Diagnose-Client, `Modbus.Contracts`, `Devices.Common` | Susanne Lastowicka | [`src/Devices/DualPortCharger/README.md`](src/Devices/DualPortCharger/README.md), [`src/ModbusDiagnosticClient/README.md`](src/ModbusDiagnosticClient/README.md), [`src/Modbus.Contracts/README.md`](src/Modbus.Contracts/README.md), [`src/Devices.Common/README.md`](src/Devices.Common/README.md) |
 | Industrieverbraucher (Kühlhaus, viertes Feldgerät) | Dominik Zach (LB01-Modell und LB02-Umbau) | [`src/Devices/KuehlhausSimulator/README.md`](src/Devices/KuehlhausSimulator/README.md) |
@@ -17,7 +18,8 @@ Anlagen, ein Modbus-Diagnose-Client liest und schreibt Register. Alles läuft lo
 ### Aufgabe 03 – Modbus zu RabbitMQ (neue Module)
 
 Entschieden: Übertragung per **MQTT** (RabbitMQ-MQTT-Plugin, Port 1883); als Viewer dient ein MQTT-Werkzeug
-(z. B. MQTT Explorer), ein eigener Viewer ist damit nicht nötig. Leere Felder sind noch nicht zugeteilt.
+(z. B. MQTT Explorer), ein eigener Viewer ist damit nicht nötig. Die Einrichtung des Viewers ist noch offen.
+Leere Zuständigkeitsfelder bleiben unzugeteilt.
 
 | Baustein | Verantwortlich | Dokumentation |
 |---|---|---|
@@ -32,10 +34,10 @@ Entschieden: Übertragung per **MQTT** (RabbitMQ-MQTT-Plugin, Port 1883); als Vi
 | RabbitMQ unter Docker (Compose, `.env.example`, Start/Status/Stopp) | Alexander Lux | [`docker/README.md`](docker/README.md), lokaler Lauf mit allen vier Geräten geprüft |
 | Viewer: Einrichtung und Anleitung MQTT-Werkzeug | | |
 | Funktionsnachweise 1–7 | | [`docs/nachweise/`](docs/nachweise/2026-11-08-gateway-mit-master/README.md) (Lauf mit Ladesäule und Master) |
-| Optional: Wetter/TimeSim über RabbitMQ | | |
+| Optional: zusätzliche TimeSim-Nachrichten über RabbitMQ | | Wetter-MQTT ist separat oben dokumentiert; Zeitsteuerung bleibt TCP |
 | Eigener Skill `readTask` | Susanne Lastowicka | [`skills/readTask/README.md`](skills/readTask/README.md) |
 | Eigener Skill „Let's Document“ | Alexander Lux | [`skills/lets-document/README.md`](skills/lets-document/README.md), [Anwendungsnachweis](docs/nachweise/2026-11-08-lets-document/README.md) |
-| Eigener Skill | Dominik Zach | |
+| Eigener Skill `probelauf` | Dominik Zach | [`skills/probelauf/README.md`](skills/probelauf/README.md), [Anwendungsnachweis](docs/nachweise/2026-11-08-probelauf-skill/README.md) |
 
 ## LB03 starten
 
@@ -68,7 +70,7 @@ src/
   Shared/                  geräteunabhängig: CSV-Writer, Balken, Jahreszeiten/Wetter/Einstrahlung
   Devices.Common/          Zeitanbindung, StepScheduler, Modbus-Server, Wetter-Client/Feed, Konsolenhilfen
   SimulationMaster/        Master: Pause, Tempo, Neustart, Status
-  WeatherSimulator/        HTTP-Wetterdienst (deterministisch, WeatherSynth-Basis)
+  WeatherSimulator/        HTTP-Wetterdienst; optional MQTT mit Master-Zeit, fünf Standorte und regionale Klimaprofile
   ModbusDiagnosticClient/  Register lesen/schreiben, Fehler anzeigen
   Modbus.Client/           Modbus-TCP-Client (Verbindung, Fehlerübersetzung) für Diagnose-Client und Gateway
   ModbusRabbitGateway/     LB03: Geräte über Modbus lesen, nach Nachrichtenvertrag per MQTT an RabbitMQ veröffentlichen
@@ -81,12 +83,15 @@ tests/
   Devices.Common.Tests/     Gerätezeit, Modbus-Server, Registercodec, Wetter-Feed (51)
   FieldDevices.Tests/       PV, Batterie und Kühlhaus: Modbus, Optionen, Standalone-Lauf (62)
   ModbusDiagnosticClient.Tests/  Client gegen echten Modbus-Server (28)
-  Weather.Tests/            Reproduzierbarkeit und Plausibilität des Wetters (11)
+  Weather.Tests/            Reproduzierbarkeit, Regionalmodelle und Optionen (18 Prüffälle; aktueller Lauf offen)
   ModbusRabbitGateway.Tests/  Gateway: Dekodierung, Qualität, Schlüssel, Optionen, gegen echten Modbus-Server
 ```
 
-Abhängigkeitsrichtung: `SimCore.Contracts` ← `SimCore.Time` ← `SimCore.TimeSync` ← `Modbus.Contracts` ← `Devices.*`.
-Keine Zyklen; nur Geräte und der Diagnose-Client verwenden EasyModbusTCP.NETCore.
+Die Projekte bilden getrennte Bibliotheksschichten: `SimCore.Contracts` ist abhängigkeitsfrei; `SimCore.Time`
+und `SimCore.TimeSync` bauen darauf auf. `Modbus.Contracts` verwendet die Verträge, aber keine Zeitverteilung.
+`Devices.Common` bündelt Zeit-, Wetter- und Modbus-Anbindung; `Modbus.Client` wird von Diagnose-Client und Gateway
+genutzt. EasyModbusTCP.NETCore liegt in `Devices.Common` und `Modbus.Client`; die einzelnen `.csproj` nennen die
+maßgeblichen direkten Abhängigkeiten.
 
 ## Startreihenfolge
 
@@ -133,8 +138,8 @@ dotnet run --project src/ModbusDiagnosticClient -- --port 1502
 dotnet run --project src/ModbusRabbitGateway
 ```
 
-Die Standardports sind 1502 (PV und Charger), 1503 (Batterie) und 1505 (Kühlhaus). In der Demo mit allen Geräten
-gleichzeitig bekommt der Charger 1504, sonst kollidiert er mit der PV.
+PV, Batterie und Charger haben jeweils den Geräte-Standardport 1502, das Kühlhaus 1505. Für den gemeinsamen
+Aufbau setzen die obigen Befehle und das Startskript Batterie auf 1503 und Charger auf 1504. So kollidieren die Ports nicht.
 
 Im Master mit **Leertaste** starten; danach `+`/`-` für das Tempo, `1`–`4` für Jahreszeiten-Neustart, `Q` zum Beenden.
 Die Geräte verbinden sich beim Start mit `127.0.0.1:5100` und wiederholen das automatisch, solange der Master fehlt.
@@ -157,8 +162,9 @@ Die Geräte verbinden sich beim Start mit `127.0.0.1:5100` und wiederholen das a
 | Schnittstelle | Transport | Standard | Details |
 |---|---|---|---|
 | Zeitverteilung Master → Geräte | TCP, JSON je Zeile | `127.0.0.1:5100` | [`src/SimCore.TimeSync/README.md`](src/SimCore.TimeSync/README.md) |
-| Wetter | HTTP GET `/weather` | `http://127.0.0.1:8080` | [`src/WeatherSimulator/README.md`](src/WeatherSimulator/README.md) |
+| Wetter für Geräte | HTTP GET `/weather`, Standortkatalog `/locations` | `http://127.0.0.1:8080` | [`src/WeatherSimulator/README.md`](src/WeatherSimulator/README.md) |
 | Geräteregister | Modbus TCP, Holding Registers | `127.0.0.1:1502` ff. | Registerplan im README des jeweiligen Geräts |
+| Geräte-/Wetterdaten für Viewer | MQTT über RabbitMQ | `127.0.0.1:1883` | [Gerätevertrag](docs/Nachrichtenvertrag-LB03.md), [Wettervertrag](docs/Wetter-Nachrichtenvertrag-LB03.md) |
 
 **Registerkopf (Adressen 0–19) für alle Geräte:** Typ, Geräte-Nummer, Zustand, Fehlercode, Leistung (Float32, positiv = Aufnahme),
 kumulierte Energie, Modellzeit (UInt32, Sekunden seit 1970), Lauf, Sequenz, Zeitstatus, läuft, Tempo, Ein/Aus (schreibbar),
@@ -167,9 +173,15 @@ Mehrteilige Werte: zwei Register, höherwertiges Wort zuerst. Details: [`src/Mod
 
 ## Konfiguration
 
-Alle Programme werden über Kommandozeilenoptionen konfiguriert (`--help` zeigt die jeweilige Hilfe). Es gibt **keine
-Umgebungsvariablen und keine Secrets**; `.env`-Dateien werden nicht benötigt. CSV-Ausgaben landen standardmäßig in
-`docs/data/` (im Repo, unabhängig vom Startordner).
+Startoptionen und Defaults stehen in den Modul-READMEs. RabbitMQ benötigt lokale Zugangsdaten in `docker/.env`
+(Vorlage: [`docker/.env.example`](docker/.env.example)); Gateway und Wetter-MQTT verwenden dieselbe Datei oder
+`ENERGYTWIN_MQTT_USER`/`ENERGYTWIN_MQTT_PASSWORD`. Einzelheiten zur Priorität:
+[`Shared.Config`](src/Shared.Config/README.md). Secrets bleiben außerhalb der Versionierung.
+CSV-Ausgaben landen standardmäßig in `docs/data/`, unabhängig vom Startordner.
+
+`skills/` enthält die versionierten Skills. `.claude/`, `.opencode/` und `graphify-out/` sind lokale, ignorierte
+Ordner; sie werden bei einem frischen Checkout nicht mitgeliefert. Der lokale Graph dient zur Navigation und
+muss nach relevanten Änderungen neu indiziert werden.
 
 ## Tests
 
@@ -184,7 +196,14 @@ dotnet test tests/ModbusRabbitGateway.Tests
 ```
 
 Die Testprojekte werden **einzeln** gestartet: Mehrere binden echte TCP-Ports, deshalb kann `dotnet test EnergyTwin.sln`
-wegen der parallelen Ausführung scheitern, obwohl der Code in Ordnung ist. Zusammen sind es 258 Tests (Stand 2026-11-08, alle grün).
+wegen konkurrierender Ports scheitern. Letzter dokumentierter Gesamtstand am **2026-11-08: 258/258**, siehe
+[Susannes Journal](docs/development-journal/susanne-lastowicka.md). Danach wurden sieben regionale/Options-Prüffälle
+ergänzt und die Wetterübersteuerung angepasst. Der erweiterte Bestand wurde gebaut, aber noch nicht erneut als
+Unit-Tests ausgeführt. Die Zahlen im Projektbaum beschreiben den Testbestand, keinen aktuellen Lauferfolg.
+
+Vorhandene Funktionsnachweise: [alle vier Geräte bis RabbitMQ](docs/nachweise/2026-11-08-docker-alexander/README.md)
+und [Wetter-MQTT einschließlich Pause und Wiederanlauf](docs/nachweise/2026-11-08-wetter-mqtt/README.md).
+Beide nennen Aufbau, Datum und Prüfgrenzen; eine interaktive Gesamtvorführung bleibt offen.
 
 Pflicht-Tests laut Aufgabenstellung: Zeitsteuerung des Masters (`tests/SimCore.Tests`) und Reproduzierbarkeit des
 Wetters (`tests/Weather.Tests`). Dazu Gerätezeit/Modbus (`Devices.Common.Tests`), PV/Batterie/Kühlhaus
@@ -201,5 +220,4 @@ Teamregeln und Architekturdetails: [`AGENTS.md`](AGENTS.md).
   für PV, Batterie, Ladesäule und Kühlhaus angebunden; ohne Wettersimulator rechnen sie mit festen Werten
   (PV lokales Wetter, sonst 20 °C, Kühlhaus lokales Tagesprofil).
 - Die Registerpläne stehen in den READMEs der Geräte; Änderungen daran mit den jeweiligen Verantwortlichen abstimmen.
-- Interaktive Anzeigen wurden bisher überwiegend mit umgeleiteter Ausgabe geprüft; echte Terminalfenster sind zu testen.
-- Das Abgabe-Tag `lb02-2026` ist noch nicht gesetzt (setzt Alexander laut `docs/adr/0004-prozess-abgabe.md`).
+- SRS und Geräte-Nachrichtenvertrag für LB03 sind Entwürfe; Teamabstimmung und abschließender Akzeptanzabgleich bleiben offen.

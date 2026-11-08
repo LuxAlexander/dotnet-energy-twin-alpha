@@ -1,5 +1,8 @@
 # SimCore.Time
 
+**LB03-Ergänzung 2026-11-08:** `SyncedClock.MasterSession` liefert lesend die aktuell gültige Master-Sitzung.
+Zusammen mit `RunId` lassen sich Läufe auch nach einem vollständigen Master-Neustart eindeutig unterscheiden.
+
 **Zweck:** Logik der gemeinsamen virtuellen Zeit für Master und Geräte: Pause, Fortsetzen und Tempowechsel ohne Zeitsprung,
 Neustart mit neuer Zeit, Uhrenabgleich, Erkennen eines verlorenen Masters. Kein Netzwerk, keine Konsole.
 **Verantwortlich:** Susanne Lastowicka

@@ -7,7 +7,7 @@
 
 | Programm | Start | Protokoll |
 |---|---|---|
-| RabbitMQ (Docker, `docker/docker-compose.yml`) | `docker compose up -d` | – |
+| RabbitMQ (Docker, `docker/docker-compose.yml`) | `docker compose --env-file docker/.env -f docker/docker-compose.yml up -d --wait --wait-timeout 180` | – |
 | Wettersimulator | `dotnet run --project src/WeatherSimulator` | `wetter.txt` |
 | Master | `dotnet run --project src/SimulationMaster -- --speed 600` | `master.txt` |
 | &lt;Gerät&gt; | `dotnet run --project src/Devices/… -- --id … --modbus-port …` | `&lt;geraet&gt;.txt` |

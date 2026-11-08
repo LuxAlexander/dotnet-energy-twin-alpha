@@ -1,7 +1,9 @@
 # SimCore.Tests
 
 **Zweck:** Pflicht-Tests der Zeitsteuerung (Pause, Fortsetzen, Tempo, Neustart), der Zeitsynchronisation der Geräte und des TCP-Transports.
-**Verantwortlich:** _offen_ (wie `SimCore.Time`). Am 2026-10-25 von Susanne Lastowicka erstellt.
+**Verantwortlich:** Susanne Lastowicka für die enthaltenen Zeit-/Sync-Tests. Wetterprüfungen fallen an Alexander Lux;
+sie liegen derzeit in [Weather.Tests](../Weather.Tests/README.md) und im Wetterteil von
+[Devices.Common.Tests](../Devices.Common.Tests/README.md), nicht in diesem Projekt.
 **Basis aus LB01:** –
 
 ## Ausführen

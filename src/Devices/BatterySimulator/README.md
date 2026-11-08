@@ -1,6 +1,11 @@
 # Batteriespeicher-Simulator
 
-Konsolenanwendung in C# (.NET), die einen **Batteriespeicher** als eigenständiges, simuliertes Gerät abbildet. Der Speicher wird mit Leistungsvorgaben geladen und entladen, der Ladezustand (SOC) wird über die Simulationszeit berechnet. Im Gesamtprojekt wird er später mit der PV-Anlage und der Ladestation zusammengeführt. Dieses Programm simuliert das Gerät einzeln.
+Konsolenanwendung in C# (.NET 10), die einen **Batteriespeicher** als Feldgerät im verteilten EnergyTwin-System
+abbildet. Zeit vom Master oder einer lokalen Standalone-Uhr, optional HTTP-Wetter und ein Modbus-TCP-Server
+sind angebunden. Leistungsvorgaben steuern Laden/Entladen; der Ladezustand (SOC) folgt der virtuellen Zeit.
+Ein gemeinsamer Energieregler für PV, Batterie und Ladestation ist nicht implementiert.
+
+**Verantwortlich:** Dominik Zach; Master-/Modbus-Umbau von Susanne Lastowicka.
 
 ## Voraussetzungen
 
@@ -8,7 +13,7 @@ Konsolenanwendung in C# (.NET), die einen **Batteriespeicher** als eigenständig
 - Windows-Konsole (Visual-Studio-Debugging-Konsole, Windows Terminal oder Eingabeaufforderung), mindestens 80 Zeichen breit und 15 Zeilen hoch.
 - Die Konsole muss **interaktiv** sein (Tastatureingaben). Die Eingabe darf nicht umgeleitet werden.
 - Teil der Solution `EnergyTwin.sln` im Repository-Hauptordner. Das Projekt verweist auf `src/Devices.Common`
-  (bringt EasyModbusTCP.NETCore mit, wird beim ersten Build aus NuGet geladen). Der LB01-Code nutzt das noch nicht.
+  (Zeit, Wetter-Client und Modbus-Server; EasyModbusTCP.NETCore wird beim ersten Build aus NuGet geladen).
 
 ## Starten
 
@@ -27,15 +32,15 @@ dotnet run -- <Argumente>
 Beispiel (im Projektordner):
 
 ```
-dotnet run -- --id BAT-01 --capacity 10 --start 06:00
+dotnet run -- --standalone --id BAT-01 --capacity 10 --start "2026-01-15 06:00"
 ```
 
 Die weiteren Beispiele in dieser Datei gehen vom Projektordner aus.
 
 In Visual Studio: `EnergyTwin.sln` öffnen, `BatterySimulator` als Startprojekt festlegen, dann *Projekt → Eigenschaften → Debuggen → Befehlszeilenargumente*, dort die Argumente eintragen (ohne `dotnet run --`).
 
-> **Ab LB02** kommt die Zeit vom Simulations-Master (`--master`). Die Aufrufe unten (LB01) laufen nur noch mit `--standalone`; `--speed`, `--start` und
-> `--duration` gelten nur dort, `--start` jetzt mit Datum (`"2026-01-15 06:00"`). Siehe Abschnitt „LB02“ am Ende.
+> Standard ist die Zeit vom Simulations-Master. `--speed`, `--start` und `--duration` gelten ausschließlich mit
+> `--standalone`. Vollständige Zeit-, Modbus- und Wetteroptionen stehen im Abschnitt „LB02“.
 
 Ohne Argumente (und ohne Master) wartet das Gerät auf den Simulations-Master; mit `--standalone` läuft es mit den Standardwerten auf einer lokalen Uhr.
 
@@ -57,20 +62,22 @@ Ohne Argumente (und ohne Master) wartet das Gerät auf den Simulations-Master; m
 
 Hinweise:
 
-- Dezimalzahlen werden in den Argumenten mit **Punkt** geschrieben (`--capacity 7.5`).
-- Ungültige Eingaben beenden das Programm mit einer Fehlermeldung. Geprüft werden: `--speed` und `--step` größer als 0, `--capacity` größer als 0, `--soc-min` kleiner als `--soc-max`.
+- Dezimalzahlen dürfen **Punkt oder Komma** enthalten (`--capacity 7.5` bzw. `7,5`).
+- Ungültige Eingaben beenden das Programm mit einer Fehlermeldung. Es gelten insbesondere Tempo 1–100 000,
+  positive Schrittweite/Kapazität/Lade- und Entladeleistung, `0 ≤ SOC-Min < SOC-Max ≤ 100` und Start-SOC innerhalb
+  dieser Grenzen. Eine angegebene Dauer muss positiv sein; ohne `--duration` läuft standalone endlos.
 
 ### Beispielparameter
 
 | Zweck | Aufruf |
 |---|---|
 | Standardlauf | `dotnet run` |
-| Schneller Demolauf (24 h in ca. 24 s) | `dotnet run -- --speed 3600` |
-| Kleine Batterie, ganzer Zyklus ab Morgen | `dotnet run -- --capacity 10 --start 06:00 --soc-start 20` |
+| Schneller Demolauf (24 h in ca. 24 s) | `dotnet run -- --standalone --speed 3600 --duration 24` |
+| Kleine Batterie ab 06:00 | `dotnet run -- --standalone --capacity 10 --start "2026-01-15 06:00" --soc-start 20` |
 | Leistungsbegrenzung sichtbar machen | `dotnet run -- --max-charge 2 --max-discharge 2` |
-| Feinere Zeitauflösung | `dotnet run -- --step 10 --speed 600` |
-| Dauerbetrieb (Tagesprofil wiederholt sich) | `dotnet run -- --duration 0` |
-| Zweites Gerät parallel (zweites Terminal) | `dotnet run -- --id BAT-02 --capacity 10` |
+| Feinere Zeitauflösung | `dotnet run -- --standalone --step 10 --speed 600` |
+| Dauerbetrieb (Tagesprofil wiederholt sich) | `dotnet run -- --standalone` |
+| Zweites Gerät parallel (zusätzlicher freier Port) | `dotnet run -- --id BAT-02 --capacity 10 --modbus-port 1506` |
 
 ## Bedienung
 
@@ -93,27 +100,25 @@ Während der Simulation zeigt ein festes Dashboard Simulationszeit, Tempo, Modus
 
 Zum Beenden immer **Q** drücken (oder die Simulationsdauer ablaufen lassen). Wird der Debugger hart gestoppt, kann das Ende der CSV-Datei fehlen.
 
-### Pausenmenü (LB01) und Einstellungen (LB02)
+### Einstellungen
 
-In LB01 hielt die Leertaste die Simulation an und öffnete ein Menü. Ab LB02 steuert der Master die Pause; die Einstellungen öffnet `S`, die Zeit läuft dabei weiter,
-Tempo und Schrittweite sind dort nicht mehr änderbar. Änderbar sind:
+`S` öffnet das Einstellungsmenü, während Zeit und Modbus-Veröffentlichung weiterlaufen:
 
-1. Sollwert (wechselt dabei in den Manuell-Modus)
+1. Sollwert (wechselt in den Manuell-Modus)
 2. Maximale Ladeleistung
 3. Maximale Entladeleistung
 4. SOC-Untergrenze
 5. SOC-Obergrenze
-6. Simulationsgeschwindigkeit
-7. Schrittweite
-8. Fortsetzen
 
-Im Menü werden Dezimalzahlen mit der **Schreibweise des Betriebssystems** eingegeben, bei deutschen Windows-Einstellungen also mit **Komma** (`3,5`). Ungültige Werte werden abgelehnt und der alte Wert bleibt bestehen. Die Zeit, die man im Menü verbringt, wird nicht nachgeholt.
+`0` oder eine leere Auswahl schließt das Menü. Punkt und Komma sind als Dezimaltrenner erlaubt; ungültige Werte
+werden mit Begründung abgelehnt. Tempo bestimmt der Master beziehungsweise standalone `<`/`>`; die Schrittweite
+wird beim Start mit `--step` festgelegt.
 
 ## Modellbeschreibung
 
 ### Grundprinzip
 
-Vorzeichen: **positive Leistung = Laden, negative Leistung = Entladen.** Das Gerät bekommt einen **Sollwert**, entweder vom Tagesprofil (Auto), per Tasten oder über das Pausenmenü (Manuell). Es liefert die **Ist-Leistung**, also das, was es unter den aktuellen Bedingungen darf. Unzulässige Sollwerte werden nicht abgelehnt, sondern still begrenzt, so wie es ein Batteriemanagementsystem tut. Soll und Ist werden getrennt angezeigt und protokolliert.
+Vorzeichen: **positive Leistung = Laden, negative Leistung = Entladen.** Das Gerät bekommt einen **Sollwert**, entweder vom Tagesprofil (Auto), per Tasten oder über die Einstellungen (Manuell). Es liefert die **Ist-Leistung**, also das, was es unter den aktuellen Bedingungen darf. Unzulässige Sollwerte werden nicht abgelehnt, sondern still begrenzt, so wie es ein Batteriemanagementsystem tut. Soll und Ist werden getrennt angezeigt und protokolliert.
 
 ### Begrenzung der Leistung
 
@@ -191,15 +196,19 @@ Auf den Sollwert wird ein Zufallsfaktor von ±10 % gelegt, der alle 5 Simulation
 
 ### Simulationsuhr
 
-Die Hauptschleife läuft alle etwa 100 ms in Echtzeit. Aus der vergangenen Realzeit und der eingestellten Geschwindigkeit wird Simulationszeit gutgeschrieben, und für jede volle Schrittweite wird ein Rechenschritt ausgeführt. Geschwindigkeit und Schrittweite sind damit unabhängig voneinander einstellbar. Bei Speed 600 und Schritt 60 s entspricht eine Realsekunde zehn Rechenschritten (zehn Simulationsminuten). Während der Pause wird keine Zeit gutgeschrieben.
+`DeviceTimeSource` liefert die Master-Zeit oder standalone eine lokale Uhr. `StepScheduler` ermittelt daraus die
+fälligen festen Schritte (`--step`, Standard 60 s); das Gerät zählt die Zeit nicht selbst hoch. Bei Tempo 600
+entspricht eine Realsekunde zehn Modellschritten à 60 s. Pause und Master-Verlust halten die Modellzeit an;
+Modbus bleibt erreichbar. Ein neuer Master-Lauf ändert die Zeit, erhält aber SOC, Temperatur und Zähler.
 
 ## CSV-Verlauf
 
-Pro Gerät entsteht eine Datei `battery_<ID>_<Datum>.csv` in `docs/data/` im Repository, egal aus welchem Ordner (Kommandozeile oder Visual Studio) gestartet wird. Es wird **bei jedem Simulationsschritt** eine Zeile geschrieben, mit dem Zustand am Ende des Schritts. Trennzeichen ist das Semikolon, Dezimalzeichen der Punkt.
+Pro Programmstart entsteht eine Datei `battery_<ID>_<yyyy-MM-dd_HHmmss>.csv` in `docs/data/` im Repository, egal aus welchem Ordner (Kommandozeile oder Visual Studio) gestartet wird. Beim ersten Zeitstand, bei jedem Master-Neustart und nach jedem Modellschritt wird eine Zeile geschrieben.
+Trennzeichen ist das Semikolon, Dezimalzeichen weiterhin der Punkt (InvariantCulture; beim Excel-Import beachten).
 
 | Spalte | Bedeutung |
 |---|---|
-| `SimTime` | Simulationszeit (Tag.Stunde:Minute:Sekunde, z. B. `1.06:15:00`) |
+| `SimTime` | Virtuelle Zeit mit Datum, `yyyy-MM-dd HH:mm:ss` |
 | `DeviceId` | Geräte-ID |
 | `Mode` | Gerätezustand (Off, Standby, Charging, Discharging, Fault, Cooldown) |
 | `Control` | Auto oder Manual |
@@ -209,8 +218,9 @@ Pro Gerät entsteht eine Datei `battery_<ID>_<Datum>.csv` in `docs/data/` im Rep
 | `Fault` | aktive Störung (None, EmergencyStop, Overheat) |
 | `MaxChargeKW` / `MaxDischargeKW` | aktuelle Leistungsgrenzen |
 | `SocMin` / `SocMax` | aktuelle SOC-Grenzen |
+| `Lauf` | Laufnummer des Masters, letzte Spalte |
 
-Die CSV darf während des Laufs nicht in Excel geöffnet sein. Zwei Instanzen mit **derselben ID** am selben Tag blockieren sich gegenseitig, daher pro Instanz eine eigene `--id` verwenden.
+Die CSV darf während des Laufs nicht in Excel geöffnet sein. Der Dateiname enthält die reale Startzeit sekundengenau. Für parallele Instanzen eigene IDs und freie Modbus-Ports verwenden.
 
 ## Aufbau
 
@@ -229,8 +239,8 @@ Die CSV darf während des Laufs nicht in Excel geöffnet sein. Zwei Instanzen mi
 ## Bekannte Einschränkungen
 
 - Wirkungsgrad, Selbstentladung, Spannung/Strom und Alterung (SOH) sind nicht modelliert.
-- Die Kopplung mit PV-Anlage und Ladestation ist noch nicht umgesetzt. Das Gerät läuft eigenständig.
-- Die Eingaben im Pausenmenü werden nur grob geprüft, Dezimalzahlen müssen in der Schreibweise des Betriebssystems eingegeben werden.
+- Zeit-, Wetter- und Modbus-Kopplung sind umgesetzt; ein gemeinsamer Energieregler mit PV und Ladestation fehlt.
+- Das CSV-Zahlenformat verwendet weiterhin Dezimalpunkte; die Umstellung auf die gemeinsamen de-AT-Helfer ist offen.
 - Ein Ereignisprotokoll im Dashboard und eine Zusammenfassung am Programmende gibt es nicht.
 
 ![alt text](../../../docs/screenshots/BatterySimulator/bild.png)
@@ -294,7 +304,7 @@ docs/                                 # zentral im Repository
 | `--no-modbus` | Server nicht starten | aus |
 | `--register-plan` | Registerplan als Markdown ausgeben | |
 | `--weather <url\|off>` | Wettersimulator; mit Master Standard `http://127.0.0.1:8080`, standalone aus | |
-| `--location <ort>` | Standort für die Wetterabfrage (salzburg, wien, innsbruck) | salzburg |
+| `--location <ort>` | Standort aus dem Wetterkatalog (auch `tamanrasset`, `neumayer`) | salzburg |
 
 Zusätzlich geprüft: `--max-charge`/`--max-discharge` > 0, `0 ≤ --soc-min < --soc-max ≤ 100`, `--soc-start` dazwischen. Dezimalzahlen mit Punkt **oder** Komma.
 
@@ -324,7 +334,7 @@ Mehrteilige Werte müssen mit **einem** Schreibzugriff (FC16) auf beide Register
 
 | Adresse | Ref. | Name | Typ | Regs | Einheit | Zugriff | Schreibbereich | Bedeutung / Fehlerverhalten |
 |---|---|---|---|---|---|---|---|---|
-| 0 | 40001 | Gerätetyp | UInt16 | 1 |  | lesen | – | 1 PV, 2 Batterie, 3 Charger, 4 Wind |
+| 0 | 40001 | Gerätetyp | UInt16 | 1 |  | lesen | – | 1 PV, 2 Batterie, 3 Charger, 4 Wind, 5 Industrieverbraucher |
 | 1 | 40002 | Geräte-Nummer | UInt16 | 1 |  | lesen | – | Zahl am Ende der Geräte-ID (DC-02 → 2), 0 wenn keine |
 | 2 | 40003 | Betriebszustand | UInt16 | 1 |  | lesen | – | 0 Aus, 1 Bereit/Leerlauf, 2 Betrieb, 3 Störung |
 | 3 | 40004 | Fehlercode | UInt16 | 1 |  | lesen | – | 0 = kein Fehler, sonst gerätespezifisch (siehe Registerplan des Geräts) |
@@ -365,8 +375,7 @@ Besonderheiten des Batteriespeichers:
 - Fehlerverhalten bei Schreibzugriffen: siehe `src/Devices/DualPortCharger/README.md`, Abschnitt „Fehlerverhalten bei Schreibzugriffen“.
 
 ### CSV
-`docs/data/battery_<ID>_<Datum>_<Uhrzeit>.csv`, neue Spalte `Lauf` am Ende, `SimTime` jetzt mit Datum (`yyyy-MM-dd HH:mm:ss`). Beim Start und bei jedem
-Neustart im Master wird zusätzlich eine Zeile geschrieben.
+Format, Spalten und Dateinamen stehen vollständig unter [CSV-Verlauf](#csv-verlauf).
 
 ### Schnittstellen
 - **Benötigt:** Simulations-Master (TCP, `127.0.0.1:5100`).
@@ -381,3 +390,14 @@ Neustart im Master wird zusätzlich eine Zeile geschrieben.
 - Ein Neustart im Master behält den Zustand (SOC, Temperatur, Zähler).
 - Die interaktive Anzeige, die Tasten und das Einstellungsmenü sind nur mit umgeleiteter Ausgabe geprüft, noch nicht in einem echten Terminalfenster.
 - Die Beispiel-CSV aus LB01 hat noch das alte Format (`SimTime` als Zeitdauer, ohne `Lauf`).
+
+## LB03 – Daten im MQTT-Viewer
+
+Das [Gateway](../../ModbusRabbitGateway/README.md) liest dieses Gerät über Modbus und veröffentlicht seine Daten
+über RabbitMQ. Broker und vollständige Startfolge: [Docker-Anleitung](../../../docker/README.md).
+Im gemeinsamen Aufbau gelten PV 1502, Batterie 1503, Charger 1504 und Kühlhaus 1505; der Geräte-Standardport
+kann davon abweichen.
+
+Der [Empfangsnachweis vom 2026-11-08](../../../docs/nachweise/2026-11-08-docker-alexander/README.md) umfasst alle
+vier Geräte. Er belegt den Datenempfang, keinen aktuellen vollständigen Unit-Testlauf und keine interaktive
+Gesamtvorführung. Wetter bleibt HTTP; unterstützte Orte stehen im [Wetterkatalog](../../WeatherSimulator/README.md#standorte).

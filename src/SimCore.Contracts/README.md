@@ -1,7 +1,8 @@
 # SimCore.Contracts
 
 **Zweck:** Gemeinsame Verträge (Interfaces und DTOs) aller Programme. Keine Abhängigkeiten, keine Logik außer reinen Formeln.
-**Verantwortlich:** Alexander Lux / Susanne Lastowicka
+**Verantwortlich:** Alexander Lux für Wetterverträge (`WeatherData`, `WeatherCondition`, `IWeatherService`);
+Susanne Lastowicka für Zeit-, Sync- und übrige Verträge.
 **Basis aus LB01:** –
 
 ## Inhalt
@@ -44,7 +45,9 @@ ab Master-Uhrzeit EffectiveAt gilt:
 Keine (Bibliothek).
 
 ## Tests
-Indirekt über `tests/SimCore.Tests`.
+Zeit-/Sync-Verträge indirekt über [SimCore.Tests](../../tests/SimCore.Tests/README.md), Wetterverträge über
+[Weather.Tests](../../tests/Weather.Tests/README.md) und [Devices.Common.Tests](../../tests/Devices.Common.Tests/README.md).
+Die Zuordnung beschreibt den Prüfumfang; datierte Laufergebnisse stehen in den Test-READMEs.
 
 ## Bekannte Probleme
 - Keine. Das Transportformat ist seit 2026-10-25 festgelegt: JSON-Zeilen über TCP (`SyncProtocol`).

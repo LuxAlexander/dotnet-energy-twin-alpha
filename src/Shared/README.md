@@ -19,12 +19,13 @@ Abhängigkeiten und wird von den Geräten per `ProjectReference` eingebunden.
 | `Shared.Weather` | `Weather/WeatherCondition.cs` | Lokale Wetterzustände und deutsche Bezeichnung |
 | `Shared.Weather` | `Weather/IrradiationCalculator.cs` | Idealisierte Einstrahlung aus Uhrzeit, Wetter und Jahreszeit |
 
-Das lokale Wettermodell ist nur für Standalone-Läufe gedacht. Mit Simulations-Master beziehen die
-Geräte das Wetter über `Devices.Common.Weather` vom Wettersimulator.
+Das lokale Wettermodell dient als Ersatz bei ausgeschaltetem oder noch nicht verfügbarem HTTP-Wetterbezug.
+Mit Master ist der Wetterdienst standardmäßig aktiv, standalone nur nach ausdrücklicher Angabe von `--weather`.
+Der gemeinsame Zugriff liegt in [Devices.Common](../Devices.Common/README.md).
 
 Die Helfer `CsvFormat`, `CsvSchema` und `ConsoleText.Fit` stehen den Feldgeräten bereit;
-die PV nutzt sie bereits. Batterie, Charger und Kühlhaus können bei Bedarf nachziehen –
-geändert wurden an ihren Geräten (noch) keine Dateien.
+die PV nutzt sie bereits. Das Kühlhaus verwendet außerdem `CsvFileWriter`; die Batterie schreibt weiterhin mit
+eigenem Logger und Dezimalpunkt. Die Verfügbarkeit eines Helfers bedeutet keine Umstellung aller Geräte.
 
 ## Verwendung
 
@@ -43,3 +44,4 @@ await csv.WriteRowAsync(["PV-Anlage", "2026-10-26", "12:00", "1", "4,2"], cancel
 
 Die Geräte bleiben für ihre Spalten und ihre Anzeige selbst verantwortlich; hier liegen nur die
 wiederverwendbaren Grundlagen.
+

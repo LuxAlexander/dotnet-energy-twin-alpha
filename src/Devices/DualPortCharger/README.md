@@ -1,6 +1,6 @@
-# dotnet-energy-sim-lb01 – Dual-Port-Charger
+# EnergyTwin – Dual-Port-Charger
 
-Konsolensimulator einer **öffentlichen DC-Schnellladesäule mit zwei Ladepunkten** und gemeinsamem Leistungsbudget (LB01, .NET Programmierung 2026).
+Konsolensimulator einer **öffentlichen DC-Schnellladesäule mit zwei Ladepunkten** und gemeinsamem Leistungsbudget (aus LB01, seit LB02 Feldgerät im verteilten EnergyTwin-System).
 
 Fahrzeuge kommen an, stecken an, laden nach einer SOC-abhängigen Ladekurve und fahren wieder ab. Die Säule teilt ihre Leistung zwischen den beiden Punkten auf. Die Ladepunkte erwärmen sich und können überhitzen. Jeder Schritt wird in eine CSV-Datei geschrieben.
 
@@ -16,7 +16,7 @@ steuert der Master für alle Geräte gemeinsam. Ohne Master läuft der Charger m
 - Empfohlen: Konsolenfenster mit mindestens **140 Zeichen** Breite, sonst werden die Zeilen abgeschnitten
 - Optional: Rider oder Visual Studio: `EnergyTwin.sln` öffnen, `DualPortCharger` als Startprojekt (Startprofil in `src/Devices/DualPortCharger/Properties/launchSettings.json`)
 - Teil der Solution `EnergyTwin.sln` im Repository-Hauptordner. Das Projekt verweist auf `src/Devices.Common`
-  (Zeitquelle, Schrittsteuerung, async Konsoleneingabe; bringt auch EasyModbusTCP.NETCore mit, das noch nicht genutzt wird).
+  (Zeitquelle, Schrittsteuerung, async Konsoleneingabe, Wetter-Client und Modbus-Server mit EasyModbusTCP.NETCore).
 
 ## Start
 
@@ -83,13 +83,13 @@ dotnet run --project src/Devices/DualPortCharger
 dotnet run --project src/Devices/DualPortCharger -- --id DC-01 --power 150 --step 1 --seed 42 --master 192.168.1.20:5100
 
 # Zweite Säule am selben Master (andere ID, anderer Modbus-Port)
-dotnet run --project src/Devices/DualPortCharger -- --id DC-02 --power 100 --step 15
+dotnet run --project src/Devices/DualPortCharger -- --id DC-02 --power 100 --step 15 --modbus-port 1506
 
 # Standalone wie in LB01: 24 h in 4,8 min, reproduzierbar
 dotnet run --project src/Devices/DualPortCharger -- --standalone --step 1 --speed 300 --duration 24 --seed 42
 ```
 
-Mehrere Instanzen mit verschiedenen `--id` können gleichzeitig laufen. Jede schreibt ihre eigene CSV und erscheint
+Mehrere Instanzen mit verschiedenen `--id` und jeweils freiem `--modbus-port` können gleichzeitig laufen. Jede schreibt ihre eigene CSV und erscheint
 einzeln in der Liste des Masters.
 
 ## Bedienung
@@ -162,7 +162,7 @@ Screenshots aus einem echten Lauf (LB01, noch ohne Zeile „Zeitquelle“):
 
 ## Modellbeschreibung
 
-Ausführliche Herleitung und Begründungen: [`docs/devices/DualPortCharger/design-notes.md`](../../../docs/devices/DualPortCharger/design-notes.md).
+Die frühere zusätzliche Herleitung ist als `docs/devices/DualPortCharger/design-notes.md` referenziert, im aktuellen Checkout aber nicht vorhanden. Die folgenden Modellangaben bleiben die nutzbare Dokumentation; der Verbleib der Zusatzdatei ist offen.
 
 ### Klassen
 
@@ -338,7 +338,7 @@ Mehrteilige Werte müssen mit **einem** Schreibzugriff (FC16) auf beide Register
 
 | Adresse | Ref. | Name | Typ | Regs | Einheit | Zugriff | Schreibbereich | Bedeutung / Fehlerverhalten |
 |---|---|---|---|---|---|---|---|---|
-| 0 | 40001 | Gerätetyp | UInt16 | 1 |  | lesen | – | 1 PV, 2 Batterie, 3 Charger, 4 Wind |
+| 0 | 40001 | Gerätetyp | UInt16 | 1 |  | lesen | – | 1 PV, 2 Batterie, 3 Charger, 4 Wind, 5 Industrieverbraucher |
 | 1 | 40002 | Geräte-Nummer | UInt16 | 1 |  | lesen | – | Zahl am Ende der Geräte-ID (DC-02 → 2), 0 wenn keine |
 | 2 | 40003 | Betriebszustand | UInt16 | 1 |  | lesen | – | 0 Aus, 1 Bereit/Leerlauf, 2 Betrieb, 3 Störung |
 | 3 | 40004 | Fehlercode | UInt16 | 1 |  | lesen | – | 0 = kein Fehler, sonst gerätespezifisch (siehe Registerplan des Geräts) |
@@ -419,7 +419,7 @@ dotnet run --project src/ModbusDiagnosticClient -- --port 1502
 | Zeit vom Simulations-Master (`SyncedClock`, `TimeSyncClient`) | ✅ |
 | Standalone-Betrieb mit lokaler Uhr (`--standalone`) | ✅ |
 | async Schleife, CSV, Tastatur (kein `Thread.Sleep`, kein `ReadLine`) | ✅ |
-| Modbus-Server, Registerplan (Kopf 0–19, Säule 20–38; Server bleibt in der Pause erreichbar) | ✅ (2026-10-25) |
+| Modbus-Server, Registerplan (Kopf 0–19, Säule 20–37; Server bleibt in der Pause erreichbar) | ✅ (2026-10-25) |
 | Umgebungstemperatur aus dem Wetter (`--weather`, `--location`; Standard mit Master) | ✅ (2026-10-26) |
 
 ### Schnittstellen
@@ -441,3 +441,15 @@ dotnet run --project src/ModbusDiagnosticClient -- --port 1502
 - Interaktive Anzeige und Tasten nach dem Umbau noch nicht in einem echten Terminalfenster getestet.
 - Ein Neustart im Master behält den Zustand der Säule (Fahrzeuge bleiben angesteckt); ob das gewünscht ist, im Team klären.
 - Die Screenshots stammen noch aus LB01.
+
+## LB03 – Daten im MQTT-Viewer
+
+Das [Gateway](../../ModbusRabbitGateway/README.md) liest dieses Gerät über Modbus und veröffentlicht seine Daten
+über RabbitMQ. Broker und vollständige Startfolge: [Docker-Anleitung](../../../docker/README.md).
+Im gemeinsamen Aufbau gelten PV 1502, Batterie 1503, Charger 1504 und Kühlhaus 1505; der Geräte-Standardport
+kann davon abweichen.
+
+Der [Empfangsnachweis vom 2026-11-08](../../../docs/nachweise/2026-11-08-docker-alexander/README.md) umfasst alle
+vier Geräte. Er belegt den Datenempfang, keinen aktuellen vollständigen Unit-Testlauf und keine interaktive
+Gesamtvorführung. Wetter bleibt HTTP; unterstützte Orte stehen im [Wetterkatalog](../../WeatherSimulator/README.md#standorte).
+

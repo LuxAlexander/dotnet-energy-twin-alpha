@@ -12,7 +12,7 @@ Register (20–49), Datentypen und Codierung, `RegisterPlan` mit Prüfung und Ma
 | `CommonRegisters` | Adressen und Definitionen des Kopfs 0–19, Bereichsgrenzen (`SpecificStart` 20, `SpecificEnd` 50) |
 | `RegisterDefinition` | Ein Eintrag: Adresse, Name, Typ (`UInt16`, `UInt32`, `Float32`), Zugriff, Einheit, Skalierung, Schreibbereich, `Labels` (Klartext zu Zahlenwerten); `Validate(wert)` |
 | `ChargerRegisters`, `PvRegisters`, `BatteryRegisters`, `KuehlhausRegisters` | Adressen und `RegisterPlan` der Geräte (Säule 20–37, PV 20–38, Batterie 20–43, Kühlhaus 20–31); gemeinsam von Gerät und Diagnose-Client benutzt |
-| `RegisterPlans` | `For(DeviceType)` liefert den Plan zum Gerätetyp (Charger, PV, Batterie, Industrieverbraucher); neue Geräte (Wind) dort eintragen |
+| `RegisterPlans` | `For(DeviceType)` liefert den Plan zum Gerätetyp (Charger, PV, Batterie, Industrieverbraucher); weitere Gerätetypen dort eintragen; Wind (Typ 4) hat derzeit keinen Plan |
 | `RegisterPlan` | Kopf + gerätespezifische Register; prüft Überschneidungen, `Find(adresse)`, `ToMarkdown()` für die Geräte-README |
 | `RegisterCodec` | Wert ↔ Register: Float32/UInt32 Big-Endian, höherwertiges Wort zuerst; Modellzeit als Sekunden seit 1970 |
 | `DeviceType`, `OperatingState`, `TimeStatus`, `WriteError` | Enums der Kopfregister |
@@ -49,12 +49,15 @@ Keine. Host, Port und Unit-ID legt jedes Gerät fest (`Devices.Common.Modbus.Mod
 Bibliothek ohne eigenes Programm.
 
 ## Schnittstellen
-Benutzt von `Devices.Common` (Server) und vom `ModbusDiagnosticClient` (Dekodieren, Plan über `RegisterPlans.For`). Neues Gerät: `new RegisterPlan(DeviceType.X, "Name", spezifischeRegister)`.
+Benutzt von `Devices.Common` (Server), `Modbus.Client`, `ModbusDiagnosticClient` und `ModbusRabbitGateway`
+(Dekodieren, Plan über `RegisterPlans.For`). Neues Gerät: `new RegisterPlan(DeviceType.X, "Name", spezifischeRegister)`.
 
 ## Tests
 `tests/Devices.Common.Tests` (`RegisterCodecTests`, `ModbusDeviceServerTests`), `tests/ModbusDiagnosticClient.Tests`.
 
 ## Bekannte Probleme
-- Der Kopf muss mit den Geräten von Alexander und Dominik abgestimmt werden, bevor deren Registerpläne entstehen.
+- Registerpläne für PV, Batterie, Charger und Kühlhaus sind vorhanden. Änderungen am gemeinsamen Kopf oder
+  gerätespezifischen Plänen mit den jeweiligen Verantwortlichen abstimmen.
 - Das Vorzeichen der Wirkleistung (positiv = Aufnahme) ist für Erzeuger (PV, Wind) gewöhnungsbedürftig: dort negative Werte.
 - Skalierung (`Scale`) ist vorgesehen, aktuell nutzen alle Register Rohwert = technischer Wert.
+

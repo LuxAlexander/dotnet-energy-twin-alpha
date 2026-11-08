@@ -1,7 +1,8 @@
 # Devices.Common.Tests
 
 **Zweck:** Tests der gemeinsamen Gerätebausteine in `src/Devices.Common`.
-**Verantwortlich:** _offen_ (wie `Devices.Common`). Am 2026-10-25 von Susanne Lastowicka erstellt.
+**Verantwortlich:** Susanne Lastowicka für Zeit/Modbus/Dual-Charger, Alexander Lux für Wetter/PV-Anlage, Dominik für Batterie/Verbraucher.
+Zuordnung entsprechend [Devices.Common](../../src/Devices.Common/README.md).
 **Basis aus LB01:** –
 
 ## Ausführen
@@ -20,7 +21,12 @@ dotnet test tests/Devices.Common.Tests
 | `ModbusDeviceServerTests` | Echter Server + Client über TCP: Kopf lesbar (Typ, Instanz, Zustand, Leistung, Energie, Modellzeit, Lauf, Zeitstatus) · Sequenznummer wächst nur mit neuer Modellzeit/Lauf · gültiger Sollwert wird angenommen und als Befehl gereicht · ungültige Werte (zu klein/groß, negativ, NaN, ∞) abgelehnt, alter Wert bleibt, Fehlerregister gesetzt · Schreiben auf nur lesbare/unbelegte Adresse abgelehnt · halber Float abgelehnt · Zugriff über lesbar+schreibbar komplett abgelehnt · Ein/Aus und Reset als Befehle, ungültige Werte dafür abgelehnt · Register in der Pause lesbar mit letztem Stand · belegter Port ⇒ `IOException` |
 | `RegisterCodecTests` | Float32/UInt32 Big-Endian, höheres Wort zuerst · Modellzeit hin und zurück · Registerplan lehnt Überschneidungen und falsche Bereiche ab · Bereichsprüfung (Typ, Grenzen, NaN) |
 
-Ergebnis am 2026-10-25: 44 von 44 bestanden.
+Die spätere Erweiterung `WeatherFeedTests` enthält Wetter-Cache, Wiederholungsversuche/Fehlermeldungen und
+Wetteroptionen (Standard mit Master, standalone aus, `off`, Standortkennung).
+
+Letzter dokumentierter Lauf am **2026-11-08: 51/51**, siehe
+[Susannes Journal](../../docs/development-journal/susanne-lastowicka.md). Seitdem wurde unter anderem
+`DeviceTimeSource.MasterSession` ergänzt; kein neuer Lauf im Rahmen dieser README-Pflege.
 
 ## Bekannte Probleme
 - `DeviceTimeSourceTests.WithMaster_FollowsMasterClock` und die Modbus-Tests brauchen freie Ports auf localhost (die Modbus-Tests suchen sich einen freien Port).

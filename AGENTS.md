@@ -1,20 +1,5 @@
 # AGENTS.md – dotnet-energy-twin-alpha
 
-**PV-Anzeige (2026-11-08):** Lange gelbe Hinweise/Verbindungsfehler verwenden denselben Zeilenumbruch wie
-Statuszeilen; keine überbreite Hinweiszeile mehr. Alexanders README-Pflege-Skill „Let's Document“ ist erstellt:
-`skills/lets-document/SKILL.md`, Beispiel/Nachweis `docs/nachweise/2026-11-08-lets-document/`.
-GetStatus wegen Überschneidung mit readTask verworfen. Lokaler ADR-0015 hält die Entscheidungen fest.
-
-**Stand:** 2026-11-08 · **LB03 Docker (Alexander):** RabbitMQ 4.4.0 mit lokaler `.env`, Healthcheck und Anleitung eingerichtet;
-Empfang aller vier Geräte über echten Master/Gateway geprüft (`docs/nachweise/2026-11-08-docker-alexander/`).
-**Wetter/MQTT (Alexander):** umgesetzt; `--mqtt` aktiviert den Wetterstrom für fünf Standorte inklusive Tamanrasset/Neumayer III.
-Einmalige paused/continued-Statusmeldungen, gezielte manuelle Übersteuerung, Last Will und Wiederanlauf geprüft;
-Vertrag `docs/Wetter-Nachrichtenvertrag-LB03.md`, Nachweis `docs/nachweise/2026-11-08-wetter-mqtt/`.
-**LB03 begonnen:** MQTT entschieden, Nachrichtenvertrag (`docs/Nachrichtenvertrag-LB03.md`) und
-Modbus–RabbitMQ-Gateway (`src/ModbusRabbitGateway`, MQTT per MQTTnet 5.0.1, gegen RabbitMQ geprüft) von Susanne;
-`DeviceConnection` nach `src/Modbus.Client` verschoben; Aufgabenabgleich `docs/task-status/aufgabe-03.md`;
-SRS-Entwurf `docs/SRS-LB03.md`; Funktionsnachweis mit Master `docs/nachweise/2026-11-08-gateway-mit-master/`
-(Protokolle als `.txt`, weil `.gitignore` `*.log` ausschließt).
 **Davor, Phase LB02-Endstand:** alle Programme fertig und an Master, Modbus und Wettersimulator angebunden; viertes Feldgerät = Kühlhaus (Wind entfallen); zusammen 206 Tests (54 + 51 + 28 + 62 + 11); PV-CSV-Fehler behoben (de-AT Dezimalkomma) und CSV-/Konsolen-Helfer nach `src/Shared` ausgelagert (§0.6a im Archiv).
 
 Pflichtlektüre für jeden Agenten in diesem Repo. Sie fasst die drei LB01-Projekte und den LB02-Plan

@@ -358,3 +358,14 @@ Probeläufe am 2026-10-26 (umgeleitete Ausgabe):
   (1502 = PV/Charger, 1503 = Batterie, 1504 = Charger in der Demo), Wärmeeintrag bei offener Tür 1,5 kW.
 - **Modellvereinfachungen:** ein Kompressor ohne Vereisung, keine Ware, kein Abtauen, kein Lastprofil außer der Tür;
   der COP hängt nur von der Außentemperatur ab.
+
+## LB03 – Daten im MQTT-Viewer
+
+Das [Gateway](../../ModbusRabbitGateway/README.md) liest dieses Gerät über Modbus und veröffentlicht seine Daten
+über RabbitMQ. Broker und vollständige Startfolge: [Docker-Anleitung](../../../docker/README.md).
+Im gemeinsamen Aufbau gelten PV 1502, Batterie 1503, Charger 1504 und Kühlhaus 1505; der Geräte-Standardport
+kann davon abweichen.
+
+Der [Empfangsnachweis vom 2026-11-08](../../../docs/nachweise/2026-11-08-docker-alexander/README.md) umfasst alle
+vier Geräte. Er belegt den Datenempfang, keinen aktuellen vollständigen Unit-Testlauf und keine interaktive
+Gesamtvorführung. Wetter bleibt HTTP; unterstützte Orte stehen im [Wetterkatalog](../../WeatherSimulator/README.md#standorte).

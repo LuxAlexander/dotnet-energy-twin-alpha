@@ -217,3 +217,27 @@ Optionale Tags bei Relevanz:
 - **Artefact:** `docs/handoff/2026-11-08-alexander-lb03.md`, `AGENTS.md`, `graphify-out/`, dieses Journal.
 - **Test:** Statische Graph-/Quellenprüfung und vorgeschriebener Solution-Build im Übergabeschritt; keine Unit-Tests oder Simulatoren starten. Letzter dokumentierter Build 0 Fehler/0 Warnungen; erweiterter Wetter-Testbestand weiterhin nicht neu ausgeführt.
 - **Comment:** Kein Commit/Push/Tag. Grafische Dateien sind generiert; Graph-Warnungen und verbleibende Einschränkungen werden im Aktualisierungsstatus dokumentiert. Ignorierte lokale ADRs/Glossar bei Rechnerwechsel separat verfügbar machen.
+
+### Nachtrag 2026-11-08 – Lokale Agent- und Graphordner ignorieren
+
+- **Done:** graphify-out, .claude und .opencode in .gitignore aufgenommen; vorhandene Dateien aus der Git-Verfolgung genommen, lokale Inhalte erhalten. probelauf samt Referenzen, Skript und Vorlage unverändert nach skills/probelauf kopiert; bestehende readTask-Kopie mit .claude bytegleich geprüft.
+- **KI:** Codex => Repository-Ablage bereinigt.
+- **Artefact:** .gitignore, skills/probelauf/, Git-Index, dieses Journal.
+- **Test:** Sieben probelauf-Dateien bytegleich; readTask-Kopie bytegleich; Ignore-Regeln greifen und keine Dateien dieser drei Ordner mehr im Git-Index. Solution-Build erfolgreich: 0 Fehler, 0 Warnungen (erster eingeschränkter Lauf abgebrochen, Wiederholung erfolgreich). Keine Tests oder Programme gestartet.
+- **Comment:** Keine Quelldateien der Simulatoren geändert; kein Commit/Push. Lokales Graphmodell bleibt nutzbar, bildet diese Ablageänderung noch nicht ab.
+
+### Nachtrag 2026-11-08 – Graph-Ignore in GitHub Desktop korrigiert
+
+- **Done:** Abweichende Ignore-Regel .graphify-out/ wieder auf /graphify-out/ korrigiert und erneut versionierte lokale Agent-/Graphordner aus dem Index genommen. Lokale Dateien bleiben erhalten.
+- **KI:** Codex => Git-Status analysiert und Ignore-Verhalten korrigiert.
+- **Artefact:** .gitignore, Git-Index, dieses Journal.
+- **Test:** Ignore-Regeln und leeren Indexumfang für die drei Ordner geprüft. Keine Codeänderung, Tests oder Programmstarts.
+- **Comment:** GitHub Desktop zeigt die Entfernung bisher versionierter Dateien einmalig bis zum nächsten Commit. Kein Commit/Push durch den Agenten.
+
+### Nachtrag 2026-11-08 – Alle Projekt-READMEs mit Let's Document abgleichen
+
+- **Done:** Nach ausdrücklicher Umfangsentscheidung alle 27 Projekt-READMEs in Root, docker, src, tests und skills gelesen und gezielt mit Code/Konfiguration/Nachweisen abgeglichen; 17 davon korrigiert oder ergänzt, bereits passende Inhalte erhalten. Konfiguration mit lokaler .env, tatsächliche Abhängigkeiten, Geräte- und Demoports, Standalone-Beispiele, Batterie-Einstellungen/CSV, fünf Wetterorte, Zustandspriorität/Rundung, MQTT-Nachweise und lokale Skill-Aktivierung aktualisiert. CSV- und Wetter-Dopplungen gebündelt. readTask-Beispiel als historisch gekennzeichnet. SimCore-Verträge und Tests nach Nutzerantwort fachlich zugeordnet: Alexander Wetter, Susanne Zeit/übrige Bausteine. SimCore.Tests enthält derzeit keine Wetterfälle. Letzte Testläufe von aktuellem Prüffallbestand getrennt; keine neue Laufbehauptung.
+- **KI:** Codex => Let's Document, gezielte Zuständigkeitsfragen, Quellenvergleich, Archivierung und statische Prüfung.
+- **Artefact:** 17 Projekt-READMEs sowie Navigationslinks im probelauf-Nachweis und Broker-Start in dessen README-Vorlage; docs/archive/2026-11-08-readme-abgleich.md mit 29 unveränderten Originalabschnitten und Herkunft/Grund/Ziel/Ausgangscommit; dieses Journal; AGENTS-Hinweis.
+- **Test:** Relative Dateiverweise und Überschriften statisch geprüft; vorhandene Codeblöcke und Registerzeilen mit gesichertem Ausgangstext verglichen. Änderungen an vorhandenen Blöcken betreffen ausschließlich Projektbaum und zwei ungültige Startbeispiele; Formelblöcke erhalten. Registeränderungen ausschließlich Ergänzung Gerätetyp 5 in drei Kopflegenden. 33 README-Dateien statisch berücksichtigt (27 Projektbeschreibungen, 5 datierte Nachweise, 1 Vorlage), keine fehlenden relativen Linkziele oder Überschriften. Solution-Build erfolgreich: 0 Fehler, 0 Warnungen. Keine Unit-Tests, Probeläufe oder Dienste gestartet.
+- **Comment:** docs/devices/DualPortCharger/design-notes.md fehlt im aktuellen Checkout; Verweis als fehlend gekennzeichnet, keine Verwerfung behauptet. Übrige offene Team-/LB03-Zuständigkeiten nicht erfunden. Lokaler Graph ist gegenüber dieser README-Pflege nicht neu indiziert. Bestehende Nachweisaussagen und Archivtexte bleiben datierte Belege; im probelauf-Nachweis nur Navigationslinks zur versionierten Skill-Ablage berichtigt. Keine neue Aufgabenbewertung. Kein Commit/Push.

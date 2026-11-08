@@ -1,6 +1,8 @@
-# EnergySimulator – PV-Anlage (LB01, ab LB02 mit Master-Zeit und Modbus)
+# EnergySimulator – PV-Anlage
 
-Konsolensimulator für eine PV-Anlage im Rahmen von .NET-Programmierung 2026, LB01.
+Konsolensimulator einer PV-Anlage für das verteilte EnergyTwin-System, hervorgegangen aus LB01.
+Im Master-Betrieb übernimmt er die virtuelle Zeit und fragt den lokalen Wetterdienst ab; standalone verwendet er
+eine lokale Uhr und lokales Wetter. Zustand und Sollwerte sind über Modbus TCP zugänglich (abschaltbar).
 
 **Verantwortlich:** Alexander Lux  
 **Team:** Alpha
@@ -81,6 +83,10 @@ Die Zeit kommt vom Simulations-Master (standalone von einer lokalen Uhr ab `--st
 Das Modell rechnet in festen Schritten (`--model-step`, Standard 1 min). Datum, Uhrzeit und Jahreszeit werden fortlaufend angezeigt.
 
 ### Jahreszeiten
+
+Dieser Abschnitt und die folgende Einstrahlungsformel beschreiben das **lokale Ersatzmodell**. Mit aktivem
+HTTP-Wetterbezug gelten die Standortmodelle des [Wettersimulators](../../WeatherSimulator/README.md); insbesondere
+Sahara und Antarktis verwenden eigene Klimaprofile.
 
 Die Jahreszeit ergibt sich aus dem Monat und beeinflusst Einstrahlung, Tageslänge,
 Umgebungstemperatur und Schneewahrscheinlichkeit:
@@ -174,7 +180,7 @@ Mit exakt ausgerichteten Rahmen:
 - Auslastung als Balken in %
 
 Die Bildschirmaktualisierung ist von der Simulationsrate entkoppelt und standardmäßig
-auf 4 Bilder/s begrenzt, damit alles lesbar bleibt. Per `-r`/`--refresh` konfigurierbar,
+auf etwa 2,5 Bilder/s (400 ms) begrenzt, damit alles lesbar bleibt. Per `-r`/`--refresh` konfigurierbar,
 per Taste `R` im Betrieb umschaltbar (100 – 3000 ms).
 
 Das Bild wird **differentiell** gezeichnet: Es wird nur beschrieben, was sich seit dem
@@ -184,7 +190,12 @@ Cursor-Steuerung zur Verfügung – dann wird das ganze Bild geschrieben.
 
 Diagnose: `ENERGYSIM_RENDER_LOG=<datei>` protokolliert pro Bild, wie viele Zeilen
 wirklich angefasst wurden (z. B. `diff;rows=20;written=4`).
-- Bestätigungsmeldung der letzten Aktion (verschwindet nach 4 s)
+- Gelbe Hinweis-/Fehlermeldungen, einschließlich langer Verbindungsfehler, werden vollständig an Wortgrenzen
+  innerhalb der Rahmenbreite umbrochen; ungetrennte lange Zeichenfolgen werden nötigenfalls geteilt.
+  Bestätigungsmeldungen verschwinden nach 4 s.
+
+Die frühere Einleitung und der separate datierte Anzeigehinweis sind im
+[README-Archiv](../../../docs/archive/2026-11-08-pv-readme.md) mit Herkunft und Änderungsgrund erhalten.
 
 ## Artefakte
 
@@ -278,7 +289,7 @@ andere Geräte dieselben Bausteine verwenden, ohne Code zu kopieren.
 | `-o, --output <ordner>` | CSV-Ordner | `docs/data` im Repo |
 | `--seed <zahl>` | Zufalls-Seed für Auto-Wetter und Netzrauschen | zufällig |
 | `--weather <url\|off>` | Wettersimulator; `off` = lokales Wetter | mit Master `http://127.0.0.1:8080`, standalone `off` |
-| `--location <kennung>` | Standort für die Wetterabfrage (`salzburg`, `wien`, `innsbruck`) | `salzburg` |
+| `--location <kennung>` | Standort aus dem Wetterkatalog (`salzburg`, `wien`, `innsbruck`, `tamanrasset`, `neumayer`) | `salzburg` |
 | `--master <host:port>` | Simulations-Master | `127.0.0.1:5100` |
 | `--standalone` | ohne Master, lokale Uhr | aus |
 | `-d, --start <zeit>` | nur standalone, `yyyy-MM-dd HH:mm` | heute 00:00 |
@@ -327,7 +338,7 @@ Mehrteilige Werte müssen mit **einem** Schreibzugriff (FC16) auf beide Register
 
 | Adresse | Ref. | Name | Typ | Regs | Einheit | Zugriff | Schreibbereich | Bedeutung / Fehlerverhalten |
 |---|---|---|---|---|---|---|---|---|
-| 0 | 40001 | Gerätetyp | UInt16 | 1 |  | lesen | – | 1 PV, 2 Batterie, 3 Charger, 4 Wind |
+| 0 | 40001 | Gerätetyp | UInt16 | 1 |  | lesen | – | 1 PV, 2 Batterie, 3 Charger, 4 Wind, 5 Industrieverbraucher |
 | 1 | 40002 | Geräte-Nummer | UInt16 | 1 |  | lesen | – | Zahl am Ende der Geräte-ID (DC-02 → 2), 0 wenn keine |
 | 2 | 40003 | Betriebszustand | UInt16 | 1 |  | lesen | – | 0 Aus, 1 Bereit/Leerlauf, 2 Betrieb, 3 Störung |
 | 3 | 40004 | Fehlercode | UInt16 | 1 |  | lesen | – | 0 = kein Fehler, sonst gerätespezifisch (siehe Registerplan des Geräts) |
@@ -374,6 +385,10 @@ Besonderheiten der PV-Anlage:
 - `tests/FieldDevices.Tests`: Modbus-Anbindung (Kopf, Vorzeichen, Leistungsbegrenzung gültig/ungültig, Ein/Aus, Reset, Pause), Optionen,
   kompletter Standalone-Lauf mit CSV (`PvEngineTests`).
 - Probelauf 2026-10-25 mit Master (x600) zusammen mit Batterie und Charger: Zeitstatus „synchron“, drei Simulatoren im Master.
+- Dokumentierter Probelauf 2026-11-08: PV gemeinsam mit den anderen drei Feldgeräten über echten Master,
+  Modbus, Gateway und RabbitMQ; PV-01 mit 18 Messwerten und `good/running` empfangen.
+  [Nachweis und Grenzen](../../../docs/nachweise/2026-11-08-docker-alexander/README.md).
+  Dies ist ein Empfangsnachweis, kein neuer vollständiger Testlauf der PV und keine interaktive Bedienprüfung.
 
 ### Bekannte Probleme
 - Das lokale Auto-Wetter (nur `--weather off` bzw. standalone) ist nur mit `--seed` wiederholbar.

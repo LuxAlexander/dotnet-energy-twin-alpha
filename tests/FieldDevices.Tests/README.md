@@ -1,7 +1,8 @@
 # FieldDevices.Tests
 
-**Zweck:** Tests der Feldgeräte PV-Anlage (`src/Devices/PvSimulator`) und Batteriespeicher (`src/Devices/BatterySimulator`): Modbus-Anbindung, Optionen, Standalone-Lauf.
-**Verantwortlich:** Susanne Lastowicka (Umbau auf Master-Zeit und Modbus am 2026-10-25)
+**Zweck:** Tests für PV-Anlage, Batteriespeicher und Kühlhaus: Modelle, Modbus-Anbindung, Optionen und Standalone-Läufe.
+Die Ladesäulen-Anbindung wird über `Devices.Common.Tests` und Gateway-Tests mit abgedeckt.
+**Verantwortlich:** Susanne Lastowicka
 **Basis aus LB01:** –
 
 ## Ausführen
@@ -20,8 +21,8 @@ dotnet test tests/FieldDevices.Tests
 | `ArgsParserTests` | PV: Standard, Kürzel `-s`/`-d`, standalone-Pflicht, ungültige Werte · Batterie: Gerätedaten, Zeit, Modbus, Seed, ungültige Konfiguration, standalone-Pflicht |
 | `PvEngineTests` | kompletter Standalone-Lauf mit Zeitraffer: CSV beginnt genau bei `--start`, Energie wächst, Abbruch beendet geordnet |
 | `BatteryUnitTests` | `Update(TimeSpan)` = `Update(double)`, Tagesprofil mit Seed wiederholbar |
+| Kühlhaus-Prüfklassen in `ConsumerTests.cs` | Modell, Modbus, Optionen, CSV/Engine, Anzeigeaufbau und Tür-Automatik; 28 zusätzliche Fälle, Einzelheiten im [Geräte-README](../../src/Devices/KuehlhausSimulator/README.md#tests) |
 
-Ergebnis am 2026-10-25: 34 von 34 bestanden (dreimal wiederholt, ohne Ausfall).
 
 ## Bekannte Probleme
 - Die Modbus-Tests brauchen freie Ports auf localhost und warten auf Schreibzugriffe, die die Bibliothek erst nach der Antwort meldet (`WaitUntil`).
