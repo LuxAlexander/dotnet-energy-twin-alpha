@@ -1,0 +1,10 @@
+15:55:19.252  Start: KuehlhausSimulator KH-01, standalone, Tempo 600, 8 Modellstunden, --weather off, Seed 42, Modbus 1505
+15:55:20.451  Port 1505 erreichbar
+15:55:20.452  Diagnose-Client: Registerkopf und Kuehlhaus-Register lesen (--once)
+15:55:21.276  Diagnose-Client read beendet
+15:55:21.277  Diagnose-Client: Solltemperatur=-15 schreiben
+15:55:22.280  Diagnose-Client write beendet
+15:55:22.281  Diagnose-Client: erneut lesen (Wert muss im Geraet stehen)
+15:55:23.107  Diagnose-Client read beendet
+15:56:08.136  Geraet beendet
+15:56:08.150  Ende des Selbsttests
