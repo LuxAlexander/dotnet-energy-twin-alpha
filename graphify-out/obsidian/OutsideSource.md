@@ -1,0 +1,17 @@
+---
+source_file: "src/Devices/KuehlhausSimulator/Simulation/SimulationEngine.cs"
+type: "code"
+community: "WeatherClient & Anzeige"
+location: "L86"
+tags:
+  - graphify/code
+  - graphify/EXTRACTED
+  - community/WeatherClient__Anzeige
+---
+
+# OutsideSource
+
+## Connections
+- [[SimulationEngine_1]] - `defines` [EXTRACTED]
+
+#graphify/code #graphify/EXTRACTED #community/WeatherClient__Anzeige

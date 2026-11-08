@@ -1,0 +1,1088 @@
+{
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\.graphify_detect.json": {
+    "mtime": 1793826705.468914,
+    "seen": 1793826847.5970366,
+    "ast_hash": "52a457a20ac500f52fcd80e5f70be64a",
+    "semantic_hash": "52a457a20ac500f52fcd80e5f70be64a"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\EnergyTwin.sln": {
+    "mtime": 1793033954.57014,
+    "seen": 1793826847.5970478,
+    "ast_hash": "f8dfee845907b5c693d48bbbbd8b00de",
+    "semantic_hash": "f8dfee845907b5c693d48bbbbd8b00de"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docker\\docker-compose.yml": {
+    "mtime": 1793099762.208918,
+    "seen": 1793826847.5970526,
+    "ast_hash": "acfab1d4cfff06aa0970951956ed63ca",
+    "semantic_hash": "acfab1d4cfff06aa0970951956ed63ca"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices.Common\\AsyncConsole.cs": {
+    "mtime": 1792937208.180463,
+    "seen": 1793826847.597056,
+    "ast_hash": "b6c321978a85ec826f59abc2670f6f1e",
+    "semantic_hash": "b6c321978a85ec826f59abc2670f6f1e"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices.Common\\DeviceTimeSource.cs": {
+    "mtime": 1792944129.5940106,
+    "seen": 1793826847.5970595,
+    "ast_hash": "4d887cc45b9f9cda5ce62a1166507ba3",
+    "semantic_hash": "4d887cc45b9f9cda5ce62a1166507ba3"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices.Common\\Devices.Common.csproj": {
+    "mtime": 1792936206.1642568,
+    "seen": 1793826847.5970623,
+    "ast_hash": "592f25e2dbbc6a8c72c8e72d270c15b8",
+    "semantic_hash": "592f25e2dbbc6a8c72c8e72d270c15b8"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices.Common\\Modbus\\ModbusDeviceServer.cs": {
+    "mtime": 1792944129.5930111,
+    "seen": 1793826847.5970654,
+    "ast_hash": "34cf64bc3e373fd4a54ec7475575aa79",
+    "semantic_hash": "34cf64bc3e373fd4a54ec7475575aa79"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices.Common\\Modbus\\ModbusOptions.cs": {
+    "mtime": 1792942526.2919676,
+    "seen": 1793826847.5970688,
+    "ast_hash": "d800e3f3c92e1ecfbe78a46ea9204e8f",
+    "semantic_hash": "d800e3f3c92e1ecfbe78a46ea9204e8f"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices.Common\\StepScheduler.cs": {
+    "mtime": 1792937207.844878,
+    "seen": 1793826847.5970721,
+    "ast_hash": "3226f536c3738b4b9f83b20a7f7f6224",
+    "semantic_hash": "3226f536c3738b4b9f83b20a7f7f6224"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices.Common\\TimeSyncOptions.cs": {
+    "mtime": 1792937207.6776829,
+    "seen": 1793826847.5970783,
+    "ast_hash": "fbc60fad9b0e9a99750c13a9344dd17d",
+    "semantic_hash": "fbc60fad9b0e9a99750c13a9344dd17d"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices.Common\\Weather\\WeatherClient.cs": {
+    "mtime": 1793030968.0836544,
+    "seen": 1793826847.5970836,
+    "ast_hash": "66bbf5eb04bd09d9e7d4dfcd926968c6",
+    "semantic_hash": "66bbf5eb04bd09d9e7d4dfcd926968c6"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices.Common\\Weather\\WeatherFeed.cs": {
+    "mtime": 1793030968.0846672,
+    "seen": 1793826847.597088,
+    "ast_hash": "cbd79e86069f5df98e89816ed4d74275",
+    "semantic_hash": "cbd79e86069f5df98e89816ed4d74275"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices.Common\\Weather\\WeatherOptions.cs": {
+    "mtime": 1793030968.0846672,
+    "seen": 1793826847.5970917,
+    "ast_hash": "66578f678dc398d6819a33580677ced6",
+    "semantic_hash": "66578f678dc398d6819a33580677ced6"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\BatterySimulator\\ArgsParser.cs": {
+    "mtime": 1793030968.0866666,
+    "seen": 1793826847.5970948,
+    "ast_hash": "2ebc7bbb13bf0c874e6bfd4303fdfb6b",
+    "semantic_hash": "2ebc7bbb13bf0c874e6bfd4303fdfb6b"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\BatterySimulator\\Batterie.cs": {
+    "mtime": 1793030968.0876663,
+    "seen": 1793826847.5970974,
+    "ast_hash": "3d3d13d4e25987e1bd2c7f7bdba832ed",
+    "semantic_hash": "3d3d13d4e25987e1bd2c7f7bdba832ed"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\BatterySimulator\\BatterieConfig.cs": {
+    "mtime": 1791875814.308901,
+    "seen": 1793826847.5971005,
+    "ast_hash": "c6f868477cda9a3f2d957fe450a3d0f4",
+    "semantic_hash": "c6f868477cda9a3f2d957fe450a3d0f4"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\BatterySimulator\\BatteryModbus.cs": {
+    "mtime": 1792944377.8699806,
+    "seen": 1793826847.597104,
+    "ast_hash": "9befa0cf788c65dd33c7febc074a9b80",
+    "semantic_hash": "9befa0cf788c65dd33c7febc074a9b80"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\BatterySimulator\\BatterySimulator.csproj": {
+    "mtime": 1791879758.8098297,
+    "seen": 1793826847.5971076,
+    "ast_hash": "00ff95db6ac3e21b5b7cd101eb5cb364",
+    "semantic_hash": "00ff95db6ac3e21b5b7cd101eb5cb364"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\BatterySimulator\\ConsoleDashboard.cs": {
+    "mtime": 1793030968.0886662,
+    "seen": 1793826847.5971112,
+    "ast_hash": "c0b66609ed8dc12c2a15c86ec70330f9",
+    "semantic_hash": "c0b66609ed8dc12c2a15c86ec70330f9"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\BatterySimulator\\CsvLogger.cs": {
+    "mtime": 1792944396.3267338,
+    "seen": 1793826847.5971148,
+    "ast_hash": "31091add8fe19be71cd14454edda8a98",
+    "semantic_hash": "31091add8fe19be71cd14454edda8a98"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\BatterySimulator\\DailyProfile.cs": {
+    "mtime": 1792944444.5696483,
+    "seen": 1793826847.597118,
+    "ast_hash": "85b2d99f46566e6e0ca1095bc22386b2",
+    "semantic_hash": "85b2d99f46566e6e0ca1095bc22386b2"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\BatterySimulator\\Enum.cs": {
+    "mtime": 1791875814.3971295,
+    "seen": 1793826847.5971212,
+    "ast_hash": "e514898f56af1a8d4ed4d08a23f67755",
+    "semantic_hash": "e514898f56af1a8d4ed4d08a23f67755"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\BatterySimulator\\Simulator.cs": {
+    "mtime": 1793030968.0907946,
+    "seen": 1793826847.5971253,
+    "ast_hash": "7b045b17909713dbaae01046e12e8920",
+    "semantic_hash": "7b045b17909713dbaae01046e12e8920"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\BatterySimulator\\SimulatorOptions.cs": {
+    "mtime": 1793030968.0919094,
+    "seen": 1793826847.5971286,
+    "ast_hash": "6ae59a39c36332975131162c00c7a697",
+    "semantic_hash": "6ae59a39c36332975131162c00c7a697"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\BatterySimulator\\main.cs": {
+    "mtime": 1792944445.114571,
+    "seen": 1793826847.597132,
+    "ast_hash": "46dd3a70625ab1956b46ce11b36799de",
+    "semantic_hash": "46dd3a70625ab1956b46ce11b36799de"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\DualPortCharger\\DualPortCharger.csproj": {
+    "mtime": 1791879758.8621776,
+    "seen": 1793826847.5971355,
+    "ast_hash": "00ff95db6ac3e21b5b7cd101eb5cb364",
+    "semantic_hash": "00ff95db6ac3e21b5b7cd101eb5cb364"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\DualPortCharger\\IO\\ArgsParser.cs": {
+    "mtime": 1793030968.092936,
+    "seen": 1793826847.5971384,
+    "ast_hash": "a7625ef664a57dc5bc86ed63dd774025",
+    "semantic_hash": "a7625ef664a57dc5bc86ed63dd774025"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\DualPortCharger\\IO\\ConsoleRenderer.cs": {
+    "mtime": 1793030968.0951397,
+    "seen": 1793826847.5971417,
+    "ast_hash": "a6ccecaa8cd3cde88f014bf4d6fce1ef",
+    "semantic_hash": "a6ccecaa8cd3cde88f014bf4d6fce1ef"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\DualPortCharger\\IO\\CsvLogger.cs": {
+    "mtime": 1792937278.149759,
+    "seen": 1793826847.5971448,
+    "ast_hash": "c9b31b98afd405dbd50bcf5bf03e8422",
+    "semantic_hash": "c9b31b98afd405dbd50bcf5bf03e8422"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\DualPortCharger\\IO\\InputHandler.cs": {
+    "mtime": 1792937356.6329541,
+    "seen": 1793826847.5971484,
+    "ast_hash": "a2006f061de1552cd13b9f263cc9a89c",
+    "semantic_hash": "a2006f061de1552cd13b9f263cc9a89c"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\DualPortCharger\\Models\\ChargingPoint.cs": {
+    "mtime": 1793030968.0951397,
+    "seen": 1793826847.5971515,
+    "ast_hash": "aaa8d58c9231847a3a85625edd15187c",
+    "semantic_hash": "aaa8d58c9231847a3a85625edd15187c"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\DualPortCharger\\Models\\ChargingPointState.cs": {
+    "mtime": 1791042092.2778363,
+    "seen": 1793826847.5971549,
+    "ast_hash": "bc61276079518ac7cd5a1b7102321e0e",
+    "semantic_hash": "bc61276079518ac7cd5a1b7102321e0e"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\DualPortCharger\\Models\\DualCharger.cs": {
+    "mtime": 1793030968.0961523,
+    "seen": 1793826847.5971582,
+    "ast_hash": "ab7c80c107e92078ec12fb260037e357",
+    "semantic_hash": "ab7c80c107e92078ec12fb260037e357"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\DualPortCharger\\Models\\Vehicle.cs": {
+    "mtime": 1791272122.8952532,
+    "seen": 1793826847.597161,
+    "ast_hash": "95ad048efe884055d06a7fcfe220c7c0",
+    "semantic_hash": "95ad048efe884055d06a7fcfe220c7c0"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\DualPortCharger\\Models\\VehicleCatalog.cs": {
+    "mtime": 1791272122.8986568,
+    "seen": 1793826847.5971646,
+    "ast_hash": "d82cbd60e09dcd97e8015fed9e1b7974",
+    "semantic_hash": "d82cbd60e09dcd97e8015fed9e1b7974"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\DualPortCharger\\Program.cs": {
+    "mtime": 1792943461.8909109,
+    "seen": 1793826847.5971684,
+    "ast_hash": "255f8d27af8884c4f36cbf93cbc2833a",
+    "semantic_hash": "255f8d27af8884c4f36cbf93cbc2833a"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\DualPortCharger\\Properties\\launchSettings.json": {
+    "mtime": 1792937551.9652822,
+    "seen": 1793826847.597172,
+    "ast_hash": "bba709f1dd52440c8da2967b678e0294",
+    "semantic_hash": "bba709f1dd52440c8da2967b678e0294"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\DualPortCharger\\Simulation\\AutoModeController.cs": {
+    "mtime": 1791272548.8729043,
+    "seen": 1793826847.5971742,
+    "ast_hash": "2060db94ba522703c41bc3102052c5b2",
+    "semantic_hash": "2060db94ba522703c41bc3102052c5b2"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\DualPortCharger\\Simulation\\ChargerModbus.cs": {
+    "mtime": 1792943461.8909109,
+    "seen": 1793826847.5971768,
+    "ast_hash": "83d4f8c23ec137f191c0c5f90256a8b6",
+    "semantic_hash": "83d4f8c23ec137f191c0c5f90256a8b6"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\DualPortCharger\\Simulation\\SimulationConfig.cs": {
+    "mtime": 1793030968.0997016,
+    "seen": 1793826847.59718,
+    "ast_hash": "b9ff5521f9d068730eef9602b1bc8e83",
+    "semantic_hash": "b9ff5521f9d068730eef9602b1bc8e83"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\DualPortCharger\\Simulation\\SimulationEngine.cs": {
+    "mtime": 1793030968.0997016,
+    "seen": 1793826847.5971835,
+    "ast_hash": "51856d4ce8c609fee6a55bca002e9da6",
+    "semantic_hash": "51856d4ce8c609fee6a55bca002e9da6"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\KuehlhausSimulator\\Enums.cs": {
+    "mtime": 1793030968.100906,
+    "seen": 1793826847.5971873,
+    "ast_hash": "e252a9f08eea55c2e0c52c3bb79186d8",
+    "semantic_hash": "e252a9f08eea55c2e0c52c3bb79186d8"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\KuehlhausSimulator\\IO\\ArgsParser.cs": {
+    "mtime": 1793085566.2921066,
+    "seen": 1793826847.5971906,
+    "ast_hash": "ce49b38844d908d5e13ea3c60959bf42",
+    "semantic_hash": "ce49b38844d908d5e13ea3c60959bf42"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\KuehlhausSimulator\\IO\\ConsoleRenderer.cs": {
+    "mtime": 1793030968.1034749,
+    "seen": 1793826847.5971966,
+    "ast_hash": "91173da448dc41f67719bc38f7d90dc8",
+    "semantic_hash": "91173da448dc41f67719bc38f7d90dc8"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\KuehlhausSimulator\\IO\\CsvLogger.cs": {
+    "mtime": 1793085566.2932954,
+    "seen": 1793826847.5972004,
+    "ast_hash": "44122c489cbb03334d6b8486af19ee38",
+    "semantic_hash": "44122c489cbb03334d6b8486af19ee38"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\KuehlhausSimulator\\IO\\InputHandler.cs": {
+    "mtime": 1793030968.104475,
+    "seen": 1793826847.5972037,
+    "ast_hash": "f27b0e2c76eea2b8f8c0a2844947ae80",
+    "semantic_hash": "f27b0e2c76eea2b8f8c0a2844947ae80"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\KuehlhausSimulator\\Kuehlhaus.cs": {
+    "mtime": 1793030968.1058104,
+    "seen": 1793826847.597207,
+    "ast_hash": "fdafb560021a2059f5b27eb3a389f313",
+    "semantic_hash": "fdafb560021a2059f5b27eb3a389f313"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\KuehlhausSimulator\\KuehlhausConfig.cs": {
+    "mtime": 1793030968.1068294,
+    "seen": 1793826847.59721,
+    "ast_hash": "367b99e7cb7baf2d3c6b738d101d65b6",
+    "semantic_hash": "367b99e7cb7baf2d3c6b738d101d65b6"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\KuehlhausSimulator\\KuehlhausSimulator.csproj": {
+    "mtime": 1793085566.2944508,
+    "seen": 1793826847.597213,
+    "ast_hash": "bdb2db5cd220ff460cc5058de52861d1",
+    "semantic_hash": "bdb2db5cd220ff460cc5058de52861d1"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\KuehlhausSimulator\\Program.cs": {
+    "mtime": 1793030968.1078293,
+    "seen": 1793826847.5972152,
+    "ast_hash": "74d59043ff36ed040554aa952bb0f6ae",
+    "semantic_hash": "74d59043ff36ed040554aa952bb0f6ae"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\KuehlhausSimulator\\Simulation\\AutoModeController.cs": {
+    "mtime": 1793030968.1102772,
+    "seen": 1793826847.5972178,
+    "ast_hash": "abd36710f334f90f97a813b1ae51b29f",
+    "semantic_hash": "abd36710f334f90f97a813b1ae51b29f"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\KuehlhausSimulator\\Simulation\\KuehlhausModbus.cs": {
+    "mtime": 1793030968.1102772,
+    "seen": 1793826847.5972202,
+    "ast_hash": "df625d1212cd17e27dcfe17c33a37ad5",
+    "semantic_hash": "df625d1212cd17e27dcfe17c33a37ad5"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\KuehlhausSimulator\\Simulation\\SimulationConfig.cs": {
+    "mtime": 1793085566.298661,
+    "seen": 1793826847.5972233,
+    "ast_hash": "5e7babba77c43047dd64e147e1d6aae4",
+    "semantic_hash": "5e7babba77c43047dd64e147e1d6aae4"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\KuehlhausSimulator\\Simulation\\SimulationEngine.cs": {
+    "mtime": 1793085566.2998433,
+    "seen": 1793826847.5972257,
+    "ast_hash": "79243553c2047e2747c1d7ddd2dd6758",
+    "semantic_hash": "79243553c2047e2747c1d7ddd2dd6758"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\PvSimulator\\Data\\CsvExporter.cs": {
+    "mtime": 1793188087.963495,
+    "seen": 1793826847.5972283,
+    "ast_hash": "22df5dd42c5bcfdff2250a70495c7c8a",
+    "semantic_hash": "22df5dd42c5bcfdff2250a70495c7c8a"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\PvSimulator\\Devices\\FaultType.cs": {
+    "mtime": 1791801477.1725116,
+    "seen": 1793826847.5972311,
+    "ast_hash": "ae0f73bbc0e6a523ef3d0de24e5f62f8",
+    "semantic_hash": "ae0f73bbc0e6a523ef3d0de24e5f62f8"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\PvSimulator\\Devices\\IDevice.cs": {
+    "mtime": 1791801477.1851418,
+    "seen": 1793826847.5972333,
+    "ast_hash": "c80439e9c07a2b467ffa32a7891a1c2c",
+    "semantic_hash": "c80439e9c07a2b467ffa32a7891a1c2c"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\PvSimulator\\Devices\\InverterStatus.cs": {
+    "mtime": 1791801477.1966755,
+    "seen": 1793826847.5972364,
+    "ast_hash": "cbb82d5782d74eedd3662caf8a6765f8",
+    "semantic_hash": "cbb82d5782d74eedd3662caf8a6765f8"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\PvSimulator\\Devices\\PvFaultModel.cs": {
+    "mtime": 1793030968.1163912,
+    "seen": 1793826847.597239,
+    "ast_hash": "102d188abdfcdc408b06a357ba3e7369",
+    "semantic_hash": "102d188abdfcdc408b06a357ba3e7369"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\PvSimulator\\Devices\\PvSystem.cs": {
+    "mtime": 1793030968.116897,
+    "seen": 1793826847.5972416,
+    "ast_hash": "c5ca9b9c59c8e8685a7c528041a19ed1",
+    "semantic_hash": "c5ca9b9c59c8e8685a7c528041a19ed1"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\PvSimulator\\Output\\ConsoleDisplay.cs": {
+    "mtime": 1793030968.1189294,
+    "seen": 1793826847.5972443,
+    "ast_hash": "7b082ebdd602c6222254e4222201a6b1",
+    "semantic_hash": "7b082ebdd602c6222254e4222201a6b1"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\PvSimulator\\Program.cs": {
+    "mtime": 1792944280.7920308,
+    "seen": 1793826847.597247,
+    "ast_hash": "2227a68765fe7a1acf131f5a30605504",
+    "semantic_hash": "2227a68765fe7a1acf131f5a30605504"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\PvSimulator\\PvSimulator.csproj": {
+    "mtime": 1793030968.1199186,
+    "seen": 1793826847.5972495,
+    "ast_hash": "bb29fd194f7e4ad2b64b97bc35ea5188",
+    "semantic_hash": "bb29fd194f7e4ad2b64b97bc35ea5188"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\PvSimulator\\Simulation\\ArgsParser.cs": {
+    "mtime": 1793030968.1229296,
+    "seen": 1793826847.5972524,
+    "ast_hash": "031e0dc69743e412f00570eeb92ca493",
+    "semantic_hash": "031e0dc69743e412f00570eeb92ca493"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\PvSimulator\\Simulation\\PvModbus.cs": {
+    "mtime": 1792944510.3267062,
+    "seen": 1793826847.5972552,
+    "ast_hash": "27feace18c5093c49cc34146ef0affb8",
+    "semantic_hash": "27feace18c5093c49cc34146ef0affb8"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\PvSimulator\\Simulation\\SimulationConfig.cs": {
+    "mtime": 1793030968.123919,
+    "seen": 1793826847.597258,
+    "ast_hash": "b6ba87303708b972737de02dd57717c5",
+    "semantic_hash": "b6ba87303708b972737de02dd57717c5"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\PvSimulator\\Simulation\\SimulationEngine.cs": {
+    "mtime": 1793030968.1260247,
+    "seen": 1793826847.5972602,
+    "ast_hash": "db2640369e5b06a64af111356d0e376d",
+    "semantic_hash": "db2640369e5b06a64af111356d0e376d"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\PvSimulator\\Simulation\\SimulationMode.cs": {
+    "mtime": 1793030968.1273086,
+    "seen": 1793826847.597263,
+    "ast_hash": "ec2baf2adfc47cdf59466510f2424205",
+    "semantic_hash": "ec2baf2adfc47cdf59466510f2424205"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Modbus.Contracts\\BatteryRegisters.cs": {
+    "mtime": 1792944377.8684597,
+    "seen": 1793826847.597266,
+    "ast_hash": "db7615cc4684bda3b9cfea7c382d4d33",
+    "semantic_hash": "db7615cc4684bda3b9cfea7c382d4d33"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Modbus.Contracts\\ChargerRegisters.cs": {
+    "mtime": 1792943452.2807226,
+    "seen": 1793826847.5972686,
+    "ast_hash": "23a6b0e3f1bf0e16c4c4801540c3b72f",
+    "semantic_hash": "23a6b0e3f1bf0e16c4c4801540c3b72f"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Modbus.Contracts\\CommonRegisters.cs": {
+    "mtime": 1793030968.1295676,
+    "seen": 1793826847.5972712,
+    "ast_hash": "0b43258969027043b2c394a03696454f",
+    "semantic_hash": "0b43258969027043b2c394a03696454f"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Modbus.Contracts\\KuehlhausRegisters.cs": {
+    "mtime": 1793030968.130979,
+    "seen": 1793826847.597274,
+    "ast_hash": "621938aaa0669aca7f7af03c5f1d6ced",
+    "semantic_hash": "621938aaa0669aca7f7af03c5f1d6ced"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Modbus.Contracts\\Modbus.Contracts.csproj": {
+    "mtime": 1791879758.4374795,
+    "seen": 1793826847.5972767,
+    "ast_hash": "6080c0ebdeb2b138268fa0c2b0cf9ea3",
+    "semantic_hash": "6080c0ebdeb2b138268fa0c2b0cf9ea3"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Modbus.Contracts\\PvRegisters.cs": {
+    "mtime": 1792944152.8544588,
+    "seen": 1793826847.5972795,
+    "ast_hash": "a69cb1913624069a27fe54b34c17268a",
+    "semantic_hash": "a69cb1913624069a27fe54b34c17268a"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Modbus.Contracts\\RegisterCodec.cs": {
+    "mtime": 1792943760.2852576,
+    "seen": 1793826847.5972826,
+    "ast_hash": "f0d21783d2efab3b41360748248c06f5",
+    "semantic_hash": "f0d21783d2efab3b41360748248c06f5"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Modbus.Contracts\\RegisterDefinition.cs": {
+    "mtime": 1792943461.7946808,
+    "seen": 1793826847.5972853,
+    "ast_hash": "09cab7044853daa0df8e21a89b39106f",
+    "semantic_hash": "09cab7044853daa0df8e21a89b39106f"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Modbus.Contracts\\RegisterPlan.cs": {
+    "mtime": 1792942500.4863772,
+    "seen": 1793826847.5972886,
+    "ast_hash": "2a91ac4521bd8cadd39efdc970760b5e",
+    "semantic_hash": "2a91ac4521bd8cadd39efdc970760b5e"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Modbus.Contracts\\RegisterPlans.cs": {
+    "mtime": 1793030968.132962,
+    "seen": 1793826847.5972917,
+    "ast_hash": "bad69ddffc0f0e4cd1f1c7de05c5fd3b",
+    "semantic_hash": "bad69ddffc0f0e4cd1f1c7de05c5fd3b"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusDiagnosticClient\\ClientOptions.cs": {
+    "mtime": 1792943513.9840972,
+    "seen": 1793826847.597295,
+    "ast_hash": "4855e5c6065a54cd02cad2b07cb2575d",
+    "semantic_hash": "4855e5c6065a54cd02cad2b07cb2575d"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusDiagnosticClient\\DeviceConnection.cs": {
+    "mtime": 1792943519.6921523,
+    "seen": 1793826847.5972981,
+    "ast_hash": "78b2cddd6941465d7532fc1848e6b022",
+    "semantic_hash": "78b2cddd6941465d7532fc1848e6b022"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusDiagnosticClient\\DiagnosticSession.cs": {
+    "mtime": 1792943641.4815269,
+    "seen": 1793826847.5973012,
+    "ast_hash": "79c7f2d738beed9f8da2981b573a1989",
+    "semantic_hash": "79c7f2d738beed9f8da2981b573a1989"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusDiagnosticClient\\ModbusDiagnosticClient.csproj": {
+    "mtime": 1791879758.6996672,
+    "seen": 1793826847.5973043,
+    "ast_hash": "fe23aa5f5c20259449ed9df4d9dbf3a1",
+    "semantic_hash": "fe23aa5f5c20259449ed9df4d9dbf3a1"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusDiagnosticClient\\Program.cs": {
+    "mtime": 1792943594.4595337,
+    "seen": 1793826847.5973074,
+    "ast_hash": "aa87c72d62bac89d422d928875e787ce",
+    "semantic_hash": "aa87c72d62bac89d422d928875e787ce"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusDiagnosticClient\\RegisterFormatter.cs": {
+    "mtime": 1792943641.480527,
+    "seen": 1793826847.5973108,
+    "ast_hash": "4f9e2d9def23e853f5e2ae825bc2bd7c",
+    "semantic_hash": "4f9e2d9def23e853f5e2ae825bc2bd7c"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Shared.Config\\OutputPaths.cs": {
+    "mtime": 1791881385.3462982,
+    "seen": 1793826847.5973136,
+    "ast_hash": "46ab0e0042e5f3c94c974f79576eb891",
+    "semantic_hash": "46ab0e0042e5f3c94c974f79576eb891"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Shared.Config\\Shared.Config.csproj": {
+    "mtime": 1791879758.4891305,
+    "seen": 1793826847.5973165,
+    "ast_hash": "6080c0ebdeb2b138268fa0c2b0cf9ea3",
+    "semantic_hash": "6080c0ebdeb2b138268fa0c2b0cf9ea3"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Shared\\Data\\CsvFileWriter.cs": {
+    "mtime": 1793030968.1369834,
+    "seen": 1793826847.5973227,
+    "ast_hash": "e9333beea10d63ad3450fb517deed33b",
+    "semantic_hash": "e9333beea10d63ad3450fb517deed33b"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Shared\\Data\\CsvFormat.cs": {
+    "mtime": 1793188087.9679835,
+    "seen": 1793826847.597327,
+    "ast_hash": "bcdafc2224afad640bea6fd70439e0b2",
+    "semantic_hash": "bcdafc2224afad640bea6fd70439e0b2"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Shared\\Data\\CsvSchema.cs": {
+    "mtime": 1793188087.9689913,
+    "seen": 1793826847.5973299,
+    "ast_hash": "3d3f986bf33112f564d372f2bccf05d2",
+    "semantic_hash": "3d3f986bf33112f564d372f2bccf05d2"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Shared\\Output\\BarChart.cs": {
+    "mtime": 1793030968.1380737,
+    "seen": 1793826847.5973334,
+    "ast_hash": "512518d842d41139d00c5898703db814",
+    "semantic_hash": "512518d842d41139d00c5898703db814"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Shared\\Output\\ConsoleText.cs": {
+    "mtime": 1793188087.970984,
+    "seen": 1793826847.597337,
+    "ast_hash": "6b8a2940a1899acddd2bdd654001895b",
+    "semantic_hash": "6b8a2940a1899acddd2bdd654001895b"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Shared\\Shared.csproj": {
+    "mtime": 1793030968.1392057,
+    "seen": 1793826847.5973403,
+    "ast_hash": "8580c4f07dbbf8062a68a2458f23c0a9",
+    "semantic_hash": "8580c4f07dbbf8062a68a2458f23c0a9"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Shared\\Weather\\IrradiationCalculator.cs": {
+    "mtime": 1793030968.1402338,
+    "seen": 1793826847.5973432,
+    "ast_hash": "057f223751dc0e4e7e015e8d07fd81a0",
+    "semantic_hash": "057f223751dc0e4e7e015e8d07fd81a0"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Shared\\Weather\\Season.cs": {
+    "mtime": 1793030968.1412628,
+    "seen": 1793826847.5973473,
+    "ast_hash": "aedace064de0f6b6755086bb261d6c2c",
+    "semantic_hash": "aedace064de0f6b6755086bb261d6c2c"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Shared\\Weather\\WeatherCondition.cs": {
+    "mtime": 1793030968.1419637,
+    "seen": 1793826847.5973504,
+    "ast_hash": "44de6a6f56451349b5c33fae97781d41",
+    "semantic_hash": "44de6a6f56451349b5c33fae97781d41"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimCore.Contracts\\ISimClock.cs": {
+    "mtime": 1792935188.3779187,
+    "seen": 1793826847.597354,
+    "ast_hash": "d455a717df51ffa3f73e5691b9ccfad6",
+    "semantic_hash": "d455a717df51ffa3f73e5691b9ccfad6"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimCore.Contracts\\IWeatherService.cs": {
+    "mtime": 1793030968.1429882,
+    "seen": 1793826847.5973575,
+    "ast_hash": "2c1ca46c3079318ead7fe606de120ae7",
+    "semantic_hash": "2c1ca46c3079318ead7fe606de120ae7"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimCore.Contracts\\SimCore.Contracts.csproj": {
+    "mtime": 1791879758.3337152,
+    "seen": 1793826847.5973604,
+    "ast_hash": "7c8babad7fd2aa41c90e1b7c1d1d1e1b",
+    "semantic_hash": "7c8babad7fd2aa41c90e1b7c1d1d1e1b"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimCore.Contracts\\SimMode.cs": {
+    "mtime": 1792935188.1008055,
+    "seen": 1793826847.597364,
+    "ast_hash": "e34217899893f82c4533f7d97d4d9f3e",
+    "semantic_hash": "e34217899893f82c4533f7d97d4d9f3e"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimCore.Contracts\\SyncMessages.cs": {
+    "mtime": 1792936032.5648935,
+    "seen": 1793826847.5973666,
+    "ast_hash": "4038932ea44ef939822bdf7b2cc489a9",
+    "semantic_hash": "4038932ea44ef939822bdf7b2cc489a9"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimCore.Contracts\\SyncProtocol.cs": {
+    "mtime": 1792936032.964861,
+    "seen": 1793826847.5973692,
+    "ast_hash": "63a31404edd34e85d6fcd57dbfede45a",
+    "semantic_hash": "63a31404edd34e85d6fcd57dbfede45a"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimCore.Contracts\\TimeState.cs": {
+    "mtime": 1792935188.2519827,
+    "seen": 1793826847.5973718,
+    "ast_hash": "261396dbd176bd10ebb2176550537d50",
+    "semantic_hash": "261396dbd176bd10ebb2176550537d50"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimCore.Contracts\\WeatherData.cs": {
+    "mtime": 1793030968.145068,
+    "seen": 1793826847.5973742,
+    "ast_hash": "d89b903231d0eb57685f8e5a05b1ddc0",
+    "semantic_hash": "d89b903231d0eb57685f8e5a05b1ddc0"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimCore.TimeSync\\MessageChannel.cs": {
+    "mtime": 1792936085.19937,
+    "seen": 1793826847.597378,
+    "ast_hash": "32bef5442c5732cb9fc72a63f036ac59",
+    "semantic_hash": "32bef5442c5732cb9fc72a63f036ac59"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimCore.TimeSync\\SimCore.TimeSync.csproj": {
+    "mtime": 1792936033.902452,
+    "seen": 1793826847.597381,
+    "ast_hash": "2ea045fc11dab2174354b0d9bf8db9c7",
+    "semantic_hash": "2ea045fc11dab2174354b0d9bf8db9c7"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimCore.TimeSync\\TimeSyncClient.cs": {
+    "mtime": 1792936123.6575007,
+    "seen": 1793826847.5973845,
+    "ast_hash": "c75f23bb7f24adbbb3c78024d887da18",
+    "semantic_hash": "c75f23bb7f24adbbb3c78024d887da18"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimCore.TimeSync\\TimeSyncClientInfo.cs": {
+    "mtime": 1792936085.6050785,
+    "seen": 1793826847.5973876,
+    "ast_hash": "5e82e6281df70be86ee50743619185c3",
+    "semantic_hash": "5e82e6281df70be86ee50743619185c3"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimCore.TimeSync\\TimeSyncServer.cs": {
+    "mtime": 1792936098.0468655,
+    "seen": 1793826847.5973907,
+    "ast_hash": "023022060ccebdba54db6df54a76ac2d",
+    "semantic_hash": "023022060ccebdba54db6df54a76ac2d"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimCore.Time\\ClockOffsetEstimator.cs": {
+    "mtime": 1792935248.505896,
+    "seen": 1793826847.597394,
+    "ast_hash": "33518c0ca0ef291060b7e23909d5839c",
+    "semantic_hash": "33518c0ca0ef291060b7e23909d5839c"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimCore.Time\\MasterClock.cs": {
+    "mtime": 1792935258.3495326,
+    "seen": 1793826847.5973976,
+    "ast_hash": "3de513bbba1901868ffafc3296a11401",
+    "semantic_hash": "3de513bbba1901868ffafc3296a11401"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimCore.Time\\MonotonicUtcClock.cs": {
+    "mtime": 1792935247.9565892,
+    "seen": 1793826847.5974011,
+    "ast_hash": "0ba0ba8024fee57a230087ed4c14cc43",
+    "semantic_hash": "0ba0ba8024fee57a230087ed4c14cc43"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimCore.Time\\SimCore.Time.csproj": {
+    "mtime": 1791879758.3845778,
+    "seen": 1793826847.5974045,
+    "ast_hash": "6080c0ebdeb2b138268fa0c2b0cf9ea3",
+    "semantic_hash": "6080c0ebdeb2b138268fa0c2b0cf9ea3"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimCore.Time\\SyncedClock.cs": {
+    "mtime": 1792935248.812645,
+    "seen": 1793826847.5974076,
+    "ast_hash": "3625e17d4b81717bfc6bbd4673514254",
+    "semantic_hash": "3625e17d4b81717bfc6bbd4673514254"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimCore.Time\\TimeLine.cs": {
+    "mtime": 1792935248.3039434,
+    "seen": 1793826847.5974107,
+    "ast_hash": "6fb8f2dc5ceaab464014b37e08ff7375",
+    "semantic_hash": "6fb8f2dc5ceaab464014b37e08ff7375"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimulationMaster\\MasterConsole.cs": {
+    "mtime": 1792936204.3060036,
+    "seen": 1793826847.5974138,
+    "ast_hash": "e80be1fad39e9e4341e05b21b3a8d4d1",
+    "semantic_hash": "e80be1fad39e9e4341e05b21b3a8d4d1"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimulationMaster\\MasterOptions.cs": {
+    "mtime": 1792936150.645187,
+    "seen": 1793826847.5974169,
+    "ast_hash": "c00d62a317f6ff686ac2d53f31884736",
+    "semantic_hash": "c00d62a317f6ff686ac2d53f31884736"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimulationMaster\\Program.cs": {
+    "mtime": 1792936204.3779333,
+    "seen": 1793826847.5974202,
+    "ast_hash": "78088ce6135f418f6ced64c3b44d342e",
+    "semantic_hash": "78088ce6135f418f6ced64c3b44d342e"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimulationMaster\\SimulationMaster.csproj": {
+    "mtime": 1792936206.161676,
+    "seen": 1793826847.597424,
+    "ast_hash": "416d5a62677d8d2385c5ef89ea1e9d01",
+    "semantic_hash": "416d5a62677d8d2385c5ef89ea1e9d01"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\WeatherSimulator\\Program.cs": {
+    "mtime": 1793030968.1484375,
+    "seen": 1793826847.5974283,
+    "ast_hash": "49b8da9ff767f3463d591f3f74b6ef61",
+    "semantic_hash": "49b8da9ff767f3463d591f3f74b6ef61"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\WeatherSimulator\\Simulation\\LocationCatalog.cs": {
+    "mtime": 1793030968.1509032,
+    "seen": 1793826847.5974321,
+    "ast_hash": "683d598b9c455faec10fed9ef90bdf1c",
+    "semantic_hash": "683d598b9c455faec10fed9ef90bdf1c"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\WeatherSimulator\\Simulation\\ManualWeather.cs": {
+    "mtime": 1793030968.1521404,
+    "seen": 1793826847.5974357,
+    "ast_hash": "e7a466fd7b333c8994944c74c4551d75",
+    "semantic_hash": "e7a466fd7b333c8994944c74c4551d75"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\WeatherSimulator\\Simulation\\WeatherModel.cs": {
+    "mtime": 1793030968.1532896,
+    "seen": 1793826847.5974388,
+    "ast_hash": "a530b53986322c1b0d77729e73950123",
+    "semantic_hash": "a530b53986322c1b0d77729e73950123"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\WeatherSimulator\\WeatherSimulator.csproj": {
+    "mtime": 1793030968.1537962,
+    "seen": 1793826847.5974412,
+    "ast_hash": "fddb530dc4b22906b3554208112112f8",
+    "semantic_hash": "fddb530dc4b22906b3554208112112f8"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\start-all.ps1": {
+    "mtime": 1793030968.15531,
+    "seen": 1793826847.5974438,
+    "ast_hash": "bffad1a91719d6680d98d2918902c930",
+    "semantic_hash": "bffad1a91719d6680d98d2918902c930"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\Devices.Common.Tests\\DeviceTimeSourceTests.cs": {
+    "mtime": 1792937416.9371264,
+    "seen": 1793826847.5974464,
+    "ast_hash": "38d09912c011b7e13ea4fd0cf96ffb02",
+    "semantic_hash": "38d09912c011b7e13ea4fd0cf96ffb02"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\Devices.Common.Tests\\Devices.Common.Tests.csproj": {
+    "mtime": 1792937379.5426776,
+    "seen": 1793826847.5974486,
+    "ast_hash": "00cc2d09d055ee295e1128be331f77d0",
+    "semantic_hash": "00cc2d09d055ee295e1128be331f77d0"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\Devices.Common.Tests\\ModbusDeviceServerTests.cs": {
+    "mtime": 1792944604.2794168,
+    "seen": 1793826847.5974512,
+    "ast_hash": "9dfc2eabc4c9c5c914fa6f6ad7da0316",
+    "semantic_hash": "9dfc2eabc4c9c5c914fa6f6ad7da0316"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\Devices.Common.Tests\\StepSchedulerTests.cs": {
+    "mtime": 1792937416.5405748,
+    "seen": 1793826847.597454,
+    "ast_hash": "e1ec1559b17de1a6e3ea746ece622c24",
+    "semantic_hash": "e1ec1559b17de1a6e3ea746ece622c24"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\Devices.Common.Tests\\TimeSyncOptionsTests.cs": {
+    "mtime": 1792937416.862942,
+    "seen": 1793826847.5974572,
+    "ast_hash": "a292e646cee94ff833586ceab1af72f5",
+    "semantic_hash": "a292e646cee94ff833586ceab1af72f5"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\Devices.Common.Tests\\WeatherFeedTests.cs": {
+    "mtime": 1793030968.1558163,
+    "seen": 1793826847.5974607,
+    "ast_hash": "5e300388a6db228fc83062fd8b26a97f",
+    "semantic_hash": "5e300388a6db228fc83062fd8b26a97f"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\FieldDevices.Tests\\ConsumerTests.cs": {
+    "mtime": 1793085566.3008711,
+    "seen": 1793826847.5974638,
+    "ast_hash": "3e43267a4c0f1edb0ad3bba90c8a31e1",
+    "semantic_hash": "3e43267a4c0f1edb0ad3bba90c8a31e1"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\FieldDevices.Tests\\FieldDeviceTests.cs": {
+    "mtime": 1793188087.978775,
+    "seen": 1793826847.5974672,
+    "ast_hash": "05a21df29dd5ca53ed17de78d729d993",
+    "semantic_hash": "05a21df29dd5ca53ed17de78d729d993"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\FieldDevices.Tests\\FieldDevices.Tests.csproj": {
+    "mtime": 1793030968.159069,
+    "seen": 1793826847.5974703,
+    "ast_hash": "eb11c0bd66d72fe8d32a236c7851bf1c",
+    "semantic_hash": "eb11c0bd66d72fe8d32a236c7851bf1c"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\ModbusDiagnosticClient.Tests\\DiagnosticClientTests.cs": {
+    "mtime": 1792943760.3080924,
+    "seen": 1793826847.597473,
+    "ast_hash": "2f3563fccd1afbd37dd47de94818b817",
+    "semantic_hash": "2f3563fccd1afbd37dd47de94818b817"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\ModbusDiagnosticClient.Tests\\ModbusDiagnosticClient.Tests.csproj": {
+    "mtime": 1792943693.656911,
+    "seen": 1793826847.5974755,
+    "ast_hash": "e86aa612a6888fee735f8379efc7b8b2",
+    "semantic_hash": "e86aa612a6888fee735f8379efc7b8b2"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\SimCore.Tests\\ClockOffsetEstimatorTests.cs": {
+    "mtime": 1792935330.800235,
+    "seen": 1793826847.5974782,
+    "ast_hash": "17a2c4372b50843ea5e31477a787709d",
+    "semantic_hash": "17a2c4372b50843ea5e31477a787709d"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\SimCore.Tests\\ManualTimeProvider.cs": {
+    "mtime": 1792935329.7624762,
+    "seen": 1793826847.5974808,
+    "ast_hash": "d2af4d0b1e8ab14c66640548e7aa2114",
+    "semantic_hash": "d2af4d0b1e8ab14c66640548e7aa2114"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\SimCore.Tests\\MasterClockTests.cs": {
+    "mtime": 1792935330.1647687,
+    "seen": 1793826847.5974832,
+    "ast_hash": "19eeff2c406c0815ac0bf7a5f296de64",
+    "semantic_hash": "19eeff2c406c0815ac0bf7a5f296de64"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\SimCore.Tests\\SimCore.Tests.csproj": {
+    "mtime": 1792936206.21011,
+    "seen": 1793826847.5974858,
+    "ast_hash": "1b5f41faa732e380ffeffa46ddcc7354",
+    "semantic_hash": "1b5f41faa732e380ffeffa46ddcc7354"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\SimCore.Tests\\SyncProtocolTests.cs": {
+    "mtime": 1792936249.5347958,
+    "seen": 1793826847.5974884,
+    "ast_hash": "8ef601b9d4a928440928caa507724d81",
+    "semantic_hash": "8ef601b9d4a928440928caa507724d81"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\SimCore.Tests\\SyncedClockTests.cs": {
+    "mtime": 1792935355.0154555,
+    "seen": 1793826847.597491,
+    "ast_hash": "e3aa5ccbb4f4b34ea74abbaa8c5a08d3",
+    "semantic_hash": "e3aa5ccbb4f4b34ea74abbaa8c5a08d3"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\SimCore.Tests\\TimeSyncIntegrationTests.cs": {
+    "mtime": 1792936249.6166568,
+    "seen": 1793826847.5974934,
+    "ast_hash": "7d9ef5e55f810417a348a1b60e3bbc31",
+    "semantic_hash": "7d9ef5e55f810417a348a1b60e3bbc31"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\Weather.Tests\\Weather.Tests.csproj": {
+    "mtime": 1791879774.4418838,
+    "seen": 1793826847.597497,
+    "ast_hash": "b45240b13547f936d387892cb12ed5e2",
+    "semantic_hash": "b45240b13547f936d387892cb12ed5e2"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\Weather.Tests\\WeatherModelTests.cs": {
+    "mtime": 1793030968.1613002,
+    "seen": 1793826847.5975003,
+    "ast_hash": "f8b55f61142286e454d052f7829cd6e0",
+    "semantic_hash": "f8b55f61142286e454d052f7829cd6e0"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\AGENTS.md": {
+    "mtime": 1793188087.9570508,
+    "seen": 1793826847.597503,
+    "ast_hash": "fe3a70f5dac804c53b4f0bb3acb3017c",
+    "semantic_hash": "fe3a70f5dac804c53b4f0bb3acb3017c"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\README.md": {
+    "mtime": 1793034122.221,
+    "seen": 1793826847.5975056,
+    "ast_hash": "8564636db6f292bec59d587fb7660e2c",
+    "semantic_hash": "8564636db6f292bec59d587fb7660e2c"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\development-journal\\AGENTS1-archiv-2026-10-10.md": {
+    "mtime": 1793030968.073532,
+    "seen": 1793826847.5975087,
+    "ast_hash": "bc547a8aff7522c8b4cfbf88571e257b",
+    "semantic_hash": "bc547a8aff7522c8b4cfbf88571e257b"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\development-journal\\AGENTS2-archiv-2026-10-27.md": {
+    "mtime": 1793188087.959065,
+    "seen": 1793826847.597511,
+    "ast_hash": "b489535c39fd2c1d1c305a7001ad55d8",
+    "semantic_hash": "b489535c39fd2c1d1c305a7001ad55d8"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\development-journal\\alexander-lux.md": {
+    "mtime": 1793188087.961108,
+    "seen": 1793826847.5975137,
+    "ast_hash": "ab2aefec0c1a03c09f1a1fe0c7f6ace2",
+    "semantic_hash": "ab2aefec0c1a03c09f1a1fe0c7f6ace2"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\development-journal\\dominik-Zach.md": {
+    "mtime": 1793085566.2878363,
+    "seen": 1793826847.5975163,
+    "ast_hash": "bdbb15aa47c6b3f218f516d2ba2b9553",
+    "semantic_hash": "bdbb15aa47c6b3f218f516d2ba2b9553"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\development-journal\\susanne-lastowicka.md": {
+    "mtime": 1793033973.1443717,
+    "seen": 1793826847.597519,
+    "ast_hash": "2d7ea0029ab887210d778dcb7c4ca473",
+    "semantic_hash": "2d7ea0029ab887210d778dcb7c4ca473"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\devices\\KuehlhausSimulator\\umsetzung-lb02.md": {
+    "mtime": 1793085566.289886,
+    "seen": 1793826847.5975223,
+    "ast_hash": "876dee399198e10c7447be33ccded514",
+    "semantic_hash": "876dee399198e10c7447be33ccded514"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices.Common\\README.md": {
+    "mtime": 1793031650.9516132,
+    "seen": 1793826847.5975273,
+    "ast_hash": "fdef83ca5c033281f3f5b07720820066",
+    "semantic_hash": "fdef83ca5c033281f3f5b07720820066"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\BatterySimulator\\README.md": {
+    "mtime": 1793031650.9536932,
+    "seen": 1793826847.5975325,
+    "ast_hash": "48fbec18f9a2900749b7fc426097fe93",
+    "semantic_hash": "48fbec18f9a2900749b7fc426097fe93"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\DualPortCharger\\README.md": {
+    "mtime": 1793031650.9566767,
+    "seen": 1793826847.5975358,
+    "ast_hash": "424a8e2b4a29ce8ad63deea024852a37",
+    "semantic_hash": "424a8e2b4a29ce8ad63deea024852a37"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\KuehlhausSimulator\\README.md": {
+    "mtime": 1793085566.296597,
+    "seen": 1793826847.5975385,
+    "ast_hash": "444b8cdb71d92a33c64c8d4a1123b4c9",
+    "semantic_hash": "444b8cdb71d92a33c64c8d4a1123b4c9"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Devices\\PvSimulator\\README.md": {
+    "mtime": 1793188087.9659915,
+    "seen": 1793826847.5975423,
+    "ast_hash": "4a5cb17b72b98dd72e08b1ba067dccad",
+    "semantic_hash": "4a5cb17b72b98dd72e08b1ba067dccad"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Modbus.Contracts\\README.md": {
+    "mtime": 1793031650.9605038,
+    "seen": 1793826847.5975463,
+    "ast_hash": "fb2f2f9ccc1365d656fbe064759f5b60",
+    "semantic_hash": "fb2f2f9ccc1365d656fbe064759f5b60"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusDiagnosticClient\\README.md": {
+    "mtime": 1793031650.9627888,
+    "seen": 1793826847.5975504,
+    "ast_hash": "108b0460cd36a73fce6916d794f7ebdf",
+    "semantic_hash": "108b0460cd36a73fce6916d794f7ebdf"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Shared.Config\\README.md": {
+    "mtime": 1793031650.9652078,
+    "seen": 1793826847.5975542,
+    "ast_hash": "fa68623fcd2eb1955997a34d7d412031",
+    "semantic_hash": "fa68623fcd2eb1955997a34d7d412031"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Shared\\README.md": {
+    "mtime": 1793188087.974056,
+    "seen": 1793826847.5975585,
+    "ast_hash": "1544a2ac45119ea267c928691bca596d",
+    "semantic_hash": "1544a2ac45119ea267c928691bca596d"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimCore.Contracts\\README.md": {
+    "mtime": 1793031650.9665396,
+    "seen": 1793826847.5975628,
+    "ast_hash": "58d95071b6c7bf66cf9774d5e4b23822",
+    "semantic_hash": "58d95071b6c7bf66cf9774d5e4b23822"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimCore.TimeSync\\README.md": {
+    "mtime": 1793031650.9709654,
+    "seen": 1793826847.5975666,
+    "ast_hash": "5e13dc78fd15f93111e4f281f08c9d40",
+    "semantic_hash": "5e13dc78fd15f93111e4f281f08c9d40"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimCore.Time\\README.md": {
+    "mtime": 1793031650.9689388,
+    "seen": 1793826847.5975707,
+    "ast_hash": "ffeeef9d1507c1662240b2110f7659cc",
+    "semantic_hash": "ffeeef9d1507c1662240b2110f7659cc"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\SimulationMaster\\README.md": {
+    "mtime": 1793031650.9735315,
+    "seen": 1793826847.5975747,
+    "ast_hash": "bfea8b06816732c704815662610f638a",
+    "semantic_hash": "bfea8b06816732c704815662610f638a"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\WeatherSimulator\\README.md": {
+    "mtime": 1793188087.9758828,
+    "seen": 1793826847.5975773,
+    "ast_hash": "0309463fd497c02e6d7a35b7185efe4b",
+    "semantic_hash": "0309463fd497c02e6d7a35b7185efe4b"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\Devices.Common.Tests\\README.md": {
+    "mtime": 1792942818.5959723,
+    "seen": 1793826847.5975792,
+    "ast_hash": "a2a3d570ac663dd8d69b83a7decd7492",
+    "semantic_hash": "a2a3d570ac663dd8d69b83a7decd7492"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\FieldDevices.Tests\\README.md": {
+    "mtime": 1792944796.1410916,
+    "seen": 1793826847.597581,
+    "ast_hash": "0efd655e229f47d1db96cf503e8cb338",
+    "semantic_hash": "0efd655e229f47d1db96cf503e8cb338"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\ModbusDiagnosticClient.Tests\\README.md": {
+    "mtime": 1792943824.40974,
+    "seen": 1793826847.5975826,
+    "ast_hash": "c4f96b99d6b4cad2733d2308e508b64f",
+    "semantic_hash": "c4f96b99d6b4cad2733d2308e508b64f"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\SimCore.Tests\\README.md": {
+    "mtime": 1792936399.4963224,
+    "seen": 1793826847.597584,
+    "ast_hash": "d1ae4d0bc17fc014b070637637540a3b",
+    "semantic_hash": "d1ae4d0bc17fc014b070637637540a3b"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\Weather.Tests\\README.md": {
+    "mtime": 1793030968.1599896,
+    "seen": 1793826847.5975862,
+    "ast_hash": "87e783d257b0c01a36661848a99687c4",
+    "semantic_hash": "87e783d257b0c01a36661848a99687c4"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\screenshots\\BatterySimulator\\bild.png": {
+    "mtime": 1791875814.440128,
+    "seen": 1793826847.597591,
+    "ast_hash": "9a9cc0dd48bf269fd07e2bda04acbe32",
+    "semantic_hash": "9a9cc0dd48bf269fd07e2bda04acbe32"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\screenshots\\DualPortCharger\\Automatischer_Modus.png": {
+    "mtime": 1791129161.4910324,
+    "seen": 1793826847.5975928,
+    "ast_hash": "df32d1940ba1c65d249c70cea65b8dae",
+    "semantic_hash": "df32d1940ba1c65d249c70cea65b8dae"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\screenshots\\DualPortCharger\\Limit_Erh\u00f6hung.png": {
+    "mtime": 1791129361.1576164,
+    "seen": 1793826847.5975964,
+    "ast_hash": "a504c6b8e5674da1ba4a411d4d8305c1",
+    "semantic_hash": "a504c6b8e5674da1ba4a411d4d8305c1"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\screenshots\\DualPortCharger\\Manueller_Modus.png": {
+    "mtime": 1791129185.067188,
+    "seen": 1793826847.5975983,
+    "ast_hash": "f898853fea14dae4e3dda25b3fe08cab",
+    "semantic_hash": "f898853fea14dae4e3dda25b3fe08cab"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\screenshots\\DualPortCharger\\\u00dcberhitzung.png": {
+    "mtime": 1791129233.3238468,
+    "seen": 1793826847.5976002,
+    "ast_hash": "3fc2584431963ba166abc4d294a98299",
+    "semantic_hash": "3fc2584431963ba166abc4d294a98299"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\screenshots\\PvSimulator\\CleanerRefreshRate.png": {
+    "mtime": 1791801477.1066067,
+    "seen": 1793826847.5976021,
+    "ast_hash": "677f881606fb4764e46aac34b87d4806",
+    "semantic_hash": "677f881606fb4764e46aac34b87d4806"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\screenshots\\PvSimulator\\Cleaning.png": {
+    "mtime": 1791801477.1193602,
+    "seen": 1793826847.5976038,
+    "ast_hash": "c9a42cfd17c0b3b8f0811857644479b0",
+    "semantic_hash": "c9a42cfd17c0b3b8f0811857644479b0"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\screenshots\\PvSimulator\\Everything_Together.png": {
+    "mtime": 1793030968.0809696,
+    "seen": 1793826847.5976055,
+    "ast_hash": "77bc7df1005ddaa026a01e241790dc7f",
+    "semantic_hash": "77bc7df1005ddaa026a01e241790dc7f"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\screenshots\\PvSimulator\\Inverter_Fehler.png": {
+    "mtime": 1791801477.1341217,
+    "seen": 1793826847.597607,
+    "ast_hash": "7daf2441b0c9adbc140df2792a73757c",
+    "semantic_hash": "7daf2441b0c9adbc140df2792a73757c"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\screenshots\\PvSimulator\\Save_CSV.png": {
+    "mtime": 1791801477.1466262,
+    "seen": 1793826847.5976088,
+    "ast_hash": "4450da81e115d2122f45dd6eb537a08b",
+    "semantic_hash": "4450da81e115d2122f45dd6eb537a08b"
+  }
+}

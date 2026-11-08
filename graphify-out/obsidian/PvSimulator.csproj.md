@@ -1,0 +1,20 @@
+---
+source_file: "src/Devices/PvSimulator/PvSimulator.csproj"
+type: "code"
+community: "Gruppe 60"
+tags:
+  - graphify/code
+  - graphify/EXTRACTED
+  - community/Gruppe_60
+---
+
+# PvSimulator.csproj
+
+## Connections
+- [[Devices.Common.csproj]] - `imports` [EXTRACTED]
+- [[EnergyTwin.sln]] - `contains` [EXTRACTED]
+- [[FieldDevices.Tests.csproj]] - `imports` [EXTRACTED]
+- [[Microsoft.NET.Sdk_4]] - `references` [EXTRACTED]
+- [[Shared.csproj]] - `imports` [EXTRACTED]
+
+#graphify/code #graphify/EXTRACTED #community/Gruppe_60

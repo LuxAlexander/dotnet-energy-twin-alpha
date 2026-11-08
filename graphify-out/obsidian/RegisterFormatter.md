@@ -1,0 +1,23 @@
+---
+source_file: "src/ModbusDiagnosticClient/RegisterFormatter.cs"
+type: "code"
+community: "Register-Dekodierung"
+location: "L8"
+tags:
+  - graphify/code
+  - graphify/EXTRACTED
+  - community/Register-Dekodierung
+---
+
+# RegisterFormatter
+
+## Connections
+- [[CultureInfo]] - `references` [EXTRACTED]
+- [[RegisterFormatter.Number()]] - `method` [EXTRACTED]
+- [[RegisterFormatter.Raw()]] - `method` [EXTRACTED]
+- [[RegisterFormatter.Short()]] - `method` [EXTRACTED]
+- [[RegisterFormatter.Table()]] - `method` [EXTRACTED]
+- [[RegisterFormatter.Value()]] - `method` [EXTRACTED]
+- [[RegisterFormatter.cs]] - `contains` [EXTRACTED]
+
+#graphify/code #graphify/EXTRACTED #community/Register-Dekodierung

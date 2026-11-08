@@ -1,0 +1,16 @@
+---
+source_file: "docs/screenshots/BatterySimulator/bild.png"
+type: "image"
+community: "Gruppe 93"
+tags:
+  - graphify/image
+  - graphify/EXTRACTED
+  - community/Gruppe_93
+---
+
+# Status: Auto, Standby, SOC 50, Sollwert 0 kW, 20 C, Tempo x3600
+
+## Connections
+- [[Battery Screenshot Batteriespeicher BAT-01 (LB01 console)]] - `references` [EXTRACTED]
+
+#graphify/image #graphify/EXTRACTED #community/Gruppe_93

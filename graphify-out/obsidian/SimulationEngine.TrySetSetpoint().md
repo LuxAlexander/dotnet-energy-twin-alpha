@@ -1,0 +1,18 @@
+---
+source_file: "src/Devices/KuehlhausSimulator/Simulation/SimulationEngine.cs"
+type: "code"
+community: "WeatherClient & Anzeige"
+location: "L123"
+tags:
+  - graphify/code
+  - graphify/INFERRED
+  - community/WeatherClient__Anzeige
+---
+
+# SimulationEngine.TrySetSetpoint()
+
+## Connections
+- [[InputHandler.AskSetpointAsync()]] - `calls` [INFERRED]
+- [[SimulationEngine_1]] - `method` [EXTRACTED]
+
+#graphify/code #graphify/INFERRED #community/WeatherClient__Anzeige

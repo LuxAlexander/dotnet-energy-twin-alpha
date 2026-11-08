@@ -1,0 +1,80 @@
+---
+source_file: ""
+type: "code"
+community: "Batterie-Simulator Loop"
+tags:
+  - graphify/code
+  - graphify/EXTRACTED
+  - community/Batterie-Simulator_Loop
+---
+
+# CancellationToken
+
+## Connections
+- [[AsyncConsole.ReadLineAsync()]] - `references` [EXTRACTED]
+- [[ConsoleRenderer.PromptAsync()]] - `references` [EXTRACTED]
+- [[ConsoleRenderer.PromptAsync()_1]] - `references` [EXTRACTED]
+- [[CsvExporter.CreateAsync()]] - `references` [EXTRACTED]
+- [[CsvExporter.FlushAsync()]] - `references` [EXTRACTED]
+- [[CsvExporter.WriteRowAsync()]] - `references` [EXTRACTED]
+- [[CsvFileWriter.CreateAsync()]] - `references` [EXTRACTED]
+- [[CsvFileWriter.FlushAsync()]] - `references` [EXTRACTED]
+- [[CsvFileWriter.WriteRowAsync()]] - `references` [EXTRACTED]
+- [[CsvLogger.CreateAsync()]] - `references` [EXTRACTED]
+- [[CsvLogger.CreateAsync()_1]] - `references` [EXTRACTED]
+- [[CsvLogger.CreateAsync()_2]] - `references` [EXTRACTED]
+- [[CsvLogger.FlushAsync()]] - `references` [EXTRACTED]
+- [[CsvLogger.FlushAsync()_1]] - `references` [EXTRACTED]
+- [[CsvLogger.FlushAsync()_2]] - `references` [EXTRACTED]
+- [[CsvLogger.LogAsync()]] - `references` [EXTRACTED]
+- [[CsvLogger.WriteAsync()]] - `references` [EXTRACTED]
+- [[CsvLogger.WriteAsync()_1]] - `references` [EXTRACTED]
+- [[DeviceTimeSource.RunAsync()]] - `references` [EXTRACTED]
+- [[DiagnosticSession.ExecuteAsync()]] - `references` [EXTRACTED]
+- [[DiagnosticSession.WatchAsync()]] - `references` [EXTRACTED]
+- [[DiagnosticSession.WriteAsync()]] - `references` [EXTRACTED]
+- [[FakeWeatherService.GetAsync()]] - `references` [EXTRACTED]
+- [[IWeatherService.GetAsync()]] - `references` [EXTRACTED]
+- [[InputHandler.AskPercentAsync()]] - `references` [EXTRACTED]
+- [[InputHandler.AskSetpointAsync()]] - `references` [EXTRACTED]
+- [[InputHandler.ConnectVehicleAsync()]] - `references` [EXTRACTED]
+- [[InputHandler.HandleAsync()]] - `references` [EXTRACTED]
+- [[InputHandler.HandleAsync()_1]] - `references` [EXTRACTED]
+- [[InputHandler.HandlePendingKeysAsync()]] - `references` [EXTRACTED]
+- [[InputHandler.HandlePendingKeysAsync()_1]] - `references` [EXTRACTED]
+- [[InputHandler.WaitForQuitAsync()]] - `references` [EXTRACTED]
+- [[InputHandler.WaitForQuitAsync()_1]] - `references` [EXTRACTED]
+- [[MasterConsole.RunAsync()]] - `references` [EXTRACTED]
+- [[MessageChannel.ReceiveAsync()]] - `references` [EXTRACTED]
+- [[MessageChannel.SendAsync()]] - `references` [EXTRACTED]
+- [[SimulationEngine.AdvanceAsync()]] - `references` [EXTRACTED]
+- [[SimulationEngine.AdvanceAsync()_1]] - `references` [EXTRACTED]
+- [[SimulationEngine.AdvanceAsync()_2]] - `references` [EXTRACTED]
+- [[SimulationEngine.RunAsync()]] - `references` [EXTRACTED]
+- [[SimulationEngine.RunAsync()_1]] - `references` [EXTRACTED]
+- [[SimulationEngine.RunAsync()_2]] - `references` [EXTRACTED]
+- [[SimulationEngine.StartRunAsync()]] - `references` [EXTRACTED]
+- [[SimulationEngine.UpdateWeatherAsync()]] - `references` [EXTRACTED]
+- [[SimulationEngine.UpdateWeatherAsync()_1]] - `references` [EXTRACTED]
+- [[Simulator.AdvanceAsync()]] - `references` [EXTRACTED]
+- [[Simulator.HandleKey()]] - `references` [EXTRACTED]
+- [[Simulator.HandleKeys()]] - `references` [EXTRACTED]
+- [[Simulator.PromptAsync()]] - `references` [EXTRACTED]
+- [[Simulator.RunAsync()]] - `references` [EXTRACTED]
+- [[Simulator.SettingsMenuAsync()]] - `references` [EXTRACTED]
+- [[TimeSyncClient.PingLoopAsync()]] - `references` [EXTRACTED]
+- [[TimeSyncClient.ReceiveLoopAsync()]] - `references` [EXTRACTED]
+- [[TimeSyncClient.RunAsync()]] - `references` [EXTRACTED]
+- [[TimeSyncClient.RunConnectionAsync()]] - `references` [EXTRACTED]
+- [[TimeSyncClient.SendPingAsync()]] - `references` [EXTRACTED]
+- [[TimeSyncServer.AcceptLoopAsync()]] - `references` [EXTRACTED]
+- [[TimeSyncServer.BroadcastLoopAsync()]] - `references` [EXTRACTED]
+- [[TimeSyncServer.HandleClientAsync()]] - `references` [EXTRACTED]
+- [[TimeSyncServer.HeartbeatLoopAsync()]] - `references` [EXTRACTED]
+- [[TimeSyncServer.ReceiveHelloAsync()]] - `references` [EXTRACTED]
+- [[TimeSyncServer.RunAsync()]] - `references` [EXTRACTED]
+- [[TimeSyncServer.SendToAllAsync()]] - `references` [EXTRACTED]
+- [[WeatherClient.GetAsync()]] - `references` [EXTRACTED]
+- [[WeatherFeed.UpdateAsync()]] - `references` [EXTRACTED]
+
+#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop
