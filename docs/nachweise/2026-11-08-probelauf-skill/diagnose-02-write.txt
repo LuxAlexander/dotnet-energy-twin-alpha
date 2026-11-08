@@ -1,0 +1,4 @@
+EasyModbus Client Library Version: 1.0.0.0
+Copyright (c) Stefan Rossmann Engineering Solutions
+
+ANGENOMMEN: Solltemperatur -20 °C → -15 °C. Gerät zeigt jetzt -15 °C.

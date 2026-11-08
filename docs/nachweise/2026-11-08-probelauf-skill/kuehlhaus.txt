@@ -1,0 +1,28 @@
+2026-11-08 00:00  Lauf 1  Raum -20,00 °C  außen 7,64 °C  Soll -20,0 °C     aus  0,00 kW  0,00 kWh  Tür zu
+  Zeit: STANDALONE (lokale Uhr, ohne Master) · LÄUFT · x600  | Modbus: 127.0.0.1:1505 · Unit 1 · 0 Client(s)  | Meldung: Erste Zeit empfangen: Lauf 1 ab 08.11.2026 00:00.
+2026-11-08 00:50  Lauf 1  Raum -18,90 °C  außen 6,52 °C  Soll -15,0 °C     aus  0,00 kW  0,00 kWh  Tür zu
+  Zeit: STANDALONE (lokale Uhr, ohne Master) · LÄUFT · x600  | Modbus: 127.0.0.1:1505 · Unit 1 · 4 Client(s) · Modbus-Schreibzugriff angenommen: Solltemperatur = -15 °C  | Meldung: Modbus: 4
+2026-11-08 01:40  Lauf 1  Raum -17,88 °C  außen 5,61 °C  Soll -15,0 °C     aus  0,00 kW  0,00 kWh  Tür zu
+  Zeit: STANDALONE (lokale Uhr, ohne Master) · LÄUFT · x600  | Modbus: 127.0.0.1:1505 · Unit 1 · 4 Client(s) · Modbus-Schreibzugriff angenommen: Solltemperatur = -15 °C  | Meldung: Modbus: 4
+2026-11-08 02:30  Lauf 1  Raum -16,93 °C  außen 5,10 °C  Soll -15,0 °C     aus  0,00 kW  0,00 kWh  Tür zu
+  Zeit: STANDALONE (lokale Uhr, ohne Master) · LÄUFT · x600  | Modbus: 127.0.0.1:1505 · Unit 1 · 4 Client(s) · Modbus-Schreibzugriff angenommen: Solltemperatur = -15 °C  | Meldung: Modbus: 4
+2026-11-08 03:20  Lauf 1  Raum -15,79 °C  außen 5,02 °C  Soll -15,0 °C     aus  0,00 kW  0,00 kWh  Tür zu
+  Zeit: STANDALONE (lokale Uhr, ohne Master) · LÄUFT · x600  | Modbus: 127.0.0.1:1505 · Unit 1 · 4 Client(s) · Modbus-Schreibzugriff angenommen: Solltemperatur = -15 °C  | Meldung: Modbus: 4
+2026-11-08 04:10  Lauf 1  Raum -14,94 °C  außen 5,36 °C  Soll -15,0 °C     aus  0,00 kW  0,00 kWh  Tür zu
+  Zeit: STANDALONE (lokale Uhr, ohne Master) · LÄUFT · x600  | Modbus: 127.0.0.1:1505 · Unit 1 · 4 Client(s) · Modbus-Schreibzugriff angenommen: Solltemperatur = -15 °C  | Meldung: Modbus: 4
+2026-11-08 05:00  Lauf 1  Raum -14,09 °C  außen 6,11 °C  Soll -15,0 °C     aus  0,00 kW  0,00 kWh  Tür zu
+  Zeit: STANDALONE (lokale Uhr, ohne Master) · LÄUFT · x600  | Modbus: 127.0.0.1:1505 · Unit 1 · 4 Client(s) · Modbus-Schreibzugriff angenommen: Solltemperatur = -15 °C  | Meldung: Modbus: 4
+2026-11-08 05:50  Lauf 1  Raum -13,24 °C  außen 7,23 °C  Soll -15,0 °C     aus  0,00 kW  0,00 kWh  Tür zu
+  Zeit: STANDALONE (lokale Uhr, ohne Master) · LÄUFT · x600  | Modbus: 127.0.0.1:1505 · Unit 1 · 4 Client(s) · Modbus-Schreibzugriff angenommen: Solltemperatur = -15 °C  | Meldung: Modbus: 4
+2026-11-08 06:40  Lauf 1  Raum -15,33 °C  außen 8,68 °C  Soll -15,0 °C   Kälte  2,34 kW  1,35 kWh  Tür offen
+  Zeit: STANDALONE (lokale Uhr, ohne Master) · LÄUFT · x600  | Modbus: 127.0.0.1:1505 · Unit 1 · 4 Client(s) · Modbus-Schreibzugriff angenommen: Solltemperatur = -15 °C  | Meldung: Modbus: 4
+2026-11-08 07:30  Lauf 1  Raum -16,74 °C  außen 10,38 °C  Soll -15,0 °C     aus  0,00 kW  2,53 kWh  Tür offen
+  Zeit: STANDALONE (lokale Uhr, ohne Master) · LÄUFT · x600  | Modbus: 127.0.0.1:1505 · Unit 1 · 4 Client(s) · Modbus-Schreibzugriff angenommen: Solltemperatur = -15 °C  | Meldung: Modbus: 4
+2026-11-08 08:00  Lauf 1  Raum -16,05 °C  außen 11,48 °C  Soll -15,0 °C     aus  0,00 kW  2,53 kWh  Tür zu
+  Zeit: STANDALONE (lokale Uhr, ohne Master) · LÄUFT · x600  | Modbus: 127.0.0.1:1505 · Unit 1 · 4 Client(s) · Modbus-Schreibzugriff angenommen: Solltemperatur = -15 °C  | Meldung: Simulatio
+
+Kühlhaus KH-01 beendet
+  Zeit:     08.11.2026 08:00
+  Raum:     -16,1 °C
+  Energie:  2,53 kWh
+  CSV:      C:\Users\Dominik\Desktop\programmieren\unity\spiele\Github\Neuer Ordner\dotnet-energy-twin-alpha\docs\data\KH-01_2026-11-08_155520.csv

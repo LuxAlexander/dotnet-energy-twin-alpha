@@ -72,3 +72,28 @@
   - Der zweite Typ `WeatherUnavailableException` ist damit weg – es gilt nur noch der aus `Devices.Common.Weather`.
   - Die 16 CSV-Spalten und das de-AT-Zahlenformat bleiben unverändert, damit das Abgabeformat gleich ist.
   - Nicht committet.
+
+## 2026-11-08 – Skill `probelauf` (eigener Skill, Aufgabe 03 A16)
+
+- **Done:** Eigenen Skill für reproduzierbare Funktionsnachweise angelegt, nach der Repo-Konvention wie `readTask` (versioniert unter `skills/`, Aktivierung über `.claude/skills/`). Inhalt: `SKILL.md` mit Aufruf, drei Umfängen (A Gerät, B LB02-Demo, C LB03-Kette), Pflichtlektüre, Regeln vor dem Start, 7-Schritt-Ablauf, Kurz-Prüftabelle und Grenzen; `references/ports.md` (Portmatrix 8080/5100/1502–1505/1883/15672/5672, Startbefehle, Standardwerte); `references/abnahmekriterien.md` (A1–A8, Z1–Z11, N1–N7 aus Aufgabe 03, Registerkopf 0–19, Qualitätswerte); `references/fehlerbilder.md` (17 Fälle mit Ursache/Abhilfe); `templates/nachweis-README.md`; `scripts/pruefe-ports.ps1` (Portcheck, nur lesend). Dazu `README.md` mit Feldtabelle, Nutzen, belegtem Beispielaufruf, Aktivierung, Dateiliste, Quelle und bekannten Grenzen.
+- **KI:** opencode (Big Pickle) => Analyse der vorhandenen Nachweise und Stolperfallen, Skill-Texte, Portcheck-Skript, Selbsttest und Nachweisordner.
+- **Artefact:** `skills/probelauf/` (`SKILL.md`, `README.md`, `references/ports.md`, `references/abnahmekriterien.md`, `references/fehlerbilder.md`, `templates/nachweis-README.md`, `scripts/pruefe-ports.ps1`), identische Kopie in `.claude/skills/probelauf/`, Nachweis `docs/nachweise/2026-11-08-probelauf-skill/` (`README.md`, `ablauf.txt`, `kuehlhaus.txt`, `diagnose-01-read.txt`, `diagnose-02-write.txt`, `diagnose-03-read.txt`).
+- **Test:** `dotnet build EnergyTwin.sln` 0 Fehler/0 Warnungen. `pruefe-ports.ps1` vor und nach dem Lauf: alle Ports frei. Selbsttest Umfang A: Kühlhaus KH-01 standalone, `--speed 600 --duration 8 --weather off --seed 42 --modbus-port 1505`; Port nach 1,2 s offen; `--once` liest Kopf 0–19 (Typ 5, Zeitstatus 2, Tempo 600) und Register 20–31; `--write "Solltemperatur=-15"` wird angenommen, Gegenlesung zeigt −15 °C und Register 19 = 20; Gerät endet nach 8 Modellstunden mit CSV, keine Restprozesse. Testprojekte nicht gestartet (kein Commit geplant, Projektregel in `AGENTS.md` §0.1).
+- **Comment:**
+  - Die ersten Protokolle waren unbrauchbar: PowerShell-Redirection mit `*>` schreibt UTF-16 und ersetzt Umlaute durch `?`. Mit `Start-Process -RedirectStandardOutput` bleiben die UTF-8-Bytes des Programms unverändert – als Fehlerbild 17 im Skill vermerkt, der Lauf wurde damit wiederholt.
+  - `Start-Process -PassThru` lieferte nach `WaitForExit` keinen Exit-Code; der Nachweis stützt sich auf Ausgaben, Portverhalten und Zeitmarken.
+  - Der Skill kann Anzeige, Tasten und Strg+C nicht abnehmen; das steht im Nachweis als „nicht geprüft“, ebenso Umfang B und C.
+  - `ExitCode`- und Encoding-Eigenheiten sowie die Pflicht zu `.txt`-Protokollen (wegen `*.log` in `.gitignore`) sind im Skill-README dokumentiert.
+  - OpenCode hat den Skill nach dem Anlegen selbst erkannt (Eintrag in der Skill-Liste), ohne Neustart.
+  - Nicht committet.
+
+### Nachtrag 2026-11-08 – Skill nach `.opencode/skills/` umgehängt (Agenten getrennt)
+
+- **Done:** Der Skill liegt jetzt nur noch in **`.opencode/skills/probelauf/`**; die Kopien in `skills/probelauf/` und `.claude/skills/probelauf/` sind entfallen (Team-Entscheidung: Agenten getrennt halten, damit sich Arbeitsweisen und Widersprüche nicht vermischen). Korrigiert: Aufruf ist **`@probelauf <Thema>`** statt `/probelauf` – OpenCode lädt Skills über die ID (aus dem Ordnernamen), das Skill-Werkzeug kennt keine Parameter, und ein Slash-Command wäre ein eigener Command in `.opencode/commands/`, der bewusst nicht angelegt wurde; Skriptpfad `powershell -File .opencode/skills/probelauf/scripts/pruefe-ports.ps1`; Abschnitt „Ablage und Aktivierung“ im README neu (ID aus Ordnernamen, automatische Erkennung, kein Kopieren und kein Neustart, `.opencode/skills/` hat Vorrang vor `.claude/skills/`); relativer Link auf den Nachweis (eine Ordnerebene tiefer) und die Verweise im Nachweis-README.
+- **KI:** opencode (Big Pickle) => Pfade und Aufruftexte angepasst, Duplikat entfernt, Links und Reststellen geprüft.
+- **Artefact:** `.opencode/skills/probelauf/` (`SKILL.md`, `README.md`, `references/ports.md`, `references/abnahmekriterien.md`, `references/fehlerbilder.md`, `templates/nachweis-README.md`, `scripts/pruefe-ports.ps1`), `docs/nachweise/2026-11-08-probelauf-skill/README.md`; gelöscht: `skills/probelauf/`, `.claude/skills/probelauf/`.
+- **Test:** `git grep "skills/probelauf"` ohne Treffer außer diesem Journal; relative Links im Skill-README und im Nachweis auf Existenz geprüft; OpenCode hat die geänderte `SKILL.md` selbst neu eingelesen (Skill-Liste zeigt die neue Beschreibung mit `@probelauf`) – kein Neustart nötig. Build und Tests nicht nötig (nur Markdown und ein Skriptkommentar).
+- **Comment:**
+  - `skills/` enthält jetzt nur noch `readTask`; für diesen Skill gibt es genau eine Ablage.
+  - Claude Code sieht diesen Skill nicht mehr (`.claude/skills/` enthält nur `readTask`). Umgekehrt liest OpenCode `.claude/skills/` als Kompatibilitätsquelle und zeigt `readTask` weiterhin an; echte Trennung ginge nur über `permissions` (`skill`/`readTask`/`deny`) oder durch Verschieben von `readTask` – nicht beauftragt.
+  - Nicht committet.

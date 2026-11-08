@@ -1,0 +1,31 @@
+EasyModbus Client Library Version: 1.0.0.0
+Copyright (c) Stefan Rossmann Engineering Solutions
+
+=== IndustrialConsumer Nr. 1 an 127.0.0.1:1505 (Unit 1) ===
+Gemeinsamer Registerkopf (0–19):
+  Adr    Name                                  Rohwert          Wert
+  0      Gerätetyp                             0x0005           5 = Industrieverbraucher
+  1      Geräte-Nummer                         0x0001           1
+  2      Betriebszustand                       0x0001           1 = Bereit
+  3      Fehlercode                            0x0000           0 = kein Fehler
+  4–5    Wirkleistung                          0x0000 0x0000    0 kW
+  6–7    Kumulierte Energie                    0x0000 0x0000    0 kWh
+  8–9    Modellzeit                            0x6AEF 0xC15C    So 2026-11-08 00:25:00
+  10     Lauf                                  0x0001           1
+  11     Sequenznummer                         0x0007           7
+  12     Zeitstatus                            0x0002           2 = Standalone
+  13     Simulation läuft                      0x0001           1 = läuft
+  14–15  Tempo                                 0x4416 0x0000    600 x
+  16     Ein/Aus                               0x0001           1 = ein [schreibbar]
+  17     Fehler zurücksetzen                   0x0000           0 [schreibbar]
+  18     Letzter Schreibfehler                 0x0000           0 = angenommen
+  19     Adresse des letzten Schreibzugriffs   0x0014           20
+Gerätespezifisch (KuehlhausSimulator, 20–31):
+  Adr    Name                                  Rohwert          Wert
+  20–21  Solltemperatur                        0xC170 0x0000    -15 °C [schreibbar]
+  22     Tür                                   0x0000           0 = zu [schreibbar]
+  23–24  Raumtemperatur                        0xC19B 0x7C70    -19,44 °C
+  25–26  Außentemperatur                       0x40E3 0x6113    7,11 °C
+  27     Kompressor                            0x0000           0 = aus
+  28–29  Kälteleistung                         0x0000 0x0000    0 kW
+  30–31  Laufzeit                              0x0000 0x0000    0 h
