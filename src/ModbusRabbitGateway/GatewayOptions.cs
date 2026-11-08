@@ -18,17 +18,32 @@ public sealed class GatewayOptions
     public TimeSpan Interval { get; private set; } = TimeSpan.FromSeconds(1);
     public TimeSpan StaleModelTime { get; private set; } = QualitySettings.Default.StaleModelTime;
     public int TimeoutMs { get; private set; } = 1000;
+
+    /// <summary>Wiederholung der Status-Nachrichten (RabbitMQ liefert retained nicht an Wildcard-Abos); 0 = nur bei Änderung.</summary>
+    public TimeSpan StatusRepeat { get; private set; } = TimeSpan.FromSeconds(30);
     public string GatewayId { get; private set; } = "GW-01";
     public bool Once { get; private set; }
     public bool ShowJson { get; private set; }
     public bool ListKeys { get; private set; }
 
+    /// <summary>Probebetrieb ohne Broker: nur Konsole.</summary>
+    public bool ConsoleOnly { get; private set; }
+    public string BrokerHost { get; private set; } = "127.0.0.1";
+    public int BrokerPort { get; private set; } = BrokerSettings.DefaultPort;
+
+    /// <summary>MQTT-Benutzer von der Kommandozeile; das Passwort gibt es bewusst nur über Umgebung oder <c>.env</c>.</summary>
+    public string? MqttUser { get; private set; }
+
+    /// <summary><c>.env</c>-Datei mit den Zugangsdaten; Standard <c>&lt;Repo&gt;/docker/.env</c>.</summary>
+    public string? EnvFile { get; private set; } =
+        Shared.Config.OutputPaths.RepositoryRoot is { } root ? Path.Combine(root, "docker", ".env") : null;
+
     /// <summary>Reale Mindestwartezeit für <c>stale</c>: drei Abfrageintervalle.</summary>
     public QualitySettings Quality => new(StaleModelTime, Interval * 3);
 
     public const string Usage = """
-        Modbus–RabbitMQ-Gateway – liest die Feldgeräte über Modbus TCP und veröffentlicht sie nach docs/Nachrichtenvertrag-LB03.md.
-        Derzeit Probebetrieb ohne Broker: Übersicht auf der Konsole, mit --json die vollständigen Nachrichten.
+        Modbus–RabbitMQ-Gateway – liest die Feldgeräte über Modbus TCP und veröffentlicht sie nach docs/Nachrichtenvertrag-LB03.md
+        per MQTT an RabbitMQ (MQTT-Plugin, Standard 127.0.0.1:1883).
 
         Aufruf: dotnet run --project src/ModbusRabbitGateway -- [Optionen]
 
@@ -37,9 +52,15 @@ public sealed class GatewayOptions
           --interval <s>                Abfrage- und Veröffentlichungsintervall in Sekunden (Standard 1, mind. 0,1)
           --stale-after <min>           Modellzeit in Minuten ohne neue Gerätesequenz bis „stale“ (Standard 60)
           --timeout <ms>                Modbus-Zeitlimit je Gerät (Standard 1000)
-          --gateway-id <ID>             Kennung für das Gateway-Status-Topic (Standard GW-01)
+          --status-repeat <s>           Status-Nachrichten zusätzlich alle n Sekunden wiederholen (Standard 30, 0 = nur bei Änderung)
+          --gateway-id <ID>             Kennung für das Gateway-Status-Topic und die MQTT-Client-ID (Standard GW-01)
+          --broker <host:port>          MQTT-Broker (Standard 127.0.0.1:1883)
+          --mqtt-user <name>            MQTT-Benutzer (sonst ENERGYTWIN_MQTT_USER oder RABBITMQ_DEFAULT_USER aus der .env-Datei)
+          --env-file <pfad>             .env-Datei mit RABBITMQ_DEFAULT_USER/RABBITMQ_DEFAULT_PASS (Standard <Repo>/docker/.env)
+                                        Passwort nur über ENERGYTWIN_MQTT_PASSWORD oder die .env-Datei, nie als Option
+          --console                     Probebetrieb ohne Broker: nur Konsole
           --once                        jedes Gerät einmal lesen und beenden
-          --json                        vollständige Nachrichten (Topic + JSON) ausgeben
+          --json                        vollständige Nachrichten (Topic + JSON) zusätzlich auf der Konsole ausgeben
           --keys                        Messwert-Schlüssel aller Registerpläne ausgeben und beenden
           --help                        diese Hilfe
 
@@ -81,11 +102,39 @@ public sealed class GatewayOptions
                         throw new ArgumentException("--timeout muss eine ganze Zahl von 100 bis 60000 ms sein.");
                     options.TimeoutMs = (int)timeout;
                     break;
+                case "--status-repeat":
+                    double repeat = ParseNumber(Next(args, ref i, name), name);
+                    if (repeat < 0)
+                        throw new ArgumentException("--status-repeat darf nicht negativ sein (0 = nur bei Änderung).");
+                    options.StatusRepeat = TimeSpan.FromSeconds(repeat);
+                    break;
                 case "--gateway-id":
                     string id = Next(args, ref i, name);
                     if (!id.All(c => char.IsAsciiLetterOrDigit(c) || c == '-'))
                         throw new ArgumentException($"Gateway-ID '{id}' ist ungültig: erlaubt sind Buchstaben, Ziffern und '-'.");
                     options.GatewayId = id;
+                    break;
+                case "--broker":
+                    var broker = DeviceEndpoint.Parse($"BROKER={Next(args, ref i, name)}");
+                    if (broker.UnitId != 1)
+                        throw new ArgumentException("--broker erwartet host:port ohne Unit-ID.");
+                    (options.BrokerHost, options.BrokerPort) = (broker.Host, broker.Port);
+                    break;
+                case "--mqtt-user":
+                    options.MqttUser = Next(args, ref i, name);
+                    break;
+                case "--env-file":
+                    string envFile = Next(args, ref i, name);
+                    if (!File.Exists(envFile))
+                        throw new ArgumentException($"--env-file: Datei '{envFile}' nicht gefunden.");
+                    options.EnvFile = Path.GetFullPath(envFile);
+                    break;
+                case "--mqtt-password" or "--password":
+                    throw new ArgumentException(
+                        $"Das Passwort wird nicht als Option angenommen (wäre in der Prozessliste sichtbar). " +
+                        $"Bitte {MqttCredentials.PasswordVariable} setzen oder RABBITMQ_DEFAULT_PASS in der .env-Datei.");
+                case "--console":
+                    options.ConsoleOnly = true;
                     break;
                 case "--once":
                     options.Once = true;

@@ -81,6 +81,25 @@ public sealed class GatewayAgainstDeviceTests : IDisposable
     }
 
     [Fact]
+    public void Status_IsRepeatedAfterInterval_WithOriginalSince_ForWildcardSubscribers()
+    {
+        using var poller = new DevicePoller(new DeviceEndpoint("DC-01", "127.0.0.1", _port), 1500, QualitySettings.Default,
+            statusRepeat: TimeSpan.FromSeconds(30));
+        var start = new DateTimeOffset(2026, 11, 8, 12, 0, 0, TimeSpan.Zero);
+
+        var first = poller.Poll(start);
+        var soon = poller.Poll(start.AddSeconds(10));
+        var later = poller.Poll(start.AddSeconds(31));
+
+        Assert.False(first.StatusRepeated);
+        Assert.Null(soon.StatusChange);                                // noch nicht fällig
+        Assert.True(later.StatusRepeated);                             // Wiederholung ohne Änderung
+        Assert.Equal(first.StatusChange!.SinceUtc, later.StatusChange!.SinceUtc);
+        Assert.Equal("2026-11-08T12:00:00.000Z", later.StatusChange.SinceUtc);
+        Assert.NotNull(later.Message);                                 // Messwerte laufen normal weiter
+    }
+
+    [Fact]
     public async Task Service_Once_PublishesGatewayStatusDeviceStatusAndMeasurements()
     {
         var options = GatewayOptions.Parse(["--device", $"DC-01=127.0.0.1:{_port}", "--once"]);

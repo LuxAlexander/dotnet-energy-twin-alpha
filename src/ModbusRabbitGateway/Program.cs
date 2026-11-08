@@ -34,10 +34,23 @@ Console.CancelKeyPress += (_, e) =>
     app.Cancel();
 };
 
-var pollers = options.Devices.Select(d => new DevicePoller(d, options.TimeoutMs, options.Quality)).ToList();
+var pollers = options.Devices.Select(d => new DevicePoller(d, options.TimeoutMs, options.Quality, options.StatusRepeat)).ToList();
+MqttPublisher? mqtt = null;
 try
 {
-    var publisher = new ConsolePublisher(Console.Out, options.ShowJson);
+    IMessagePublisher publisher;
+    if (options.ConsoleOnly)
+    {
+        publisher = new ConsolePublisher(Console.Out, options.ShowJson);
+    }
+    else
+    {
+        var credentials = MqttCredentials.Resolve(options.MqttUser, options.EnvFile, Environment.GetEnvironmentVariable);
+        mqtt = new MqttPublisher(new BrokerSettings(options.BrokerHost, options.BrokerPort, options.GatewayId, credentials),
+            options.GatewayId, TimeProvider.System);
+        publisher = options.ShowJson ? new TeePublisher(mqtt, new ConsolePublisher(Console.Out, true)) : mqtt;
+    }
+
     Console.WriteLine($"Modbus–RabbitMQ-Gateway {options.GatewayId} – Ziel: {publisher.Description}");
     Console.WriteLine($"Geräte: {string.Join("  ", options.Devices)} · Intervall {options.Interval.TotalSeconds:0.###} s");
     if (!options.Once)
@@ -57,6 +70,8 @@ finally
 {
     foreach (var poller in pollers)
         poller.Dispose();
+    if (mqtt is not null)
+        await mqtt.DisposeAsync();                                // geordnet trennen (kein Last Will)
 }
 
 Console.WriteLine("Gateway beendet.");

@@ -6,6 +6,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="EasyModbusTCP.NETCore" Version="1.0.0" />
+    <PackageVersion Include="MQTTnet" Version="5.0.1.1416" />
+    <PackageVersion Include="MQTTnet.Server" Version="5.0.1.1416" />
     <PackageVersion Include="WeatherSynth" Version="0.3.0" />
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />

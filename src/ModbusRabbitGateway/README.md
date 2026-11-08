@@ -1,14 +1,15 @@
 # ModbusRabbitGateway
 
 **Zweck:** Modbus–RabbitMQ-Gateway (Aufgabe 03). Liest die Feldgeräte über Modbus TCP, dekodiert Registerkopf und
-gerätespezifische Register nach dem Registerplan und baut daraus Nachrichten nach dem
-[Nachrichtenvertrag](../../docs/Nachrichtenvertrag-LB03.md).
+gerätespezifische Register nach dem Registerplan und veröffentlicht Nachrichten nach dem
+[Nachrichtenvertrag](../../docs/Nachrichtenvertrag-LB03.md) per **MQTT** an RabbitMQ (MQTT-Plugin, Port 1883).
 **Verantwortlich:** Susanne Lastowicka
 **Basis:** Modbus-Verbindung aus dem Diagnose-Client (LB02), jetzt in `src/Modbus.Client`.
-**Abhängigkeiten:** `Modbus.Contracts` (Registerpläne, Codec), `Modbus.Client` (Verbindung, EasyModbusTCP.NETCore).
+**Abhängigkeiten:** `Modbus.Contracts` (Registerpläne, Codec), `Modbus.Client` (Verbindung, EasyModbusTCP.NETCore),
+`Shared.Config` (Repo-Ordner für `docker/.env`), MQTTnet 5.0.1 (MQTT-Client).
 
-**Stand 2026-11-08:** Modbus lesen, dekodieren, Qualitätsstatus und Nachrichten fertig; veröffentlicht wird noch auf
-die **Konsole** (Probebetrieb ohne Broker). Nächster Schritt: MQTT-Publisher an RabbitMQ (Port 1883).
+**Stand 2026-11-08:** vollständiger Datenweg Modbus → MQTT umgesetzt, mit einem MQTT-Broker im Testprozess getestet
+und im Probelauf gegen RabbitMQ 4.4.0 (Docker) geprüft. `--console` erlaubt den Betrieb ohne Broker.
 
 ## Konfiguration
 
@@ -18,10 +19,31 @@ die **Konsole** (Probebetrieb ohne Broker). Nächster Schritt: MQTT-Publisher an
 | `--interval <s>` | 1 | Abfrage- und Veröffentlichungsintervall (reale Zeit), mind. 0,1 |
 | `--stale-after <min>` | 60 | Modellzeit ohne neue Gerätesequenz bis Qualität `stale` |
 | `--timeout <ms>` | 1000 | Modbus-Zeitlimit je Gerät |
-| `--gateway-id <ID>` | `GW-01` | Kennung im Gateway-Status-Topic |
+| `--gateway-id <ID>` | `GW-01` | Kennung im Gateway-Status-Topic und MQTT-Client-ID |
+| `--broker <host:port>` | `127.0.0.1:1883` | MQTT-Broker (RabbitMQ-MQTT-Plugin) |
+| `--mqtt-user <name>` | – | MQTT-Benutzer (sonst Umgebung oder `.env`) |
+| `--env-file <pfad>` | `<Repo>/docker/.env` | `.env` mit `RABBITMQ_DEFAULT_USER` / `RABBITMQ_DEFAULT_PASS` |
+| `--status-repeat <s>` | 30 | Status-Nachrichten zusätzlich alle n Sekunden wiederholen (0 = nur bei Änderung), siehe unten |
+| `--console` | – | Probebetrieb ohne Broker, nur Konsole |
 | `--once` | – | jedes Gerät einmal lesen und beenden |
-| `--json` | – | vollständige Nachrichten (Topic + JSON) ausgeben |
+| `--json` | – | vollständige Nachrichten (Topic + JSON) zusätzlich auf der Konsole |
 | `--keys` | – | Messwert-Schlüssel aller Registerpläne ausgeben |
+
+### Zugangsdaten
+
+Das Passwort steht nie im Repo und wird nie als Option angenommen (wäre in der Prozessliste sichtbar). Reihenfolge:
+
+1. Benutzer aus `--mqtt-user`,
+2. Umgebungsvariablen `ENERGYTWIN_MQTT_USER` und `ENERGYTWIN_MQTT_PASSWORD`,
+3. `docker/.env` (bzw. `--env-file`) mit `RABBITMQ_DEFAULT_USER` und `RABBITMQ_DEFAULT_PASS` – dieselbe Datei, aus der
+   die Compose-Datei die Broker-Zugangsdaten lesen soll; `*.env` ist in `.gitignore`.
+
+Ohne Angaben verbindet sich das Gateway anonym; RabbitMQ lehnt das in der Regel ab.
+
+```powershell
+$env:ENERGYTWIN_MQTT_USER = "user"; $env:ENERGYTWIN_MQTT_PASSWORD = "<passwort>"
+dotnet run --project src/ModbusRabbitGateway
+```
 
 Aus der Geräte-ID prüft das Gateway, ob das richtige Gerät antwortet: Das Kürzel (`PV`, `BAT`, `DC`, `KH`) gibt den
 Gerätetyp (Register 0) vor, die Zahl am Ende die Geräte-Nummer (Register 1). Bei Abweichung: `decodeError`, keine
@@ -30,11 +52,11 @@ Messwerte. Unbekannte Kürzel werden nicht auf den Typ geprüft.
 ## Bedienung / Start
 
 ```bash
-# Geräte wie in der zentralen README starten (Charger auf 1504), dann:
+# RabbitMQ und die Geräte wie in der zentralen README starten (Charger auf 1504), dann:
 dotnet run --project src/ModbusRabbitGateway
 
-# nur die Ladesäule, einmal lesen, vollständige Nachricht zeigen
-dotnet run --project src/ModbusRabbitGateway -- --device DC-01=127.0.0.1:1504 --once --json
+# ohne Broker: nur die Ladesäule, einmal lesen, vollständige Nachricht zeigen
+dotnet run --project src/ModbusRabbitGateway -- --console --device DC-01=127.0.0.1:1504 --once --json
 ```
 
 Je Lesung erscheint eine Übersichtszeile, z. B.
@@ -45,7 +67,27 @@ BAT-01  OFFLINE: Keine Verbindung zu 127.0.0.1:1503 (Unit 1): connection timed o
 ```
 
 Beenden mit `Q` oder Strg+C: Die laufende Runde wird abgebrochen, der Gateway-Status `offline` wird noch gemeldet,
-die Verbindungen werden geschlossen.
+die Verbindungen werden geordnet getrennt.
+
+### Broker-Ausfall und Wiederanlauf
+
+| Situation | Verhalten |
+|---|---|
+| Broker beim Start oder im Betrieb nicht erreichbar | einmal `BROKER NICHT ERREICHBAR: …`, Geräte werden weiter gelesen, Übersichtszeilen tragen `[nicht übertragen]`; kein Abbruch, keine Endlosschleife |
+| Neuversuch | beim nächsten Veröffentlichen, mit wachsendem Abstand 1, 2, 4 … höchstens 30 s (dazwischen keine Verbindungsversuche) |
+| Broker wieder da | `BROKER WIEDER VERBUNDEN – n Nachricht(en) … nicht übertragen`; die letzten Status-Nachrichten (Gateway und Geräte, retained) werden **nachgeholt** |
+| Messwerte aus der Ausfallzeit | **verworfen** (Momentaufnahmen, kein Puffer); im Viewer als Lücke in `publishSeq` erkennbar |
+| Falsche Zugangsdaten | RabbitMQ schließt die Verbindung beim Anmelden: `Verbindung bei der Anmeldung geschlossen – startet der Broker gerade, oder sind die Zugangsdaten falsch? (Benutzer … (Passwort aus …))`. Dieselbe Meldung erscheint, solange der Container neu startet (die Docker-Portweiterleitung nimmt an und schließt sofort); beides ist von außen nicht unterscheidbar. Broker mit Ablehnungscode: `Anmeldung abgelehnt (BadUserNameOrPassword) …`. Das Passwort wird nie angezeigt |
+| Gateway stirbt ohne geordnetes Beenden | Last Will: der Broker setzt `energytwin/gateway/GW-01/status` auf `offline` |
+
+### Besonderheit RabbitMQ: retained nur bei exaktem Topic
+
+RabbitMQ liefert gespeicherte (retained) Nachrichten nur an Abos, deren Topic **exakt** passt
+(`energytwin/devices/BAT-01/status`), nicht an Wildcard-Abos wie `energytwin/#` oder `energytwin/devices/+/status`
+(im Probelauf am 2026-11-08 mit RabbitMQ 4.4.0 nachgeprüft). Ein später gestarteter Viewer mit `energytwin/#` sähe
+ein ausgefallenes Gerät sonst erst bei der nächsten Zustandsänderung. Deshalb wiederholt das Gateway die
+Status-Nachrichten von Gateway und Geräten alle `--status-repeat` Sekunden (Standard 30). `sinceUtc` bleibt dabei der
+Beginn des Zustands; auf der Konsole erscheinen nur echte Änderungen.
 
 ## Ablauf und Aufbau
 
@@ -56,7 +98,9 @@ die Verbindungen werden geschlossen.
 | `MessageBuilder` | dekodiert nach `RegisterPlans.For(Typ)`, trennt virtuelle Zeit (`simTime`) und Abfragezeit (`polledAtUtc`), leitet den Qualitätsstatus ab (Vertrag §3.1) |
 | `MeasurementKeys`, `KeyCatalog` | stabile Schlüssel je Messwert (`Punkt 1: SOC` → `punkt_1_soc`) |
 | `Messages` (`MeasurementMessage`, `DeviceStatusMessage`, `GatewayStatusMessage`, `Contract`, `MessageJson`) | Nachrichten, Topics, Qualitäts- und Statuswerte, JSON (camelCase, UTF-8) |
-| `IMessagePublisher`, `ConsolePublisher` | Ziel der Nachrichten; heute Konsole, später MQTT |
+| `MqttPublisher`, `BrokerSettings` | MQTT (MQTTnet): QoS 1, Retain für Status, Last Will, Wiederanlauf mit Wartezeit, Status nachholen |
+| `MqttCredentials` | Zugangsdaten aus Option, Umgebung oder `.env`; Passwort nie in Anzeige oder Kommandozeile |
+| `IMessagePublisher`, `ConsolePublisher`, `TeePublisher`, `BrokerUnavailableException` | Ziel der Nachrichten; Konsole für `--console`/`--json` |
 | `GatewayOptions`, `DeviceEndpoint` | Kommandozeile, Geräteangaben |
 
 Die Daten kommen ausschließlich über Modbus; der Diagnose-Client bleibt unverändert nutzbar (gleiche
@@ -75,7 +119,8 @@ neu; das Gateway versucht es in jedem Intervall, ohne Endlosschleife und ohne Pr
 
 ## Bekannte Probleme
 
-- Noch kein MQTT: Nachrichten gehen nur auf die Konsole.
+- Probelauf gegen RabbitMQ unter Docker noch offen (Tests laufen gegen den MQTTnet-Broker im Testprozess).
+- Die Compose-Datei enthält noch feste Zugangsdaten; bis zur Umstellung auf `docker/.env` die Umgebungsvariablen setzen.
 - Keine atomare Lesung über mehrere Register (EasyModbus); Einzelheiten im Vertrag §6.
 - Geräte werden nacheinander gelesen; ein nicht erreichbares Gerät verzögert die Runde um bis zu `--timeout`.
 - Die Bibliothek gibt beim Start je Gerät `EasyModbus Client Library Version …` aus; das lässt sich nicht abschalten.

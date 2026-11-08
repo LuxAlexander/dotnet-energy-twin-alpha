@@ -34,6 +34,8 @@ Feldgerät (Modbus-Server) → Gateway (Modbus-Client, MQTT-Publisher) → Rabbi
 
 - `{deviceId}` ist die konfigurierte Geräte-ID, z. B. `PV-01`, `BAT-01`, `DC-01`, `KH-01`. Erlaubt: Buchstaben `A–Z`/`a–z`, `0–9`, `-`.
 - **Abonnement im Viewer:** `energytwin/#` (alles) oder `energytwin/devices/+/measurements` (nur Messwerte).
+- **Retained bei RabbitMQ:** gespeicherte Nachrichten bekommen nur Abos mit exakt passendem Topic, nicht Wildcard-Abos.
+  Deshalb wiederholt das Gateway die Status-Nachrichten regelmäßig (§4).
 - **RabbitMQ intern:** Das MQTT-Plugin legt MQTT-Nachrichten auf den Exchange `amq.topic`; aus `/` im Topic wird `.`
   im Routing Key (`energytwin.devices.DC-01.measurements`). Für jeden MQTT-Abonnenten legt das Plugin automatisch
   eine Queue an und bindet sie. Eigene Exchanges, Queues oder Bindings sind nicht nötig.
@@ -147,7 +149,9 @@ Das Gateway schreibt die Nachricht kompakt in eine Zeile; `--json` zeigt sie so 
 ## 4. Statusnachricht je Gerät
 
 Topic: `energytwin/devices/{deviceId}/status`, retained. Wird bei **jeder Änderung** des Zustands gesendet, nicht bei
-jeder Lesung. Bei `offline` zählt nur der Zustand (der Fehlertext wechselt zwischen „Lesen abgebrochen“ und „keine
+jeder Lesung, und zusätzlich alle `--status-repeat` Sekunden (Standard 30) **wiederholt**, damit auch ein später
+gestarteter Viewer mit Wildcard-Abo den Zustand sieht; `sinceUtc` bleibt dabei der Beginn des Zustands. Der
+Gateway-Status `online` wird ebenso wiederholt. Bei `offline` zählt nur der Zustand (der Fehlertext wechselt zwischen „Lesen abgebrochen“ und „keine
 Verbindung“, ohne dass sich etwas ändert); bei `decodeError` auch ein neuer Grund.
 
 ```json
@@ -181,13 +185,21 @@ keinen gab.
 | Grenze für `stale` | `--stale-after <min>` | 60 min Modellzeit | Siehe §3.1 |
 | Modbus-Zeitlimit | `--timeout <ms>` | 1000 ms | Je Gerät und Zugriff |
 | Gateway-Kennung | `--gateway-id <ID>` | `GW-01` | Für das Gateway-Status-Topic und die MQTT-Client-ID |
-| MQTT-Broker | (folgt) | `127.0.0.1:1883` | Host und Port des RabbitMQ-MQTT-Plugins |
-| MQTT-Zugangsdaten | (folgt) | aus Umgebungsvariablen / `.env` | Nie im Repo; Platzhalter in `.env.example` |
+| MQTT-Broker | `--broker <host:port>` | `127.0.0.1:1883` | Host und Port des RabbitMQ-MQTT-Plugins |
+| MQTT-Zugangsdaten | `--mqtt-user`, `ENERGYTWIN_MQTT_USER`/`ENERGYTWIN_MQTT_PASSWORD`, `--env-file` | `docker/.env` (`RABBITMQ_DEFAULT_USER`/`RABBITMQ_DEFAULT_PASS`) | Nie im Repo, Passwort nie als Option |
+| Status-Wiederholung | `--status-repeat <s>` | 30 s | 0 = nur bei Änderung (§4) |
+| Probebetrieb | `--console` | aus | Ohne Broker, nur Konsole |
 
 Prüfung beim Lesen: Register 0 (Gerätetyp) und 1 (Geräte-Nummer) müssen zur konfigurierten ID passen
 (`DC-01` ⇒ Typ 3, Nummer 1). Sonst `decodeError`, keine Messwertnachricht.
 
-## 6. Bekannte Einschränkungen
+## 6. Bekannte Einschränkungen und Wiederanlauf
+
+- **Broker-Ausfall:** Das Gateway liest weiter und meldet den Ausfall einmal sichtbar. Messwerte aus der Ausfallzeit
+  werden verworfen (kein Puffer; erkennbar an Lücken in `publishSeq`). Neuversuch beim nächsten Veröffentlichen mit
+  wachsendem Abstand (1 … 30 s). Nach dem Wiederverbinden werden die letzten Status-Nachrichten (retained) nachgeholt.
+- **Last Will:** `sinceUtc` in der Last-Will-Nachricht ist der Zeitpunkt des Verbindungsaufbaus (der Broker sendet sie
+  unverändert).
 
 - **Keine atomare Lesung:** Die Register 0–49 werden in einer Anfrage gelesen, das Gerät kann sie aber währenddessen
   aktualisieren (EasyModbus ist nicht transaktional). Einzelne Werte einer Nachricht können daher aus zwei

@@ -4,7 +4,8 @@ namespace ModbusRabbitGateway;
 
 /// <summary>
 /// Hauptschleife: liest im festen Intervall alle Geräte, veröffentlicht Messwerte und Statusänderungen und zeigt
-/// je Lesung eine Übersichtszeile. Ein Gerätefehler hält die anderen Geräte nicht auf.
+/// je Lesung eine Übersichtszeile. Ein Gerätefehler hält die anderen Geräte nicht auf; ein Broker-Ausfall hält das Lesen
+/// nicht auf (Messwerte werden dann verworfen, Ausfall und Wiederkehr einmal sichtbar gemeldet).
 /// Reale Zeit nur über <see cref="TimeProvider"/> (testbar); die virtuelle Zeit kommt ausschließlich aus den Registern.
 /// </summary>
 public sealed class GatewayService(
@@ -16,9 +17,19 @@ public sealed class GatewayService(
 {
     private static readonly CultureInfo De = CultureInfo.GetCultureInfo("de-AT");
 
+    private bool _brokerDown;
+    private int _dropped;
+
+    /// <summary>Nachrichten, die seit Beginn des aktuellen Broker-Ausfalls nicht übertragen wurden.</summary>
+    public int DroppedSinceOutage => _dropped;
+
+    public bool BrokerDown => _brokerDown;
+
     public async Task RunAsync(CancellationToken cancellationToken)
     {
-        await PublishGatewayStateAsync("online", cancellationToken);
+        var onlineSince = time.GetUtcNow();
+        var lastOnlineSent = onlineSince;
+        await PublishGatewayStateAsync("online", onlineSince, cancellationToken);
         try
         {
             using var timer = new PeriodicTimer(options.Interval, time);
@@ -27,6 +38,13 @@ public sealed class GatewayService(
                 await PollAllAsync(cancellationToken);
                 if (options.Once)
                     break;
+
+                // Wiederholung (RabbitMQ liefert retained nicht an Wildcard-Abos, siehe DevicePoller)
+                if (options.StatusRepeat > TimeSpan.Zero && time.GetUtcNow() - lastOnlineSent >= options.StatusRepeat)
+                {
+                    lastOnlineSent = time.GetUtcNow();
+                    await PublishGatewayStateAsync("online", onlineSince, cancellationToken);
+                }
             }
             while (await timer.WaitForNextTickAsync(cancellationToken));
         }
@@ -36,7 +54,8 @@ public sealed class GatewayService(
             using var shutdown = new CancellationTokenSource(TimeSpan.FromSeconds(2));
             try
             {
-                await PublishGatewayStateAsync("offline", shutdown.Token);
+                if (!await PublishGatewayStateAsync("offline", time.GetUtcNow(), shutdown.Token))
+                    await log.WriteLineAsync("Gateway-Status „offline“ nicht übertragen (Broker nicht erreichbar).");
             }
             catch (OperationCanceledException)
             {
@@ -54,25 +73,57 @@ public sealed class GatewayService(
 
             if (outcome.StatusChange is { } status)
             {
-                await publisher.PublishAsync(Contract.DeviceStatusTopic(status.DeviceId), MessageJson.Serialize(status),
+                bool sent = await TryPublishAsync(Contract.DeviceStatusTopic(status.DeviceId), MessageJson.Serialize(status),
                     retain: true, cancellationToken);
-                await log.WriteLineAsync(DescribeStatus(status));
+                if (!outcome.StatusRepeated)                      // Wiederholungen nicht auf der Konsole
+                    await log.WriteLineAsync(DescribeStatus(status) + (sent ? "" : NotSent));
             }
 
             if (outcome.Message is { } message)
             {
-                await publisher.PublishAsync(Contract.MeasurementsTopic(message.DeviceId), MessageJson.Serialize(message),
+                bool sent = await TryPublishAsync(Contract.MeasurementsTopic(message.DeviceId), MessageJson.Serialize(message),
                     retain: false, cancellationToken);
-                await log.WriteLineAsync(Summarize(message));
+                await log.WriteLineAsync(Summarize(message) + (sent ? "" : NotSent));
             }
         }
     }
 
-    private Task PublishGatewayStateAsync(string state, CancellationToken cancellationToken)
+    private const string NotSent = "  [nicht übertragen]";
+
+    private async Task<bool> PublishGatewayStateAsync(string state, DateTimeOffset since, CancellationToken cancellationToken)
     {
-        var message = new GatewayStatusMessage(Contract.SchemaVersion, options.GatewayId, state, Contract.FormatUtc(time.GetUtcNow()));
-        return publisher.PublishAsync(Contract.GatewayStatusTopic(options.GatewayId), MessageJson.Serialize(message),
+        var message = new GatewayStatusMessage(Contract.SchemaVersion, options.GatewayId, state, Contract.FormatUtc(since));
+        return await TryPublishAsync(Contract.GatewayStatusTopic(options.GatewayId), MessageJson.Serialize(message),
             retain: true, cancellationToken);
+    }
+
+    /// <returns><c>false</c>, wenn der Broker die Nachricht nicht angenommen hat; Ausfall und Wiederkehr werden je einmal gemeldet.</returns>
+    private async Task<bool> TryPublishAsync(string topic, string payload, bool retain, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await publisher.PublishAsync(topic, payload, retain, cancellationToken);
+        }
+        catch (BrokerUnavailableException ex)
+        {
+            _dropped++;
+            if (!_brokerDown)
+            {
+                _brokerDown = true;
+                await log.WriteLineAsync($"BROKER NICHT ERREICHBAR: {ex.Message} – Geräte werden weiter gelesen, " +
+                                         "Messwerte bis zur Wiederverbindung verworfen, Neuversuch automatisch.");
+            }
+            return false;
+        }
+
+        if (_brokerDown)
+        {
+            await log.WriteLineAsync($"BROKER WIEDER VERBUNDEN – {_dropped} Nachricht(en) in der Ausfallzeit nicht übertragen; " +
+                                     "Status-Nachrichten wurden nachgeholt.");
+            _brokerDown = false;
+            _dropped = 0;
+        }
+        return true;
     }
 
     /// <summary>Eine Zeile je Nachricht: Gerät, virtuelle Zeit, Lauf, Sequenzen, Qualität, Wirkleistung.</summary>

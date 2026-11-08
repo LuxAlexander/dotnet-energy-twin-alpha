@@ -51,7 +51,7 @@ src/
   WeatherSimulator/        HTTP-Wetterdienst (deterministisch, WeatherSynth-Basis)
   ModbusDiagnosticClient/  Register lesen/schreiben, Fehler anzeigen
   Modbus.Client/           Modbus-TCP-Client (Verbindung, Fehlerübersetzung) für Diagnose-Client und Gateway
-  ModbusRabbitGateway/     LB03: Geräte über Modbus lesen, nach Nachrichtenvertrag veröffentlichen (derzeit Konsole, MQTT folgt)
+  ModbusRabbitGateway/     LB03: Geräte über Modbus lesen, nach Nachrichtenvertrag per MQTT an RabbitMQ veröffentlichen
   Devices/PvSimulator/       PV-Anlage
   Devices/BatterySimulator/  Batteriespeicher
   Devices/DualPortCharger/   DC-Ladesäule mit zwei Ladepunkten
@@ -108,8 +108,9 @@ dotnet run --project src/Devices/KuehlhausSimulator -- --id KH-01
 # 4. Modbus-Diagnose-Client
 dotnet run --project src/ModbusDiagnosticClient -- --port 1502
 
-# 5. Modbus–RabbitMQ-Gateway (LB03, liest PV 1502, Batterie 1503, Charger 1504, Kühlhaus 1505; derzeit Ausgabe auf der Konsole)
-dotnet run --project src/ModbusRabbitGateway -- --json
+# 5. Modbus–RabbitMQ-Gateway (LB03, liest PV 1502, Batterie 1503, Charger 1504, Kühlhaus 1505 → MQTT 127.0.0.1:1883)
+#    Zugangsdaten über ENERGYTWIN_MQTT_USER/ENERGYTWIN_MQTT_PASSWORD oder docker/.env; ohne Broker: --console
+dotnet run --project src/ModbusRabbitGateway
 ```
 
 Die Standardports sind 1502 (PV und Charger), 1503 (Batterie) und 1505 (Kühlhaus). In der Demo mit allen Geräten
@@ -163,7 +164,7 @@ dotnet test tests/ModbusRabbitGateway.Tests
 ```
 
 Die Testprojekte werden **einzeln** gestartet: Mehrere binden echte TCP-Ports, deshalb kann `dotnet test EnergyTwin.sln`
-wegen der parallelen Ausführung scheitern, obwohl der Code in Ordnung ist. Zusammen sind es 247 Tests (Stand 2026-11-08, alle grün).
+wegen der parallelen Ausführung scheitern, obwohl der Code in Ordnung ist. Zusammen sind es 258 Tests (Stand 2026-11-08, alle grün).
 
 Pflicht-Tests laut Aufgabenstellung: Zeitsteuerung des Masters (`tests/SimCore.Tests`) und Reproduzierbarkeit des
 Wetters (`tests/Weather.Tests`). Dazu Gerätezeit/Modbus (`Devices.Common.Tests`), PV/Batterie/Kühlhaus
