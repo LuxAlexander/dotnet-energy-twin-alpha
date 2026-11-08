@@ -436,3 +436,8 @@ dotNET Programmierung 2026 - Aufgabe 02.pdf
 # Agent-Entscheide (nur lokal, nicht versionieren)
 docs/adr/
 docs/glossary.md
+
+# Lokale Agent-Konfiguration und generiertes Graphmodell
+/graphify-out/
+/.claude/
+/.opencode/
