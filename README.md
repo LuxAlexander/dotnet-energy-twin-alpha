@@ -1,4 +1,4 @@
-# EnergyTwin – verteiltes Energiesystem (LB02, Team Alpha)
+# EnergyTwin – verteiltes Energiesystem (LB02/LB03, Team Alpha)
 
 Simulation eines Energiesystems aus mehreren getrennten Programmen: ein Simulations-Master gibt die virtuelle Zeit vor,
 ein Wettersimulator liefert deterministisches Wetter, vier Feldgeräte (PV, Batterie, DC-Ladesäule, Kühlhaus) simulieren
@@ -28,13 +28,29 @@ Entschieden: Übertragung per **MQTT** (RabbitMQ-MQTT-Plugin, Port 1883); als Vi
 | Messwerte im Vertrag: Batteriespeicher | | |
 | Messwerte im Vertrag: Kühlhaus | | |
 | SRS `docs/SRS-LB03.md` | | [`docs/SRS-LB03.md`](docs/SRS-LB03.md) (Entwurf mit Gateway-Teil) |
-| RabbitMQ unter Docker (Compose, `.env.example`, Start/Status/Stopp) | | [`docker/docker-compose.yml`](docker/docker-compose.yml) |
+| RabbitMQ unter Docker (Compose, `.env.example`, Start/Status/Stopp) | Alexander Lux | [`docker/README.md`](docker/README.md), lokaler Lauf mit allen vier Geräten geprüft |
 | Viewer: Einrichtung und Anleitung MQTT-Werkzeug | | |
 | Funktionsnachweise 1–7 | | [`docs/nachweise/`](docs/nachweise/2026-11-08-gateway-mit-master/README.md) (Lauf mit Ladesäule und Master) |
 | Optional: Wetter/TimeSim über RabbitMQ | | |
 | Eigener Skill `readTask` | Susanne Lastowicka | [`skills/readTask/README.md`](skills/readTask/README.md) |
 | Eigener Skill | Alexander Lux | |
 | Eigener Skill | Dominik Zach | |
+
+## LB03 starten
+
+Einrichtung und vollständige Startfolge: [`docker/README.md`](docker/README.md).
+Nach einmaliger Einrichtung von `docker/.env`, aus dem Repository-Root:
+
+```powershell
+docker compose --env-file docker/.env -f docker/docker-compose.yml up -d --wait --wait-timeout 180
+.\start-all.ps1 -Autostart -NoClient
+# Anschließend in einem weiteren Terminal:
+dotnet run --no-build --project src/ModbusRabbitGateway
+```
+
+Management: <http://localhost:15672>; MQTT: `127.0.0.1:1883`, Abo `energytwin/#`.
+Zugangsdaten stehen ausschließlich in der lokalen `docker/.env`.
+Der [Docker-Funktionsnachweis](docs/nachweise/2026-11-08-docker-alexander/README.md) belegt den Empfang aller vier Geräte.
 
 ## Aufbau
 

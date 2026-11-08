@@ -1,5 +1,11 @@
 # Aufgabenabgleich: Aufgabe 03 – Von Modbus zu RabbitMQ (Stand 2026-11-08, Commit `f30bcd1`)
 
+> **Historischer Abgleich:** Die folgende Tabelle beschreibt den damaligen Commit, nicht den aktuellen Arbeitsstand.
+> Gateway, Nachrichtenvertrag und SRS sind inzwischen vorhanden. Alexander hat am 2026-11-08 die Broker-Konfiguration
+> auf feste Version, lokale `.env`, Healthcheck und dokumentierten Start umgestellt und Nachrichten aller vier Geräte
+> empfangen. Aktuell: [`SRS-LB03.md`](../SRS-LB03.md), [`Docker-Anleitung`](../../docker/README.md) und
+> [Funktionsnachweis](../nachweise/2026-11-08-docker-alexander/README.md). Ein vollständiger neuer Anforderungsabgleich steht aus.
+
 Erstellt mit dem Skill [`readTask`](../../skills/readTask/README.md), Aufruf `/readTask Aufgabe 03` (Susanne Lastowicka).
 Nur lesend ermittelt: kein Build, kein Test und kein Docker-Start (Grenzen des Skills).
 

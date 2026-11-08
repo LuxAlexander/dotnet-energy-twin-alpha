@@ -1,7 +1,7 @@
 # SRS LB03 – Von Modbus zu RabbitMQ
 
 **Stand:** 2026-11-08 · **Status:** Entwurf; Abschnitte zu Gateway und Nachrichtenvertrag umgesetzt und geprüft,
-Broker und Viewer noch ohne Zuständigkeit · **Erstellt von:** Susanne Lastowicka (mit Claude Opus 5.5)
+Broker von Alexander Lux eingerichtet und geprüft, Viewer noch ohne Zuständigkeit · **Erstellt von:** Susanne Lastowicka (mit Claude Opus 5.5)
 
 Knappe, projektspezifische Anforderungsbeschreibung für Aufgabe 03. Details stehen in den verlinkten Dokumenten und
 werden hier nicht wiederholt.
@@ -29,7 +29,7 @@ Feldgerät (Modbus-Server) → Gateway (Modbus-Client, MQTT-Publisher) → Rabbi
 | PV, Batterie, DC-Ladesäule, Kühlhaus | liefern Daten nur über Modbus (unverändert) | siehe zentrale `README.md` | vorhanden |
 | `ModbusRabbitGateway` (+ `Modbus.Client`) | liest Modbus, dekodiert, veröffentlicht per MQTT | Susanne Lastowicka | umgesetzt |
 | Nachrichtenvertrag | Format, Topics, Qualität | Susanne Lastowicka | umgesetzt, Teamzustimmung offen |
-| RabbitMQ unter Docker | Broker mit MQTT-Plugin | offen | Compose vorhanden, Umstellung auf `.env` offen |
+| RabbitMQ unter Docker | Broker mit MQTT-Plugin | Alexander Lux | feste Version, `.env`, Healthcheck und Anleitung umgesetzt; lokaler Lauf geprüft |
 | Viewer | Empfang und Anzeige (MQTT-Werkzeug, z. B. MQTT Explorer) | offen | Anleitung offen |
 
 **Protokollwahl: MQTT** (Entscheidung 2026-11-08). Gründe: Das MQTT-Plugin war in der Compose-Datei schon aktiv; ein
@@ -61,7 +61,7 @@ fertiges MQTT-Werkzeug kann als Viewer dienen; Topics bilden Gerät und Nachrich
 | FA-VW-02 | Zeigt mindestens Geräte-ID, Simulationszeit, Messwerte mit Einheit, Sequenznummer und Qualitätsstatus (im Nachrichteninhalt erkennbar). |
 | FA-VW-03 | Verbindungseinstellungen und Abo sind so dokumentiert, dass der Empfang reproduzierbar eingerichtet werden kann. |
 
-### 3.3 Broker (Zuständigkeit offen)
+### 3.3 Broker (Alexander Lux)
 
 | ID | Anforderung |
 |---|---|
@@ -111,8 +111,8 @@ Register (Einschränkung im Vertrag §6 dokumentiert).
 | ID | Kriterium | Stand 2026-11-08 | Beleg |
 |---|---|---|---|
 | AK-01 | Die Solution baut mit 0 Fehlern/0 Warnungen, alle bisherigen Tests bleiben grün. | ✅ 258/258 | Journal Susanne, Nachtrag „Gesamttestlauf“ |
-| AK-02 | RabbitMQ startet aus der versionierten Compose-Datei, ohne Zugangsdaten im Repo. | ⚠️ startet; Zugangsdaten noch fest in der Compose-Datei | FA-BR-02 offen |
-| AK-03 | Alle vier Pflicht-Geräte liefern Nachrichten an den Viewer. | ⚠️ Ladesäule nachgewiesen; PV, Batterie, Kühlhaus nicht im Lauf | `docs/nachweise/2026-11-08-gateway-mit-master/` |
+| AK-02 | RabbitMQ startet aus der versionierten Compose-Datei, ohne Zugangsdaten im Repo. | ✅ aktualisierte Compose-Datei lokal geprüft; Zugangsdaten nur in ignorierter `.env` (Änderung noch nicht committet) | `docs/nachweise/2026-11-08-docker-alexander/` |
+| AK-03 | Alle vier Pflicht-Geräte liefern Nachrichten an den Viewer. | ⚠️ alle vier mit echtem Master an MQTT-Testempfänger nachgewiesen; interaktiver Viewer noch offen | `docs/nachweise/2026-11-08-docker-alexander/` |
 | AK-04 | Jede Messwertnachricht enthält DeviceId, virtuelle Zeit, Sequenz, Qualität und Messwerte mit Einheit. | ✅ | Vertrag, `viewer.txt`, Tests `MessageBuilderTests` |
 | AK-05 | Ein über Modbus geschriebener Sollwert ist im Simulator, in den Modbus-Daten und in der nächsten Nachricht sichtbar. | ✅ (ein früherer Verlust nicht reproduzierbar, siehe Nachweis) | Nachweis 4 |
 | AK-06 | Während der Pause bleibt `simTime` stehen und die Qualität ist `paused`; nach dem Fortsetzen kein Zeitsprung. | ✅ | Nachweis 5 |
@@ -125,7 +125,7 @@ Register (Einschränkung im Vertrag §6 dokumentiert).
 
 ## 9. Offene Punkte
 
-1. Zuständigkeit für Broker und Viewer; Umstellung der Compose-Datei auf `docker/.env` + `.env.example`.
+1. Zuständigkeit und Einrichtung des interaktiven Viewers; Broker-Einrichtung durch Alexander abgeschlossen.
 2. Zustimmung des Teams zum Nachrichtenvertrag (dann Status „Entwurf“ entfernen).
 3. Gesamtlauf mit allen vier Geräten und dem echten Master im Terminal (Screenshots für die Abgabe).
 4. Optional: Gateway in `start-all.ps1` aufnehmen.

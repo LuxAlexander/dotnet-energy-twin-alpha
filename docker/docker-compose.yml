@@ -1,17 +1,39 @@
 
+name: energytwin
+
 services:
   rabbitmq:
-    image: rabbitmq:4-management
-    container_name: rabbitmq
+    image: rabbitmq:4.4.0-management
+    hostname: energytwin-rabbitmq
     ports:
-      - "5672:5672"         # AMQP Port für RabbitMQ
-      - "15672:15672"       # Management-UI Port für RabbitMQ
-      - "1883:1883"         # MQTT Port
+      - "127.0.0.1:5672:5672"    # AMQP
+      - "127.0.0.1:15672:15672"  # Management-Oberfläche
+      - "127.0.0.1:1883:1883"    # MQTT
     environment:
-      RABBITMQ_DEFAULT_USER: user
-      RABBITMQ_DEFAULT_PASS: userpassword
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:?Bitte docker/.env mit Benutzer anlegen}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:?Bitte docker/.env mit Passwort anlegen}
     volumes:
-      - "./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf"  # Konfigurationsdatei für RabbitMQ einbinden
-    command: >
-      sh -c "rabbitmq-plugins enable --offline rabbitmq_mqtt &&
-             rabbitmq-server"
+      - rabbitmq-data:/var/lib/rabbitmq
+      - type: bind
+        source: ./rabbitmq.conf
+        target: /etc/rabbitmq/rabbitmq.conf
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./enabled_plugins
+        target: /etc/rabbitmq/enabled_plugins
+        read_only: true
+        bind:
+          create_host_path: false
+    healthcheck:
+      test: ["CMD-SHELL", "rabbitmq-diagnostics -q check_running && rabbitmq-diagnostics -q check_port_connectivity"]
+      interval: 10s
+      timeout: 10s
+      retries: 12
+      start_period: 30s
+    restart: unless-stopped
+    stop_grace_period: 30s
+
+volumes:
+  rabbitmq-data:

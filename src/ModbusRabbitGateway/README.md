@@ -36,7 +36,7 @@ Das Passwort steht nie im Repo und wird nie als Option angenommen (wäre in der 
 1. Benutzer aus `--mqtt-user`,
 2. Umgebungsvariablen `ENERGYTWIN_MQTT_USER` und `ENERGYTWIN_MQTT_PASSWORD`,
 3. `docker/.env` (bzw. `--env-file`) mit `RABBITMQ_DEFAULT_USER` und `RABBITMQ_DEFAULT_PASS` – dieselbe Datei, aus der
-   die Compose-Datei die Broker-Zugangsdaten lesen soll; `*.env` ist in `.gitignore`.
+   die Compose-Datei die Broker-Zugangsdaten liest; `*.env` ist in `.gitignore`. Einrichtung: [`docker/README.md`](../../docker/README.md).
 
 Ohne Angaben verbindet sich das Gateway anonym; RabbitMQ lehnt das in der Regel ab.
 
@@ -119,8 +119,7 @@ neu; das Gateway versucht es in jedem Intervall, ohne Endlosschleife und ohne Pr
 
 ## Bekannte Probleme
 
-- Probelauf gegen RabbitMQ unter Docker noch offen (Tests laufen gegen den MQTTnet-Broker im Testprozess).
-- Die Compose-Datei enthält noch feste Zugangsdaten; bis zur Umstellung auf `docker/.env` die Umgebungsvariablen setzen.
+- RabbitMQ 4.4.0 unter Docker ist geprüft, zuletzt mit allen vier Geräten am 2026-11-08; siehe [Nachweis](../../docs/nachweise/2026-11-08-docker-alexander/README.md). Die interaktive Gesamtvorführung bleibt offen.
 - Keine atomare Lesung über mehrere Register (EasyModbus); Einzelheiten im Vertrag §6.
 - Geräte werden nacheinander gelesen; ein nicht erreichbares Gerät verzögert die Runde um bis zu `--timeout`.
 - Die Bibliothek gibt beim Start je Gerät `EasyModbus Client Library Version …` aus; das lässt sich nicht abschalten.

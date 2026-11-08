@@ -1,6 +1,8 @@
 # AGENTS.md – dotnet-energy-twin-alpha
 
-**Stand:** 2026-11-08 · **LB03 begonnen:** MQTT entschieden, Nachrichtenvertrag (`docs/Nachrichtenvertrag-LB03.md`) und
+**Stand:** 2026-11-08 · **LB03 Docker (Alexander):** RabbitMQ 4.4.0 mit lokaler `.env`, Healthcheck und Anleitung eingerichtet;
+Empfang aller vier Geräte über echten Master/Gateway geprüft (`docs/nachweise/2026-11-08-docker-alexander/`).
+**LB03 begonnen:** MQTT entschieden, Nachrichtenvertrag (`docs/Nachrichtenvertrag-LB03.md`) und
 Modbus–RabbitMQ-Gateway (`src/ModbusRabbitGateway`, MQTT per MQTTnet 5.0.1, gegen RabbitMQ geprüft) von Susanne;
 `DeviceConnection` nach `src/Modbus.Client` verschoben; Aufgabenabgleich `docs/task-status/aufgabe-03.md`;
 SRS-Entwurf `docs/SRS-LB03.md`; Funktionsnachweis mit Master `docs/nachweise/2026-11-08-gateway-mit-master/`
@@ -37,6 +39,10 @@ Dieser Abschnitt reicht, um an einem neuen Tag ohne Vorwissen weiterzuarbeiten. 
 
 ### 0.2 Git-Stand
 `main`,(Commit nur auf Anweisung, Message wörtlich, ohne Co-Author).
+
+**Aktueller Arbeitsbereich:** Alexander Lux übernimmt die LB03-Broker-Einrichtung. Journal: `alexander-lux.md`.
+Start/Status/Stopp und Zugangsdaten: `docker/README.md`. Keine `.env` oder aufgelöste Compose-Ausgabe versionieren.
+Interaktiver Viewer und Gesamtvorführung bleiben offen; der bestehende Graph kann ältere Aufgabenstände enthalten.
 
 ### 0.3 Was fertig ist
 
@@ -192,6 +198,11 @@ ungültiger oder unerlaubter Schreibwert → abgelehnt mit Fehler · Beenden dur
 
 ## 3. LB02 – Architektur (Entscheidungen, fortgeschrieben bis 2026-10-26)
 
+**LB03-Ergänzung 2026-11-08:** RabbitMQ `4.4.0-management` im Compose-Projekt `energytwin`, zuständig Alexander Lux.
+Plugins über `docker/enabled_plugins`, Konfiguration über `docker/rabbitmq.conf`, Zugangsdaten nur in ignorierter
+`docker/.env`; Ports 1883/5672/15672 lokal an `127.0.0.1`. Benanntes Datenvolume und stabiler Hostname erhalten den
+Broker-Zustand; Passwortänderungen in `.env` ändern vorhandene Broker-Benutzer nicht automatisch. Anleitung: `docker/README.md`.
+
 - **Bibliotheken (ohne Zyklen):** `SimCore.Contracts` (Interfaces + DTOs: `ISimClock` (statt des geplanten `ITimeProvider`), `IWeatherService`, `WeatherData`,
   `TimeState`, `IWeatherService`, `WeatherData`, `DeviceConfig`; **keine** Abhängigkeiten) ← `SimCore.Time` (virtuelle Zeit) ← `SimCore.TimeSync` (TCP-Zeitverteilung) ←
   `Modbus.Contracts` (Registeradressen, `RegisterMap`, `DeviceId`, `RegisterPlan`) ← `Devices.*` (+ EasyModbusTCP.NETCore).
@@ -344,7 +355,12 @@ LB02 überholt; vollständige Tabelle im Archiv, `AGENTS2-archiv-2026-10-27.md`,
 
 ---
 
-## 6. Build-Status (zuletzt 2026-10-27, .NET SDK 10)
+## 6. Build-Status (zuletzt 2026-11-08, .NET SDK 10)
+
+**Aktuell:** Build am 2026-11-08 durch Codex mit 0 Fehlern/0 Warnungen geprüft. Docker-Broker healthy, Anmeldung und
+MQTT-Empfang aller vier Geräte nachgewiesen (`docs/nachweise/2026-11-08-docker-alexander/`). In diesem Docker-Arbeitsschritt
+keine Unit-Tests ausgeführt; letzter dokumentierter Gesamttestlauf: 258/258 (Susannes Journal, 2026-11-08).
+Die folgenden Zahlen von Oktober beschreiben den historischen LB02-Stand.
 
 **Befehle:**
 ```
