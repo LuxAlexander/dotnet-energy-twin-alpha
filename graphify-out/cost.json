@@ -6,6 +6,15 @@
       "output_tokens": 0,
       "files": 228,
       "mode": "update"
+    },
+    {
+      "date": "2026-11-08T19:10:36.440956+00:00",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "tokens_measured": false,
+      "files": 156,
+      "mode": "incremental",
+      "note": "Agent token usage not measured; zeros are unmeasured placeholders."
     }
   ],
   "total_input_tokens": 227722,
