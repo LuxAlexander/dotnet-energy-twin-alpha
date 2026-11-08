@@ -55,10 +55,14 @@ docker compose --env-file docker/.env -f docker/docker-compose.yml logs --tail 6
 
 ```powershell
 dotnet build EnergyTwin.sln
-.\start-all.ps1 -Autostart -NoClient
+.\start-all.ps1 -Autostart -NoClient -WeatherMqtt
 ```
 
 Das vorhandene Startskript öffnet Wetter, Master und alle vier Feldgeräte in eigenen Fenstern.
+`-WeatherMqtt` schaltet den zusätzlichen Wetterstrom ein; ohne den Schalter läuft Wetter nur über HTTP.
+Für gespeicherte Wetterwerte und Pausenstatus muss der Viewer die sechs konkreten Wettertopics aus dem
+[Wettervertrag](../docs/Wetter-Nachrichtenvertrag-LB03.md) abonnieren. Ein bereits laufender Wetterdienst wird
+übersprungen und muss für diese Funktion bereits mit `--mqtt` gestartet sein.
 Danach in einem weiteren Terminal:
 
 ```powershell

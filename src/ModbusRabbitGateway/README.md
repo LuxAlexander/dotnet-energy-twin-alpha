@@ -99,7 +99,7 @@ Beginn des Zustands; auf der Konsole erscheinen nur echte Änderungen.
 | `MeasurementKeys`, `KeyCatalog` | stabile Schlüssel je Messwert (`Punkt 1: SOC` → `punkt_1_soc`) |
 | `Messages` (`MeasurementMessage`, `DeviceStatusMessage`, `GatewayStatusMessage`, `Contract`, `MessageJson`) | Nachrichten, Topics, Qualitäts- und Statuswerte, JSON (camelCase, UTF-8) |
 | `MqttPublisher`, `BrokerSettings` | MQTT (MQTTnet): QoS 1, Retain für Status, Last Will, Wiederanlauf mit Wartezeit, Status nachholen |
-| `MqttCredentials` | Zugangsdaten aus Option, Umgebung oder `.env`; Passwort nie in Anzeige oder Kommandozeile |
+| `MqttCredentials` | kompatible Fassade für `Shared.Config.MqttCredentials` (auch vom Wetter genutzt); Zugangsdaten aus Option, Umgebung oder `.env`, Passwort nie in Anzeige oder Kommandozeile |
 | `IMessagePublisher`, `ConsolePublisher`, `TeePublisher`, `BrokerUnavailableException` | Ziel der Nachrichten; Konsole für `--console`/`--json` |
 | `GatewayOptions`, `DeviceEndpoint` | Kommandozeile, Geräteangaben |
 

@@ -79,7 +79,7 @@ public class WeatherModelTests
     }
 
     [Fact]
-    public void ManualOverride_AppliesToAllLocations()
+    public void ManualOverride_AppliesOnlyToSelectedLocation()
     {
         var manual = new ManualWeather();
         var model = new WeatherModel(manual);
@@ -92,7 +92,7 @@ public class WeatherModelTests
         var wien = model.Get("wien", time, 1);
 
         Assert.Equal(-12, salzburg.TemperatureC);
-        Assert.Equal(-12, wien.TemperatureC);
+        Assert.NotEqual(-12, wien.TemperatureC);
         Assert.Equal(0, salzburg.WindSpeedMs);
     }
 

@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace WeatherSimulator.Simulation;
 
 /// <summary>Ein vom Wettersimulator unterstützter Standort (Kennung plus Geometrie).</summary>
@@ -11,7 +13,8 @@ public sealed record WeatherLocation(
     string Name,
     double LatitudeDegrees,
     double LongitudeDegrees,
-    double AltitudeMeters);
+    double AltitudeMeters,
+    [property: JsonIgnore] ClimateProfile? Climate = null);
 
 /// <summary>Feste Standorttabelle. Unbekannte Kennungen werden abgelehnt (HTTP 404).</summary>
 public static class LocationCatalog
@@ -22,7 +25,9 @@ public static class LocationCatalog
     [
         new("salzburg", "Salzburg", 47.8095, 13.0550, 424.0),
         new("wien", "Wien", 48.2082, 16.3738, 171.0),
-        new("innsbruck", "Innsbruck", 47.2692, 11.4041, 574.0)
+        new("innsbruck", "Innsbruck", 47.2692, 11.4041, 574.0),
+        new("tamanrasset", "Tamanrasset (Sahara)", 22.80, 5.43, 1362.0, ClimateProfile.Sahara),
+        new("neumayer", "Neumayer III (Antarktis)", -70.667, -8.267, 40.0, ClimateProfile.Antarctic)
     ];
 
     public static IReadOnlyList<WeatherLocation> All => Locations;

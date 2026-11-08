@@ -1,7 +1,15 @@
 # AGENTS.md – dotnet-energy-twin-alpha
 
+**PV-Anzeige (2026-11-08):** Lange gelbe Hinweise/Verbindungsfehler verwenden denselben Zeilenumbruch wie
+Statuszeilen; keine überbreite Hinweiszeile mehr. Alexanders README-Pflege-Skill „Let's Document“ ist erstellt:
+`skills/lets-document/SKILL.md`, Beispiel/Nachweis `docs/nachweise/2026-11-08-lets-document/`.
+GetStatus wegen Überschneidung mit readTask verworfen. Lokaler ADR-0015 hält die Entscheidungen fest.
+
 **Stand:** 2026-11-08 · **LB03 Docker (Alexander):** RabbitMQ 4.4.0 mit lokaler `.env`, Healthcheck und Anleitung eingerichtet;
 Empfang aller vier Geräte über echten Master/Gateway geprüft (`docs/nachweise/2026-11-08-docker-alexander/`).
+**Wetter/MQTT (Alexander):** umgesetzt; `--mqtt` aktiviert den Wetterstrom für fünf Standorte inklusive Tamanrasset/Neumayer III.
+Einmalige paused/continued-Statusmeldungen, gezielte manuelle Übersteuerung, Last Will und Wiederanlauf geprüft;
+Vertrag `docs/Wetter-Nachrichtenvertrag-LB03.md`, Nachweis `docs/nachweise/2026-11-08-wetter-mqtt/`.
 **LB03 begonnen:** MQTT entschieden, Nachrichtenvertrag (`docs/Nachrichtenvertrag-LB03.md`) und
 Modbus–RabbitMQ-Gateway (`src/ModbusRabbitGateway`, MQTT per MQTTnet 5.0.1, gegen RabbitMQ geprüft) von Susanne;
 `DeviceConnection` nach `src/Modbus.Client` verschoben; Aufgabenabgleich `docs/task-status/aufgabe-03.md`;
@@ -18,7 +26,11 @@ zusammen, damit nicht alles neu analysiert werden muss. Details:
 
 ---
 
-## 0. Übergabe – hier weitermachen (Stand 2026-10-27)
+## 0. Übergabe – hier weitermachen (Stand 2026-11-08)
+
+**Aktuelle kompakte Übergabe:** `docs/handoff/2026-11-08-alexander-lb03.md`.
+Graphaktualisierung und Integrität: `graphify-out/UPDATE_STATUS.json`; Graph dient zur Navigation, Originalquellen
+bleiben maßgeblich. Änderungen sind noch uncommittet; fremde/Nutzer-Artefakte nicht pauschal bereinigen.
 
 Dieser Abschnitt reicht, um an einem neuen Tag ohne Vorwissen weiterzuarbeiten. §1–§8 enthalten die Details.
 
@@ -40,9 +52,10 @@ Dieser Abschnitt reicht, um an einem neuen Tag ohne Vorwissen weiterzuarbeiten. 
 ### 0.2 Git-Stand
 `main`,(Commit nur auf Anweisung, Message wörtlich, ohne Co-Author).
 
-**Aktueller Arbeitsbereich:** Alexander Lux übernimmt die LB03-Broker-Einrichtung. Journal: `alexander-lux.md`.
-Start/Status/Stopp und Zugangsdaten: `docker/README.md`. Keine `.env` oder aufgelöste Compose-Ausgabe versionieren.
-Interaktiver Viewer und Gesamtvorführung bleiben offen; der bestehende Graph kann ältere Aufgabenstände enthalten.
+**Wetter/MQTT (Alexander, 2026-11-08):** bestätigter Entwurf umgesetzt. Start `WeatherSimulator --mqtt` oder
+`start-all.ps1 -WeatherMqtt` (Broker vorher starten). Geräte bleiben bei HTTP. Später Viewer braucht sechs konkrete
+Wetter-Abos für Retain. Neue Master-Sitzung/neuer Lauf löschen manuelle Vorgaben; bloßer Reconnect nicht.
+7 neue Wetter-Prüffälle gebaut, noch kein neuer Unit-Testlauf; bisherige 258/258 sind der letzte dokumentierte Teststand.
 
 ### 0.3 Was fertig ist
 
@@ -63,7 +76,7 @@ Interaktiver Viewer und Gesamtvorführung bleiben offen; der bestehende Graph ka
 | Tests | ✅ `SimCore.Tests` 54/54, `Devices.Common.Tests` 51/51, `ModbusDiagnosticClient.Tests` 28/28, `FieldDevices.Tests` 62/62 (PV, Batterie, Kühlhaus), `Weather.Tests` 11/11, `ModbusRabbitGateway.Tests` 52/52 – zusammen 258 (Stand 2026-11-08) | – |
 | `PvSimulator` | ✅ an Master-Zeit (`StepScheduler`, `--model-step`), Modbus (Registerplan 20–38) und Wettersimulator (`--weather`, `--location`, Abfrage je Modellstunde) angebunden, async, CSV je Lauf; Tasten `Q`/`C`/`R`/`F`/`T`/`G` immer, `P`/`M`/`0–4`/`5–9` nur standalone (mit Master ignoriert und im Footer ausgeblendet, Sitzungsprotokoll §0.13 im Archiv); Statuszeilen umbrochen, Adresse/Standort farbig; nutzt `WeatherClient` aus `Devices.Common` und die gemeinsamen Bausteine aus `Shared` | `Simulation/SimulationEngine.cs`, `PvModbus.cs`, `Output/ConsoleDisplay.cs` |
 | `BatterySimulator` | ✅ an Master-Zeit, Modbus (Registerplan 20–43, Sollwert in konfigurierter Leistung) und optional Wetter (Außentemperatur) angebunden, async, Einstellungsmenü `S` statt Pausenmenü | `Simulator.cs`, `BatteryModbus.cs` |
-| `WeatherSimulator` | ✅ HTTP-Dienst (`/weather`, `/locations`), deterministisch aus WeatherSynth + eigenem Modell, 3 Standorte, manuelle Übersteuerung, Fehler 404/400 | `Program.cs`, `Simulation/WeatherModel.cs`, README |
+| `WeatherSimulator` | ✅ HTTP plus optional MQTT (`--mqtt`), fünf Standorte, Klimaprofile für Tamanrasset/Neumayer III, standortbezogene Übersteuerung, Master-Zeit, einmalige Statuswechsel, Retain/Last Will und Wiederanlauf geprüft | `Program.cs`, `Simulation/ClimateProfile.cs`, `Publishing/WeatherPublisher.cs`, README |
 | `Devices/KuehlhausSimulator` (Kühlhaus) | ✅ **fertig (Schritte 1–9, 2026-10-26)**: in der Solution, Modell mit exakter Exponentiallösung (`SetDoor(bool)`, `ResetFault()`, `AlarmTempC`), `DeviceType.IndustrialConsumer = 5`, `KuehlhausRegisters` (20–31), `SimulationConfig`/`SimulationEngine` (Master-Zeit, feste Schritte, CSV je Lauf, Wetter je Modellstunde über `Devices.Common` (§0.14 im Archiv), Modbus auch in der Pause), `KuehlhausModbus`, Automatik (`AutoModeController`), Anzeige/Tasten (`ConsoleRenderer`, `InputHandler`), 28 Tests, Geräte-README mit Registerplan | `Simulation/SimulationEngine.cs`, `Simulation/KuehlhausModbus.cs`, `IO/ConsoleRenderer.cs`, `IO/InputHandler.cs`, `README.md`, Anleitung `docs/devices/KuehlhausSimulator/umsetzung-lb02.md` |
 
 ### 0.4 Noch offen (Abgabe `lb02-2026`)
@@ -71,8 +84,8 @@ Interaktiver Viewer und Gesamtvorführung bleiben offen; der bestehende Graph ka
    Charger/Batterie/Kühlhaus übernehmen – Helfer stehen in `src/Shared` bereit, vorher im Team abstimmen.
 2. **Im Team zu klären:** Zuständigkeiten (B/C in §3), Drift-Toleranz (Vorschlag 10 ms · Tempo), ob ein
    Neustart im Master den Gerätezustand zurücksetzt (Charger behält derzeit angesteckte Fahrzeuge).
-3. **Wetter-Erweiterung (Idee, freiwillig):** Klimatabelle pro Standort (Sahara/Antarktis/Tropen) statt
-   Österreich-kalibrierten Formeln; im Team besprochen, noch nicht umgesetzt.
+3. **Wetter-Erweiterung:** Sahara/Antarktis mit regionalen Profilen und MQTT-Sichtbarkeit umgesetzt (2026-11-08).
+   Tropen bleiben eine freiwillige spätere Idee. Interaktive Wetterbedienung und MQTT-Viewer noch live zu prüfen.
 
 ### 0.5 Kurzreferenz Zeit-API (Details in den READMEs)
 - **Master:** `new MasterClock(timeProvider, startSimTime, speed = 1, leadTime = null)` (Vorlauf standardmäßig 200 ms) startet pausiert. `Resume()`, `Pause()`, `SetSpeed(x)` (1–100 000),
@@ -198,6 +211,11 @@ ungültiger oder unerlaubter Schreibwert → abgelehnt mit Fehler · Beenden dur
 
 ## 3. LB02 – Architektur (Entscheidungen, fortgeschrieben bis 2026-10-26)
 
+**Wetter/MQTT 2026-11-08:** WeatherSimulator veröffentlicht direkt über MQTTnet (nicht Modbus) mit eigenem Wettervertrag;
+HTTP bleibt Geräteversorgung. Master-Anbindung über `DeviceTimeSource`, Sitzungskennung lesend aus `SyncedClock`.
+Gemeinsame MQTT-Zugangsdatenauflösung in `Shared.Config`, Gateway-Fassade bleibt kompatibel.
+Regionale neue Klimaprofile ohne Änderung der numerischen Wetterbasis für Salzburg/Wien/Innsbruck.
+
 **LB03-Ergänzung 2026-11-08:** RabbitMQ `4.4.0-management` im Compose-Projekt `energytwin`, zuständig Alexander Lux.
 Plugins über `docker/enabled_plugins`, Konfiguration über `docker/rabbitmq.conf`, Zugangsdaten nur in ignorierter
 `docker/.env`; Ports 1883/5672/15672 lokal an `127.0.0.1`. Benanntes Datenvolume und stabiler Hostname erhalten den
@@ -253,7 +271,7 @@ src/
   Shared/                  lib   keine Abhängigkeiten        (CSV-Writer, CsvFormat/CsvSchema, Balken, Fit, Jahreszeiten/Wetter/Einstrahlung; seit 2026-10-26)
   Devices.Common/          lib   → Contracts, Time, TimeSync, Modbus.Contracts, Shared.Config + EasyModbusTCP.NETCore (Zeit + Modbus-Server)
   SimulationMaster/        exe   → Contracts, Time, TimeSync, Shared.Config   (lauffähig seit 2026-10-25)
-  WeatherSimulator/        exe   → Contracts, Shared.Config, Devices.Common + WeatherSynth (HTTP-Wetterdienst)
+  WeatherSimulator/        exe   → Contracts, Shared.Config, Devices.Common + WeatherSynth, MQTTnet (HTTP + optionaler MQTT-Ausgang)
   ModbusDiagnosticClient/  exe   → Contracts, Modbus.Contracts, Modbus.Client, Shared.Config   (lauffähig seit 2026-10-25)
   Modbus.Client/           lib   → Modbus.Contracts + EasyModbusTCP.NETCore   (DeviceConnection, seit 2026-11-08)
   ModbusRabbitGateway/     exe   → Modbus.Contracts, Modbus.Client, Shared.Config + MQTTnet   (LB03-Gateway, seit 2026-11-08)
@@ -356,6 +374,11 @@ LB02 überholt; vollständige Tabelle im Archiv, `AGENTS2-archiv-2026-10-27.md`,
 ---
 
 ## 6. Build-Status (zuletzt 2026-11-08, .NET SDK 10)
+
+**Wetter-Erweiterung:** Solution baut mit 0 Fehlern/0 Warnungen. Echter RabbitMQ-Probelauf mit fünf Standorten,
+HTTP/MQTT-Gleichheit, Pause/Manual/RunId/MasterSession, Retain, Broker-Ausfall und Last Will erfolgreich.
+7 neue Unit-Prüffälle und geänderte Standortübersteuerungs-Erwartung nur gebaut, gemäß Projektregel nicht ausgeführt.
+Nachweis: `docs/nachweise/2026-11-08-wetter-mqtt/`.
 
 **Aktuell:** Build am 2026-11-08 durch Codex mit 0 Fehlern/0 Warnungen geprüft. Docker-Broker healthy, Anmeldung und
 MQTT-Empfang aller vier Geräte nachgewiesen (`docs/nachweise/2026-11-08-docker-alexander/`). In diesem Docker-Arbeitsschritt

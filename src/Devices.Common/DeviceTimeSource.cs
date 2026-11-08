@@ -53,6 +53,9 @@ public sealed class DeviceTimeSource
 
     public ISimClock Clock { get; }
 
+    /// <summary>Master-Sitzung zur Unterscheidung gleich nummerierter Läufe verschiedener Master-Prozesse.</summary>
+    public Guid? MasterSession => _synced?.MasterSession ?? _local?.Current.MasterSession;
+
     public bool IsStandalone => _local is not null;
 
     public SyncStatus Status => _synced?.Status ?? SyncStatus.Synced;

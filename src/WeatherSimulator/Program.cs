@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SimCore.Contracts;
 using WeatherSimulator.Simulation;
+using WeatherSimulator.Publishing;
 
 Console.OutputEncoding = Encoding.UTF8;
 
@@ -19,24 +20,14 @@ if (args.Any(a => a is "--help" or "-h" or "/?"))
     return 0;
 }
 
-int port = 8080;
-for (int i = 0; i < args.Length; i++)
+WeatherOptions options;
+try { options = WeatherOptions.Parse(args); }
+catch (ArgumentException ex)
 {
-    switch (args[i])
-    {
-        case "--port":
-            if (i + 1 >= args.Length || !int.TryParse(args[++i], NumberStyles.Integer, CultureInfo.InvariantCulture, out port)
-                || port is < 1 or > 65535)
-            {
-                Console.Error.WriteLine("Fehler: --port erwartet eine Portnummer (1–65535).");
-                return 1;
-            }
-            break;
-        default:
-            Console.Error.WriteLine($"Fehler: Unbekanntes Argument '{args[i]}'.\n\n{Usage}");
-            return 1;
-    }
+    Console.Error.WriteLine($"Fehler: {ex.Message}\n\n{Usage}");
+    return 1;
 }
+int port = options.Port;
 
 var manual = new ManualWeather();
 var model = new WeatherModel(manual);
@@ -80,98 +71,118 @@ Console.CancelKeyPress += (_, e) =>
 };
 
 await app.StartAsync(stop.Token);
+var timeSource = options.Mqtt ? DeviceTimeSource.Create(options.TimeSync, "WEATHER-01", "Wetter") : null;
+await using var publisher = timeSource is null ? null : new WeatherPublisher(options, model, manual, timeSource);
+var timeTask = timeSource?.RunAsync(stop.Token) ?? Task.CompletedTask;
+var publishTask = publisher?.RunAsync(stop.Token) ?? Task.CompletedTask;
 Console.WriteLine($"Wettersimulator läuft auf http://127.0.0.1:{port}/weather");
-Console.WriteLine("Tasten: 1 sonnig · 2 bewölkt · 3 dicht bewölkt · 4 Gewitter · S Schnee · R Regen · T Temperatur · W Wind · X Automatik · Q Ende");
+Console.WriteLine("Tasten: L Standort · 1 sonnig · 2 bewölkt · 3 dicht bewölkt · 4 Gewitter · S Schnee · R Regen · T Temperatur · W Wind · X Automatik · Q Ende");
 
-bool running = true;
-bool interactive = !Console.IsOutputRedirected;
-var nextRender = DateTime.MinValue;
-var nextLog = DateTime.MinValue;
 string notification = "";
 DateTime notificationAt = DateTime.MinValue;
-
-while (running && !stop.IsCancellationRequested)
+try
 {
-    while (AsyncConsole.TryReadKey() is { } key)
+    bool running = true;
+    bool interactive = !Console.IsOutputRedirected;
+    var nextRender = DateTime.MinValue;
+    var nextLog = DateTime.MinValue;
+
+    while (running && !stop.IsCancellationRequested)
     {
-        switch (key.Key)
+        while (AsyncConsole.TryReadKey() is { } key)
         {
-            case ConsoleKey.D1 or ConsoleKey.NumPad1:
-                manual.ApplyPreset(WeatherCondition.Sunny);
-                SetNote("Manuell: SONNIG");
-                break;
-            case ConsoleKey.D2 or ConsoleKey.NumPad2:
-                manual.ApplyPreset(WeatherCondition.PartlyCloudy);
-                SetNote("Manuell: BEWÖLKT");
-                break;
-            case ConsoleKey.D3 or ConsoleKey.NumPad3:
-                manual.ApplyPreset(WeatherCondition.Overcast);
-                SetNote("Manuell: DICHT BEWÖLKT");
-                break;
-            case ConsoleKey.D4 or ConsoleKey.NumPad4:
-                manual.ApplyPreset(WeatherCondition.Storm);
-                SetNote("Manuell: GEWITTER");
-                break;
-            case ConsoleKey.S:
-                manual.ApplyPreset(WeatherCondition.Snow);
-                SetNote("Manuell: SCHNEE");
-                break;
-            case ConsoleKey.R:
-                manual.SetRain();
-                SetNote("Manuell: REGEN");
-                break;
-            case ConsoleKey.T:
-                await SetNumberAsync("Temperatur in °C: ", manual.SetTemperature);
-                break;
-            case ConsoleKey.W:
-                await SetNumberAsync("Wind in m/s: ", manual.SetWind);
-                break;
-            case ConsoleKey.X:
-                manual.Clear();
-                SetNote("Automatik (deterministisches Modell)");
-                break;
-            case ConsoleKey.Q:
-                running = false;
-                break;
+            switch (key.Key)
+            {
+                case ConsoleKey.L:
+                    var locations = LocationCatalog.All;
+                    int selected = locations.ToList().FindIndex(l => l.Key == manual.SelectedLocation);
+                    manual.Select(locations[(selected + 1) % locations.Count].Key);
+                    SetNote($"Ausgewählter Standort: {manual.SelectedLocation}");
+                    break;
+                case ConsoleKey.D1 or ConsoleKey.NumPad1:
+                    manual.ApplyPreset(WeatherCondition.Sunny);
+                    SetNote("Manuell: SONNIG");
+                    break;
+                case ConsoleKey.D2 or ConsoleKey.NumPad2:
+                    manual.ApplyPreset(WeatherCondition.PartlyCloudy);
+                    SetNote("Manuell: BEWÖLKT");
+                    break;
+                case ConsoleKey.D3 or ConsoleKey.NumPad3:
+                    manual.ApplyPreset(WeatherCondition.Overcast);
+                    SetNote("Manuell: DICHT BEWÖLKT");
+                    break;
+                case ConsoleKey.D4 or ConsoleKey.NumPad4:
+                    manual.ApplyPreset(WeatherCondition.Storm);
+                    SetNote("Manuell: GEWITTER");
+                    break;
+                case ConsoleKey.S:
+                    manual.ApplyPreset(WeatherCondition.Snow);
+                    SetNote("Manuell: SCHNEE");
+                    break;
+                case ConsoleKey.R:
+                    manual.SetRain();
+                    SetNote("Manuell: REGEN");
+                    break;
+                case ConsoleKey.T:
+                    await SetNumberAsync("Temperatur in °C: ", manual.SetTemperature);
+                    break;
+                case ConsoleKey.W:
+                    await SetNumberAsync("Wind in m/s: ", manual.SetWind);
+                    break;
+                case ConsoleKey.X:
+                    manual.Clear();
+                    SetNote("Automatik (deterministisches Modell)");
+                    break;
+                case ConsoleKey.Q:
+                    running = false;
+                    break;
+            }
+        }
+
+        var now = TimeProvider.System.GetUtcNow().UtcDateTime;
+        if (interactive)
+        {
+            if (now >= nextRender)
+            {
+                Render();
+                nextRender = now.AddMilliseconds(400);
+            }
+        }
+        else if (now >= nextLog)
+        {
+            await Console.Out.WriteLineAsync(StatusLine());
+            nextLog = now.AddSeconds(5);
+        }
+
+        if (!running)
+            break;
+
+        try
+        {
+            await Task.Delay(80, stop.Token);
+        }
+        catch (OperationCanceledException)
+        {
+            break;
         }
     }
 
-    var now = DateTime.UtcNow;
-    if (interactive)
-    {
-        if (now >= nextRender)
-        {
-            Render();
-            nextRender = now.AddMilliseconds(400);
-        }
-    }
-    else if (now >= nextLog)
-    {
-        await Console.Out.WriteLineAsync(StatusLine());
-        nextLog = now.AddSeconds(5);
-    }
-
-    if (!running)
-        break;
-
-    try
-    {
-        await Task.Delay(80, stop.Token);
-    }
-    catch (OperationCanceledException)
-    {
-        break;
-    }
 }
-
-await app.StopAsync(CancellationToken.None);
+catch (OperationCanceledException) when (stop.IsCancellationRequested) { }
+finally
+{
+    await stop.CancelAsync();
+    await Task.WhenAll(timeTask, publishTask);
+    await app.StopAsync(CancellationToken.None);
+    await app.DisposeAsync();
+}
 Console.WriteLine("\nWettersimulator beendet.");
 return 0;
 
 void SetNote(string text)
 {
     notification = text;
-    notificationAt = DateTime.UtcNow;
+    notificationAt = TimeProvider.System.GetUtcNow().UtcDateTime;
 }
 
 async Task SetNumberAsync(string prompt, Action<double> apply)
@@ -181,9 +192,10 @@ async Task SetNumberAsync(string prompt, Action<double> apply)
     if (input is null || string.IsNullOrWhiteSpace(input))
         return;
 
-    if (double.TryParse(input.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out double value))
+    if (double.TryParse(input.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out double value) && double.IsFinite(value))
     {
-        apply(value);
+        try { apply(value); }
+        catch (ArgumentOutOfRangeException ex) { SetNote(ex.Message); return; }
         SetNote($"Manuell: {prompt.TrimEnd(':', ' ')} = {value.ToString("0.##", CultureInfo.InvariantCulture)}");
     }
     else
@@ -203,7 +215,9 @@ void Render()
     {
         "",
         $"  WETTERSIMULATOR   http://127.0.0.1:{port}/weather",
+        $"  Standortwahl:     {manual.SelectedLocation} (L wechselt; Eingriffe nur hier)",
         $"  Modus:            {manualState}",
+        $"  Zeit/MQTT:        {timeSource?.StatusText ?? "HTTP ohne Master-Anbindung"} · {publisher?.StatusText ?? "MQTT aus"}",
         "",
         "  Letzte Abfrage:",
         last.SimTimeUtc is null
@@ -217,8 +231,8 @@ void Render()
             : FormattableString.Invariant($"    Temperatur {last.TemperatureC,5:0.0} °C   Niederschlag {last.PrecipitationMmPerHour,4:0.0} mm/h   Wind {last.WindSpeedMs,4:0.0} m/s   {last.Condition}"),
         $"  Abfragen:          {last.Count}",
         "",
-        "  1 sonnig · 2 bewölkt · 3 dicht · 4 Gewitter · S Schnee · R Regen · T Temp · W Wind · X Automatik · Q Ende",
-        (DateTime.UtcNow - notificationAt).TotalSeconds < 5 ? $"  » {notification}" : ""
+        "  L Standort · 1 sonnig · 2 bewölkt · 3 dicht · 4 Gewitter · S Schnee · R Regen · T Temp · W Wind · X Automatik · Q Ende",
+        (TimeProvider.System.GetUtcNow().UtcDateTime - notificationAt).TotalSeconds < 5 ? $"  » {notification}" : ""
     };
 
     Console.Write("\x1b[H\x1b[?25l");
@@ -231,7 +245,7 @@ string StatusLine()
 {
     string state = manual.IsActive ? "MANUELL" : "AUTOMATISCH";
     string time = last.SimTimeUtc is { } t ? FormattableString.Invariant($"{t:yyyy-MM-dd HH:mm} UTC") : "--";
-    return FormattableString.Invariant($"{time}  {state}  {last.Location,-10}  {last.Condition,-13}  Strahlung {last.IrradiationWm2:F1} W/m²  {last.TemperatureC:F1} °C  {last.PrecipitationMmPerHour:F1} mm/h  Wind {last.WindSpeedMs:F1} m/s  | Abfragen {last.Count}  {notification}");
+    return FormattableString.Invariant($"Auswahl {manual.SelectedLocation} · {publisher?.StatusText ?? "MQTT aus"} · {time}  {state}  {last.Location,-10}  {last.Condition,-13}  Strahlung {last.IrradiationWm2:F1} W/m²  {last.TemperatureC:F1} °C  {last.PrecipitationMmPerHour:F1} mm/h  Wind {last.WindSpeedMs:F1} m/s  | Abfragen {last.Count}  {notification}");
 }
 
 DateTime ToLocal(DateTime? utc)
@@ -303,6 +317,10 @@ static partial class Program
         Aufruf: dotnet run --project src/WeatherSimulator -- [Optionen]
 
           --port <nummer>   HTTP-Port (Standard: 8080)
+          --mqtt            Wetter zur Master-Zeit zusätzlich über MQTT veröffentlichen
+          --master <host:port> Master (Standard: 127.0.0.1:5100), nur mit --mqtt
+          --broker <host:port> MQTT-Broker (Standard: 127.0.0.1:1883)
+          --env-file <pfad> Zugangsdaten (Standard: docker/.env; Umgebung hat Vorrang)
           -h, --help        Diese Hilfe
 
         Schnittstelle:
@@ -311,10 +329,10 @@ static partial class Program
           GET /locations
               → unterstützte Standorte
 
-        Standorte: salzburg (Standard), wien, innsbruck
+        Standorte: salzburg (Standard), wien, innsbruck, tamanrasset, neumayer
         Alle Zeiten sind UTC; die Anzeige zeigt zusätzlich die Ortszeit.
 
-        Tasten: 1 sonnig · 2 bewölkt · 3 dicht bewölkt · 4 Gewitter · S Schnee · R Regen
+        Tasten: L Standort · 1 sonnig · 2 bewölkt · 3 dicht bewölkt · 4 Gewitter · S Schnee · R Regen
                 T Temperatur eingeben · W Wind eingeben · X zurück auf Automatik · Q Ende
         """;
 }

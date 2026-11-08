@@ -1,4 +1,4 @@
-﻿# Entwicklungsjournal – Alexander Lux
+# Entwicklungsjournal – Alexander Lux
 
 <!--
 Verpflichtende Tags pro Eintrag:
@@ -113,3 +113,107 @@ Optionale Tags bei Relevanz:
 - **Artefact:** `docker/docker-compose.yml`, `docker/.env.example`, `docker/rabbitmq.conf`, `docker/enabled_plugins`, `docker/README.md`, `docs/nachweise/2026-11-08-docker-alexander/`, `README.md`, `src/ModbusRabbitGateway/README.md`, `docs/SRS-LB03.md`, `docs/task-status/aufgabe-03.md`, `AGENTS.md`.
 - **Test:** Compose-Konfiguration gültig; `up -d --wait` erfolgreich, Broker healthy; MQTT/AMQP/HTTP-Listener vorhanden; authentifizierte Management-API meldet 4.4.0. `dotnet build EnergyTwin.sln`: 0 Fehler, 0 Warnungen. MQTT-Testempfänger erhält PV-01 (18), BAT-01 (21), DC-01 (19), KH-01 (15 Messwerte), jeweils good/running mit virtueller Zeit, Sequenz und Einheiten. Gateway `--once` Exit-Code 0. Keine Unit-Tests ausgeführt.
 - **Comment:** Broker bleibt aktiv; eigene temporäre Simulator-/Master-/Wetter-Prozesse nach der Prüfung beendet. Interaktiver Viewer, Tastenbedienung, geordnetes Beenden aller Programme und vollständiger neuer Aufgabenabgleich bleiben offen. Bestehender Graph wurde nicht neu aufgebaut. Alte Zugangsdaten sind aus der aktuellen Compose-Datei entfernt; die Git-Historie wurde nicht verändert. Kein Commit, kein Push.
+
+### Nachtrag 2026-11-08 – Wetter über RabbitMQ: Umfang geklärt
+
+- **Done:** Im grill-with-docs-Interview bestätigt: Alexander bleibt für den Broker zuständig. Wetterdaten sollen zusätzlich für den Viewer veröffentlicht werden; die Feldgeräte bleiben beim HTTP-Wetterbezug. Diese Umfangsentscheidung in ADR-0013 gespeichert; Auslöser, Zeitquelle, Nachricht und Fehlerverhalten bleiben Gegenstand weiterer Interviewrunden.
+- **KI:** Codex (GPT-6.1) => Interview mit grilling und domain-modeling, Faktenabgleich des Wetterdienstes, ADR.
+- **Artefact:** `docs/adr/0013-wetter-rabbitmq-sichtbarkeit.md`, `AGENTS.md`, dieses Journal.
+- **Test:** Nur Planungsdokumentation geändert; dotnet build EnergyTwin.sln --no-restore: 0 Fehler, 0 Warnungen. Keine Unit-Tests ausgeführt.
+- **Comment:** Noch keine Wetter-MQTT-Implementierung. ADRs bleiben gemäß ADR-0004 lokale Arbeitsunterlagen. Umsetzung erst nach abschließender Bestätigung des gemeinsam erarbeiteten Entwurfs.
+
+### Nachtrag 2026-11-08 – Wetterstrom und zusätzliche Klimastandorte bestätigt
+
+- **Done:** Interviewentscheidungen in ADR-0013 ergänzt: unabhängiger Wetterstrom zur Master-Zeit, alle vorhandenen Größen und Standorte sowie zwei zusätzliche Standorte (Sahara und antarktische Forschungsstation). Konkrete Orte, Klimaprofile und Veröffentlichungsrhythmus sind noch offen. Österreichisch geprägte Temperatur-/Niederschlagsformeln als Modellgrenze dokumentiert.
+- **KI:** Codex (GPT-6.1) => Faktenprüfung, Fortsetzung des Interviews und ADR-Fortschreibung.
+- **Artefact:** `docs/adr/0013-wetter-rabbitmq-sichtbarkeit.md`, dieses Journal.
+- **Test:** Nur Dokumentation geändert; dotnet build EnergyTwin.sln --no-restore: 0 Fehler, 0 Warnungen. Keine Unit-Tests ausgeführt.
+- **Comment:** Standorterweiterung ist beauftragt, wird nach abgeschlossener Entwurfsabstimmung umgesetzt. Keine zusätzlichen Standorte im Code angelegt.
+
+### Nachtrag 2026-11-08 – Wetterorte und Veröffentlichungsrhythmus festgelegt
+
+- **Done:** Tamanrasset und Neumayer III als neue Referenzorte bestätigt. Ziel möglichst realitätsnaher Klimaprofile bei überschaubarem Änderungsaufwand dokumentiert. MQTT veröffentlicht jede reale Sekunde den neuesten stündlichen Wetterstand aller Standorte; keine Nachlieferung übersprungener Modellstunden. Grenzen der mitteleuropäischen WeatherSynth-Defaults festgehalten.
+- **KI:** Codex (GPT-6.1) => Interviewfortsetzung und ADR-Pflege.
+- **Artefact:** `docs/adr/0013-wetter-rabbitmq-sichtbarkeit.md`, dieses Journal.
+- **Test:** Dokumentationsänderung; dotnet build EnergyTwin.sln --no-restore: 0 Fehler, 0 Warnungen. Keine Unit-Tests ausgeführt.
+- **Comment:** Manuelle Übersteuerung und Verhalten bei Pause/Verbindungsunterbrechungen noch abzustimmen. Kein Implementierungsbeginn.
+
+### Nachtrag 2026-11-08 – Manuelle Standortwahl und Pausenmeldungen abgestimmt
+
+- **Done:** Gezielt standortbezogene manuelle Wetterübersteuerung und MQTT-Wiederanlauf ohne Nachlieferung bestätigt. Nutzerwunsch einmaliger paused-/continued-Meldungen in ADR-0013 aufgenommen. Details zu dienstweitem Status, Messwerten während Pause und Master-Verlust bleiben offen. Begriffe Wetterstrom, Klimaprofil und standortbezogene Übersteuerung im bestehenden docs/glossary.md ergänzt.
+- **KI:** Codex (GPT-6.1) => Interview und ADR-Fortschreibung.
+- **Artefact:** `docs/adr/0013-wetter-rabbitmq-sichtbarkeit.md`, dieses Journal.
+- **Test:** Dokumentationsänderung; Build mit 0 Fehlern/0 Warnungen geprüft. Keine Unit-Tests ausgeführt.
+- **Comment:** Bisher globale manuelle Übersteuerung wird im Entwurf standortbezogen. Kein Implementierungsbeginn; Klärung der Pause vor Umsetzung.
+
+### Nachtrag 2026-11-08 – Wetterstatus bei Pause und Master-Verlust präzisiert
+
+- **Done:** Einmalige dienstweite paused-/continued-Zustandsmeldungen bestätigt; regelmäßige Wetterveröffentlichung stoppt in Pause. Manuelle Standortänderungen werden in Pause einmal mit unveränderter Modellzeit und manual-Kennzeichnung gesendet. Ohne gültige Master-Zeit keine neuen Wetterwerte; noTime/masterLost und Wiederanlaufzustand festgelegt. ADR-0013 fortgeschrieben.
+- **KI:** Codex (GPT-6.1) => Interview und ADR-Pflege.
+- **Artefact:** `docs/adr/0013-wetter-rabbitmq-sichtbarkeit.md`, dieses Journal.
+- **Test:** Dokumentationsänderung; dotnet build EnergyTwin.sln --no-restore: 0 Fehler, 0 Warnungen. Keine Unit-Tests ausgeführt.
+- **Comment:** Noch offen: später gestarteter Viewer, MQTT-Aktivierung und manuelle Vorgaben bei neuer RunId. Kein Implementierungsbeginn.
+
+### Nachtrag 2026-11-08 – Wetter-MQTT: Interview abgeschlossen, Gesamtentwurf zur Bestätigung
+
+- **Done:** Letzte Interviewentscheidungen bestätigt: gespeicherte Wetterstände und Status für späteren Viewer, MQTT ausdrücklich über geplantes --mqtt aktivieren, manuelle Vorgaben bei neuer RunId zurücksetzen. ADR-0013 zum konsistenten Gesamtentwurf mit Nachrichten-/Statusregeln und Akzeptanzkriterien zusammengeführt. Technische Ausgestaltung und initiale pausierte Momentaufnahme ausdrücklich zur Gesamtfreigabe aufgenommen. Planungsstand in AGENTS, Wetter-README und SRS abgeglichen.
+- **KI:** Codex (GPT-6.1) => Entwurfskonsolidierung, Prüfkriterien und Dokumentation.
+- **Artefact:** `docs/adr/0013-wetter-rabbitmq-sichtbarkeit.md`, `AGENTS.md`, `src/WeatherSimulator/README.md`, `docs/SRS-LB03.md`, dieses Journal.
+- **Test:** Dokumentationsänderung; dotnet build EnergyTwin.sln --no-restore: 0 Fehler, 0 Warnungen. Keine Unit-Tests ausgeführt.
+- **Comment:** Gesamtentwurf wartet auf ausdrückliche abschließende Bestätigung gemäß grilling. Keine Implementierung vor dieser Bestätigung. Konkrete Klimaparameter/Quellen werden im genehmigten Umfang bei der Umsetzung recherchiert.
+
+### Nachtrag 2026-11-08 – Wetter-MQTT und Klimaprofile umgesetzt
+
+- **Done:** Nach ausdrücklichem Umsetzungsauftrag den bestätigten Wetterentwurf realisiert. Neue Standorte Tamanrasset und Neumayer III mit recherchierten Temperatur-/Niederschlagskenngrößen bzw. ausdrücklich dokumentierten synthetischen Näherungen. Österreichische numerische Modellbasis beibehalten. Übersteuerung threadsicher je ausgewähltem Standort; L wählt Standort, neue RunId/Master-Sitzung löscht Vorgaben. Optionaler --mqtt-Ausgang mit Master-Zeit, UTC-Nachrichten, Retain/QoS 1, einmaligen paused/continued/noTime/masterLost-Meldungen, Änderungen in Pause, automatischem Wiederanlauf ohne historischen Puffer und offline/Last Will. Gemeinsame Zugangsdatenauflösung nach Shared.Config ausgelagert, Gateway-Fassade kompatibel. MasterSession lesend verfügbar gemacht. Startskript um -WeatherMqtt erweitert. Wettervertrag, Klimadatenquellen, Grenzen, Anleitungen und Nachweise ergänzt; ADR-0013 als bestätigt/umgesetzt markiert.
+- **KI:** Codex (GPT-6.1) => Umsetzung, Quellenrecherche (JMA/BAS/AWI/pvlib), funktionaler MQTT-/HTTP-Probelauf und Dokumentation.
+- **Artefact:** `src/WeatherSimulator/` (Program, Simulation, Publishing), `src/Shared.Config/MqttCredentials.cs`, Gateway-Zugangsdaten-Fassade, MasterSession-Eigenschaften in SimCore.Time/Devices.Common, `start-all.ps1`, `tests/Weather.Tests/RegionalWeatherTests.cs`, angepasster bestehender Übersteuerungs-Prüffall, `docs/Wetter-Nachrichtenvertrag-LB03.md`, `docs/nachweise/2026-11-08-wetter-mqtt/`, READMEs, SRS, AGENTS, lokale ADRs.
+- **Test:** Abschließender Solution-Build mit 0 Fehlern/0 Warnungen; Startskript inklusive -WeatherMqtt mit -WhatIf geprüft. Isolierter RabbitMQ 4.4.0 auf 1884: fünf Orte, Stundenkonstanz, Polartag/-nacht, Jahreszeiten, Schnee bei Nacht, Sahara-Jahresniederschlag 63,0 mm für Lauf 7; noTime, Pause, gezielter manueller Wert, Retain-Einstieg, continued, neuer Lauf, Broker-Ausfall/Wiederanlauf, Master-Verlust, neue MasterSession bei gleicher RunId und offline erfolgreich geprüft. Tatsächlich gestartete Wetter-/Master-Programme: HTTP und MQTT je sechs numerische Werte für alle fünf Orte identisch, HTTP 404/400 korrekt, Last Will nach Prozessabbruch, HTTP ohne --mqtt funktionsfähig. 7 neue Unit-Prüffälle gebaut; keine Unit-Tests ausgeführt.
+- **Comment:** Kein wissenschaftlich kalibriertes Wettermodell; vereinfachte regionale Profile und Grenzen im Wetter-README. Interaktive Bedienung im Terminal und MQTT-Viewer bleiben live zu zeigen. Eigene Prüfprozesse beendet, temporärer Broker nach ID-Prüfung entfernt; Projektbroker bleibt healthy. Kein Commit/Push. Bestehende Journale anderer Personen unverändert.
+
+### Nachtrag 2026-11-08 – PV-Hinweisbox umbrechen und GetStatus-Interview beginnen
+
+- **Done:** Ursache der überbreiten Master-Fehlermeldung gefunden: gelbe Benachrichtigung wurde direkt als eine Row ausgegeben, während Statuszeilen bereits Wrap nutzten. Hinweisbox auf denselben Info-/Wrap-Pfad umgestellt, vollständiger Text bleibt mehrzeilig innerhalb des Rahmens. PV-README und AGENTS ergänzt. Interview zum eigenen GetStatus-Skill vorbereitet; Überschneidung mit Susannes readTask und Dominiks probelauf anhand vorhandener Skills geprüft. Lokalen ADR-0014-Entwurf mit vorgegebenen Statuskategorien und noch offenen Abgrenzungsentscheidungen gespeichert.
+- **KI:** Codex (GPT-6.1) => PV-Korrektur, Anzeigeprüfung, Faktenaufnahme für grill-with-docs und ADR-Entwurf.
+- **Artefact:** `src/Devices/PvSimulator/Output/ConsoleDisplay.cs`, PV-README, `AGENTS.md`, lokale Arbeitsunterlage `docs/adr/0014-getstatus-skill.md`, dieses Journal.
+- **Test:** `dotnet build EnergyTwin.sln --no-restore`: 0 Fehler, 0 Warnungen. Ausgabeprüfung mit dem Originalfehler und einer 180 Zeichen langen ungetrennten Zeichenfolge: alle Rahmenzeilen genau 76 Zeichen, vollständiger Text erhalten. Keine Unit-Tests ausgeführt.
+- **Comment:** Eigener GetStatus-Skill noch nicht implementiert; Interview und Bestätigung des Gesamtentwurfs folgen. Bestehende nicht zugehörige Änderungen und Screenshots unverändert gelassen. Kein Commit/Push.
+
+### Nachtrag 2026-11-08 – Eigener Skill: Let's Document statt GetStatus
+
+- **Done:** Auf Nutzerwunsch GetStatus verworfen (zu ähnlich zu readTask). Neuen Skill Let's Document als Dokumentationspflege abgegrenzt: README-Lücken ergänzen, alte/verworfene Informationen archivieren und Abschnitte zusammenfassen. ADR-0014 als verworfen markiert, ADR-0015-Entwurf angelegt und AGENTS-Übergabe aktualisiert. Interview zu Umfang, Archivierung und Verdichtung begonnen.
+- **KI:** Codex (GPT-6.1) => grill-with-docs-Fortsetzung, Quellenaufnahme und ADR-Entwurf.
+- **Artefact:** lokale `docs/adr/0014-getstatus-skill.md` und `0015-lets-document-skill.md`, `AGENTS.md`, dieses Journal.
+- **Test:** Nur Planungsdokumentation geändert; dotnet build EnergyTwin.sln --no-restore: 0 Fehler, 0 Warnungen. Keine Unit-Tests ausgeführt.
+- **Comment:** Noch kein Skill implementiert; bestehender GetStatus-Entwurf bleibt nachvollziehbar als verworfen erhalten. Keine Änderung an readTask oder probelauf.
+
+### Nachtrag 2026-11-08 – Let's Document: Umfang und Archivierung bestätigt
+
+- **Done:** Erste Interviewentscheidungen in ADR-0015 festgehalten: gezielte betroffene READMEs, ausdrücklich auch eine einzelne README per Pfad; vollständiger Durchgang nur auf Auftrag. Alte Abschnitte vollständig unter docs/archive mit Herkunft, Datum und Grund erhalten. Unklare Aussagen markieren. Erklärungen und Dopplungen verdichten, Formeln/Registerpläne/Start/Bedienung/Einschränkungen vollständig erhalten. Begriffe Archivierung und Dokumentationslücke im bestehenden Glossar ergänzt.
+- **KI:** Codex (GPT-6.1) => Interview und lokale Entscheidungsdokumentation.
+- **Artefact:** lokale `docs/adr/0015-lets-document-skill.md`, `docs/glossary.md`, dieses Journal.
+- **Test:** Planungsdokumentation geändert; dotnet build EnergyTwin.sln --no-restore: 0 Fehler, 0 Warnungen. Keine Unit-Tests ausgeführt.
+- **Comment:** Skill noch nicht implementiert. Belegregeln, Widersprüche, Ausführungsgrenzen und Ablage noch abzustimmen.
+
+### Nachtrag 2026-11-08 – Let's Document: Belege und gezielte User-Einbindung festgelegt
+
+- **Done:** Zweite Interviewrunde in ADR-0015 festgehalten: belegbare Ergänzungen, fachliche Widersprüche offenlegen, User gezielt wie bei Grill Me einbinden; keine Tests/Programmstarts ohne Zustimmung. Allgemeine Wiederverwendbarkeit bestätigt. Gesamtentwurf um vorgeschlagene Ablage, Beispielaufrufe, Abschlussbericht und Prüfkriterien ergänzt.
+- **KI:** Codex (GPT-6.1) => Interviewkonsolidierung und Gesamtentwurf.
+- **Artefact:** lokale `docs/adr/0015-lets-document-skill.md`, dieses Journal.
+- **Test:** Dokumentationsänderung; vorgeschriebener Solution-Build: 0 Fehler, 0 Warnungen. Keine Unit-Tests oder Simulatoren gestartet.
+- **Comment:** Skill noch nicht erstellt. Gesamtentwurf wartet auf abschließende Bestätigung gemäß grilling; danach Erstellung und eng begrenzter Dokumentations-Beispielaufruf.
+
+### Nachtrag 2026-11-08 – Let's Document erstellt, installiert und angewendet
+
+- **Done:** Nach ausdrücklicher Freigabe den eigenen Skill Let's Document unter skills/lets-document erstellt: kurzer Einstieg, bedarfsweise Archivregeln, Codex-Metadaten und LB03-Beschreibung mit Aufruf/Ergebnis. Einzeldatei-/Modul-/Gesamtscope, belegte Ergänzungen, gezielte User-Fragen wie Grill Me, Schutz fachlicher Details und Zustimmungspflicht für Tests/Programmstarts umgesetzt. Maßgebliche Repository-Fassung lokal für Codex installiert; drei installierte Dateien bytegleich. Begrenzter PV-README-Aufruf durchgeführt: Einleitung aktualisiert, Anzeigehinweis im Ausgabeabschnitt gebündelt, vorhandenen datierten Empfangsnachweis mit Grenzen ergänzt; Originalausschnitte vorher archiviert. Skill in zentraler README registriert, ADR-0015 als bestätigt/erstellt markiert.
+- **KI:** Codex (GPT-6.1) => Skill-Erstellung, formale/statische Prüfung, README-Beispiel und unabhängiger Dokumentationsdurchgang mit separatem Agenten auf isolierten Beispieldateien.
+- **Artefact:** `skills/lets-document/` (SKILL.md, agents/openai.yaml, references/archive.md, README.md), lokale Installation, `docs/archive/2026-11-08-pv-readme.md`, `docs/nachweise/2026-11-08-lets-document/README.md`, PV-README, zentrale README, AGENTS, lokaler ADR-0015, dieses Journal.
+- **Test:** Skill-Validator für Repository und Installation: Skill is valid. Drei Skill-Dateien bytegleich; 14 relative Dateiverweise statisch gültig. Alle vorhandenen PV-Code-/Formelblöcke unverändert. Isolierter Dokumentationsdurchgang: veraltete Option korrigiert/archiviert, Nachweisalter und neuen Testbestand getrennt, Formelkonflikt dem User vorgelegt, unbestätigten Plan erhalten und Einzeldateigrenze eingehalten. Keine Unit-Tests, Simulatoren oder Dienste gestartet; abschließender vorgeschriebener Solution-Build: 0 Fehler, 0 Warnungen.
+- **Comment:** Der isolierte Formelkonflikt gehört ausschließlich zum synthetischen Beispiel, nicht zum EnergyTwin-Modell. Andere READMEs wurden im Einzeldatei-Beispiel nicht verändert; zentrale README/Skill-README sind Bestandteil des separaten Erstellungsauftrags. README im Skillordner dient der vorgeschriebenen LB03-Dokumentation und wird nicht als zusätzliche Skill-Anweisung installiert. Kein Commit/Push.
+
+### Nachtrag 2026-11-08 – Graphmodell aktualisieren und Übergabe vorbereiten
+
+- **Done:** Kompakte Übergabe mit Zuständigkeiten, umgesetzten Wetter-/PV-/Skill-Änderungen, Belegen, offenen Prüfungen, Startbefehlen und lokalen ADRs angelegt. Laufzustand rein lesend erfasst: Projektbroker healthy, keine Listener der Simulatoren/Master/Wetter auf den Standardports. AGENTS-Einstieg auf die aktuelle Übergabe ausgerichtet. Inkrementelle Graphaktualisierung mit portablen Quellpfaden und Integritätsprüfung wird im selben Arbeitsschritt abgeschlossen; Einzelheiten stehen anschließend in graphify-out/UPDATE_STATUS.json.
+- **KI:** Codex (GPT-6.1) => Übergabedokumentation und Graphify-Aktualisierung.
+- **Artefact:** `docs/handoff/2026-11-08-alexander-lb03.md`, `AGENTS.md`, `graphify-out/`, dieses Journal.
+- **Test:** Statische Graph-/Quellenprüfung und vorgeschriebener Solution-Build im Übergabeschritt; keine Unit-Tests oder Simulatoren starten. Letzter dokumentierter Build 0 Fehler/0 Warnungen; erweiterter Wetter-Testbestand weiterhin nicht neu ausgeführt.
+- **Comment:** Kein Commit/Push/Tag. Grafische Dateien sind generiert; Graph-Warnungen und verbleibende Einschränkungen werden im Aktualisierungsstatus dokumentiert. Ignorierte lokale ADRs/Glossar bei Rechnerwechsel separat verfügbar machen.

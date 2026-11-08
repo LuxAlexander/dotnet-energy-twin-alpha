@@ -119,6 +119,12 @@ public sealed class SyncedClock : ISimClock
         get { lock (_lock) return StateNow()?.RunId ?? 0; }
     }
 
+    /// <summary>Kennung des aktuell gültigen Masters; trennt Läufe nach einem vollständigen Master-Neustart.</summary>
+    public Guid? MasterSession
+    {
+        get { lock (_lock) return StateNow()?.MasterSession; }
+    }
+
     /// <summary>
     /// Übernimmt einen Zustand vom Master (Änderung oder Heartbeat). Jede Nachricht zählt als Lebenszeichen.
     /// </summary>

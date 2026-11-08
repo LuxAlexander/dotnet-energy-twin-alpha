@@ -168,7 +168,7 @@ public static class ConsoleDisplay
         if (!string.IsNullOrEmpty(notification))
         {
             Sep();
-            Row(("  " + notification, B + YELLOW));
+            Info("", notification, B + YELLOW, highlightLength: 0);
         }
 
         Bottom();

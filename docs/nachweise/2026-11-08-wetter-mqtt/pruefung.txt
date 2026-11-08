@@ -1,0 +1,43 @@
+Fünf Standorte vorhanden.
+salzburg: prozessunabhängig reproduzierbares Stundenwetter.
+wien: prozessunabhängig reproduzierbares Stundenwetter.
+innsbruck: prozessunabhängig reproduzierbares Stundenwetter.
+tamanrasset: prozessunabhängig reproduzierbares Stundenwetter.
+neumayer: prozessunabhängig reproduzierbares Stundenwetter.
+Neumayer: Polarnacht im Juni, keine Einstrahlung.
+Neumayer: Polartag im Dezember über volle 24 Stunden.
+Antarktische Jahreszeiten richtig herum.
+Sahara: Sommer wärmer als Winter.
+Schnee wird in Polarnacht nicht durch Night verdeckt.
+Sahara-Jahresniederschlag Lauf 7: 63,0 mm (synthetisch).
+MQTT verbunden.
+Ohne Master: noTime, keine Wetterwerte.
+Vor gültiger Master-Zeit keine Messwertnachrichten.
+Wetterstatus: paused
+Initial pausierter Master: fünf Anfangsstände und paused empfangen.
+Pause: keine regelmäßigen Werte, genau ein paused-Wechsel.
+Manuelle Änderung während Pause empfangen.
+Manuelle Änderung behält pausierte Modellzeit.
+Manuell: genau ein Standort gesendet, Wien unverändert.
+Später Viewer erhält alle fünf Wetterstände und Status per konkretem Abo.
+Später Viewer: Nachrichten tatsächlich retained.
+Wetterstatus: continued
+Fortsetzen: continued und Wetterstrom wieder aktiv.
+Keine periodische Wiederholung von continued.
+Wetterstatus: paused
+Neuer Lauf veröffentlicht neue Wetterstände.
+Neue RunId löscht manuelle Vorgaben.
+Viewer nach Neustart erhält fünf aktuelle Wetterstände.
+Keine gespeicherten Wetterwerte des alten Laufs.
+MQTT nicht erreichbar oder Anmeldung fehlgeschlagen; HTTP bleibt verfügbar, Wiederverbindung läuft.
+MQTT wieder verbunden; aktueller Wetterstand wird gesendet.
+Broker-Wiederanlauf: aktueller manueller Stand auch in Pause nachgeholt.
+Broker-Wiederanlauf erhält manuelle Vorgaben.
+Wetterstatus: masterLost
+Master-Ende: masterLost empfangen.
+Bei Master-Verlust keine Wetterveröffentlichung trotz manueller Änderung.
+Wetterstatus: paused
+Neuer Master mit gleicher RunId wird über MasterSession erkannt.
+Neue Master-Sitzung löscht alte manuelle Vorgaben trotz gleicher Laufnummer.
+Geordnetes Ende meldet offline.
+FUNKTIONSNACHWEIS ERFOLGREICH

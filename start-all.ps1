@@ -3,7 +3,8 @@ param(
     [ValidateRange(1, 100000)]
     [int]$Speed = 600,
     [switch]$Autostart,
-    [switch]$NoClient
+    [switch]$NoClient,
+    [switch]$WeatherMqtt
 )
 
 $ErrorActionPreference = 'Stop'
@@ -94,9 +95,9 @@ try {
     }
 
     Write-Host '1. Wettersimulator und Simulations-Master' -ForegroundColor Cyan
-    Start-TwinService -Title 'Wetter' -Port 8080 -Arguments @(
-        'run', '--no-build', '--project', 'src/WeatherSimulator'
-    )
+    $weatherArguments = @('run', '--no-build', '--project', 'src/WeatherSimulator')
+    if ($WeatherMqtt) { $weatherArguments += @('--', '--mqtt') }
+    Start-TwinService -Title 'Wetter' -Port 8080 -Arguments $weatherArguments
 
     $masterArguments = @('run', '--no-build', '--project', 'src/SimulationMaster', '--', '--speed', "$Speed")
     if ($Autostart) { $masterArguments += '--autostart' }

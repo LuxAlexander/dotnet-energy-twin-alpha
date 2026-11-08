@@ -14,7 +14,11 @@ Die Gerätedaten der Feldgeräte, die bisher nur über Modbus TCP lesbar waren, 
 **Im Umfang:** Modbus–RabbitMQ-Gateway, Nachrichtenvertrag, RabbitMQ per Docker Compose, Viewer, Anbindung aller
 verpflichtenden Feldgeräte (PV, Batterie, DC-Ladesäule, Kühlhaus).
 **Nicht im Umfang:** InfluxDB, REST, Grafana; Containerisierung der eigenen Programme.
-**Optional:** Wetter- und Master-Daten über RabbitMQ (nicht geplant).
+**Optionale Erweiterung umgesetzt:** Wetterdaten zusätzlich über RabbitMQ, verantwortlich Alexander Lux;
+fünf Standorte, Master-Zeit, manuelle Standortübersteuerung und einmalige Pausen-/Fortsetzungsstatus.
+Vertrag: [`Wetter-Nachrichtenvertrag-LB03.md`](Wetter-Nachrichtenvertrag-LB03.md),
+Prüfung: [`Wetter-MQTT-Nachweis`](nachweise/2026-11-08-wetter-mqtt/README.md).
+Master-Daten über RabbitMQ sind weiterhin nicht geplant. Ein interaktiver Viewer bleibt einzurichten.
 **Unverändert erhalten:** virtuelle Zeit (Master), Wettersimulator, Modbus-Server der Geräte, Diagnose-Client.
 
 ## 2. Datenweg und beteiligte Anwendungen

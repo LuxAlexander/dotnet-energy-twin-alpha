@@ -22,39 +22,67 @@ public sealed class WeatherModel
 
     /// <summary>Wetter für (Standortkennung, virtuelle Zeit, Lauf); Zeiten sind UTC.</summary>
     /// <exception cref="KeyNotFoundException">Unbekannte Standortkennung.</exception>
-    public WeatherData Get(string locationKey, DateTime simTimeUtc, int runId)
+    public WeatherData Get(string locationKey, DateTime simTimeUtc, int runId, ManualWeatherState? manualState = null)
     {
         if (!LocationCatalog.TryGet(locationKey, out var location))
             throw new KeyNotFoundException($"Unbekannter Standort: '{locationKey}'.");
 
         var utc = DateTime.SpecifyKind(simTimeUtc, DateTimeKind.Utc);
         var hourStart = new DateTime(utc.Year, utc.Month, utc.Day, utc.Hour, 0, 0, DateTimeKind.Utc);
-        var year = GetYear(location, runId, hourStart.Year);
-        int index = IndexOfHour(year, hourStart);
-        var hour = year.Hours[index];
-
-        double clearSky = hour.Solar.ClearSkyWhPerM2;
-        double irradiation = hour.Solar.GhiWhPerM2;
-        double wind = hour.Wind.Speed;
         double sunHeight = SunHeightDegrees(hourStart, location.LatitudeDegrees, location.LongitudeDegrees);
+        double clearSky, irradiation, wind, cloud, temperature, precipitation;
+        if (location.Climate is { } climate)
+        {
+            // Regionale Profile statt Übertragung des Bochum-/Essen-Wetters auf Wüste oder Polargebiet.
+            string day = hourStart.ToString("yyyyMMdd", CultureInfo.InvariantCulture);
+            string stamp = hourStart.ToString("yyyyMMddHH", CultureInfo.InvariantCulture);
+            double weather = Rand01(location.Key, runId, day, "cloud");
+            cloud = Math.Clamp(climate.MeanCloudPercent + (weather - 0.5) * 70, 0, 100);
+            wind = climate.MeanWindMs * Math.Sqrt(-4.0 / Math.PI * Math.Log(Math.Max(1e-9,
+                1 - Rand01(location.Key, runId, stamp, "wind"))));
+            double localHour = hourStart.Hour + location.LongitudeDegrees / 15.0;
+            // In Polarnacht fehlt ein solarer Tagesgang; Wetterlagen bleiben variabel.
+            double daylight = Math.Clamp(Math.Sin(sunHeight * Math.PI / 180) * 4, 0, 1);
+            temperature = ClimateProfile.Interpolate(climate.MonthlyTemperatureC, hourStart)
+                + (Rand01(location.Key, runId, day, "temp") - 0.5) * 2 * climate.DailyVariationC
+                + climate.DiurnalAmplitudeC * (1 - 0.3 * cloud / 100)
+                  * Math.Cos(2 * Math.PI * (localHour - 15) / 24) * (location.LatitudeDegrees < -66 ? daylight : 1);
+            double monthlyRain = climate.MonthlyPrecipitationMm[hourStart.Month - 1];
+            double wetProbability = Math.Min(0.25, monthlyRain / (DateTime.DaysInMonth(hourStart.Year, hourStart.Month) * 24 * 0.5));
+            bool wet = Rand01(location.Key, runId, stamp, "rain") < wetProbability;
+            precipitation = wet ? -0.5 * Math.Log(Math.Max(1e-9, 1 - Rand01(location.Key, runId, stamp, "amount"))) : 0;
+            if (wet) cloud = Math.Max(85, cloud);
+            // Haurwitz-Klarhimmelmodell; Näherung, kein lokales Strahlungsfitting (siehe README).
+            double cosine = Math.Max(0, Math.Sin(sunHeight * Math.PI / 180));
+            clearSky = cosine > 0 ? 1098 * cosine * Math.Exp(-0.059 / cosine) : 0;
+            irradiation = clearSky * (1 - 0.75 * Math.Pow(cloud / 100, 3.4));
+        }
+        else
+        {
+            var year = GetYear(location, runId, hourStart.Year);
+            int index = IndexOfHour(year, hourStart);
+            var hour = year.Hours[index];
+            clearSky = hour.Solar.ClearSkyWhPerM2;
+            irradiation = hour.Solar.GhiWhPerM2;
+            wind = hour.Wind.Speed;
+            cloud = CloudCover(year, index);
+            temperature = TemperatureC(location, runId, hourStart, cloud);
+            precipitation = PrecipitationMmPerHour(location, runId, hourStart, cloud, wind);
+        }
         if (sunHeight <= 0)
             irradiation = 0;
 
-        double cloud = CloudCover(year, index);
-        double temperature = TemperatureC(location, runId, hourStart, cloud);
-        double precipitation = PrecipitationMmPerHour(location, runId, hourStart, cloud, wind);
-
-        // Manuelle Übersteuerung (Toggle) wirkt auf alle Standorte.
-        if (_manual.IsActive)
+        var manual = manualState ?? _manual.Get(location.Key);
+        if (manual.IsActive)
         {
-            double usedCloud = _manual.CloudCoverPercent ?? cloud;
-            if (_manual.CloudCoverPercent is not null && sunHeight > 0)
+            double usedCloud = manual.CloudCoverPercent ?? cloud;
+            if (manual.CloudCoverPercent is not null && sunHeight > 0)
                 irradiation = Math.Max(0, clearSky * (1.0 - 0.8 * usedCloud / 100.0));
 
             cloud = usedCloud;
-            temperature = _manual.TemperatureC ?? temperature;
-            precipitation = _manual.PrecipitationMmPerHour ?? precipitation;
-            wind = _manual.WindSpeedMs ?? wind;
+            temperature = manual.TemperatureC ?? temperature;
+            precipitation = manual.PrecipitationMmPerHour ?? precipitation;
+            wind = manual.WindSpeedMs ?? wind;
         }
 
         var condition = ConditionOf(sunHeight, irradiation, cloud, wind, precipitation, temperature);
@@ -154,14 +182,14 @@ public sealed class WeatherModel
     private static WeatherCondition ConditionOf(
         double sunHeight, double irradiation, double cloud, double wind, double precipitation, double temperature)
     {
-        if (sunHeight <= 0 && irradiation <= 0)
-            return WeatherCondition.Night;
-
         if (precipitation > 0 && temperature <= 1.5)
             return WeatherCondition.Snow;
 
         if (cloud >= 90 && wind >= 14)
             return WeatherCondition.Storm;
+
+        if (sunHeight <= 0 && irradiation <= 0)
+            return WeatherCondition.Night;
 
         if (cloud >= 80)
             return WeatherCondition.Overcast;

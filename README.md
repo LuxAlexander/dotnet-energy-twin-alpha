@@ -23,6 +23,7 @@ Entschieden: Übertragung per **MQTT** (RabbitMQ-MQTT-Plugin, Port 1883); als Vi
 |---|---|---|
 | Modbus–RabbitMQ-Gateway, `Modbus.Client` | Susanne Lastowicka | [`src/ModbusRabbitGateway/README.md`](src/ModbusRabbitGateway/README.md), [`src/Modbus.Client/README.md`](src/Modbus.Client/README.md) |
 | Nachrichtenvertrag (Format, Topics, Qualitätsstatus, Beispielnachricht) | Susanne Lastowicka | [`docs/Nachrichtenvertrag-LB03.md`](docs/Nachrichtenvertrag-LB03.md) (Entwurf) |
+| Wetter zusätzlich über MQTT, Klimaprofile Sahara/Antarktis | Alexander Lux | [`Wettervertrag`](docs/Wetter-Nachrichtenvertrag-LB03.md), [`Nachweis`](docs/nachweise/2026-11-08-wetter-mqtt/README.md) |
 | Messwerte im Vertrag: DC-Ladesäule | Susanne Lastowicka | |
 | Messwerte im Vertrag: PV-Anlage | | |
 | Messwerte im Vertrag: Batteriespeicher | | |
@@ -33,7 +34,7 @@ Entschieden: Übertragung per **MQTT** (RabbitMQ-MQTT-Plugin, Port 1883); als Vi
 | Funktionsnachweise 1–7 | | [`docs/nachweise/`](docs/nachweise/2026-11-08-gateway-mit-master/README.md) (Lauf mit Ladesäule und Master) |
 | Optional: Wetter/TimeSim über RabbitMQ | | |
 | Eigener Skill `readTask` | Susanne Lastowicka | [`skills/readTask/README.md`](skills/readTask/README.md) |
-| Eigener Skill | Alexander Lux | |
+| Eigener Skill „Let's Document“ | Alexander Lux | [`skills/lets-document/README.md`](skills/lets-document/README.md), [Anwendungsnachweis](docs/nachweise/2026-11-08-lets-document/README.md) |
 | Eigener Skill | Dominik Zach | |
 
 ## LB03 starten
@@ -43,13 +44,16 @@ Nach einmaliger Einrichtung von `docker/.env`, aus dem Repository-Root:
 
 ```powershell
 docker compose --env-file docker/.env -f docker/docker-compose.yml up -d --wait --wait-timeout 180
-.\start-all.ps1 -Autostart -NoClient
+.\start-all.ps1 -Autostart -NoClient -WeatherMqtt
 # Anschließend in einem weiteren Terminal:
 dotnet run --no-build --project src/ModbusRabbitGateway
 ```
 
 Management: <http://localhost:15672>; MQTT: `127.0.0.1:1883`, Abo `energytwin/#`.
 Zugangsdaten stehen ausschließlich in der lokalen `docker/.env`.
+`-WeatherMqtt` aktiviert den zusätzlichen Wetterstrom für Salzburg, Wien, Innsbruck, Tamanrasset und Neumayer III.
+Geräte verwenden weiterhin HTTP. Für gespeicherte Wetterstände im Viewer die sechs konkreten Topics aus dem
+[Wettervertrag](docs/Wetter-Nachrichtenvertrag-LB03.md) abonnieren. Ohne `-WeatherMqtt` bleibt der bisherige Wetterstart erhalten.
 Der [Docker-Funktionsnachweis](docs/nachweise/2026-11-08-docker-alexander/README.md) belegt den Empfang aller vier Geräte.
 
 ## Aufbau
