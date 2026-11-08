@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Modbus-TCP-Client (Verbindung, Lesen, Schreiben, Fehlerübersetzung) für Diagnose-Client und Gateway. -->
+
+  <ItemGroup>
+    <ProjectReference Include="../Modbus.Contracts/Modbus.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EasyModbusTCP.NETCore" />
+  </ItemGroup>
+
+</Project>

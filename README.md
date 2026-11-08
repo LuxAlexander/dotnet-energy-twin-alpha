@@ -14,6 +14,28 @@ Anlagen, ein Modbus-Diagnose-Client liest und schreibt Register. Alles läuft lo
 | DC-Ladesäule (2 Ladepunkte), Modbus-Diagnose-Client, `Modbus.Contracts`, `Devices.Common` | Susanne Lastowicka | [`src/Devices/DualPortCharger/README.md`](src/Devices/DualPortCharger/README.md), [`src/ModbusDiagnosticClient/README.md`](src/ModbusDiagnosticClient/README.md), [`src/Modbus.Contracts/README.md`](src/Modbus.Contracts/README.md), [`src/Devices.Common/README.md`](src/Devices.Common/README.md) |
 | Industrieverbraucher (Kühlhaus, viertes Feldgerät) | Dominik Zach (LB01-Modell und LB02-Umbau) | [`src/Devices/KuehlhausSimulator/README.md`](src/Devices/KuehlhausSimulator/README.md) |
 
+### Aufgabe 03 – Modbus zu RabbitMQ (neue Module)
+
+Entschieden: Übertragung per **MQTT** (RabbitMQ-MQTT-Plugin, Port 1883); als Viewer dient ein MQTT-Werkzeug
+(z. B. MQTT Explorer), ein eigener Viewer ist damit nicht nötig. Leere Felder sind noch nicht zugeteilt.
+
+| Baustein | Verantwortlich | Dokumentation |
+|---|---|---|
+| Modbus–RabbitMQ-Gateway, `Modbus.Client` | Susanne Lastowicka | [`src/ModbusRabbitGateway/README.md`](src/ModbusRabbitGateway/README.md), [`src/Modbus.Client/README.md`](src/Modbus.Client/README.md) |
+| Nachrichtenvertrag (Format, Topics, Qualitätsstatus, Beispielnachricht) | Susanne Lastowicka | [`docs/Nachrichtenvertrag-LB03.md`](docs/Nachrichtenvertrag-LB03.md) (Entwurf) |
+| Messwerte im Vertrag: DC-Ladesäule | Susanne Lastowicka | |
+| Messwerte im Vertrag: PV-Anlage | | |
+| Messwerte im Vertrag: Batteriespeicher | | |
+| Messwerte im Vertrag: Kühlhaus | | |
+| SRS `docs/SRS-LB03.md` | | |
+| RabbitMQ unter Docker (Compose, `.env.example`, Start/Status/Stopp) | | [`docker/docker-compose.yml`](docker/docker-compose.yml) |
+| Viewer: Einrichtung und Anleitung MQTT-Werkzeug | | |
+| Funktionsnachweise 1–7 | | |
+| Optional: Wetter/TimeSim über RabbitMQ | | |
+| Eigener Skill `readTask` | Susanne Lastowicka | [`skills/readTask/README.md`](skills/readTask/README.md) |
+| Eigener Skill | Alexander Lux | |
+| Eigener Skill | Dominik Zach | |
+
 ## Aufbau
 
 ```
@@ -28,6 +50,8 @@ src/
   SimulationMaster/        Master: Pause, Tempo, Neustart, Status
   WeatherSimulator/        HTTP-Wetterdienst (deterministisch, WeatherSynth-Basis)
   ModbusDiagnosticClient/  Register lesen/schreiben, Fehler anzeigen
+  Modbus.Client/           Modbus-TCP-Client (Verbindung, Fehlerübersetzung) für Diagnose-Client und Gateway
+  ModbusRabbitGateway/     LB03: Geräte über Modbus lesen, nach Nachrichtenvertrag veröffentlichen (derzeit Konsole, MQTT folgt)
   Devices/PvSimulator/       PV-Anlage
   Devices/BatterySimulator/  Batteriespeicher
   Devices/DualPortCharger/   DC-Ladesäule mit zwei Ladepunkten
@@ -38,6 +62,7 @@ tests/
   FieldDevices.Tests/       PV, Batterie und Kühlhaus: Modbus, Optionen, Standalone-Lauf (62)
   ModbusDiagnosticClient.Tests/  Client gegen echten Modbus-Server (28)
   Weather.Tests/            Reproduzierbarkeit und Plausibilität des Wetters (11)
+  ModbusRabbitGateway.Tests/  Gateway: Dekodierung, Qualität, Schlüssel, Optionen, gegen echten Modbus-Server
 ```
 
 Abhängigkeitsrichtung: `SimCore.Contracts` ← `SimCore.Time` ← `SimCore.TimeSync` ← `Modbus.Contracts` ← `Devices.*`.
@@ -82,6 +107,9 @@ dotnet run --project src/Devices/KuehlhausSimulator -- --id KH-01
 
 # 4. Modbus-Diagnose-Client
 dotnet run --project src/ModbusDiagnosticClient -- --port 1502
+
+# 5. Modbus–RabbitMQ-Gateway (LB03, liest PV 1502, Batterie 1503, Charger 1504, Kühlhaus 1505; derzeit Ausgabe auf der Konsole)
+dotnet run --project src/ModbusRabbitGateway -- --json
 ```
 
 Die Standardports sind 1502 (PV und Charger), 1503 (Batterie) und 1505 (Kühlhaus). In der Demo mit allen Geräten
@@ -131,10 +159,11 @@ dotnet test tests/Devices.Common.Tests
 dotnet test tests/FieldDevices.Tests
 dotnet test tests/ModbusDiagnosticClient.Tests
 dotnet test tests/Weather.Tests
+dotnet test tests/ModbusRabbitGateway.Tests
 ```
 
 Die Testprojekte werden **einzeln** gestartet: Mehrere binden echte TCP-Ports, deshalb kann `dotnet test EnergyTwin.sln`
-wegen der parallelen Ausführung scheitern, obwohl der Code in Ordnung ist. Zusammen sind es 206 Tests.
+wegen der parallelen Ausführung scheitern, obwohl der Code in Ordnung ist. Zusammen sind es 247 Tests (Stand 2026-11-08, alle grün).
 
 Pflicht-Tests laut Aufgabenstellung: Zeitsteuerung des Masters (`tests/SimCore.Tests`) und Reproduzierbarkeit des
 Wetters (`tests/Weather.Tests`). Dazu Gerätezeit/Modbus (`Devices.Common.Tests`), PV/Batterie/Kühlhaus

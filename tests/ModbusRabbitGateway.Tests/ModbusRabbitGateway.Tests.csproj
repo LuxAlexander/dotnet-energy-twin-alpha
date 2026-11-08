@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/ModbusRabbitGateway/ModbusRabbitGateway.csproj" />
+    <!-- echter Modbus-Server für den Test gegen ein Gerät -->
+    <ProjectReference Include="../../src/Devices.Common/Devices.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Festgehaltene Messwert-Schlüssel (Ausgabe der Gateway-Option "keys"); Änderungen nur bewusst, siehe README. -->
+    <None Include="measurement-keys.txt" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

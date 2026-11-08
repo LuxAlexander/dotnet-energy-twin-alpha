@@ -1,0 +1,81 @@
+# PvSimulator (PvPlant)
+ 2 betriebszustand | Betriebszustand
+ 3 fehlercode | Fehlercode
+ 4 wirkleistung | Wirkleistung | kW
+ 6 kumulierte_energie | Kumulierte Energie | kWh
+14 tempo | Tempo | x
+16 ein_aus | Ein/Aus
+18 letzter_schreibfehler | Letzter Schreibfehler
+19 adresse_des_letzten_schreibzugriffs | Adresse des letzten Schreibzugriffs
+20 leistungsbegrenzung | Leistungsbegrenzung | %
+22 einstrahlung | Einstrahlung | W/m²
+24 modultemperatur | Modultemperatur | °C
+26 aussentemperatur | Außentemperatur | °C
+28 netzspannung | Netzspannung | V
+30 tagesenergie | Tagesenergie | kWh
+32 verschmutzung | Verschmutzung | %
+34 alterung | Alterung | %
+36 wetter | Wetter
+37 nennleistung | Nennleistung | kW
+
+# BatterySimulator (Battery)
+ 2 betriebszustand | Betriebszustand
+ 3 fehlercode | Fehlercode
+ 4 wirkleistung | Wirkleistung | kW
+ 6 kumulierte_energie | Kumulierte Energie | kWh
+14 tempo | Tempo | x
+16 ein_aus | Ein/Aus
+18 letzter_schreibfehler | Letzter Schreibfehler
+19 adresse_des_letzten_schreibzugriffs | Adresse des letzten Schreibzugriffs
+20 leistungssollwert | Leistungssollwert | kW
+22 betriebsmodus | Betriebsmodus
+23 ladezustand_soc | Ladezustand (SOC) | %
+25 temperatur | Temperatur | °C
+27 geladene_energie | Geladene Energie | kWh
+29 entladene_energie | Entladene Energie | kWh
+31 vollzyklen | Vollzyklen
+33 kapazitaet | Kapazität | kWh
+35 max_ladeleistung | Max. Ladeleistung | kW
+37 max_entladeleistung | Max. Entladeleistung | kW
+39 soc_minimum | SOC-Minimum | %
+41 soc_maximum | SOC-Maximum | %
+43 geraetezustand | Gerätezustand
+
+# DualPortCharger (Charger)
+ 2 betriebszustand | Betriebszustand
+ 3 fehlercode | Fehlercode
+ 4 wirkleistung | Wirkleistung | kW
+ 6 kumulierte_energie | Kumulierte Energie | kWh
+14 tempo | Tempo | x
+16 ein_aus | Ein/Aus
+18 letzter_schreibfehler | Letzter Schreibfehler
+19 adresse_des_letzten_schreibzugriffs | Adresse des letzten Schreibzugriffs
+20 leistungsgrenze_der_saeule | Leistungsgrenze der Säule | kW
+22 punkt_1_zustand | Punkt 1: Zustand
+23 punkt_1_leistung | Punkt 1: Leistung | kW
+25 punkt_1_soc | Punkt 1: SOC | %
+27 punkt_1_temperatur | Punkt 1: Temperatur | °C
+29 punkt_2_zustand | Punkt 2: Zustand
+30 punkt_2_leistung | Punkt 2: Leistung | kW
+32 punkt_2_soc | Punkt 2: SOC | %
+34 punkt_2_temperatur | Punkt 2: Temperatur | °C
+36 warteschlange | Warteschlange | Fahrzeuge
+37 abgewiesene_fahrzeuge | Abgewiesene Fahrzeuge | Fahrzeuge
+
+# KuehlhausSimulator (IndustrialConsumer)
+ 2 betriebszustand | Betriebszustand
+ 3 fehlercode | Fehlercode
+ 4 wirkleistung | Wirkleistung | kW
+ 6 kumulierte_energie | Kumulierte Energie | kWh
+14 tempo | Tempo | x
+16 ein_aus | Ein/Aus
+18 letzter_schreibfehler | Letzter Schreibfehler
+19 adresse_des_letzten_schreibzugriffs | Adresse des letzten Schreibzugriffs
+20 solltemperatur | Solltemperatur | °C
+22 tuer | Tür
+23 raumtemperatur | Raumtemperatur | °C
+25 aussentemperatur | Außentemperatur | °C
+27 kompressor | Kompressor
+28 kaelteleistung | Kälteleistung | kW
+30 laufzeit | Laufzeit | h
+

@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <Using Include="Xunit" />
+    <Using Include="Modbus.Client" />
   </ItemGroup>
 
 </Project>

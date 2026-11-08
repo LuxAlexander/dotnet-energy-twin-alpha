@@ -5,7 +5,7 @@ gerätespezifischen Register (Rohwert und gedeuteter Wert), schreibt Sollwerte u
 und zeigt Verbindungs-, Protokoll- und Wertefehler verständlich an. Vorbereitung für LB03.
 **Verantwortlich:** Susanne Lastowicka
 **Basis aus LB01:** –
-**Abhängigkeiten:** `Modbus.Contracts` (Registerkopf, Registerpläne, Codec), EasyModbusTCP.NETCore.
+**Abhängigkeiten:** `Modbus.Contracts` (Registerkopf, Registerpläne, Codec), `Modbus.Client` (Verbindung `DeviceConnection`, seit LB03 gemeinsam mit dem Gateway), darüber EasyModbusTCP.NETCore.
 
 ## Konfiguration
 
@@ -81,7 +81,7 @@ dotnet run --project src/ModbusDiagnosticClient -- --port 1502 --once           
 
 ## Schnittstellen
 - **Benötigt:** ein Gerät mit Modbus-TCP-Server (Registerplan in dessen README, Kopf in `src/Modbus.Contracts/README.md`).
-- **Angeboten:** Konsole; Klassen `DeviceConnection` (Verbindung, Fehlerübersetzung), `DiagnosticSession` (Befehle), `RegisterFormatter`, `ClientOptions`.
+- **Angeboten:** Konsole; Klassen `DiagnosticSession` (Befehle), `RegisterFormatter`, `ClientOptions`. `DeviceConnection` (Verbindung, Fehlerübersetzung) liegt seit 2026-11-08 in `src/Modbus.Client`.
 - Die Bibliothek EasyModbusTCP.NETCore ist synchron (Bibliotheksgrenze laut Aufgabe, nicht in `Task.Run` verpackt); Eingabe, Wartezeiten und Ausgabe sind async.
 
 ## Tests

@@ -1,6 +1,9 @@
 # AGENTS.md – dotnet-energy-twin-alpha
 
-**Stand:** 2026-10-27 · **Phase:** LB02-Endstand: alle Programme fertig und an Master, Modbus und Wettersimulator angebunden; viertes Feldgerät = Kühlhaus (Wind entfallen); zusammen 206 Tests (54 + 51 + 28 + 62 + 11); PV-CSV-Fehler behoben (de-AT Dezimalkomma) und CSV-/Konsolen-Helfer nach `src/Shared` ausgelagert (§0.6a im Archiv).
+**Stand:** 2026-11-08 · **LB03 begonnen:** MQTT entschieden, Nachrichtenvertrag (`docs/Nachrichtenvertrag-LB03.md`) und
+Modbus–RabbitMQ-Gateway (`src/ModbusRabbitGateway`, noch ohne MQTT, Ausgabe auf der Konsole) von Susanne;
+`DeviceConnection` nach `src/Modbus.Client` verschoben; Aufgabenabgleich `docs/task-status/aufgabe-03.md`.
+**Davor, Phase LB02-Endstand:** alle Programme fertig und an Master, Modbus und Wettersimulator angebunden; viertes Feldgerät = Kühlhaus (Wind entfallen); zusammen 206 Tests (54 + 51 + 28 + 62 + 11); PV-CSV-Fehler behoben (de-AT Dezimalkomma) und CSV-/Konsolen-Helfer nach `src/Shared` ausgelagert (§0.6a im Archiv).
 
 Pflichtlektüre für jeden Agenten in diesem Repo. Sie fasst die drei LB01-Projekte und den LB02-Plan
 zusammen, damit nicht alles neu analysiert werden muss. Details:
@@ -47,7 +50,9 @@ Dieser Abschnitt reicht, um an einem neuen Tag ohne Vorwissen weiterzuarbeiten. 
 | `start-all.ps1` | ✅ baut die Solution und öffnet Wetter, Master, alle vier Feldgeräte und den Diagnose-Client in eigenen Fenstern; wartet auf Ports, überspringt belegte, `-Autostart`, `-NoClient`, `-Speed`, `-WhatIf` | `start-all.ps1`, zentrale `README.md` |
 | `DualPortCharger` | ✅ an den Master angebunden, async, CSV-Spalte `Lauf`, Profile „Master“ und „Standalone“; ✅ Modbus-Server mit Registerplan im README; ✅ optional Wetter (Außentemperatur) | `Simulation/SimulationEngine.cs` + `Simulation/ChargerModbus.cs` = **Vorlage für alle Geräte** |
 | `ModbusDiagnosticClient` | ✅ Eingabeaufforderung + `--once`/`--write`; Kopf und Geräteregister lesen (Rohwert + Deutung), Sollwert schreiben und beim Gerät prüfen (Register 18/19), `force`, `watch`, Verbindungsabbruch mit Wiederverbindung | `DiagnosticSession.cs`, README |
-| Tests | ✅ `SimCore.Tests` 54/54, `Devices.Common.Tests` 51/51, `ModbusDiagnosticClient.Tests` 28/28, `FieldDevices.Tests` 62/62 (PV, Batterie, Kühlhaus), `Weather.Tests` 11/11 – zusammen 206 | – |
+| `Modbus.Client` (LB03) | ✅ `DeviceConnection` + `DiagnosticException`, aus dem Diagnose-Client verschoben, von Client und Gateway genutzt | `DeviceConnection.cs`, README |
+| `ModbusRabbitGateway` (LB03) | 🟡 liest alle vier Geräte (Register 0–49), dekodiert nach Registerplan, Qualitätsstatus, Statusnachrichten, Schlüssel `key` je Messwert; **MQTT-Publisher fehlt** (derzeit `ConsolePublisher`); Probelauf gegen Charger ok, `tests/ModbusRabbitGateway.Tests` 41/41 | `GatewayService.cs`, `MessageBuilder.cs`, `DevicePoller.cs`, README, `docs/Nachrichtenvertrag-LB03.md` |
+| Tests | ✅ `SimCore.Tests` 54/54, `Devices.Common.Tests` 51/51, `ModbusDiagnosticClient.Tests` 28/28, `FieldDevices.Tests` 62/62 (PV, Batterie, Kühlhaus), `Weather.Tests` 11/11, `ModbusRabbitGateway.Tests` 41/41 – zusammen 247 (Stand 2026-11-08) | – |
 | `PvSimulator` | ✅ an Master-Zeit (`StepScheduler`, `--model-step`), Modbus (Registerplan 20–38) und Wettersimulator (`--weather`, `--location`, Abfrage je Modellstunde) angebunden, async, CSV je Lauf; Tasten `Q`/`C`/`R`/`F`/`T`/`G` immer, `P`/`M`/`0–4`/`5–9` nur standalone (mit Master ignoriert und im Footer ausgeblendet, Sitzungsprotokoll §0.13 im Archiv); Statuszeilen umbrochen, Adresse/Standort farbig; nutzt `WeatherClient` aus `Devices.Common` und die gemeinsamen Bausteine aus `Shared` | `Simulation/SimulationEngine.cs`, `PvModbus.cs`, `Output/ConsoleDisplay.cs` |
 | `BatterySimulator` | ✅ an Master-Zeit, Modbus (Registerplan 20–43, Sollwert in konfigurierter Leistung) und optional Wetter (Außentemperatur) angebunden, async, Einstellungsmenü `S` statt Pausenmenü | `Simulator.cs`, `BatteryModbus.cs` |
 | `WeatherSimulator` | ✅ HTTP-Dienst (`/weather`, `/locations`), deterministisch aus WeatherSynth + eigenem Modell, 3 Standorte, manuelle Übersteuerung, Fehler 404/400 | `Program.cs`, `Simulation/WeatherModel.cs`, README |
@@ -236,7 +241,9 @@ src/
   Devices.Common/          lib   → Contracts, Time, TimeSync, Modbus.Contracts, Shared.Config + EasyModbusTCP.NETCore (Zeit + Modbus-Server)
   SimulationMaster/        exe   → Contracts, Time, TimeSync, Shared.Config   (lauffähig seit 2026-10-25)
   WeatherSimulator/        exe   → Contracts, Shared.Config, Devices.Common + WeatherSynth (HTTP-Wetterdienst)
-  ModbusDiagnosticClient/  exe   → Contracts, Modbus.Contracts, Shared.Config + EasyModbusTCP.NETCore   (lauffähig seit 2026-10-25)
+  ModbusDiagnosticClient/  exe   → Contracts, Modbus.Contracts, Modbus.Client, Shared.Config   (lauffähig seit 2026-10-25)
+  Modbus.Client/           lib   → Modbus.Contracts + EasyModbusTCP.NETCore   (DeviceConnection, seit 2026-11-08)
+  ModbusRabbitGateway/     exe   → Modbus.Contracts, Modbus.Client   (LB03-Gateway, seit 2026-11-08; MQTT folgt)
   Devices/PvSimulator/        exe → Devices.Common, Shared   enthält LB01-Code von Alex (seit 2026-10-25 mit Master-Zeit und Modbus)
   Devices/BatterySimulator/   exe → Devices.Common   enthält LB01-Code von Domi (seit 2026-10-25 mit Master-Zeit und Modbus)
   Devices/DualPortCharger/    exe → Devices.Common   enthält LB01-Code von Susi
@@ -247,6 +254,7 @@ tests/
   ModbusDiagnosticClient.Tests/ xUnit → ModbusDiagnosticClient, Devices.Common   (seit 2026-10-25)
   FieldDevices.Tests/      xUnit → PvSimulator, BatterySimulator, Devices.Common         (seit 2026-10-25)
   Weather.Tests/           xUnit → WeatherSimulator (11 Tests, Modell direkt)
+  ModbusRabbitGateway.Tests/ xUnit → ModbusRabbitGateway, Devices.Common   (seit 2026-11-08, 41 Tests)
 docs/                      zentrale Doku und CSV-Ausgaben (Aufbau siehe §1)
 ```
 Jedes Projekt hat eine `README.md` als Gerüst (Zweck, Verantwortlich, Basis aus LB01, Konfiguration, Bedienung,
@@ -302,6 +310,7 @@ Umgesetzt in `SimCore.Contracts` (`TimeState`, `SimMode`, `ISimClock`) und `SimC
 | 6 | Ort fürs Wetter | ✅ umgesetzt 2026-10-26: Standortkatalog, Standard `salzburg` (auch wien, innsbruck) |
 | 7 | Komplexität des Batteriemodells | einfaches SOC-Modell |
 | 8 | Was lädt der Charger | „Batterie aus PV-Überschuss“ |
+| 9 | LB03: AMQP oder MQTT | ✅ entschieden 2026-11-08: MQTT (RabbitMQ-MQTT-Plugin, Port 1883), Viewer = MQTT-Werkzeug (z. B. MQTT Explorer); Gateway und Nachrichtenvertrag: Susanne, übrige LB03-Zuständigkeiten offen (zentrale `README.md`) |
 
 ---
 
@@ -357,6 +366,10 @@ dotnet run --project src/Devices/KuehlhausSimulator -- --register-plan       # R
 dotnet run --project src/Devices/KuehlhausSimulator -- --standalone --speed 20000 --duration 24 --weather off --seed 42   # ohne Master
 dotnet run --project src/ModbusDiagnosticClient -- --port 1505 --once                # Kühlhaus-Register lesen
 dotnet run --project src/ModbusDiagnosticClient -- --port 1505 --write "Solltemperatur=-15"
+dotnet run --project src/ModbusRabbitGateway -- --json                     # LB03-Gateway (Geräte 1502–1505, Ausgabe Konsole)
+dotnet run --project src/ModbusRabbitGateway -- --device DC-01=127.0.0.1:1504 --once --json
+dotnet run --project src/ModbusRabbitGateway -- --keys                     # Messwert-Schlüssel aller Pläne
+dotnet test tests/ModbusRabbitGateway.Tests
 ```
 
 `dotnet build EnergyTwin.sln` ⇒ 0 Fehler / 0 Warnungen (zuletzt 2026-10-27 geprüft);

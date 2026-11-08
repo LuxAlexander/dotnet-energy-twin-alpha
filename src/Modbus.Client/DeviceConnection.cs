@@ -3,7 +3,7 @@ using EasyModbus;
 using EasyModbus.Exceptions;
 using Modbus.Contracts;
 
-namespace ModbusDiagnosticClient;
+namespace Modbus.Client;
 
 public enum DiagnosticErrorKind
 {

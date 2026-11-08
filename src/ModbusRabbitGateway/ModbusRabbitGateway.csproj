@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Modbus–RabbitMQ-Gateway (LB03): liest die Feldgeräte über Modbus TCP und veröffentlicht sie nach dem
+       Nachrichtenvertrag docs/Nachrichtenvertrag-LB03.md. -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Modbus.Contracts/Modbus.Contracts.csproj" />
+    <ProjectReference Include="../Modbus.Client/Modbus.Client.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -7,11 +7,13 @@
   <ItemGroup>
     <ProjectReference Include="../SimCore.Contracts/SimCore.Contracts.csproj" />
     <ProjectReference Include="../Modbus.Contracts/Modbus.Contracts.csproj" />
+    <ProjectReference Include="../Modbus.Client/Modbus.Client.csproj" />
     <ProjectReference Include="../Shared.Config/Shared.Config.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EasyModbusTCP.NETCore" />
+    <!-- DeviceConnection liegt seit LB03 in Modbus.Client (gemeinsam mit dem Gateway). -->
+    <Using Include="Modbus.Client" />
   </ItemGroup>
 
 </Project>
