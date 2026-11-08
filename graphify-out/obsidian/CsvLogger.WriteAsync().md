@@ -16,7 +16,7 @@ tags:
 - [[CsvLogger_1]] - `method` [EXTRACTED]
 - [[DateTime]] - `references` [EXTRACTED]
 - [[DualCharger]] - `references` [EXTRACTED]
-- [[SimulationEngine.AdvanceAsync()]] - `calls` [INFERRED]
+- [[SimulationEngine.AdvanceAsync()_1]] - `calls` [INFERRED]
 - [[Task]] - `references` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop

@@ -1,12 +1,12 @@
 ---
 source_file: "src/ModbusDiagnosticClient/ClientOptions.cs"
 type: "code"
-community: "Gruppe 42"
+community: "Gruppe 57"
 location: "L39"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_42
+  - community/Gruppe_57
 ---
 
 # ClientOptions.Parse()
@@ -20,4 +20,4 @@ tags:
 - [[ClientOptionsTests.MissingValue_Throws()]] - `calls` [EXTRACTED]
 - [[ClientOptionsTests.Parses_AllOptions_AndWrites()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_42
+#graphify/code #graphify/EXTRACTED #community/Gruppe_57

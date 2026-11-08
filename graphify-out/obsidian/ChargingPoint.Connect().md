@@ -14,6 +14,6 @@ tags:
 ## Connections
 - [[ChargingPoint]] - `method` [EXTRACTED]
 - [[InputHandler.ConnectVehicleAsync()]] - `calls` [INFERRED]
-- [[Vehicle_1]] - `references` [EXTRACTED]
+- [[Vehicle]] - `references` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Fahrzeug

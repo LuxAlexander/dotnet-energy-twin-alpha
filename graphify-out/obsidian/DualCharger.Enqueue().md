@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/DualPortCharger/Models/DualCharger.cs"
 type: "code"
-community: "DualCharger"
+community: "Fahrzeug"
 location: "L62"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/DualCharger
+  - community/Fahrzeug
 ---
 
 # DualCharger.Enqueue()
@@ -17,6 +17,6 @@ tags:
 - [[DualCharger]] - `method` [EXTRACTED]
 - [[DualCharger.ConnectWaitingVehicles()]] - `calls` [EXTRACTED]
 - [[SimulationEngine.VehicleArrives()]] - `calls` [EXTRACTED]
-- [[Vehicle_1]] - `references` [EXTRACTED]
+- [[Vehicle]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/DualCharger
+#graphify/code #graphify/EXTRACTED #community/Fahrzeug

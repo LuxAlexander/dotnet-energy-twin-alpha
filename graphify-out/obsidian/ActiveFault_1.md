@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/KuehlhausSimulator/Kuehlhaus.cs"
+source_file: "src/Devices/PvSimulator/Devices/PvSystem.cs"
 type: "code"
-community: "Kühlhaus-Modell"
-location: "L91"
+community: "PvSystem"
+location: "L25"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Kühlhaus-Modell
+  - community/PvSystem
 ---
 
 # ActiveFault
 
 ## Connections
-- [[Kuehlhaus]] - `defines` [EXTRACTED]
+- [[PvSystem]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Kühlhaus-Modell
+#graphify/code #graphify/EXTRACTED #community/PvSystem

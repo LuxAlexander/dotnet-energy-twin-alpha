@@ -1,18 +1,18 @@
 ---
 source_file: "src/Devices/PvSimulator/Simulation/ArgsParser.cs"
 type: "code"
-community: "ArgsParser"
+community: "ArgsParser (2)"
 location: "L129"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/ArgsParser
+  - community/ArgsParser_2
 ---
 
 # ArgsParser.Canonical()
 
 ## Connections
-- [[ArgsParser_3]] - `method` [EXTRACTED]
-- [[ArgsParser.Parse()_3]] - `calls` [EXTRACTED]
+- [[ArgsParser]] - `method` [EXTRACTED]
+- [[ArgsParser.Parse()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/ArgsParser
+#graphify/code #graphify/EXTRACTED #community/ArgsParser_2

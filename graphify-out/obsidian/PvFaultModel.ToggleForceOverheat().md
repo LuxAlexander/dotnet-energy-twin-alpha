@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/PvSimulator/Devices/PvFaultModel.cs"
 type: "code"
-community: "PV-Engine & Fehler"
+community: "PvFaultModel"
 location: "L68"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/PV-Engine__Fehler
+  - community/PvFaultModel
 ---
 
 # PvFaultModel.ToggleForceOverheat()
@@ -15,4 +15,4 @@ tags:
 - [[PvFaultModel]] - `method` [EXTRACTED]
 - [[SimulationEngine.ToggleOverheat()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/PV-Engine__Fehler
+#graphify/code #graphify/EXTRACTED #community/PvFaultModel

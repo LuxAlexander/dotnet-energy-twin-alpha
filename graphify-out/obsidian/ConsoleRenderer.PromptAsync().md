@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/DualPortCharger/IO/ConsoleRenderer.cs"
 type: "code"
-community: "Batterie-Simulator Loop"
+community: "Batterie-Simulator Loop (3)"
 location: "L79"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Simulator_Loop
+  - community/Batterie-Simulator_Loop_3
 ---
 
 # ConsoleRenderer.PromptAsync()
@@ -22,4 +22,4 @@ tags:
 - [[InputHandler.ConnectVehicleAsync()]] - `calls` [INFERRED]
 - [[Task]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop
+#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop_3

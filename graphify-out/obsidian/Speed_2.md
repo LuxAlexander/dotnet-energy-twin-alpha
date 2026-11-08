@@ -1,17 +1,17 @@
 ---
-source_file: "src/SimCore.Time/SyncedClock.cs"
+source_file: "src/SimCore.Time/MasterClock.cs"
 type: "code"
-community: "SyncedClock"
-location: "L112"
+community: "MasterClock"
+location: "L79"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/SyncedClock
+  - community/MasterClock
 ---
 
 # Speed
 
 ## Connections
-- [[SyncedClock]] - `defines` [EXTRACTED]
+- [[MasterClock]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/SyncedClock
+#graphify/code #graphify/EXTRACTED #community/MasterClock

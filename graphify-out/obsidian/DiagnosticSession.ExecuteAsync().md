@@ -18,7 +18,6 @@ tags:
 - [[DiagnosticClientTests.OnOffReset_ByLabelAndShortcut_ReachTheDevice()]] - `calls` [INFERRED]
 - [[DiagnosticClientTests.Quit_EndsTheSession()]] - `calls` [INFERRED]
 - [[DiagnosticClientTests.Watch_KeepsGoingDuringOutage()]] - `calls` [INFERRED]
-- [[DiagnosticException]] - `calls` [INFERRED]
 - [[DiagnosticSession]] - `method` [EXTRACTED]
 - [[DiagnosticSession.ConnectAsync()]] - `calls` [EXTRACTED]
 - [[DiagnosticSession.Prefix()]] - `calls` [EXTRACTED]

@@ -15,7 +15,7 @@ tags:
 - [[ConsoleKey]] - `references` [EXTRACTED]
 - [[DeviceTimeSource.SetSpeed()]] - `calls` [EXTRACTED]
 - [[DeviceTimeSource.TogglePause()]] - `calls` [EXTRACTED]
-- [[SimulationEngine_2]] - `method` [EXTRACTED]
+- [[SimulationEngine]] - `method` [EXTRACTED]
 - [[SimulationEngine.CleanModules()]] - `calls` [EXTRACTED]
 - [[SimulationEngine.CycleRefresh()]] - `calls` [EXTRACTED]
 - [[SimulationEngine.HandleKeys()]] - `calls` [EXTRACTED]
@@ -23,7 +23,7 @@ tags:
 - [[SimulationEngine.SetWeather()]] - `calls` [EXTRACTED]
 - [[SimulationEngine.ToggleFault()]] - `calls` [EXTRACTED]
 - [[SimulationEngine.ToggleGrid()]] - `calls` [EXTRACTED]
-- [[SimulationEngine.ToggleMode()_1]] - `calls` [EXTRACTED]
+- [[SimulationEngine.ToggleMode()]] - `calls` [EXTRACTED]
 - [[SimulationEngine.ToggleOverheat()]] - `calls` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/PV-Engine__Fehler

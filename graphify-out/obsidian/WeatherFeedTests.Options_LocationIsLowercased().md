@@ -1,12 +1,12 @@
 ---
 source_file: "tests/Devices.Common.Tests/WeatherFeedTests.cs"
 type: "code"
-community: "Gruppe 52"
+community: "WeatherFeed"
 location: "L97"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_52
+  - community/WeatherFeed
 ---
 
 # WeatherFeedTests.Options_LocationIsLowercased()
@@ -17,4 +17,4 @@ tags:
 - [[WeatherOptions]] - `calls` [INFERRED]
 - [[WeatherOptions.TryApply()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_52
+#graphify/code #graphify/EXTRACTED #community/WeatherFeed

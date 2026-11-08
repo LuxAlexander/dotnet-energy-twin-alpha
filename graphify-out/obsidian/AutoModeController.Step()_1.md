@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/KuehlhausSimulator/Simulation/AutoModeController.cs"
 type: "code"
-community: "Gruppe 58"
+community: "Gruppe 109"
 location: "L35"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_58
+  - community/Gruppe_109
 ---
 
 # AutoModeController.Step()
@@ -17,7 +17,7 @@ tags:
 - [[DateTime]] - `references` [EXTRACTED]
 - [[Kuehlhaus.SetDoor()]] - `calls` [INFERRED]
 - [[KuehlhausAutoModeTests.CountOpenSteps()]] - `calls` [INFERRED]
-- [[SimulationEngine.AdvanceAsync()_1]] - `calls` [INFERRED]
+- [[SimulationEngine.AdvanceAsync()_2]] - `calls` [INFERRED]
 - [[TimeSpan]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_58
+#graphify/code #graphify/EXTRACTED #community/Gruppe_109

@@ -1,12 +1,12 @@
 ---
 source_file: "src/Shared/Data/CsvSchema.cs"
 type: "code"
-community: "Gruppe 73"
+community: "Gruppe 101"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_73
+  - community/Gruppe_101
 ---
 
 # CsvSchema.cs
@@ -15,4 +15,4 @@ tags:
 - [[CsvSchema]] - `contains` [EXTRACTED]
 - [[Shared.Data]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_73
+#graphify/code #graphify/EXTRACTED #community/Gruppe_101

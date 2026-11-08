@@ -1,12 +1,12 @@
 ---
 source_file: "tests/FieldDevices.Tests/ConsumerTests.cs"
 type: "code"
-community: "Gruppe 57"
+community: "Gruppe 72"
 location: "L13"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_57
+  - community/Gruppe_72
 ---
 
 # KuehlhausModelTests.CreateRoom()
@@ -25,4 +25,4 @@ tags:
 - [[KuehlhausModelTests.TurnOff_StopsCompressorAndReportsOffState()]] - `calls` [EXTRACTED]
 - [[KuehlhausModelTests.Update_UsesExactExponentialSolution()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_57
+#graphify/code #graphify/EXTRACTED #community/Gruppe_72

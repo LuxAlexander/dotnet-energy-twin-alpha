@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/DualPortCharger/Models/DualCharger.cs"
+source_file: "src/Devices/PvSimulator/Devices/PvSystem.cs"
 type: "code"
-community: "DualCharger"
-location: "L42"
+community: "PvSystem"
+location: "L23"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/DualCharger
+  - community/PvSystem
 ---
 
-# TotalEnergyKWh
+# TotalEnergyKwh
 
 ## Connections
-- [[DualCharger]] - `defines` [EXTRACTED]
+- [[PvSystem]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/DualCharger
+#graphify/code #graphify/EXTRACTED #community/PvSystem

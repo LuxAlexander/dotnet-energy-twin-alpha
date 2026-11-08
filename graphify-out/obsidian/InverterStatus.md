@@ -12,7 +12,7 @@ tags:
 # InverterStatus
 
 ## Connections
-- [[Fault_2]] - `case_of` [EXTRACTED]
+- [[Fault]] - `case_of` [EXTRACTED]
 - [[InverterStatus.cs]] - `contains` [EXTRACTED]
 - [[Ok]] - `case_of` [EXTRACTED]
 

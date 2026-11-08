@@ -1,16 +1,16 @@
 ---
-source_file: "src/SimCore.Contracts/SimCore.Contracts.csproj"
+source_file: "src/SimCore.Time/SimCore.Time.csproj"
 type: "concept"
-community: "Gruppe 68"
+community: "Gruppe 83"
 tags:
   - graphify/concept
   - graphify/EXTRACTED
-  - community/Gruppe_68
+  - community/Gruppe_83
 ---
 
 # Microsoft.NET.Sdk
 
 ## Connections
-- [[SimCore.Contracts.csproj]] - `references` [EXTRACTED]
+- [[SimCore.Time.csproj]] - `references` [EXTRACTED]
 
-#graphify/concept #graphify/EXTRACTED #community/Gruppe_68
+#graphify/concept #graphify/EXTRACTED #community/Gruppe_83

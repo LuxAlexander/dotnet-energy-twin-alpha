@@ -12,6 +12,6 @@ tags:
 # ModelStepMinutes
 
 ## Connections
-- [[SimulationConfig_2]] - `defines` [EXTRACTED]
+- [[SimulationConfig]] - `defines` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/ArgsParser

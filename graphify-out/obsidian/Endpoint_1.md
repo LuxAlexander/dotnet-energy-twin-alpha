@@ -1,17 +1,17 @@
 ---
-source_file: "src/SimCore.TimeSync/TimeSyncClient.cs"
+source_file: "src/Modbus.Client/DeviceConnection.cs"
 type: "code"
-community: "Sync-Nachrichten"
-location: "L53"
+community: "DeviceConnection (Modbus.Client)"
+location: "L50"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Sync-Nachrichten
+  - community/DeviceConnection_ModbusClient
 ---
 
 # Endpoint
 
 ## Connections
-- [[TimeSyncClient]] - `defines` [EXTRACTED]
+- [[DeviceConnection]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Sync-Nachrichten
+#graphify/code #graphify/EXTRACTED #community/DeviceConnection_ModbusClient

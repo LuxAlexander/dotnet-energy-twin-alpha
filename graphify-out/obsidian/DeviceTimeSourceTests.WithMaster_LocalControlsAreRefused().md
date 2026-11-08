@@ -1,12 +1,12 @@
 ---
 source_file: "tests/Devices.Common.Tests/DeviceTimeSourceTests.cs"
 type: "code"
-community: "DeviceTimeSource"
+community: "DeviceTimeSource (2)"
 location: "L54"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/DeviceTimeSource
+  - community/DeviceTimeSource_2
 ---
 
 # DeviceTimeSourceTests.WithMaster_LocalControlsAreRefused()
@@ -19,4 +19,4 @@ tags:
 - [[Fact]] - `references` [EXTRACTED]
 - [[TimeSyncOptions]] - `calls` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/DeviceTimeSource
+#graphify/code #graphify/EXTRACTED #community/DeviceTimeSource_2

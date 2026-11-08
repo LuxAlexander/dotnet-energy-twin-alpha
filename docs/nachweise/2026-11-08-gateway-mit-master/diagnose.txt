@@ -1,0 +1,8 @@
+EasyModbus Client Library Version: 1.0.0.0
+Copyright (c) Stefan Rossmann Engineering Solutions
+
+ANGENOMMEN: Leistungsgrenze der Säule 150 kW → 200 kW. Gerät zeigt jetzt 200 kW.
+EasyModbus Client Library Version: 1.0.0.0
+Copyright (c) Stefan Rossmann Engineering Solutions
+
+WERTEFEHLER: Leistungsgrenze der Säule = 999: außerhalb des gültigen Bereichs 50 … 350 kW. Mit "force" trotzdem senden.

@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/PvSimulator/Devices/PvFaultModel.cs"
+source_file: "src/Devices/PvSimulator/Devices/PvSystem.cs"
 type: "code"
-community: "PvFaultModel"
-location: "L39"
+community: "PvSystem"
+location: "L30"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/PvFaultModel
+  - community/PvSystem
 ---
 
 # AgingLossPercent
 
 ## Connections
-- [[PvFaultModel]] - `defines` [EXTRACTED]
+- [[PvSystem]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/PvFaultModel
+#graphify/code #graphify/EXTRACTED #community/PvSystem

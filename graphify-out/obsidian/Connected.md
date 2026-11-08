@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/DualPortCharger/Models/ChargingPointState.cs"
+source_file: "src/SimCore.TimeSync/TimeSyncClientInfo.cs"
 type: "code"
-community: "Gruppe 78"
-location: "L9"
+community: "Gruppe 65"
+location: "L7"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_78
+  - community/Gruppe_65
 ---
 
 # Connected
 
 ## Connections
-- [[ChargingPointState]] - `case_of` [EXTRACTED]
+- [[ClientConnectionState]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_78
+#graphify/code #graphify/EXTRACTED #community/Gruppe_65

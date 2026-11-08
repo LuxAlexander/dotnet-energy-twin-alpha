@@ -11,7 +11,7 @@ tags:
 # SyncProtocol (JSON-Zeilen TCP 5100)
 
 ## Connections
-- [[SimCore.Contracts_2]] - `references` [EXTRACTED]
+- [[SimCore.Contracts_1]] - `references` [EXTRACTED]
 - [[TimeState (Zeitvertrag als Gerade)]] - `shares_data_with` [EXTRACTED]
 
 #graphify/document #graphify/EXTRACTED #community/Geräte-READMEs__Modelle

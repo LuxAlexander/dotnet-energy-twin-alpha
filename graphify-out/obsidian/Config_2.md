@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/DualPortCharger/Simulation/SimulationEngine.cs"
+source_file: "src/Devices/BatterySimulator/SimulatorOptions.cs"
 type: "code"
-community: "Gruppe 41"
-location: "L29"
+community: "Gruppe 24"
+location: "L12"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_41
+  - community/Gruppe_24
 ---
 
 # Config
 
 ## Connections
-- [[SimulationEngine]] - `defines` [EXTRACTED]
+- [[SimulatorOptions]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_41
+#graphify/code #graphify/EXTRACTED #community/Gruppe_24

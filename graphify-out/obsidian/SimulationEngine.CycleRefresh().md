@@ -12,7 +12,7 @@ tags:
 # SimulationEngine.CycleRefresh()
 
 ## Connections
-- [[SimulationEngine_2]] - `method` [EXTRACTED]
+- [[SimulationEngine]] - `method` [EXTRACTED]
 - [[SimulationEngine.HandleKey()]] - `calls` [EXTRACTED]
 - [[SimulationEngine.SetNotification()]] - `calls` [EXTRACTED]
 

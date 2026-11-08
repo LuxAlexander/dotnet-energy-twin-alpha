@@ -1,17 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Batterie-Simulator Loop"
+community: "TimeSyncServer"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Simulator_Loop
+  - community/TimeSyncServer
 ---
 
 # Task
 
 ## Connections
 - [[AsyncConsole.ReadLineAsync()]] - `references` [EXTRACTED]
+- [[ConsolePublisher.PublishAsync()]] - `references` [EXTRACTED]
 - [[ConsoleRenderer.DrawAsync()]] - `references` [EXTRACTED]
 - [[ConsoleRenderer.DrawAsync()_1]] - `references` [EXTRACTED]
 - [[ConsoleRenderer.InitializeAsync()]] - `references` [EXTRACTED]
@@ -58,6 +59,13 @@ tags:
 - [[DiagnosticSession.WatchAsync()]] - `references` [EXTRACTED]
 - [[DiagnosticSession.WriteAsync()]] - `references` [EXTRACTED]
 - [[FakeWeatherService.GetAsync()]] - `references` [EXTRACTED]
+- [[FlakyPublisher.PublishAsync()]] - `references` [EXTRACTED]
+- [[GatewayAgainstDeviceTests.Service_Once_PublishesGatewayStatusDeviceStatusAndMeasurements()]] - `references` [EXTRACTED]
+- [[GatewayService.PollAllAsync()]] - `references` [EXTRACTED]
+- [[GatewayService.PublishGatewayStateAsync()]] - `references` [EXTRACTED]
+- [[GatewayService.RunAsync()]] - `references` [EXTRACTED]
+- [[GatewayService.TryPublishAsync()]] - `references` [EXTRACTED]
+- [[IMessagePublisher.PublishAsync()]] - `references` [EXTRACTED]
 - [[IWeatherService.GetAsync()]] - `references` [EXTRACTED]
 - [[InputHandler.AskPercentAsync()]] - `references` [EXTRACTED]
 - [[InputHandler.AskSetpointAsync()]] - `references` [EXTRACTED]
@@ -75,10 +83,22 @@ tags:
 - [[MasterConsole.ShutdownAsync()]] - `references` [EXTRACTED]
 - [[MessageChannel.ReceiveAsync()]] - `references` [EXTRACTED]
 - [[MessageChannel.SendAsync()]] - `references` [EXTRACTED]
+- [[MqttPublisher.EnsureConnectedAsync()]] - `references` [EXTRACTED]
+- [[MqttPublisher.PublishAsync()]] - `references` [EXTRACTED]
+- [[MqttPublisher.SendAsync()]] - `references` [EXTRACTED]
+- [[MqttPublisherTests.BrokerDown_FailsFast_WaitsForBackoff_ThenReconnectsAndRepublishesStatus()]] - `references` [EXTRACTED]
+- [[MqttPublisherTests.DisposeAsync()]] - `references` [EXTRACTED]
+- [[MqttPublisherTests.GatewayService_KeepsPollingDuringBrokerOutage_AndReportsOutageOnce()]] - `references` [EXTRACTED]
+- [[MqttPublisherTests.InitializeAsync()]] - `references` [EXTRACTED]
+- [[MqttPublisherTests.Publish_SendsWithQos1_RetainOnlyForStatus()]] - `references` [EXTRACTED]
+- [[MqttPublisherTests.StartServerAsync()]] - `references` [EXTRACTED]
+- [[MqttPublisherTests.WaitForAsync()]] - `references` [EXTRACTED]
+- [[MqttPublisherTests.WrongPassword_IsBrokerUnavailable_WithReadableMessage()]] - `references` [EXTRACTED]
 - [[Program.Main()]] - `references` [EXTRACTED]
 - [[Program.Main()_1]] - `references` [EXTRACTED]
 - [[Program.Main()_2]] - `references` [EXTRACTED]
 - [[PvEngineTests.Pv_RunsStandalone_WritesCsvAndStopsOnCancel()]] - `references` [EXTRACTED]
+- [[RecordingPublisher.PublishAsync()]] - `references` [EXTRACTED]
 - [[SimulationEngine.AdvanceAsync()]] - `references` [EXTRACTED]
 - [[SimulationEngine.AdvanceAsync()_1]] - `references` [EXTRACTED]
 - [[SimulationEngine.AdvanceAsync()_2]] - `references` [EXTRACTED]
@@ -94,6 +114,7 @@ tags:
 - [[Simulator.PromptAsync()]] - `references` [EXTRACTED]
 - [[Simulator.RunAsync()]] - `references` [EXTRACTED]
 - [[Simulator.SettingsMenuAsync()]] - `references` [EXTRACTED]
+- [[TeePublisher.PublishAsync()]] - `references` [EXTRACTED]
 - [[TimeSyncClient.IgnoreEndAsync()]] - `references` [EXTRACTED]
 - [[TimeSyncClient.PingLoopAsync()]] - `references` [EXTRACTED]
 - [[TimeSyncClient.ReceiveLoopAsync()]] - `references` [EXTRACTED]
@@ -125,4 +146,4 @@ tags:
 - [[WeatherFeedTests.NextHourAndOtherRun_FetchAgain()]] - `references` [EXTRACTED]
 - [[WeatherFeedTests.SameHour_FetchesOnlyOnce()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop
+#graphify/code #graphify/EXTRACTED #community/TimeSyncServer

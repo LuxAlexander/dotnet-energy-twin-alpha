@@ -12,7 +12,6 @@ tags:
 # DiagnosticSession.Prefix()
 
 ## Connections
-- [[DiagnosticErrorKind]] - `references` [EXTRACTED]
 - [[DiagnosticSession]] - `method` [EXTRACTED]
 - [[DiagnosticSession.ExecuteAsync()]] - `calls` [EXTRACTED]
 - [[DiagnosticSession.WatchAsync()]] - `calls` [EXTRACTED]

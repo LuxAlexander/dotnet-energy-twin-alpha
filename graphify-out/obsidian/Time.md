@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/BatterySimulator/Simulator.cs"
+source_file: "src/Devices/PvSimulator/Simulation/SimulationEngine.cs"
 type: "code"
-community: "Gruppe 44"
-location: "L31"
+community: "PV-Engine & Fehler"
+location: "L50"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_44
+  - community/PV-Engine__Fehler
 ---
 
 # Time
 
 ## Connections
-- [[Simulator]] - `defines` [EXTRACTED]
+- [[SimulationEngine]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_44
+#graphify/code #graphify/EXTRACTED #community/PV-Engine__Fehler

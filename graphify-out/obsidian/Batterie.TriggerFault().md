@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/BatterySimulator/Batterie.cs"
 type: "code"
-community: "Gruppe 88"
+community: "Batterie-Modell"
 location: "L189"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_88
+  - community/Batterie-Modell
 ---
 
 # Batterie.TriggerFault()
@@ -14,7 +14,7 @@ tags:
 ## Connections
 - [[Batterie]] - `method` [EXTRACTED]
 - [[BatteryModbusTests.FaultsAndSwitch_AreReportedAndResettable()]] - `calls` [INFERRED]
-- [[FaultType]] - `references` [EXTRACTED]
+- [[FaultType_2]] - `references` [EXTRACTED]
 - [[Simulator.HandleKey()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_88
+#graphify/code #graphify/EXTRACTED #community/Batterie-Modell

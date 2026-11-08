@@ -14,7 +14,7 @@ tags:
 - [[Lead time 200 ms]] - `references` [EXTRACTED]
 - [[MasterClockTests_1]] - `references` [EXTRACTED]
 - [[MonotonicUtcClock_1]] - `calls` [EXTRACTED]
-- [[SimulationMaster_2]] - `calls` [EXTRACTED]
+- [[SimulationMaster_1]] - `calls` [EXTRACTED]
 - [[TimeLine_1]] - `calls` [INFERRED]
 - [[TimeState as line instead of timestamp]] - `references` [EXTRACTED]
 - [[TimeSyncServer_1]] - `calls` [EXTRACTED]

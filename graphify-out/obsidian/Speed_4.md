@@ -1,17 +1,17 @@
 ---
-source_file: "src/SimulationMaster/MasterOptions.cs"
+source_file: "src/SimCore.Contracts/ISimClock.cs"
 type: "code"
-community: "Zeitsync-Client & Konsole"
+community: "Gruppe 88"
 location: "L17"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Zeitsync-Client__Konsole
+  - community/Gruppe_88
 ---
 
 # Speed
 
 ## Connections
-- [[MasterOptions]] - `defines` [EXTRACTED]
+- [[ISimClock]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Zeitsync-Client__Konsole
+#graphify/code #graphify/EXTRACTED #community/Gruppe_88

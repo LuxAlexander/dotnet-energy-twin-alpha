@@ -1,16 +1,16 @@
 ---
-source_file: "tests/Weather.Tests/Weather.Tests.csproj"
+source_file: "tests/SimCore.Tests/SimCore.Tests.csproj"
 type: "code"
-community: "Gruppe 69"
+community: "Gruppe 83"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_69
+  - community/Gruppe_83
 ---
 
 # xunit.runner.visualstudio
 
 ## Connections
-- [[Weather.Tests.csproj]] - `imports` [EXTRACTED]
+- [[SimCore.Tests.csproj]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_69
+#graphify/code #graphify/EXTRACTED #community/Gruppe_83

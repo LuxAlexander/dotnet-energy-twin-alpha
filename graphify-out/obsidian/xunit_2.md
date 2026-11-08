@@ -1,16 +1,16 @@
 ---
-source_file: "tests/ModbusDiagnosticClient.Tests/ModbusDiagnosticClient.Tests.csproj"
+source_file: "tests/Weather.Tests/Weather.Tests.csproj"
 type: "code"
-community: "Gruppe 65"
+community: "Gruppe 96"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_65
+  - community/Gruppe_96
 ---
 
 # xunit
 
 ## Connections
-- [[ModbusDiagnosticClient.Tests.csproj]] - `imports` [EXTRACTED]
+- [[Weather.Tests.csproj]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_65
+#graphify/code #graphify/EXTRACTED #community/Gruppe_96

@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/KuehlhausSimulator/Simulation/AutoModeController.cs"
 type: "code"
-community: "Gruppe 58"
+community: "Gruppe 104"
 location: "L8"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_58
+  - community/Gruppe_104
 ---
 
 # AutoModeController
@@ -20,6 +20,6 @@ tags:
 - [[Kuehlhaus]] - `references` [EXTRACTED]
 - [[KuehlhausSimulatorSimulationAutoModeController.cs]] - `contains` [EXTRACTED]
 - [[Random]] - `references` [EXTRACTED]
-- [[SimulationEngine_1]] - `references` [EXTRACTED]
+- [[SimulationEngine_2]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_58
+#graphify/code #graphify/EXTRACTED #community/Gruppe_104

@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "concept"
-community: "Modbus-Tests"
+community: "Modbus.Client-Fehler"
 tags:
   - graphify/concept
   - graphify/EXTRACTED
-  - community/Modbus-Tests
+  - community/ModbusClient-Fehler
 ---
 
 # easymodbus_exceptions
@@ -13,4 +13,4 @@ tags:
 ## Connections
 - [[DeviceConnection.cs]] - `imports` [EXTRACTED]
 
-#graphify/concept #graphify/EXTRACTED #community/Modbus-Tests
+#graphify/concept #graphify/EXTRACTED #community/ModbusClient-Fehler

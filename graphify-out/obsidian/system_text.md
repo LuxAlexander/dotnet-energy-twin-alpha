@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "concept"
-community: "Gruppe 40"
+community: "Gruppe 19"
 tags:
   - graphify/concept
   - graphify/EXTRACTED
-  - community/Gruppe_40
+  - community/Gruppe_19
 ---
 
 # system_text
@@ -24,8 +24,12 @@ tags:
 - [[KuehlhausSimulatorIOConsoleRenderer.cs]] - `imports` [EXTRACTED]
 - [[KuehlhausSimulatorProgram.cs]] - `imports` [EXTRACTED]
 - [[MasterConsole.cs]] - `imports` [EXTRACTED]
+- [[MeasurementKeys.cs]] - `imports` [EXTRACTED]
 - [[MessageChannel.cs]] - `imports` [EXTRACTED]
 - [[ModbusDiagnosticClientProgram.cs]] - `imports` [EXTRACTED]
+- [[MqttPublisher.cs]] - `imports` [EXTRACTED]
+- [[MqttPublisherTests.cs]] - `imports` [EXTRACTED]
+- [[Program.cs]] - `imports` [EXTRACTED]
 - [[PvSimulatorProgram.cs]] - `imports` [EXTRACTED]
 - [[RegisterFormatter.cs]] - `imports` [EXTRACTED]
 - [[RegisterPlan.cs]] - `imports` [EXTRACTED]
@@ -33,4 +37,4 @@ tags:
 - [[WeatherSimulatorProgram.cs]] - `imports` [EXTRACTED]
 - [[main.cs]] - `imports` [EXTRACTED]
 
-#graphify/concept #graphify/EXTRACTED #community/Gruppe_40
+#graphify/concept #graphify/EXTRACTED #community/Gruppe_19

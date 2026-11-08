@@ -13,6 +13,6 @@ tags:
 
 ## Connections
 - [[Kuehlhaus]] - `method` [EXTRACTED]
-- [[Kuehlhaus.Update()_1]] - `calls` [EXTRACTED]
+- [[Kuehlhaus.Update()]] - `calls` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Kühlhaus-Modell

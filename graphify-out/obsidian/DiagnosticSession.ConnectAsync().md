@@ -12,9 +12,6 @@ tags:
 # DiagnosticSession.ConnectAsync()
 
 ## Connections
-- [[DeviceConnection]] - `calls` [INFERRED]
-- [[DeviceConnection.Dispose()]] - `calls` [EXTRACTED]
-- [[DiagnosticException]] - `calls` [INFERRED]
 - [[DiagnosticSession]] - `method` [EXTRACTED]
 - [[DiagnosticSession.ExecuteAsync()]] - `calls` [EXTRACTED]
 - [[DiagnosticSession.PrintHeaderAsync()]] - `calls` [EXTRACTED]

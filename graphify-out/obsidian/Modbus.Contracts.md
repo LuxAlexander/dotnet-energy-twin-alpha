@@ -18,7 +18,6 @@ tags:
 - [[ChargerRegisters.cs]] - `contains` [EXTRACTED]
 - [[CommonRegisters.cs]] - `contains` [EXTRACTED]
 - [[ConsumerTests.cs]] - `imports` [EXTRACTED]
-- [[DeviceConnection.cs]] - `imports` [EXTRACTED]
 - [[DiagnosticClientTests.cs]] - `imports` [EXTRACTED]
 - [[DiagnosticSession.cs]] - `imports` [EXTRACTED]
 - [[FieldDeviceTests.cs]] - `imports` [EXTRACTED]

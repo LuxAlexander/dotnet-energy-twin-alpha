@@ -2,7 +2,9 @@
 
 **Stand:** 2026-11-08 · **LB03 begonnen:** MQTT entschieden, Nachrichtenvertrag (`docs/Nachrichtenvertrag-LB03.md`) und
 Modbus–RabbitMQ-Gateway (`src/ModbusRabbitGateway`, MQTT per MQTTnet 5.0.1, gegen RabbitMQ geprüft) von Susanne;
-`DeviceConnection` nach `src/Modbus.Client` verschoben; Aufgabenabgleich `docs/task-status/aufgabe-03.md`.
+`DeviceConnection` nach `src/Modbus.Client` verschoben; Aufgabenabgleich `docs/task-status/aufgabe-03.md`;
+SRS-Entwurf `docs/SRS-LB03.md`; Funktionsnachweis mit Master `docs/nachweise/2026-11-08-gateway-mit-master/`
+(Protokolle als `.txt`, weil `.gitignore` `*.log` ausschließt).
 **Davor, Phase LB02-Endstand:** alle Programme fertig und an Master, Modbus und Wettersimulator angebunden; viertes Feldgerät = Kühlhaus (Wind entfallen); zusammen 206 Tests (54 + 51 + 28 + 62 + 11); PV-CSV-Fehler behoben (de-AT Dezimalkomma) und CSV-/Konsolen-Helfer nach `src/Shared` ausgelagert (§0.6a im Archiv).
 
 Pflichtlektüre für jeden Agenten in diesem Repo. Sie fasst die drei LB01-Projekte und den LB02-Plan

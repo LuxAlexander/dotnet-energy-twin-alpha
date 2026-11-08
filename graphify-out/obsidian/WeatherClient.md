@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices.Common/Weather/WeatherClient.cs"
 type: "code"
-community: "WeatherClient & Anzeige"
+community: "Batterie-Modbus & Update (3)"
 location: "L22"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/WeatherClient__Anzeige
+  - community/Batterie-Modbus__Update_3
 ---
 
 # WeatherClient
@@ -17,12 +17,12 @@ tags:
 - [[IDisposable]] - `implements` [EXTRACTED]
 - [[IWeatherService]] - `implements` [EXTRACTED]
 - [[JsonSerializerOptions]] - `references` [EXTRACTED]
-- [[SimulationEngine]] - `calls` [INFERRED]
+- [[SimulationEngine]] - `references` [EXTRACTED]
 - [[SimulationEngine_1]] - `calls` [INFERRED]
-- [[SimulationEngine_2]] - `references` [EXTRACTED]
+- [[SimulationEngine_2]] - `calls` [INFERRED]
 - [[Simulator]] - `calls` [INFERRED]
 - [[WeatherClient.Dispose()]] - `method` [EXTRACTED]
 - [[WeatherClient.GetAsync()]] - `method` [EXTRACTED]
 - [[WeatherClient.cs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/WeatherClient__Anzeige
+#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update_3

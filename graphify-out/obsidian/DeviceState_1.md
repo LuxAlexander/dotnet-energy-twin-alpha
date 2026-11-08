@@ -1,22 +1,24 @@
 ---
-source_file: "src/Devices/KuehlhausSimulator/Enums.cs"
+source_file: "src/Devices/BatterySimulator/Enum.cs"
 type: "code"
-community: "Gruppe 50"
-location: "L4"
+community: "Gruppe 106"
+location: "L9"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_50
+  - community/Gruppe_106
 ---
 
 # DeviceState
 
 ## Connections
-- [[Cooling]] - `case_of` [EXTRACTED]
-- [[Enums.cs]] - `contains` [EXTRACTED]
-- [[Fault_1]] - `case_of` [EXTRACTED]
-- [[Idle]] - `case_of` [EXTRACTED]
-- [[Kuehlhaus]] - `references` [EXTRACTED]
-- [[Off_1]] - `case_of` [EXTRACTED]
+- [[Batterie]] - `references` [EXTRACTED]
+- [[Charging]] - `case_of` [EXTRACTED]
+- [[Cooldown]] - `case_of` [EXTRACTED]
+- [[Discharging]] - `case_of` [EXTRACTED]
+- [[Enum.cs]] - `contains` [EXTRACTED]
+- [[Fault_3]] - `case_of` [EXTRACTED]
+- [[Off_2]] - `case_of` [EXTRACTED]
+- [[Standby_1]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_50
+#graphify/code #graphify/EXTRACTED #community/Gruppe_106

@@ -12,7 +12,7 @@ tags:
 
 ## Connections
 - [[MasterClock_1]] - `calls` [EXTRACTED]
-- [[SimulationMaster_2]] - `calls` [EXTRACTED]
+- [[SimulationMaster_1]] - `calls` [EXTRACTED]
 - [[Time sync protocol v1 (TCP JSON lines, port 5100)]] - `implements` [EXTRACTED]
 - [[TimeSyncClient_1]] - `calls` [EXTRACTED]
 - [[TimeSyncIntegrationTests_1]] - `references` [EXTRACTED]

@@ -1,17 +1,17 @@
 ---
-source_file: "src/SimCore.Time/MasterClock.cs"
+source_file: "src/SimCore.Contracts/ISimClock.cs"
 type: "code"
-community: "MasterClock"
-location: "L80"
+community: "Gruppe 88"
+location: "L20"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/MasterClock
+  - community/Gruppe_88
 ---
 
 # RunId
 
 ## Connections
-- [[MasterClock]] - `defines` [EXTRACTED]
+- [[ISimClock]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/MasterClock
+#graphify/code #graphify/EXTRACTED #community/Gruppe_88

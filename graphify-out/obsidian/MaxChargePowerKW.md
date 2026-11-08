@@ -12,6 +12,6 @@ tags:
 # MaxChargePowerKW
 
 ## Connections
-- [[Vehicle_1]] - `defines` [EXTRACTED]
+- [[Vehicle]] - `defines` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Fahrzeug

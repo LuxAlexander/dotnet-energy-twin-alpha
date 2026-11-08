@@ -1,27 +1,30 @@
 ---
 type: community
-cohesion: 0.17
-members: 12
+cohesion: 0.22
+members: 15
 ---
 
 # Gruppe 61
 
-**Cohesion:** 0.17 - loosely connected
-**Members:** 12 nodes
+**Cohesion:** 0.22 - loosely connected
+**Members:** 15 nodes
 
 ## Members
-- [[CloudCoverPercent]] - code - src/WeatherSimulator/Program.cs
-- [[Condition]] - code - src/WeatherSimulator/Program.cs
-- [[Count_1]] - code - src/WeatherSimulator/Program.cs
-- [[IrradiationWm2_1]] - code - src/WeatherSimulator/Program.cs
-- [[LastRequest]] - code - src/WeatherSimulator/Program.cs
-- [[LastRequest.Update()]] - code - src/WeatherSimulator/Program.cs
-- [[Location_3]] - code - src/WeatherSimulator/Program.cs
-- [[PrecipitationMmPerHour]] - code - src/WeatherSimulator/Program.cs
-- [[SimTimeUtc]] - code - src/WeatherSimulator/Program.cs
-- [[SunHeightDegrees]] - code - src/WeatherSimulator/Program.cs
-- [[TemperatureC_1]] - code - src/WeatherSimulator/Program.cs
-- [[WindSpeedMs]] - code - src/WeatherSimulator/Program.cs
+- [[ArgsParser_1]] - code - src/Devices/KuehlhausSimulator/IO/ArgsParser.cs
+- [[ArgsParser.IsHelpRequested()_1]] - code - src/Devices/KuehlhausSimulator/IO/ArgsParser.cs
+- [[ArgsParser.NextValue()_1]] - code - src/Devices/KuehlhausSimulator/IO/ArgsParser.cs
+- [[ArgsParser.Parse()_1]] - code - src/Devices/KuehlhausSimulator/IO/ArgsParser.cs
+- [[ArgsParser.ParseNumber()]] - code - src/Devices/KuehlhausSimulator/IO/ArgsParser.cs
+- [[ArgsParser.ParsePositive()_1]] - code - src/Devices/KuehlhausSimulator/IO/ArgsParser.cs
+- [[KuehlhausArgsTests]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
+- [[KuehlhausArgsTests.DurationWithoutStandalone_IsRejected()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
+- [[KuehlhausArgsTests.StandaloneDefaults_MatchTheDeviceDocumentation()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
+- [[KuehlhausArgsTests.UnknownOption_IsRejected()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
+- [[KuehlhausArgsTests.Values_AreParsedWithDotAndComma()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
+- [[KuehlhausArgsTests.WeatherOff_DisablesTheWeatherSimulator()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
+- [[KuehlhausArgsTests.WithMaster_WeatherSimulatorIsDefault()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
+- [[KuehlhausEngineTests]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
+- [[KuehlhausEngineTests.Renderer_BuildsInteractiveLayout()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
 
 ## Live Query (requires Dataview plugin)
 
@@ -31,9 +34,19 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 2 edges to [[_COMMUNITY_WeatherFeed]]
-- 1 edge to [[_COMMUNITY_Gruppe 53]]
+- 7 edges to [[_COMMUNITY_Gruppe 23]]
+- 5 edges to [[_COMMUNITY_WeatherClient & Anzeige]]
+- 4 edges to [[_COMMUNITY_Gruppe 48]]
+- 3 edges to [[_COMMUNITY_Bibliotheks-Namespaces]]
+- 1 edge to [[_COMMUNITY_Gruppe 66]]
+- 1 edge to [[_COMMUNITY_Gruppe 44]]
+- 1 edge to [[_COMMUNITY_Gruppe 89]]
+- 1 edge to [[_COMMUNITY_WeatherFeed]]
+- 1 edge to [[_COMMUNITY_TimeSyncServer]]
 
 ## Top bridge nodes
-- [[LastRequest]] - degree 13, connects to 2 communities
-- [[LastRequest.Update()]] - degree 2, connects to 1 community
+- [[ArgsParser.Parse()_1]] - degree 18, connects to 6 communities
+- [[KuehlhausEngineTests.Renderer_BuildsInteractiveLayout()]] - degree 5, connects to 3 communities
+- [[KuehlhausArgsTests]] - degree 8, connects to 2 communities
+- [[KuehlhausArgsTests.DurationWithoutStandalone_IsRejected()]] - degree 4, connects to 2 communities
+- [[KuehlhausArgsTests.UnknownOption_IsRejected()]] - degree 4, connects to 2 communities

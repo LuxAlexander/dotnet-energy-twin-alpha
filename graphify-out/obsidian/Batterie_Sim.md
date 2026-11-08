@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/BatterySimulator/ArgsParser.cs"
 type: "code"
-community: "Gruppe 40"
+community: "Gruppe 19"
 location: "L6"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_40
+  - community/Gruppe_19
 ---
 
 # Batterie_Sim
@@ -25,4 +25,4 @@ tags:
 - [[SimulatorOptions.cs]] - `contains` [EXTRACTED]
 - [[main.cs]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_40
+#graphify/code #graphify/EXTRACTED #community/Gruppe_19

@@ -1,18 +1,18 @@
 ---
-source_file: "AGENTS.md"
+source_file: "src/Devices/KuehlhausSimulator/README.md"
 type: "document"
-community: "Projekt-Doku & Geräte"
+community: "Geräte-READMEs & Modelle"
 tags:
   - graphify/document
   - graphify/EXTRACTED
-  - community/Projekt-Doku__Geräte
+  - community/Geräte-READMEs__Modelle
 ---
 
 # KuehlhausSimulator
 
 ## Connections
-- [[Devices.Common_1]] - `calls` [EXTRACTED]
-- [[Dominik Zach]] - `references` [EXTRACTED]
-- [[Kühlhaus Umsetzungsanleitung LB02]] - `references` [EXTRACTED]
+- [[Kuehlhaus Registerplan 20-31]] - `implements` [EXTRACTED]
+- [[Simulations-Master]] - `calls` [EXTRACTED]
+- [[Wettersimulator (HTTP 8080)]] - `calls` [EXTRACTED]
 
-#graphify/document #graphify/EXTRACTED #community/Projekt-Doku__Geräte
+#graphify/document #graphify/EXTRACTED #community/Geräte-READMEs__Modelle

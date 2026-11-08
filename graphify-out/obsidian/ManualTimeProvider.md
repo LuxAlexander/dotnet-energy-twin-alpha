@@ -1,12 +1,12 @@
 ---
 source_file: "tests/Devices.Common.Tests/DeviceTimeSourceTests.cs"
 type: "code"
-community: "DeviceTimeSource"
+community: "DeviceTimeSource (2)"
 location: "L13"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/DeviceTimeSource
+  - community/DeviceTimeSource_2
 ---
 
 # ManualTimeProvider
@@ -21,4 +21,4 @@ tags:
 - [[TimeProvider]] - `inherits` [EXTRACTED]
 - [[TimestampFrequency]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/DeviceTimeSource
+#graphify/code #graphify/EXTRACTED #community/DeviceTimeSource_2

@@ -12,7 +12,7 @@ tags:
 # ChargingPoint
 
 ## Connections
-- [[AmbientTemperatureC_1]] - `defines` [EXTRACTED]
+- [[AmbientTemperatureC_2]] - `defines` [EXTRACTED]
 - [[AutoModeController]] - `references` [EXTRACTED]
 - [[ChargingPoint.Connect()]] - `method` [EXTRACTED]
 - [[ChargingPoint.Disconnect()]] - `method` [EXTRACTED]
@@ -30,18 +30,18 @@ tags:
 - [[ConsoleRenderer.FormatPoint()]] - `references` [EXTRACTED]
 - [[DeratingFactor]] - `defines` [EXTRACTED]
 - [[DualCharger]] - `references` [EXTRACTED]
-- [[Efficiency_1]] - `defines` [EXTRACTED]
-- [[EnergyKWh]] - `defines` [EXTRACTED]
+- [[Efficiency]] - `defines` [EXTRACTED]
+- [[EnergyKWh_1]] - `defines` [EXTRACTED]
 - [[InputHandler.ConnectVehicleAsync()]] - `references` [EXTRACTED]
 - [[InputHandler.ToggleCharging()]] - `references` [EXTRACTED]
 - [[IsFree]] - `defines` [EXTRACTED]
 - [[Number]] - `defines` [EXTRACTED]
-- [[PowerKW]] - `defines` [EXTRACTED]
-- [[SimulationEngine]] - `references` [EXTRACTED]
-- [[State_1]] - `defines` [EXTRACTED]
-- [[TemperatureC]] - `defines` [EXTRACTED]
+- [[PowerKW_1]] - `defines` [EXTRACTED]
+- [[SimulationEngine_1]] - `references` [EXTRACTED]
+- [[State_2]] - `defines` [EXTRACTED]
+- [[TemperatureC_1]] - `defines` [EXTRACTED]
 - [[TimeSpan]] - `references` [EXTRACTED]
-- [[Vehicle]] - `defines` [EXTRACTED]
-- [[Vehicle_1]] - `references` [EXTRACTED]
+- [[Vehicle]] - `references` [EXTRACTED]
+- [[Vehicle_1]] - `defines` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Ladepunkt

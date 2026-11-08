@@ -13,7 +13,6 @@ tags:
 
 ## Connections
 - [[DiagnosticClientTests]] - `method` [EXTRACTED]
-- [[DiagnosticException]] - `references` [EXTRACTED]
 - [[DiagnosticSession.WriteAsync()]] - `calls` [INFERRED]
 - [[Fact]] - `references` [EXTRACTED]
 - [[Task]] - `references` [EXTRACTED]

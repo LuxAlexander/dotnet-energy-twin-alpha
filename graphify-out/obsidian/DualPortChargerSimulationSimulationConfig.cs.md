@@ -16,7 +16,6 @@ tags:
 - [[Devices.Common.Modbus]] - `imports` [EXTRACTED]
 - [[Devices.Common.Weather]] - `imports` [EXTRACTED]
 - [[DualChargerSim.Simulation]] - `contains` [EXTRACTED]
-- [[Shared.Config]] - `imports` [EXTRACTED]
-- [[SimulationConfig]] - `contains` [EXTRACTED]
+- [[SimulationConfig_2]] - `contains` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Bibliotheks-Namespaces

@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/BatterySimulator/Simulator.cs"
 type: "code"
-community: "Bibliotheks-Namespaces"
+community: "Gruppe 19"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Bibliotheks-Namespaces
+  - community/Gruppe_19
 ---
 
 # Simulator.cs
@@ -19,4 +19,4 @@ tags:
 - [[system_collections_concurrent]] - `imports` [EXTRACTED]
 - [[system_globalization]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Bibliotheks-Namespaces
+#graphify/code #graphify/EXTRACTED #community/Gruppe_19

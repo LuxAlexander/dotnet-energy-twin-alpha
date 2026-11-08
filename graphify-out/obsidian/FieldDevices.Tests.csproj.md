@@ -1,11 +1,11 @@
 ---
 source_file: "tests/FieldDevices.Tests/FieldDevices.Tests.csproj"
 type: "code"
-community: "Gruppe 60"
+community: "Gruppe 51"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_60
+  - community/Gruppe_51
 ---
 
 # FieldDevices.Tests.csproj
@@ -15,11 +15,11 @@ tags:
 - [[Devices.Common.csproj]] - `imports` [EXTRACTED]
 - [[EnergyTwin.sln]] - `contains` [EXTRACTED]
 - [[KuehlhausSimulator.csproj]] - `imports` [EXTRACTED]
-- [[Microsoft.NET.Sdk_15]] - `references` [EXTRACTED]
-- [[Microsoft.NET.Test.Sdk_1]] - `imports` [EXTRACTED]
+- [[Microsoft.NET.Sdk_3]] - `references` [EXTRACTED]
+- [[Microsoft.NET.Test.Sdk]] - `imports` [EXTRACTED]
 - [[PvSimulator.csproj]] - `imports` [EXTRACTED]
-- [[coverlet.collector_1]] - `imports` [EXTRACTED]
-- [[xunit_1]] - `imports` [EXTRACTED]
-- [[xunit.runner.visualstudio_1]] - `imports` [EXTRACTED]
+- [[coverlet.collector]] - `imports` [EXTRACTED]
+- [[xunit]] - `imports` [EXTRACTED]
+- [[xunit.runner.visualstudio]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_60
+#graphify/code #graphify/EXTRACTED #community/Gruppe_51

@@ -1,16 +1,13 @@
 ---
 source_file: "docs/development-journal/AGENTS2-archiv-2026-10-27.md"
 type: "document"
-community: "Projekt-Doku & Geräte"
+community: "Projekt-Doku & Geräte (6)"
 tags:
   - graphify/document
   - graphify/EXTRACTED
-  - community/Projekt-Doku__Geräte
+  - community/Projekt-Doku__Geräte_6
 ---
 
 # AGENTS2 Archiv (Sitzungsprotokolle)
 
-## Connections
-- [[EnergyTwin LB02 Projekt]] - `references` [EXTRACTED]
-
-#graphify/document #graphify/EXTRACTED #community/Projekt-Doku__Geräte
+#graphify/document #graphify/EXTRACTED #community/Projekt-Doku__Geräte_6

@@ -1,12 +1,12 @@
 ---
 source_file: "tests/Devices.Common.Tests/TimeSyncOptionsTests.cs"
 type: "code"
-community: "TimeSyncOptions Tests"
+community: "Gruppe 44"
 location: "L17"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/TimeSyncOptions_Tests
+  - community/Gruppe_44
 ---
 
 # TimeSyncOptionsTests.Defaults_UseLocalMaster()
@@ -16,4 +16,4 @@ tags:
 - [[TimeSyncOptions]] - `calls` [INFERRED]
 - [[TimeSyncOptionsTests]] - `method` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/TimeSyncOptions_Tests
+#graphify/code #graphify/EXTRACTED #community/Gruppe_44

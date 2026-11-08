@@ -11,6 +11,6 @@ tags:
 # IWeatherService / WeatherData
 
 ## Connections
-- [[SimCore.Contracts_2]] - `references` [EXTRACTED]
+- [[SimCore.Contracts_1]] - `references` [EXTRACTED]
 
 #graphify/document #graphify/EXTRACTED #community/Geräte-READMEs__Modelle

@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "code"
-community: "Zeitsync-Client & Konsole"
+community: "MQTT-Publisher & Zugangsdaten"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Zeitsync-Client__Konsole
+  - community/MQTT-Publisher__Zugangsdaten
 ---
 
 # ConcurrentQueue
@@ -13,6 +13,7 @@ tags:
 ## Connections
 - [[MasterConsole]] - `references` [EXTRACTED]
 - [[ModbusDeviceServer]] - `references` [EXTRACTED]
+- [[MqttPublisherTests]] - `references` [EXTRACTED]
 - [[Simulator]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Zeitsync-Client__Konsole
+#graphify/code #graphify/EXTRACTED #community/MQTT-Publisher__Zugangsdaten

@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices.Common/Weather/WeatherOptions.cs"
+source_file: "src/Devices/PvSimulator/Simulation/SimulationConfig.cs"
 type: "code"
-community: "Gruppe 52"
-location: "L21"
+community: "ArgsParser"
+location: "L27"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_52
+  - community/ArgsParser
 ---
 
 # Location
 
 ## Connections
-- [[WeatherOptions]] - `defines` [EXTRACTED]
+- [[SimulationConfig]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_52
+#graphify/code #graphify/EXTRACTED #community/ArgsParser

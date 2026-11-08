@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices.Common/Weather/WeatherOptions.cs"
 type: "code"
-community: "Gruppe 52"
+community: "WeatherFeed"
 location: "L27"
 tags:
   - graphify/code
   - graphify/INFERRED
-  - community/Gruppe_52
+  - community/WeatherFeed
 ---
 
 # WeatherOptions.WithDefaultUrl()
@@ -17,4 +17,4 @@ tags:
 - [[WeatherFeedTests.Options_StandaloneHasNoWeather()]] - `calls` [INFERRED]
 - [[WeatherOptions]] - `method` [EXTRACTED]
 
-#graphify/code #graphify/INFERRED #community/Gruppe_52
+#graphify/code #graphify/INFERRED #community/WeatherFeed

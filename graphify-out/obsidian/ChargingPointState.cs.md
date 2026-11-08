@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/DualPortCharger/Models/ChargingPointState.cs"
 type: "code"
-community: "Gruppe 78"
+community: "Gruppe 108"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_78
+  - community/Gruppe_108
 ---
 
 # ChargingPointState.cs
@@ -15,4 +15,4 @@ tags:
 - [[ChargingPointState]] - `contains` [EXTRACTED]
 - [[DualChargerSim.Models]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_78
+#graphify/code #graphify/EXTRACTED #community/Gruppe_108

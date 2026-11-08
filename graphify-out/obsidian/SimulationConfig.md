@@ -1,35 +1,34 @@
 ---
-source_file: "src/Devices/DualPortCharger/Simulation/SimulationConfig.cs"
+source_file: "src/Devices/PvSimulator/Simulation/SimulationConfig.cs"
 type: "code"
-community: "Gruppe 56"
-location: "L11"
+community: "ArgsParser"
+location: "L8"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_56
+  - community/ArgsParser
 ---
 
 # SimulationConfig
 
 ## Connections
-- [[ArgsParser.Parse()_1]] - `references` [EXTRACTED]
-- [[DeviceId_2]] - `defines` [EXTRACTED]
-- [[DualPortChargerSimulationSimulationConfig.cs]] - `contains` [EXTRACTED]
-- [[Duration]] - `defines` [EXTRACTED]
-- [[DurationHours_1]] - `defines` [EXTRACTED]
-- [[IsShortRun]] - `defines` [EXTRACTED]
-- [[Modbus_1]] - `defines` [EXTRACTED]
+- [[ArgsParser.Parse()]] - `references` [EXTRACTED]
+- [[DeviceId_1]] - `defines` [EXTRACTED]
+- [[Location_1]] - `defines` [EXTRACTED]
+- [[Modbus]] - `defines` [EXTRACTED]
 - [[ModbusOptions]] - `references` [EXTRACTED]
+- [[ModelStep]] - `defines` [EXTRACTED]
+- [[ModelStepMinutes]] - `defines` [EXTRACTED]
 - [[OutputDirectory]] - `defines` [EXTRACTED]
-- [[PowerLimitKW_1]] - `defines` [EXTRACTED]
-- [[Seed_1]] - `defines` [EXTRACTED]
+- [[PeakPowerKw_1]] - `defines` [EXTRACTED]
+- [[PvSimulatorSimulationSimulationConfig.cs]] - `contains` [EXTRACTED]
+- [[RefreshMs]] - `defines` [EXTRACTED]
+- [[Seed]] - `defines` [EXTRACTED]
 - [[SimulationEngine]] - `references` [EXTRACTED]
-- [[Step_2]] - `defines` [EXTRACTED]
 - [[StepMinutes]] - `defines` [EXTRACTED]
 - [[TimeSpan]] - `references` [EXTRACTED]
-- [[TimeSync_1]] - `defines` [EXTRACTED]
+- [[TimeSync]] - `defines` [EXTRACTED]
 - [[TimeSyncOptions]] - `references` [EXTRACTED]
-- [[Weather_1]] - `defines` [EXTRACTED]
-- [[WeatherOptions]] - `references` [EXTRACTED]
+- [[WeatherUrl]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_56
+#graphify/code #graphify/EXTRACTED #community/ArgsParser

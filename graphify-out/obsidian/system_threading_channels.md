@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "concept"
-community: "Zeit-Bibliotheken & Master"
+community: "Modbus-Tests"
 tags:
   - graphify/concept
   - graphify/EXTRACTED
-  - community/Zeit-Bibliotheken__Master
+  - community/Modbus-Tests
 ---
 
 # system_threading_channels
@@ -13,4 +13,4 @@ tags:
 ## Connections
 - [[TimeSyncServer.cs]] - `imports` [EXTRACTED]
 
-#graphify/concept #graphify/EXTRACTED #community/Zeit-Bibliotheken__Master
+#graphify/concept #graphify/EXTRACTED #community/Modbus-Tests

@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices.Common/DeviceTimeSource.cs"
 type: "code"
-community: "DeviceTimeSource"
+community: "DeviceTimeSource (2)"
 location: "L110"
 tags:
   - graphify/code
   - graphify/INFERRED
-  - community/DeviceTimeSource
+  - community/DeviceTimeSource_2
 ---
 
 # DeviceTimeSource.ChangeSpeed()
@@ -21,4 +21,4 @@ tags:
 - [[MasterClock.SetSpeed()]] - `calls` [INFERRED]
 - [[Simulator.HandleKey()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/INFERRED #community/DeviceTimeSource
+#graphify/code #graphify/INFERRED #community/DeviceTimeSource_2

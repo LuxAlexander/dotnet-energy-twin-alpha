@@ -1,11 +1,11 @@
 ---
 source_file: "docs/screenshots/PvSimulator/Everything_Together.png"
 type: "image"
-community: "Gruppe 87"
+community: "Gruppe 116"
 tags:
   - graphify/image
   - graphify/EXTRACTED
-  - community/Gruppe_87
+  - community/Gruppe_116
 ---
 
 # Screenshot: Gesamtsystem mit allen Programmen
@@ -16,4 +16,4 @@ tags:
 - [[Simulations-Master Fenster (x600, Port 5100, 4 Simulatoren verbunden)]] - `references` [EXTRACTED]
 - [[Wettersimulator Fenster (HTTP 8080, salzburg)]] - `references` [EXTRACTED]
 
-#graphify/image #graphify/EXTRACTED #community/Gruppe_87
+#graphify/image #graphify/EXTRACTED #community/Gruppe_116

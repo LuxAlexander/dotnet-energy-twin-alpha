@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/KuehlhausSimulator/IO/InputHandler.cs"
 type: "code"
-community: "Batterie-Simulator Loop"
+community: "WeatherClient & Anzeige"
 location: "L50"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Simulator_Loop
+  - community/WeatherClient__Anzeige
 ---
 
 # InputHandler.HandleAsync()
@@ -21,7 +21,7 @@ tags:
 - [[InputHandler.HandlePendingKeysAsync()_1]] - `calls` [EXTRACTED]
 - [[SimulationEngine.Quit()_1]] - `calls` [INFERRED]
 - [[SimulationEngine.ToggleDoor()]] - `calls` [INFERRED]
-- [[SimulationEngine.ToggleMode()]] - `calls` [INFERRED]
+- [[SimulationEngine.ToggleMode()_1]] - `calls` [INFERRED]
 - [[Task]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop
+#graphify/code #graphify/EXTRACTED #community/WeatherClient__Anzeige

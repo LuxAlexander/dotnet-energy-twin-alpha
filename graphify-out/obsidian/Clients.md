@@ -1,12 +1,12 @@
 ---
 source_file: "src/SimCore.TimeSync/TimeSyncServer.cs"
 type: "code"
-community: "TimeSyncServer"
+community: "Sync-Nachrichten"
 location: "L48"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/TimeSyncServer
+  - community/Sync-Nachrichten
 ---
 
 # Clients
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[TimeSyncServer]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/TimeSyncServer
+#graphify/code #graphify/EXTRACTED #community/Sync-Nachrichten

@@ -13,7 +13,7 @@ tags:
 
 ## Connections
 - [[InputHandler.ConnectVehicleAsync()]] - `calls` [EXTRACTED]
-- [[Vehicle_1]] - `references` [EXTRACTED]
+- [[Vehicle]] - `references` [EXTRACTED]
 - [[VehicleCatalog]] - `method` [EXTRACTED]
 - [[VehicleCatalog.CreateRandom()]] - `calls` [EXTRACTED]
 - [[VehicleModel]] - `references` [EXTRACTED]

@@ -13,7 +13,7 @@ tags:
 
 ## Connections
 - [[PvFaultModel.ToggleInverterFault()]] - `calls` [INFERRED]
-- [[SimulationEngine_2]] - `method` [EXTRACTED]
+- [[SimulationEngine]] - `method` [EXTRACTED]
 - [[SimulationEngine.HandleKey()]] - `calls` [EXTRACTED]
 - [[SimulationEngine.SetNotification()]] - `calls` [EXTRACTED]
 

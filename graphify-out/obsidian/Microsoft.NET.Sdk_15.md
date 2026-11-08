@@ -1,16 +1,16 @@
 ---
-source_file: "tests/FieldDevices.Tests/FieldDevices.Tests.csproj"
+source_file: "src/Devices.Common/Devices.Common.csproj"
 type: "concept"
-community: "Gruppe 60"
+community: "Gruppe 117"
 tags:
   - graphify/concept
   - graphify/EXTRACTED
-  - community/Gruppe_60
+  - community/Gruppe_117
 ---
 
 # Microsoft.NET.Sdk
 
 ## Connections
-- [[FieldDevices.Tests.csproj]] - `references` [EXTRACTED]
+- [[Devices.Common.csproj]] - `references` [EXTRACTED]
 
-#graphify/concept #graphify/EXTRACTED #community/Gruppe_60
+#graphify/concept #graphify/EXTRACTED #community/Gruppe_117

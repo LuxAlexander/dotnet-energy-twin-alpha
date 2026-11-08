@@ -16,7 +16,6 @@ tags:
 - [[Devices.Common.Modbus]] - `imports` [EXTRACTED]
 - [[Devices.Common.Weather]] - `imports` [EXTRACTED]
 - [[KuehlhausSimulator.Simulation]] - `contains` [EXTRACTED]
-- [[Shared.Config]] - `imports` [EXTRACTED]
 - [[SimulationConfig_1]] - `contains` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Bibliotheks-Namespaces

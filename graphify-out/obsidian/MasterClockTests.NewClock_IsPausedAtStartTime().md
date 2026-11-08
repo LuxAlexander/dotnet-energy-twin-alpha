@@ -1,12 +1,12 @@
 ---
 source_file: "tests/SimCore.Tests/MasterClockTests.cs"
 type: "code"
-community: "Master-Zeit Tests"
+community: "Gruppe 23"
 location: "L22"
 tags:
   - graphify/code
-  - graphify/EXTRACTED
-  - community/Master-Zeit_Tests
+  - graphify/INFERRED
+  - community/Gruppe_23
 ---
 
 # MasterClockTests.NewClock_IsPausedAtStartTime()
@@ -17,4 +17,4 @@ tags:
 - [[MasterClock]] - `calls` [INFERRED]
 - [[MasterClockTests]] - `method` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Master-Zeit_Tests
+#graphify/code #graphify/INFERRED #community/Gruppe_23

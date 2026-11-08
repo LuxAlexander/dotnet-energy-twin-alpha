@@ -1,12 +1,12 @@
 ---
 source_file: "tests/SimCore.Tests/ManualTimeProvider.cs"
 type: "code"
-community: "Master-Zeit Tests"
+community: "Gruppe 23"
 location: "L14"
 tags:
   - graphify/code
   - graphify/INFERRED
-  - community/Master-Zeit_Tests
+  - community/Gruppe_23
 ---
 
 # ManualTimeProvider.Advance()
@@ -31,4 +31,4 @@ tags:
 - [[SyncedClockTests.PauseAndRestart_ReachAllDevicesAtTheSameTime()]] - `calls` [INFERRED]
 - [[TimeSpan]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/INFERRED #community/Master-Zeit_Tests
+#graphify/code #graphify/INFERRED #community/Gruppe_23

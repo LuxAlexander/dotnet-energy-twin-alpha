@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/KuehlhausSimulator/Simulation/SimulationEngine.cs"
 type: "code"
-community: "Batterie-Simulator Loop"
+community: "WeatherClient & Anzeige"
 location: "L141"
 tags:
   - graphify/code
   - graphify/INFERRED
-  - community/Batterie-Simulator_Loop
+  - community/WeatherClient__Anzeige
 ---
 
 # SimulationEngine.RunAsync()
@@ -26,9 +26,9 @@ tags:
 - [[KuehlhausModbus.Publish()]] - `calls` [INFERRED]
 - [[KuehlhausModbus.Start()]] - `calls` [INFERRED]
 - [[Program.Main()_1]] - `calls` [INFERRED]
-- [[SimulationEngine_1]] - `method` [EXTRACTED]
-- [[SimulationEngine.AdvanceAsync()_1]] - `calls` [EXTRACTED]
+- [[SimulationEngine_2]] - `method` [EXTRACTED]
+- [[SimulationEngine.AdvanceAsync()_2]] - `calls` [EXTRACTED]
 - [[Task]] - `references` [EXTRACTED]
 - [[WeatherFeed.Dispose()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/INFERRED #community/Batterie-Simulator_Loop
+#graphify/code #graphify/INFERRED #community/WeatherClient__Anzeige

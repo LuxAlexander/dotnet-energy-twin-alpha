@@ -1,17 +1,17 @@
 ---
-source_file: "src/WeatherSimulator/Simulation/WeatherModel.cs"
+source_file: "src/Devices/BatterySimulator/Enum.cs"
 type: "code"
-community: "Wettermodell & Tests"
-location: "L21"
+community: "Gruppe 21"
+location: "L22"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Wettermodell__Tests
+  - community/Gruppe_21
 ---
 
 # Manual
 
 ## Connections
-- [[WeatherModel]] - `defines` [EXTRACTED]
+- [[ControlMode]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Wettermodell__Tests
+#graphify/code #graphify/EXTRACTED #community/Gruppe_21

@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/DualPortCharger/Models/DualCharger.cs"
+source_file: "src/Devices/BatterySimulator/Batterie.cs"
 type: "code"
-community: "DualCharger"
-location: "L16"
+community: "Batterie-Modell"
+location: "L32"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/DualCharger
+  - community/Batterie-Modell
 ---
 
 # IsOn
 
 ## Connections
-- [[DualCharger]] - `defines` [EXTRACTED]
+- [[Batterie]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/DualCharger
+#graphify/code #graphify/EXTRACTED #community/Batterie-Modell

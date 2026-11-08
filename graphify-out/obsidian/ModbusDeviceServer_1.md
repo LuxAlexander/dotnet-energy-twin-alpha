@@ -1,17 +1,16 @@
 ---
 source_file: "src/Devices.Common/README.md"
 type: "document"
-community: "Projekt-Doku & Geräte"
+community: "Projekt-Doku & Geräte (2)"
 tags:
   - graphify/document
   - graphify/EXTRACTED
-  - community/Projekt-Doku__Geräte
+  - community/Projekt-Doku__Geräte_2
 ---
 
 # ModbusDeviceServer
 
 ## Connections
 - [[Modbus-im-Gerät Muster]] - `references` [EXTRACTED]
-- [[Modbus.Contracts_1]] - `calls` [EXTRACTED]
 
-#graphify/document #graphify/EXTRACTED #community/Projekt-Doku__Geräte
+#graphify/document #graphify/EXTRACTED #community/Projekt-Doku__Geräte_2

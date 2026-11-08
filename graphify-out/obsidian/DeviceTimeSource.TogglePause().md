@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices.Common/DeviceTimeSource.cs"
 type: "code"
-community: "DeviceTimeSource"
+community: "DeviceTimeSource (2)"
 location: "L94"
 tags:
   - graphify/code
   - graphify/INFERRED
-  - community/DeviceTimeSource
+  - community/DeviceTimeSource_2
 ---
 
 # DeviceTimeSource.TogglePause()
@@ -24,4 +24,4 @@ tags:
 - [[SimulationEngine.HandleKey()]] - `calls` [EXTRACTED]
 - [[Simulator.HandleKey()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/INFERRED #community/DeviceTimeSource
+#graphify/code #graphify/INFERRED #community/DeviceTimeSource_2

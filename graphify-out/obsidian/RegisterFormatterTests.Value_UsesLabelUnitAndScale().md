@@ -1,12 +1,12 @@
 ---
 source_file: "tests/ModbusDiagnosticClient.Tests/DiagnosticClientTests.cs"
 type: "code"
-community: "Register-Dekodierung"
+community: "Gruppe 52"
 location: "L252"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Register-Dekodierung
+  - community/Gruppe_52
 ---
 
 # RegisterFormatterTests.Value_UsesLabelUnitAndScale()
@@ -19,4 +19,4 @@ tags:
 - [[RegisterFormatter.Value()]] - `calls` [EXTRACTED]
 - [[RegisterFormatterTests]] - `method` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Register-Dekodierung
+#graphify/code #graphify/EXTRACTED #community/Gruppe_52

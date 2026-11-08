@@ -1,17 +1,17 @@
 ---
-source_file: "src/Shared/Data/CsvFileWriter.cs"
+source_file: "src/Devices/KuehlhausSimulator/IO/CsvLogger.cs"
 type: "code"
-community: "CsvLogger"
-location: "L14"
+community: "Batterie-Simulator Loop (2)"
+location: "L21"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/CsvLogger
+  - community/Batterie-Simulator_Loop_2
 ---
 
 # FilePath
 
 ## Connections
-- [[CsvFileWriter]] - `defines` [EXTRACTED]
+- [[CsvLogger_2]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/CsvLogger
+#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop_2

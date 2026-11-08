@@ -12,7 +12,7 @@ tags:
 # SimulationMaster/Program.cs
 
 ## Connections
-- [[Program_2]] - `contains` [EXTRACTED]
+- [[Program]] - `contains` [EXTRACTED]
 - [[SimCore.Time]] - `imports` [EXTRACTED]
 - [[SimCore.TimeSync]] - `imports` [EXTRACTED]
 - [[SimulationMaster]] - `contains` [EXTRACTED]

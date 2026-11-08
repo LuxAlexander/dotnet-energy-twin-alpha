@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/BatterySimulator/Simulator.cs"
+source_file: "src/SimCore.Time/MasterClock.cs"
 type: "code"
-community: "Gruppe 44"
-location: "L32"
+community: "MasterClock"
+location: "L78"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_44
+  - community/MasterClock
 ---
 
 # Mode
 
 ## Connections
-- [[Simulator]] - `defines` [EXTRACTED]
+- [[MasterClock]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_44
+#graphify/code #graphify/EXTRACTED #community/MasterClock

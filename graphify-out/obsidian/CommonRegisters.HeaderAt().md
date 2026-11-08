@@ -1,12 +1,12 @@
 ---
 source_file: "src/Modbus.Contracts/CommonRegisters.cs"
 type: "code"
-community: "Register-Dekodierung"
+community: "Gruppe 52"
 location: "L75"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Register-Dekodierung
+  - community/Gruppe_52
 ---
 
 # CommonRegisters.HeaderAt()
@@ -20,4 +20,4 @@ tags:
 - [[RegisterFormatterTests.Value_ModelTime_IsExactToTheSecond()]] - `calls` [EXTRACTED]
 - [[RegisterFormatterTests.Value_UsesLabelUnitAndScale()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Register-Dekodierung
+#graphify/code #graphify/EXTRACTED #community/Gruppe_52

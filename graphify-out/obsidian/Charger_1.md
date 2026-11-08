@@ -1,17 +1,17 @@
 ---
-source_file: "src/Modbus.Contracts/CommonRegisters.cs"
+source_file: "src/Devices/DualPortCharger/Simulation/SimulationEngine.cs"
 type: "code"
-community: "Registerpläne"
-location: "L7"
+community: "Gruppe 56"
+location: "L30"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Registerpläne
+  - community/Gruppe_56
 ---
 
 # Charger
 
 ## Connections
-- [[DeviceType]] - `case_of` [EXTRACTED]
+- [[SimulationEngine_1]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Registerpläne
+#graphify/code #graphify/EXTRACTED #community/Gruppe_56

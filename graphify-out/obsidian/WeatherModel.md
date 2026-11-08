@@ -1,12 +1,12 @@
 ---
 source_file: "src/WeatherSimulator/Simulation/WeatherModel.cs"
 type: "code"
-community: "Wettermodell & Tests"
+community: "Wettermodell & Tests (2)"
 location: "L14"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Wettermodell__Tests
+  - community/Wettermodell__Tests_2
 ---
 
 # WeatherModel
@@ -14,7 +14,7 @@ tags:
 ## Connections
 - [[ConcurrentDictionary]] - `references` [EXTRACTED]
 - [[CoupledWeatherYear]] - `references` [EXTRACTED]
-- [[Manual_2]] - `defines` [EXTRACTED]
+- [[Manual_1]] - `defines` [EXTRACTED]
 - [[ManualWeather]] - `references` [EXTRACTED]
 - [[WeatherModel.CloudCover()]] - `method` [EXTRACTED]
 - [[WeatherModel.ConditionOf()]] - `method` [EXTRACTED]
@@ -32,4 +32,4 @@ tags:
 - [[WeatherModelTests.NewModel()]] - `references` [EXTRACTED]
 - [[WeatherModelTests.RainPreset_ProducesPrecipitation()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/Wettermodell__Tests
+#graphify/code #graphify/EXTRACTED #community/Wettermodell__Tests_2

@@ -1,12 +1,12 @@
 ---
 source_file: "tests/SimCore.Tests/ClockOffsetEstimatorTests.cs"
 type: "code"
-community: "Gruppe 54"
+community: "Gruppe 71"
 location: "L5"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_54
+  - community/Gruppe_71
 ---
 
 # ClockOffsetEstimatorTests
@@ -19,4 +19,4 @@ tags:
 - [[ClockOffsetEstimatorTests.cs]] - `contains` [EXTRACTED]
 - [[DateTimeOffset]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_54
+#graphify/code #graphify/EXTRACTED #community/Gruppe_71

@@ -1,12 +1,12 @@
 ---
 source_file: "src/Shared/Weather/Season.cs"
 type: "code"
-community: "Gruppe 49"
+community: "Gruppe 67"
 location: "L50"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_49
+  - community/Gruppe_67
 ---
 
 # SeasonInfo.SunriseHour()
@@ -15,4 +15,4 @@ tags:
 - [[Season]] - `references` [EXTRACTED]
 - [[SeasonInfo]] - `method` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_49
+#graphify/code #graphify/EXTRACTED #community/Gruppe_67

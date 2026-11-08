@@ -1,12 +1,12 @@
 ---
 source_file: "src/ModbusDiagnosticClient/RegisterFormatter.cs"
 type: "code"
-community: "Register-Dekodierung"
+community: "Gruppe 52"
 location: "L8"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Register-Dekodierung
+  - community/Gruppe_52
 ---
 
 # RegisterFormatter
@@ -20,4 +20,4 @@ tags:
 - [[RegisterFormatter.Value()]] - `method` [EXTRACTED]
 - [[RegisterFormatter.cs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Register-Dekodierung
+#graphify/code #graphify/EXTRACTED #community/Gruppe_52

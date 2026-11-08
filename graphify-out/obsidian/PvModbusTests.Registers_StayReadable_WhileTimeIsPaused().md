@@ -1,12 +1,12 @@
 ---
 source_file: "tests/FieldDevices.Tests/FieldDeviceTests.cs"
 type: "code"
-community: "Batterie-Modbus & Update"
+community: "Batterie-Modbus & Update (4)"
 location: "L161"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Modbus__Update
+  - community/Batterie-Modbus__Update_4
 ---
 
 # PvModbusTests.Registers_StayReadable_WhileTimeIsPaused()
@@ -20,4 +20,4 @@ tags:
 - [[RegisterCodec.DecodeUInt32()]] - `calls` [EXTRACTED]
 - [[RegisterCodec.FromSeconds()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update
+#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update_4

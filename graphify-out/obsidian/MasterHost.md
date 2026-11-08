@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices.Common/TimeSyncOptions.cs"
 type: "code"
-community: "Gruppe 55"
+community: "Gruppe 44"
 location: "L25"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_55
+  - community/Gruppe_44
 ---
 
 # MasterHost
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[TimeSyncOptions]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_55
+#graphify/code #graphify/EXTRACTED #community/Gruppe_44

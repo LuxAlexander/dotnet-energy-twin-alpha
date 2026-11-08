@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/PvSimulator/Devices/PvSystem.cs"
+source_file: "src/Devices/DualPortCharger/Models/DualCharger.cs"
 type: "code"
-community: "PvSystem"
-location: "L31"
+community: "DualCharger"
+location: "L32"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/PvSystem
+  - community/DualCharger
 ---
 
 # AmbientTemperatureC
 
 ## Connections
-- [[PvSystem]] - `defines` [EXTRACTED]
+- [[DualCharger]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/PvSystem
+#graphify/code #graphify/EXTRACTED #community/DualCharger

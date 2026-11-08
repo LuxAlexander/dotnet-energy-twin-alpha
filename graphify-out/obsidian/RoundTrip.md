@@ -1,17 +1,17 @@
 ---
-source_file: "src/SimCore.Time/ClockOffsetEstimator.cs"
+source_file: "src/SimCore.Time/SyncedClock.cs"
 type: "code"
-community: "Gruppe 54"
-location: "L21"
+community: "SyncedClock"
+location: "L59"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_54
+  - community/SyncedClock
 ---
 
 # RoundTrip
 
 ## Connections
-- [[ClockOffsetEstimator]] - `defines` [EXTRACTED]
+- [[SyncedClock]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_54
+#graphify/code #graphify/EXTRACTED #community/SyncedClock

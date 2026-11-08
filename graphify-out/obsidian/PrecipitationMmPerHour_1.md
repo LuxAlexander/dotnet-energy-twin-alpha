@@ -1,17 +1,17 @@
 ---
-source_file: "src/WeatherSimulator/Simulation/ManualWeather.cs"
+source_file: "src/WeatherSimulator/Program.cs"
 type: "code"
-community: "Wettermodell & Tests"
-location: "L12"
+community: "Gruppe 84"
+location: "L276"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Wettermodell__Tests
+  - community/Gruppe_84
 ---
 
 # PrecipitationMmPerHour
 
 ## Connections
-- [[ManualWeather]] - `defines` [EXTRACTED]
+- [[LastRequest]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Wettermodell__Tests
+#graphify/code #graphify/EXTRACTED #community/Gruppe_84

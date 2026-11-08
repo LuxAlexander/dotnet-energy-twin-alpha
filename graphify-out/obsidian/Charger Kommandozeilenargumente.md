@@ -11,6 +11,6 @@ tags:
 # Charger Kommandozeilenargumente
 
 ## Connections
-- [[DualPortCharger_1]] - `references` [EXTRACTED]
+- [[DualPortCharger]] - `references` [EXTRACTED]
 
 #graphify/document #graphify/EXTRACTED #community/Geräte-READMEs__Modelle

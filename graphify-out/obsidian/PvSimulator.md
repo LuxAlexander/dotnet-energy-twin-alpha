@@ -1,20 +1,19 @@
 ---
-source_file: "AGENTS.md"
+source_file: "src/Devices/PvSimulator/README.md"
 type: "document"
-community: "Projekt-Doku & Geräte"
+community: "Geräte-READMEs & Modelle"
 tags:
   - graphify/document
   - graphify/EXTRACTED
-  - community/Projekt-Doku__Geräte
+  - community/Geräte-READMEs__Modelle
 ---
 
 # PvSimulator
 
 ## Connections
-- [[Alexander Lux]] - `references` [EXTRACTED]
-- [[Devices.Common_1]] - `calls` [EXTRACTED]
-- [[Journal Alexander Lux]] - `references` [INFERRED]
-- [[Shared library]] - `calls` [EXTRACTED]
-- [[WeatherSimulator]] - `shares_data_with` [EXTRACTED]
+- [[PV Stoerungen]] - `conceptually_related_to` [EXTRACTED]
+- [[Shared (gemeinsame Bausteine)]] - `references` [EXTRACTED]
+- [[Simulations-Master]] - `calls` [EXTRACTED]
+- [[Wettersimulator (HTTP 8080)]] - `calls` [INFERRED]
 
-#graphify/document #graphify/EXTRACTED #community/Projekt-Doku__Geräte
+#graphify/document #graphify/EXTRACTED #community/Geräte-READMEs__Modelle

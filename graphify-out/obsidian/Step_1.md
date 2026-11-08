@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/BatterySimulator/SimulatorOptions.cs"
+source_file: "src/Devices/KuehlhausSimulator/Simulation/SimulationConfig.cs"
 type: "code"
-community: "Gruppe 71"
-location: "L31"
+community: "Gruppe 66"
+location: "L49"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_71
+  - community/Gruppe_66
 ---
 
 # Step
 
 ## Connections
-- [[SimulatorOptions]] - `defines` [EXTRACTED]
+- [[SimulationConfig_1]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_71
+#graphify/code #graphify/EXTRACTED #community/Gruppe_66

@@ -1,17 +1,17 @@
 ---
-source_file: "src/SimulationMaster/MasterOptions.cs"
+source_file: "src/Modbus.Client/DeviceConnection.cs"
 type: "code"
-community: "Zeitsync-Client & Konsole"
-location: "L15"
+community: "DeviceConnection (Modbus.Client)"
+location: "L46"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Zeitsync-Client__Konsole
+  - community/DeviceConnection_ModbusClient
 ---
 
 # Port
 
 ## Connections
-- [[MasterOptions]] - `defines` [EXTRACTED]
+- [[DeviceConnection]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Zeitsync-Client__Konsole
+#graphify/code #graphify/EXTRACTED #community/DeviceConnection_ModbusClient

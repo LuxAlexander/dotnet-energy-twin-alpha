@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices.Common/TimeSyncOptions.cs"
+source_file: "src/Modbus.Contracts/CommonRegisters.cs"
 type: "code"
-community: "Gruppe 55"
-location: "L24"
+community: "DeviceTimeSource"
+location: "L26"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_55
+  - community/DeviceTimeSource
 ---
 
 # Standalone
 
 ## Connections
-- [[TimeSyncOptions]] - `defines` [EXTRACTED]
+- [[TimeStatus]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_55
+#graphify/code #graphify/EXTRACTED #community/DeviceTimeSource

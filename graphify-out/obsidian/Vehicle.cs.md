@@ -13,6 +13,6 @@ tags:
 
 ## Connections
 - [[DualChargerSim.Models]] - `contains` [EXTRACTED]
-- [[Vehicle_1]] - `contains` [EXTRACTED]
+- [[Vehicle]] - `contains` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Fahrzeug

@@ -22,7 +22,7 @@ tags:
 - [[DualCharger]] - `references` [EXTRACTED]
 - [[IDisposable]] - `implements` [EXTRACTED]
 - [[ModbusDeviceServer]] - `references` [EXTRACTED]
-- [[SimulationEngine]] - `references` [EXTRACTED]
-- [[StatusText_3]] - `defines` [EXTRACTED]
+- [[SimulationEngine_1]] - `references` [EXTRACTED]
+- [[StatusText_2]] - `defines` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update

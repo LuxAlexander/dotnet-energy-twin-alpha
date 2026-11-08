@@ -1,16 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Diagnose-Client Verbindung"
+community: "Gateway-Publisher"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Diagnose-Client_Verbindung
+  - community/Gateway-Publisher
 ---
 
 # TextWriter
 
 ## Connections
+- [[ConsolePublisher]] - `references` [EXTRACTED]
 - [[DiagnosticSession]] - `references` [EXTRACTED]
+- [[GatewayService]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Diagnose-Client_Verbindung
+#graphify/code #graphify/EXTRACTED #community/Gateway-Publisher

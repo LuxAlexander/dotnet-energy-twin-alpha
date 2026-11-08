@@ -1,16 +1,16 @@
 ---
-source_file: "src/Devices.Common/Devices.Common.csproj"
+source_file: "src/Devices/KuehlhausSimulator/KuehlhausSimulator.csproj"
 type: "concept"
-community: "Gruppe 76"
+community: "Gruppe 51"
 tags:
   - graphify/concept
   - graphify/EXTRACTED
-  - community/Gruppe_76
+  - community/Gruppe_51
 ---
 
 # Microsoft.NET.Sdk
 
 ## Connections
-- [[Devices.Common.csproj]] - `references` [EXTRACTED]
+- [[KuehlhausSimulator.csproj]] - `references` [EXTRACTED]
 
-#graphify/concept #graphify/EXTRACTED #community/Gruppe_76
+#graphify/concept #graphify/EXTRACTED #community/Gruppe_51

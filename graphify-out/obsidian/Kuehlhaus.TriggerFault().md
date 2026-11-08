@@ -12,7 +12,7 @@ tags:
 # Kuehlhaus.TriggerFault()
 
 ## Connections
-- [[FaultType_1]] - `references` [EXTRACTED]
+- [[FaultType]] - `references` [EXTRACTED]
 - [[Kuehlhaus]] - `method` [EXTRACTED]
 - [[Kuehlhaus.UpdateState()]] - `calls` [EXTRACTED]
 - [[KuehlhausModbusTests.ResetCommand_ClearsCompressorFailure()]] - `calls` [INFERRED]

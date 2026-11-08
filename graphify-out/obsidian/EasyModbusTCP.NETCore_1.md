@@ -1,16 +1,16 @@
 ---
-source_file: "src/ModbusDiagnosticClient/ModbusDiagnosticClient.csproj"
+source_file: "src/Devices.Common/Devices.Common.csproj"
 type: "code"
-community: "Gruppe 65"
+community: "Gruppe 117"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_65
+  - community/Gruppe_117
 ---
 
 # EasyModbusTCP.NETCore
 
 ## Connections
-- [[ModbusDiagnosticClient.csproj]] - `imports` [EXTRACTED]
+- [[Devices.Common.csproj]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_65
+#graphify/code #graphify/EXTRACTED #community/Gruppe_117

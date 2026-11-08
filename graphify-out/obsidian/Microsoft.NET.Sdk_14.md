@@ -1,16 +1,16 @@
 ---
-source_file: "tests/Devices.Common.Tests/Devices.Common.Tests.csproj"
+source_file: "src/Devices/BatterySimulator/BatterySimulator.csproj"
 type: "concept"
-community: "Gruppe 83"
+community: "Gruppe 51"
 tags:
   - graphify/concept
   - graphify/EXTRACTED
-  - community/Gruppe_83
+  - community/Gruppe_51
 ---
 
 # Microsoft.NET.Sdk
 
 ## Connections
-- [[Devices.Common.Tests.csproj]] - `references` [EXTRACTED]
+- [[BatterySimulator.csproj]] - `references` [EXTRACTED]
 
-#graphify/concept #graphify/EXTRACTED #community/Gruppe_83
+#graphify/concept #graphify/EXTRACTED #community/Gruppe_51

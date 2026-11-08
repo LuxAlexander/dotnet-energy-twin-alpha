@@ -4,7 +4,7 @@ type: "document"
 community: "Devices.Common Tests"
 tags:
   - graphify/document
-  - graphify/EXTRACTED
+  - graphify/INFERRED
   - community/DevicesCommon_Tests
 ---
 
@@ -14,4 +14,4 @@ tags:
 - [[FieldDevices.Tests_1]] - `references` [EXTRACTED]
 - [[ModbusDeviceServerTests_1]] - `conceptually_related_to` [INFERRED]
 
-#graphify/document #graphify/EXTRACTED #community/DevicesCommon_Tests
+#graphify/document #graphify/INFERRED #community/DevicesCommon_Tests

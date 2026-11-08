@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/KuehlhausSimulator/Simulation/AutoModeController.cs"
 type: "code"
-community: "Gruppe 58"
+community: "Gruppe 104"
 location: "L56"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_58
+  - community/Gruppe_104
 ---
 
 # DoorClosesAt
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[AutoModeController_1]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_58
+#graphify/code #graphify/EXTRACTED #community/Gruppe_104

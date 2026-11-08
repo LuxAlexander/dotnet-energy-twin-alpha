@@ -15,7 +15,7 @@ tags:
 - [[EnergySimulator.Devices]] - `contains` [EXTRACTED]
 - [[PvSystem]] - `contains` [EXTRACTED]
 - [[Shared.Weather]] - `imports` [EXTRACTED]
-- [[WeatherCondition_1]] - `imports` [EXTRACTED]
+- [[WeatherCondition]] - `imports` [EXTRACTED]
 - [[WeatherData]] - `imports` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/PV-Namespaces

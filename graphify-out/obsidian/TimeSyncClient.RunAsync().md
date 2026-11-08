@@ -1,12 +1,12 @@
 ---
 source_file: "src/SimCore.TimeSync/TimeSyncClient.cs"
 type: "code"
-community: "Sync-Nachrichten"
+community: "TimeSyncServer"
 location: "L56"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Sync-Nachrichten
+  - community/TimeSyncServer
 ---
 
 # TimeSyncClient.RunAsync()
@@ -22,4 +22,4 @@ tags:
 - [[TimeSyncIntegrationTests.SimulatorStarted_BeforeMaster_ConnectsLater()]] - `calls` [INFERRED]
 - [[TimeSyncIntegrationTests.StartSimulator()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/Sync-Nachrichten
+#graphify/code #graphify/EXTRACTED #community/TimeSyncServer

@@ -1,12 +1,12 @@
 ---
 source_file: "tests/FieldDevices.Tests/FieldDeviceTests.cs"
 type: "code"
-community: "Batterie-Modbus & Update"
+community: "Batterie-Modbus & Update (4)"
 location: "L68"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Modbus__Update
+  - community/Batterie-Modbus__Update_4
 ---
 
 # PvModbusTests
@@ -29,4 +29,4 @@ tags:
 - [[PvSystem]] - `references` [EXTRACTED]
 - [[PvSystem.StepContinuous()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update
+#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update_4

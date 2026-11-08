@@ -12,6 +12,6 @@ tags:
 # Restart
 
 ## Connections
-- [[PromptKind_1]] - `case_of` [EXTRACTED]
+- [[PromptKind]] - `case_of` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Zeitsync-Client__Konsole

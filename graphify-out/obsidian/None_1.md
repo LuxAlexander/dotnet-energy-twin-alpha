@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/KuehlhausSimulator/Enums.cs"
+source_file: "src/Modbus.Contracts/CommonRegisters.cs"
 type: "code"
-community: "Gruppe 50"
-location: "L15"
+community: "Gruppe 82"
+location: "L33"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_50
+  - community/Gruppe_82
 ---
 
 # None
 
 ## Connections
-- [[FaultType_1]] - `case_of` [EXTRACTED]
+- [[WriteError]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_50
+#graphify/code #graphify/EXTRACTED #community/Gruppe_82

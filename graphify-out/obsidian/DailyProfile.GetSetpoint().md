@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/BatterySimulator/DailyProfile.cs"
 type: "code"
-community: "Gruppe 43"
+community: "Gruppe 24"
 location: "L24"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_43
+  - community/Gruppe_24
 ---
 
 # DailyProfile.GetSetpoint()
@@ -17,4 +17,4 @@ tags:
 - [[Simulator.AdvanceAsync()]] - `calls` [INFERRED]
 - [[TimeSpan]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_43
+#graphify/code #graphify/EXTRACTED #community/Gruppe_24

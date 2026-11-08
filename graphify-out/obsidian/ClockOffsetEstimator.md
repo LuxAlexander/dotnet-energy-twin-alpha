@@ -1,12 +1,12 @@
 ---
 source_file: "src/SimCore.Time/ClockOffsetEstimator.cs"
 type: "code"
-community: "Gruppe 54"
+community: "Gruppe 71"
 location: "L9"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_54
+  - community/Gruppe_71
 ---
 
 # ClockOffsetEstimator
@@ -21,9 +21,9 @@ tags:
 - [[HasSample]] - `defines` [EXTRACTED]
 - [[Offset]] - `defines` [EXTRACTED]
 - [[Queue]] - `references` [EXTRACTED]
-- [[RoundTrip]] - `defines` [EXTRACTED]
+- [[RoundTrip_1]] - `defines` [EXTRACTED]
 - [[SyncedClock]] - `references` [EXTRACTED]
 - [[TimeSpan]] - `references` [EXTRACTED]
 - [[Uncertainty]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_54
+#graphify/code #graphify/EXTRACTED #community/Gruppe_71

@@ -1,58 +1,60 @@
 ---
-source_file: "src/Devices/PvSimulator/Simulation/SimulationEngine.cs"
+source_file: "src/Devices/KuehlhausSimulator/Simulation/SimulationEngine.cs"
 type: "code"
-community: "PV-Engine & Fehler"
-location: "L17"
+community: "WeatherClient & Anzeige"
+location: "L14"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/PV-Engine__Fehler
+  - community/WeatherClient__Anzeige
 ---
 
 # SimulationEngine
 
 ## Connections
+- [[AutoModeController_1]] - `references` [EXTRACTED]
+- [[Config_3]] - `defines` [EXTRACTED]
+- [[ConsoleRenderer_1]] - `references` [EXTRACTED]
+- [[ConsoleRenderer.BuildLines()_1]] - `references` [EXTRACTED]
+- [[ConsoleRenderer.BuildStatusLines()]] - `references` [EXTRACTED]
+- [[ConsoleRenderer.DescribeDoor()]] - `references` [EXTRACTED]
+- [[ConsoleRenderer.DrawAsync()_1]] - `references` [EXTRACTED]
 - [[CultureInfo]] - `references` [EXTRACTED]
 - [[DateTime]] - `references` [EXTRACTED]
 - [[DeviceTimeSource]] - `references` [EXTRACTED]
 - [[DeviceTimeSource.Create()]] - `calls` [EXTRACTED]
+- [[DoorClosesAt_1]] - `defines` [EXTRACTED]
+- [[EndTime_1]] - `defines` [EXTRACTED]
+- [[InputHandler_1]] - `references` [EXTRACTED]
+- [[IsAutoMode_1]] - `defines` [EXTRACTED]
+- [[IsFinished_2]] - `defines` [EXTRACTED]
+- [[IsRunning_2]] - `defines` [EXTRACTED]
+- [[Kuehlhaus]] - `references` [EXTRACTED]
+- [[KuehlhausModbus]] - `references` [EXTRACTED]
+- [[KuehlhausSimulatorSimulationSimulationEngine.cs]] - `contains` [EXTRACTED]
+- [[Message_2]] - `defines` [EXTRACTED]
 - [[ModbusStatus_3]] - `defines` [EXTRACTED]
-- [[Mode_1]] - `defines` [EXTRACTED]
-- [[Note_1]] - `references` [EXTRACTED]
-- [[Note]] - `contains` [EXTRACTED]
-- [[Pv]] - `defines` [EXTRACTED]
-- [[PvFaultModel]] - `references` [EXTRACTED]
-- [[PvModbus]] - `references` [EXTRACTED]
-- [[PvSimulatorSimulationSimulationEngine.cs]] - `contains` [EXTRACTED]
-- [[PvSystem]] - `references` [EXTRACTED]
-- [[Random]] - `references` [EXTRACTED]
-- [[RunId_4]] - `defines` [EXTRACTED]
-- [[SimulationConfig_2]] - `references` [EXTRACTED]
+- [[OutsideSource]] - `defines` [EXTRACTED]
+- [[Program.Main()_1]] - `calls` [INFERRED]
+- [[Room]] - `defines` [EXTRACTED]
+- [[RunId_7]] - `defines` [EXTRACTED]
+- [[SimulationConfig_1]] - `references` [EXTRACTED]
+- [[SimulationConfig.ToModelConfig()]] - `calls` [INFERRED]
 - [[SimulationEngine.AdvanceAsync()_2]] - `method` [EXTRACTED]
-- [[SimulationEngine.CleanModules()]] - `method` [EXTRACTED]
-- [[SimulationEngine.CycleRefresh()]] - `method` [EXTRACTED]
-- [[SimulationEngine.Draw()]] - `method` [EXTRACTED]
-- [[SimulationEngine.German()]] - `method` [EXTRACTED]
-- [[SimulationEngine.HandleKey()]] - `method` [EXTRACTED]
-- [[SimulationEngine.HandleKeys()]] - `method` [EXTRACTED]
-- [[SimulationEngine.RandomWeather()]] - `method` [EXTRACTED]
-- [[SimulationEngine.RunAsync()_2]] - `method` [EXTRACTED]
-- [[SimulationEngine.SetNotification()]] - `method` [EXTRACTED]
-- [[SimulationEngine.SetWeather()]] - `method` [EXTRACTED]
-- [[SimulationEngine.StatusLine()]] - `method` [EXTRACTED]
-- [[SimulationEngine.ToggleFault()]] - `method` [EXTRACTED]
-- [[SimulationEngine.ToggleGrid()]] - `method` [EXTRACTED]
+- [[SimulationEngine.LocalOutsideTemperature()]] - `method` [EXTRACTED]
+- [[SimulationEngine.Quit()_1]] - `method` [EXTRACTED]
+- [[SimulationEngine.RunAsync()_1]] - `method` [EXTRACTED]
+- [[SimulationEngine.StartRunAsync()]] - `method` [EXTRACTED]
+- [[SimulationEngine.ToggleDoor()]] - `method` [EXTRACTED]
 - [[SimulationEngine.ToggleMode()_1]] - `method` [EXTRACTED]
-- [[SimulationEngine.ToggleOverheat()]] - `method` [EXTRACTED]
-- [[SimulationEngine.UpdateAutoWeather()]] - `method` [EXTRACTED]
+- [[SimulationEngine.TrySetSetpoint()]] - `method` [EXTRACTED]
 - [[SimulationEngine.UpdateWeatherAsync()_1]] - `method` [EXTRACTED]
-- [[SimulationMode]] - `references` [EXTRACTED]
 - [[SimulationTime_3]] - `defines` [EXTRACTED]
 - [[StepScheduler]] - `references` [EXTRACTED]
 - [[Time_3]] - `defines` [EXTRACTED]
 - [[TimeSpan]] - `references` [EXTRACTED]
-- [[WeatherClient]] - `references` [EXTRACTED]
-- [[WeatherData]] - `references` [EXTRACTED]
+- [[WeatherClient]] - `calls` [INFERRED]
+- [[WeatherFeed]] - `references` [EXTRACTED]
 - [[WeatherStatus_3]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/PV-Engine__Fehler
+#graphify/code #graphify/EXTRACTED #community/WeatherClient__Anzeige

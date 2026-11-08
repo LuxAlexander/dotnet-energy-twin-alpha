@@ -1,0 +1,20 @@
+Wettersimulator läuft auf http://127.0.0.1:8080/weather
+Tasten: 1 sonnig · 2 bewölkt · 3 dicht bewölkt · 4 Gewitter · S Schnee · R Regen · T Temperatur · W Wind · X Automatik · Q Ende
+--  AUTOMATISCH  –           –              Strahlung 0.0 W/m²  0.0 °C  0.0 mm/h  Wind 0.0 m/s  | Abfragen 0  
+--  AUTOMATISCH  –           –              Strahlung 0.0 W/m²  0.0 °C  0.0 mm/h  Wind 0.0 m/s  | Abfragen 0  
+2026-01-15 06:00 UTC  AUTOMATISCH  salzburg    Night          Strahlung 0.0 W/m²  -2.9 °C  0.0 mm/h  Wind 5.0 m/s  | Abfragen 1  
+2026-01-15 06:00 UTC  AUTOMATISCH  salzburg    Night          Strahlung 0.0 W/m²  -2.9 °C  0.0 mm/h  Wind 5.0 m/s  | Abfragen 1  
+2026-01-15 06:00 UTC  AUTOMATISCH  salzburg    Night          Strahlung 0.0 W/m²  -2.9 °C  0.0 mm/h  Wind 5.0 m/s  | Abfragen 1  
+2026-01-15 06:00 UTC  AUTOMATISCH  salzburg    Night          Strahlung 0.0 W/m²  -2.9 °C  0.0 mm/h  Wind 5.0 m/s  | Abfragen 1  
+2026-01-15 06:00 UTC  AUTOMATISCH  salzburg    Night          Strahlung 0.0 W/m²  -2.9 °C  0.0 mm/h  Wind 5.0 m/s  | Abfragen 1  
+2026-01-15 06:00 UTC  AUTOMATISCH  salzburg    Night          Strahlung 0.0 W/m²  -2.9 °C  0.0 mm/h  Wind 5.0 m/s  | Abfragen 1  
+2026-01-15 06:00 UTC  AUTOMATISCH  salzburg    Night          Strahlung 0.0 W/m²  -2.9 °C  0.0 mm/h  Wind 5.0 m/s  | Abfragen 1  
+2026-01-15 06:00 UTC  AUTOMATISCH  salzburg    Night          Strahlung 0.0 W/m²  -2.9 °C  0.0 mm/h  Wind 5.0 m/s  | Abfragen 2  
+2026-01-15 06:00 UTC  AUTOMATISCH  salzburg    Night          Strahlung 0.0 W/m²  -2.9 °C  0.0 mm/h  Wind 5.0 m/s  | Abfragen 2  
+2026-01-15 06:00 UTC  AUTOMATISCH  salzburg    Night          Strahlung 0.0 W/m²  -2.9 °C  0.0 mm/h  Wind 5.0 m/s  | Abfragen 2  
+2026-01-15 06:00 UTC  AUTOMATISCH  salzburg    Night          Strahlung 0.0 W/m²  -2.9 °C  0.0 mm/h  Wind 5.0 m/s  | Abfragen 2  
+2026-01-15 06:00 UTC  AUTOMATISCH  salzburg    Night          Strahlung 0.0 W/m²  -2.9 °C  0.0 mm/h  Wind 5.0 m/s  | Abfragen 2  
+2026-01-15 06:00 UTC  AUTOMATISCH  salzburg    Night          Strahlung 0.0 W/m²  -2.9 °C  0.0 mm/h  Wind 5.0 m/s  | Abfragen 2  
+2026-01-15 06:00 UTC  AUTOMATISCH  salzburg    Night          Strahlung 0.0 W/m²  -2.9 °C  0.0 mm/h  Wind 5.0 m/s  | Abfragen 2  
+2026-01-15 07:00 UTC  AUTOMATISCH  salzburg    Sunny          Strahlung 45.7 W/m²  -2.2 °C  0.0 mm/h  Wind 4.2 m/s  | Abfragen 3  
+2026-01-15 07:00 UTC  AUTOMATISCH  salzburg    Sunny          Strahlung 45.7 W/m²  -2.2 °C  0.0 mm/h  Wind 4.2 m/s  | Abfragen 3  

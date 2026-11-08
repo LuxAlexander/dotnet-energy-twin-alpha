@@ -1,12 +1,12 @@
 ---
 source_file: "src/WeatherSimulator/Simulation/LocationCatalog.cs"
 type: "code"
-community: "Wettermodell & Tests"
+community: "Wettermodell & Tests (5)"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Wettermodell__Tests
+  - community/Wettermodell__Tests_5
 ---
 
 # WeatherSimulator.Simulation
@@ -18,4 +18,4 @@ tags:
 - [[WeatherModelTests.cs]] - `imports` [EXTRACTED]
 - [[WeatherSimulatorProgram.cs]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Wettermodell__Tests
+#graphify/code #graphify/EXTRACTED #community/Wettermodell__Tests_5

@@ -1,17 +1,13 @@
 ---
 source_file: "docs/development-journal/dominik-Zach.md"
 type: "document"
-community: "Projekt-Doku & Geräte"
+community: "Projekt-Doku & Geräte (8)"
 tags:
   - graphify/document
   - graphify/EXTRACTED
-  - community/Projekt-Doku__Geräte
+  - community/Projekt-Doku__Geräte_8
 ---
 
 # Journal Dominik Zach
 
-## Connections
-- [[BatterySimulator]] - `references` [INFERRED]
-- [[Entwicklungsjournal]] - `references` [EXTRACTED]
-
-#graphify/document #graphify/EXTRACTED #community/Projekt-Doku__Geräte
+#graphify/document #graphify/EXTRACTED #community/Projekt-Doku__Geräte_8

@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/PvSimulator/Simulation/SimulationMode.cs"
+source_file: "src/Devices/BatterySimulator/Enum.cs"
 type: "code"
-community: "Shared Konsolenausgabe"
-location: "L6"
+community: "Gruppe 21"
+location: "L21"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Shared_Konsolenausgabe
+  - community/Gruppe_21
 ---
 
 # Auto
 
 ## Connections
-- [[SimulationMode]] - `case_of` [EXTRACTED]
+- [[ControlMode]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Shared_Konsolenausgabe
+#graphify/code #graphify/EXTRACTED #community/Gruppe_21

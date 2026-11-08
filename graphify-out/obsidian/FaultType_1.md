@@ -1,22 +1,25 @@
 ---
-source_file: "src/Devices/KuehlhausSimulator/Enums.cs"
+source_file: "src/Devices/PvSimulator/Devices/FaultType.cs"
 type: "code"
-community: "Gruppe 50"
-location: "L13"
+community: "Gruppe 102"
+location: "L3"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_50
+  - community/Gruppe_102
 ---
 
 # FaultType
 
 ## Connections
-- [[CompressorFailure]] - `case_of` [EXTRACTED]
-- [[Enums.cs]] - `contains` [EXTRACTED]
-- [[Kuehlhaus]] - `references` [EXTRACTED]
-- [[Kuehlhaus.TriggerFault()]] - `references` [EXTRACTED]
-- [[None_1]] - `case_of` [EXTRACTED]
-- [[OverTemperature]] - `case_of` [EXTRACTED]
+- [[FaultType.cs]] - `contains` [EXTRACTED]
+- [[FaultTypeExtensions.ToGString()]] - `references` [EXTRACTED]
+- [[FieldDeviceTests.cs]] - `imports` [EXTRACTED]
+- [[GridVoltage]] - `case_of` [EXTRACTED]
+- [[Inverter]] - `case_of` [EXTRACTED]
+- [[None_3]] - `case_of` [EXTRACTED]
+- [[Overheat]] - `case_of` [EXTRACTED]
+- [[PvFaultModel]] - `references` [EXTRACTED]
+- [[PvSystem]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_50
+#graphify/code #graphify/EXTRACTED #community/Gruppe_102

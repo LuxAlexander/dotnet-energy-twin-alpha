@@ -1,17 +1,17 @@
 ---
-source_file: "src/Modbus.Contracts/CommonRegisters.cs"
+source_file: "src/Devices.Common/TimeSyncOptions.cs"
 type: "code"
-community: "Batterie-Modbus & Update"
-location: "L26"
+community: "Gruppe 44"
+location: "L24"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Modbus__Update
+  - community/Gruppe_44
 ---
 
 # Standalone
 
 ## Connections
-- [[TimeStatus]] - `case_of` [EXTRACTED]
+- [[TimeSyncOptions]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update
+#graphify/code #graphify/EXTRACTED #community/Gruppe_44

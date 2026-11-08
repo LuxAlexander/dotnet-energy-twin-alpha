@@ -1,12 +1,12 @@
 ---
 source_file: "tests/Devices.Common.Tests/WeatherFeedTests.cs"
 type: "code"
-community: "WeatherFeed"
+community: "Batterie-Simulator Loop"
 location: "L13"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/WeatherFeed
+  - community/Batterie-Simulator_Loop
 ---
 
 # FakeWeatherService.GetAsync()
@@ -20,4 +20,4 @@ tags:
 - [[WeatherData]] - `references` [EXTRACTED]
 - [[WeatherUnavailableException]] - `calls` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/WeatherFeed
+#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop

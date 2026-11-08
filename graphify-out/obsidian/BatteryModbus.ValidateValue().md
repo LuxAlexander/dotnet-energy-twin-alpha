@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/BatterySimulator/BatteryModbus.cs"
 type: "code"
-community: "Schreibprüfung"
+community: "Batterie-Modbus & Update (3)"
 location: "L43"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Schreibprüfung
+  - community/Batterie-Modbus__Update_3
 ---
 
 # BatteryModbus.ValidateValue()
@@ -15,4 +15,4 @@ tags:
 - [[BatteryModbus]] - `method` [EXTRACTED]
 - [[RegisterDefinition]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Schreibprüfung
+#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update_3

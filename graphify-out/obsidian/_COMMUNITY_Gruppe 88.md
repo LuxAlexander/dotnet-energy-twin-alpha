@@ -1,20 +1,26 @@
 ---
 type: community
-cohesion: 0.40
-members: 5
+cohesion: 0.18
+members: 11
 ---
 
 # Gruppe 88
 
-**Cohesion:** 0.40 - moderately connected
-**Members:** 5 nodes
+**Cohesion:** 0.18 - loosely connected
+**Members:** 11 nodes
 
 ## Members
-- [[Batterie.TriggerFault()]] - code - src/Devices/BatterySimulator/Batterie.cs
-- [[EmergencyStop]] - code - src/Devices/BatterySimulator/Enum.cs
-- [[FaultType]] - code - src/Devices/BatterySimulator/Enum.cs
-- [[None]] - code - src/Devices/BatterySimulator/Enum.cs
-- [[Overheat]] - code - src/Devices/BatterySimulator/Enum.cs
+- [[DeviceTimeSource.ModeText()]] - code - src/Devices.Common/DeviceTimeSource.cs
+- [[ISimClock]] - code - src/SimCore.Contracts/ISimClock.cs
+- [[ISimClock.cs]] - code - src/SimCore.Contracts/ISimClock.cs
+- [[Mode_4]] - code - src/SimCore.Contracts/ISimClock.cs
+- [[Now_3]] - code - src/SimCore.Contracts/ISimClock.cs
+- [[Paused_1]] - code - src/SimCore.Contracts/SimMode.cs
+- [[RunId_6]] - code - src/SimCore.Contracts/ISimClock.cs
+- [[Running_1]] - code - src/SimCore.Contracts/SimMode.cs
+- [[SimMode]] - code - src/SimCore.Contracts/SimMode.cs
+- [[SimMode.cs]] - code - src/SimCore.Contracts/SimMode.cs
+- [[Speed_4]] - code - src/SimCore.Contracts/ISimClock.cs
 
 ## Live Query (requires Dataview plugin)
 
@@ -24,12 +30,17 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 2 edges to [[_COMMUNITY_Batterie-Modell]]
-- 1 edge to [[_COMMUNITY_Gruppe 81]]
-- 1 edge to [[_COMMUNITY_Batterie-Modbus & Update]]
-- 1 edge to [[_COMMUNITY_Gruppe 40]]
-- 1 edge to [[_COMMUNITY_PV-Namespaces]]
+- 2 edges to [[_COMMUNITY_MasterClock]]
+- 2 edges to [[_COMMUNITY_DeviceTimeSource]]
+- 2 edges to [[_COMMUNITY_SyncedClock]]
+- 2 edges to [[_COMMUNITY_Zeit-Bibliotheken & Master]]
+- 1 edge to [[_COMMUNITY_TimeState & TimeLine]]
+- 1 edge to [[_COMMUNITY_Wettermodell & Tests (2)]]
+- 1 edge to [[_COMMUNITY_Zeitsync-Client & Konsole]]
 
 ## Top bridge nodes
-- [[FaultType]] - degree 7, connects to 3 communities
-- [[Batterie.TriggerFault()]] - degree 4, connects to 3 communities
+- [[ISimClock]] - degree 10, connects to 4 communities
+- [[SimMode]] - degree 9, connects to 4 communities
+- [[DeviceTimeSource.ModeText()]] - degree 2, connects to 1 community
+- [[ISimClock.cs]] - degree 2, connects to 1 community
+- [[SimMode.cs]] - degree 2, connects to 1 community

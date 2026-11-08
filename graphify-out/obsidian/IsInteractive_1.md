@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/DualPortCharger/IO/ConsoleRenderer.cs"
 type: "code"
-community: "Gruppe 66"
+community: "Gruppe 69"
 location: "L21"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_66
+  - community/Gruppe_69
 ---
 
 # IsInteractive
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[ConsoleRenderer]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_66
+#graphify/code #graphify/EXTRACTED #community/Gruppe_69

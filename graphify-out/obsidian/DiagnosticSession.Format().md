@@ -1,12 +1,12 @@
 ---
 source_file: "src/ModbusDiagnosticClient/DiagnosticSession.cs"
 type: "code"
-community: "Schreibprüfung"
+community: "Diagnose-Client Verbindung"
 location: "L231"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Schreibprüfung
+  - community/Diagnose-Client_Verbindung
 ---
 
 # DiagnosticSession.Format()
@@ -16,4 +16,4 @@ tags:
 - [[DiagnosticSession.WriteAsync()]] - `calls` [EXTRACTED]
 - [[RegisterDefinition]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Schreibprüfung
+#graphify/code #graphify/EXTRACTED #community/Diagnose-Client_Verbindung

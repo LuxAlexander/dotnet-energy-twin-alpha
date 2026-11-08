@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices.Common/StepScheduler.cs"
 type: "code"
-community: "StepScheduler"
+community: "StepScheduler (2)"
 location: "L16"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/StepScheduler
+  - community/StepScheduler_2
 ---
 
 # Restarted
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[StepUpdateKind]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/StepScheduler
+#graphify/code #graphify/EXTRACTED #community/StepScheduler_2

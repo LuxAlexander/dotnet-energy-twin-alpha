@@ -27,10 +27,10 @@ Entschieden: Übertragung per **MQTT** (RabbitMQ-MQTT-Plugin, Port 1883); als Vi
 | Messwerte im Vertrag: PV-Anlage | | |
 | Messwerte im Vertrag: Batteriespeicher | | |
 | Messwerte im Vertrag: Kühlhaus | | |
-| SRS `docs/SRS-LB03.md` | | |
+| SRS `docs/SRS-LB03.md` | | [`docs/SRS-LB03.md`](docs/SRS-LB03.md) (Entwurf mit Gateway-Teil) |
 | RabbitMQ unter Docker (Compose, `.env.example`, Start/Status/Stopp) | | [`docker/docker-compose.yml`](docker/docker-compose.yml) |
 | Viewer: Einrichtung und Anleitung MQTT-Werkzeug | | |
-| Funktionsnachweise 1–7 | | |
+| Funktionsnachweise 1–7 | | [`docs/nachweise/`](docs/nachweise/2026-11-08-gateway-mit-master/README.md) (Lauf mit Ladesäule und Master) |
 | Optional: Wetter/TimeSim über RabbitMQ | | |
 | Eigener Skill `readTask` | Susanne Lastowicka | [`skills/readTask/README.md`](skills/readTask/README.md) |
 | Eigener Skill | Alexander Lux | |

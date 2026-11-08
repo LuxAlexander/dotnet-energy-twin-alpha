@@ -1,17 +1,17 @@
 ---
-source_file: "src/Modbus.Contracts/CommonRegisters.cs"
+source_file: "src/Devices.Common/StepScheduler.cs"
 type: "code"
-community: "Batterie-Modbus & Update"
-location: "L24"
+community: "StepScheduler (2)"
+location: "L7"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Modbus__Update
+  - community/StepScheduler_2
 ---
 
 # NoTime
 
 ## Connections
-- [[TimeStatus]] - `case_of` [EXTRACTED]
+- [[StepUpdateKind]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update
+#graphify/code #graphify/EXTRACTED #community/StepScheduler_2

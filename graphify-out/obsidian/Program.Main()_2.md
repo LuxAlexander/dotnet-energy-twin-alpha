@@ -1,28 +1,22 @@
 ---
-source_file: "src/SimulationMaster/Program.cs"
+source_file: "src/Devices/DualPortCharger/Program.cs"
 type: "code"
-community: "TimeSyncServer"
-location: "L9"
+community: "Gruppe 37"
+location: "L8"
 tags:
   - graphify/code
-  - graphify/INFERRED
-  - community/TimeSyncServer
+  - graphify/EXTRACTED
+  - community/Gruppe_37
 ---
 
 # Program.Main()
 
 ## Connections
-- [[MasterClock]] - `calls` [INFERRED]
-- [[MasterClock.Resume()]] - `calls` [INFERRED]
-- [[MasterConsole]] - `calls` [INFERRED]
-- [[MasterConsole.AddMessage()]] - `calls` [INFERRED]
-- [[MasterConsole.RunAsync()]] - `calls` [INFERRED]
-- [[MasterConsole.ShutdownAsync()]] - `calls` [INFERRED]
-- [[MasterOptions.Parse()]] - `calls` [EXTRACTED]
+- [[ArgsParser.IsHelpRequested()_3]] - `calls` [EXTRACTED]
+- [[ArgsParser.Parse()_3]] - `calls` [EXTRACTED]
 - [[Program_2]] - `method` [EXTRACTED]
+- [[SimulationEngine_1]] - `calls` [INFERRED]
+- [[SimulationEngine.RunAsync()]] - `calls` [INFERRED]
 - [[Task]] - `references` [EXTRACTED]
-- [[TimeSyncServer]] - `calls` [INFERRED]
-- [[TimeSyncServer.RunAsync()]] - `calls` [INFERRED]
-- [[TimeSyncServer.Start()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/INFERRED #community/TimeSyncServer
+#graphify/code #graphify/EXTRACTED #community/Gruppe_37

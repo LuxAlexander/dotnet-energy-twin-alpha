@@ -1,12 +1,12 @@
 ---
 source_file: "tests/ModbusDiagnosticClient.Tests/DiagnosticClientTests.cs"
 type: "code"
-community: "TimeSyncOptions Tests"
+community: "Gruppe 48"
 location: "L230"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/TimeSyncOptions_Tests
+  - community/Gruppe_48
 ---
 
 # ClientOptionsTests.Invalid_Throws()
@@ -18,4 +18,4 @@ tags:
 - [[InlineData]] - `references` [EXTRACTED]
 - [[Theory]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/TimeSyncOptions_Tests
+#graphify/code #graphify/EXTRACTED #community/Gruppe_48

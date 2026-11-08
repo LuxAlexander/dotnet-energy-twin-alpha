@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/DualPortCharger/Simulation/SimulationEngine.cs"
 type: "code"
-community: "DualCharger"
+community: "Fahrzeug"
 location: "L82"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/DualCharger
+  - community/Fahrzeug
 ---
 
 # SimulationEngine.VehicleArrives()
@@ -14,7 +14,7 @@ tags:
 ## Connections
 - [[DualCharger.Enqueue()]] - `calls` [EXTRACTED]
 - [[InputHandler.HandleAsync()]] - `calls` [INFERRED]
-- [[SimulationEngine]] - `method` [EXTRACTED]
+- [[SimulationEngine_1]] - `method` [EXTRACTED]
 - [[VehicleCatalog.CreateRandom()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/DualCharger
+#graphify/code #graphify/EXTRACTED #community/Fahrzeug

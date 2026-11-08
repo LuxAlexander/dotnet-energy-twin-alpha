@@ -17,7 +17,7 @@ tags:
 - [[ConsoleRenderer.BuildStatusLines()]] - `calls` [EXTRACTED]
 - [[ConsoleRenderer.Cut()]] - `calls` [EXTRACTED]
 - [[ConsoleRenderer.Fit()_1]] - `calls` [EXTRACTED]
-- [[SimulationEngine_1]] - `references` [EXTRACTED]
+- [[SimulationEngine_2]] - `references` [EXTRACTED]
 - [[SimulationEngine.RunAsync()_1]] - `calls` [INFERRED]
 - [[Task]] - `references` [EXTRACTED]
 

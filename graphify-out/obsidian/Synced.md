@@ -1,12 +1,12 @@
 ---
 source_file: "src/Modbus.Contracts/CommonRegisters.cs"
 type: "code"
-community: "Batterie-Modbus & Update"
+community: "DeviceTimeSource"
 location: "L25"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Modbus__Update
+  - community/DeviceTimeSource
 ---
 
 # Synced
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[TimeStatus]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update
+#graphify/code #graphify/EXTRACTED #community/DeviceTimeSource

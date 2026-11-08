@@ -1,12 +1,12 @@
 ---
 source_file: "tests/FieldDevices.Tests/FieldDeviceTests.cs"
 type: "code"
-community: "TimeSyncOptions Tests"
+community: "Gruppe 48"
 location: "L318"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/TimeSyncOptions_Tests
+  - community/Gruppe_48
 ---
 
 # ArgsParserTests
@@ -20,4 +20,4 @@ tags:
 - [[ArgsParserTests.Pv_StandaloneOptions_RequireStandalone()]] - `method` [EXTRACTED]
 - [[FieldDeviceTests.cs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/TimeSyncOptions_Tests
+#graphify/code #graphify/EXTRACTED #community/Gruppe_48

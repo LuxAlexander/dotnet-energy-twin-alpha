@@ -1,12 +1,12 @@
 ---
 source_file: "tests/SimCore.Tests/MasterClockTests.cs"
 type: "code"
-community: "Master-Zeit Tests"
+community: "Gruppe 23"
 location: "L191"
 tags:
   - graphify/code
   - graphify/INFERRED
-  - community/Master-Zeit_Tests
+  - community/Gruppe_23
 ---
 
 # MasterClockTests.ChangesWithinLeadTime_StayContinuous()
@@ -20,4 +20,4 @@ tags:
 - [[MasterClockTests]] - `method` [EXTRACTED]
 - [[MasterClockTests.CreateRunning()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/INFERRED #community/Master-Zeit_Tests
+#graphify/code #graphify/INFERRED #community/Gruppe_23

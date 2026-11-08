@@ -1,12 +1,12 @@
 ---
-source_file: "src/Devices/DualPortCharger/IO/ArgsParser.cs"
+source_file: "src/Devices/KuehlhausSimulator/IO/ArgsParser.cs"
 type: "code"
-community: "Gruppe 82"
-location: "L13"
+community: "Gruppe 61"
+location: "L10"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_82
+  - community/Gruppe_61
 ---
 
 # ArgsParser
@@ -15,7 +15,8 @@ tags:
 - [[ArgsParser.IsHelpRequested()_1]] - `method` [EXTRACTED]
 - [[ArgsParser.NextValue()_1]] - `method` [EXTRACTED]
 - [[ArgsParser.Parse()_1]] - `method` [EXTRACTED]
-- [[ArgsParser.ParsePositive()]] - `method` [EXTRACTED]
-- [[DualPortChargerIOArgsParser.cs]] - `contains` [EXTRACTED]
+- [[ArgsParser.ParseNumber()]] - `method` [EXTRACTED]
+- [[ArgsParser.ParsePositive()_1]] - `method` [EXTRACTED]
+- [[KuehlhausSimulatorIOArgsParser.cs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_82
+#graphify/code #graphify/EXTRACTED #community/Gruppe_61

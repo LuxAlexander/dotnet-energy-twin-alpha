@@ -1,0 +1,5 @@
+15:15:56.662 MASTER FORTSETZEN   Sim 2026-01-15 06:00:06  Lauf 1  Tempo x60  Modus Running
+15:16:12.670 MASTER PAUSE        Sim 2026-01-15 06:16:00  Lauf 1  Tempo x60  Modus Paused
+15:16:22.664 MASTER FORTSETZEN   Sim 2026-01-15 06:16:07  Lauf 1  Tempo x60  Modus Running
+15:17:16.347 MASTER ENDE         Sim 2026-01-15 07:09:48  Lauf 1  Tempo x60  Modus Running
+15:17:16.361 MASTER beendet (bye an alle Simulatoren)

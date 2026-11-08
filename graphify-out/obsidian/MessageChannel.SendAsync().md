@@ -1,12 +1,12 @@
 ---
 source_file: "src/SimCore.TimeSync/MessageChannel.cs"
 type: "code"
-community: "Sync-Nachrichten"
+community: "Sync-Nachrichten (2)"
 location: "L35"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Sync-Nachrichten
+  - community/Sync-Nachrichten_2
 ---
 
 # MessageChannel.SendAsync()
@@ -23,4 +23,4 @@ tags:
 - [[TimeSyncServer.HandleClientAsync()]] - `calls` [INFERRED]
 - [[TimeSyncServer.ReceiveHelloAsync()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/Sync-Nachrichten
+#graphify/code #graphify/EXTRACTED #community/Sync-Nachrichten_2

@@ -1,11 +1,11 @@
 ---
 source_file: "docs/screenshots/PvSimulator/Everything_Together.png"
 type: "image"
-community: "Gruppe 87"
+community: "Gruppe 116"
 tags:
   - graphify/image
-  - graphify/EXTRACTED
-  - community/Gruppe_87
+  - graphify/INFERRED
+  - community/Gruppe_116
 ---
 
 # Wettersimulator Fenster (HTTP 8080, salzburg)
@@ -14,4 +14,4 @@ tags:
 - [[Feldgeraete-Fenster Batterie, Ladesaeule, PV-Anlage, Kuehlhaus]] - `shares_data_with` [INFERRED]
 - [[Screenshot Gesamtsystem mit allen Programmen]] - `references` [EXTRACTED]
 
-#graphify/image #graphify/EXTRACTED #community/Gruppe_87
+#graphify/image #graphify/INFERRED #community/Gruppe_116

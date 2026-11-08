@@ -16,7 +16,6 @@ tags:
 - [[CommonRegisters]] - `references` [EXTRACTED]
 - [[CommonRegisters.HeaderAt()]] - `references` [EXTRACTED]
 - [[Count]] - `defines` [EXTRACTED]
-- [[DeviceConnection.Write()]] - `references` [EXTRACTED]
 - [[DiagnosticSession.Format()]] - `references` [EXTRACTED]
 - [[DiagnosticSession.ParseValue()]] - `references` [EXTRACTED]
 - [[DiagnosticSession.RegisterCodecEquals()]] - `references` [EXTRACTED]

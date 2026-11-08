@@ -1,12 +1,12 @@
 ---
-source_file: "src/Devices/DualPortCharger/IO/ArgsParser.cs"
+source_file: "src/Devices/KuehlhausSimulator/IO/ArgsParser.cs"
 type: "code"
-community: "Gruppe 82"
-location: "L128"
+community: "Gruppe 61"
+location: "L143"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_82
+  - community/Gruppe_61
 ---
 
 # ArgsParser.NextValue()
@@ -15,4 +15,4 @@ tags:
 - [[ArgsParser_1]] - `method` [EXTRACTED]
 - [[ArgsParser.Parse()_1]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_82
+#graphify/code #graphify/EXTRACTED #community/Gruppe_61

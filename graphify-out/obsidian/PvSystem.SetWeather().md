@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/PvSimulator/Devices/PvSystem.cs"
 type: "code"
-community: "Gruppe 47"
+community: "Gruppe 38"
 location: "L42"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_47
+  - community/Gruppe_38
 ---
 
 # PvSystem.SetWeather()
@@ -15,6 +15,6 @@ tags:
 - [[PvSystem]] - `method` [EXTRACTED]
 - [[SimulationEngine.SetWeather()]] - `calls` [INFERRED]
 - [[SimulationEngine.UpdateAutoWeather()]] - `calls` [INFERRED]
-- [[WeatherCondition]] - `references` [EXTRACTED]
+- [[WeatherCondition_1]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_47
+#graphify/code #graphify/EXTRACTED #community/Gruppe_38

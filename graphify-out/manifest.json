@@ -1,15 +1,9 @@
 {
-  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\.graphify_detect.json": {
-    "mtime": 1793826705.468914,
-    "seen": 1793826847.5970366,
-    "ast_hash": "52a457a20ac500f52fcd80e5f70be64a",
-    "semantic_hash": "52a457a20ac500f52fcd80e5f70be64a"
-  },
   "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\EnergyTwin.sln": {
-    "mtime": 1793033954.57014,
-    "seen": 1793826847.5970478,
-    "ast_hash": "f8dfee845907b5c693d48bbbbd8b00de",
-    "semantic_hash": "f8dfee845907b5c693d48bbbbd8b00de"
+    "mtime": 1794142255.840772,
+    "seen": 1794148117.9503698,
+    "ast_hash": "a2991df803e5e6260ada8f0131a9f134",
+    "semantic_hash": "a2991df803e5e6260ada8f0131a9f134"
   },
   "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docker\\docker-compose.yml": {
     "mtime": 1793099762.208918,
@@ -473,12 +467,6 @@
     "ast_hash": "4855e5c6065a54cd02cad2b07cb2575d",
     "semantic_hash": "4855e5c6065a54cd02cad2b07cb2575d"
   },
-  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusDiagnosticClient\\DeviceConnection.cs": {
-    "mtime": 1792943519.6921523,
-    "seen": 1793826847.5972981,
-    "ast_hash": "78b2cddd6941465d7532fc1848e6b022",
-    "semantic_hash": "78b2cddd6941465d7532fc1848e6b022"
-  },
   "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusDiagnosticClient\\DiagnosticSession.cs": {
     "mtime": 1792943641.4815269,
     "seen": 1793826847.5973012,
@@ -486,10 +474,10 @@
     "semantic_hash": "79c7f2d738beed9f8da2981b573a1989"
   },
   "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusDiagnosticClient\\ModbusDiagnosticClient.csproj": {
-    "mtime": 1791879758.6996672,
-    "seen": 1793826847.5973043,
-    "ast_hash": "fe23aa5f5c20259449ed9df4d9dbf3a1",
-    "semantic_hash": "fe23aa5f5c20259449ed9df4d9dbf3a1"
+    "mtime": 1794141988.1430912,
+    "seen": 1794148117.9505854,
+    "ast_hash": "0cc19e06ad6ef4249c1945f2b5345a05",
+    "semantic_hash": "0cc19e06ad6ef4249c1945f2b5345a05"
   },
   "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusDiagnosticClient\\Program.cs": {
     "mtime": 1792943594.4595337,
@@ -504,10 +492,10 @@
     "semantic_hash": "4f9e2d9def23e853f5e2ae825bc2bd7c"
   },
   "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Shared.Config\\OutputPaths.cs": {
-    "mtime": 1791881385.3462982,
-    "seen": 1793826847.5973136,
-    "ast_hash": "46ab0e0042e5f3c94c974f79576eb891",
-    "semantic_hash": "46ab0e0042e5f3c94c974f79576eb891"
+    "mtime": 1794143152.053974,
+    "seen": 1794148117.9506102,
+    "ast_hash": "18256de4a4cc6e9a85fc156409604fb4",
+    "semantic_hash": "18256de4a4cc6e9a85fc156409604fb4"
   },
   "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Shared.Config\\Shared.Config.csproj": {
     "mtime": 1791879758.4891305,
@@ -804,10 +792,10 @@
     "semantic_hash": "2f3563fccd1afbd37dd47de94818b817"
   },
   "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\ModbusDiagnosticClient.Tests\\ModbusDiagnosticClient.Tests.csproj": {
-    "mtime": 1792943693.656911,
-    "seen": 1793826847.5974755,
-    "ast_hash": "e86aa612a6888fee735f8379efc7b8b2",
-    "semantic_hash": "e86aa612a6888fee735f8379efc7b8b2"
+    "mtime": 1794141988.5614693,
+    "seen": 1794148117.9507086,
+    "ast_hash": "16436c4a6790d135c57ff5b564fa13df",
+    "semantic_hash": "16436c4a6790d135c57ff5b564fa13df"
   },
   "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\SimCore.Tests\\ClockOffsetEstimatorTests.cs": {
     "mtime": 1792935330.800235,
@@ -864,16 +852,16 @@
     "semantic_hash": "f8b55f61142286e454d052f7829cd6e0"
   },
   "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\AGENTS.md": {
-    "mtime": 1793188087.9570508,
-    "seen": 1793826847.597503,
-    "ast_hash": "fe3a70f5dac804c53b4f0bb3acb3017c",
-    "semantic_hash": "fe3a70f5dac804c53b4f0bb3acb3017c"
+    "mtime": 1794147558.5027764,
+    "seen": 1794148117.9507415,
+    "ast_hash": "a4432ab2e832abb2a9c8114d96cf7b55",
+    "semantic_hash": "a4432ab2e832abb2a9c8114d96cf7b55"
   },
   "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\README.md": {
-    "mtime": 1793034122.221,
-    "seen": 1793826847.5975056,
-    "ast_hash": "8564636db6f292bec59d587fb7660e2c",
-    "semantic_hash": "8564636db6f292bec59d587fb7660e2c"
+    "mtime": 1794147558.500751,
+    "seen": 1794148117.9507432,
+    "ast_hash": "effd7b44e86f3fc61f05b787eed46ed7",
+    "semantic_hash": "effd7b44e86f3fc61f05b787eed46ed7"
   },
   "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\development-journal\\AGENTS1-archiv-2026-10-10.md": {
     "mtime": 1793030968.073532,
@@ -900,10 +888,10 @@
     "semantic_hash": "bdbb15aa47c6b3f218f516d2ba2b9553"
   },
   "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\development-journal\\susanne-lastowicka.md": {
-    "mtime": 1793033973.1443717,
-    "seen": 1793826847.597519,
-    "ast_hash": "2d7ea0029ab887210d778dcb7c4ca473",
-    "semantic_hash": "2d7ea0029ab887210d778dcb7c4ca473"
+    "mtime": 1794147558.5338364,
+    "seen": 1794148117.9507546,
+    "ast_hash": "70c3663638902a43454da054525de02c",
+    "semantic_hash": "70c3663638902a43454da054525de02c"
   },
   "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\devices\\KuehlhausSimulator\\umsetzung-lb02.md": {
     "mtime": 1793085566.289886,
@@ -948,10 +936,10 @@
     "semantic_hash": "fb2f2f9ccc1365d656fbe064759f5b60"
   },
   "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusDiagnosticClient\\README.md": {
-    "mtime": 1793031650.9627888,
-    "seen": 1793826847.5975504,
-    "ast_hash": "108b0460cd36a73fce6916d794f7ebdf",
-    "semantic_hash": "108b0460cd36a73fce6916d794f7ebdf"
+    "mtime": 1794142349.2637744,
+    "seen": 1794148117.9507868,
+    "ast_hash": "cb5803bd7500af45d2f51e8f12b741bf",
+    "semantic_hash": "cb5803bd7500af45d2f51e8f12b741bf"
   },
   "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Shared.Config\\README.md": {
     "mtime": 1793031650.9652078,
@@ -1084,5 +1072,299 @@
     "seen": 1793826847.5976088,
     "ast_hash": "4450da81e115d2122f45dd6eb537a08b",
     "semantic_hash": "4450da81e115d2122f45dd6eb537a08b"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\.graphify_analysis.json": {
+    "mtime": 1794148077.6649444,
+    "seen": 1794148117.9503484,
+    "ast_hash": "5175816a678027a41a4cc85755a92c71",
+    "semantic_hash": "5175816a678027a41a4cc85755a92c71"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\.graphify_ast.json": {
+    "mtime": 1794147800.2906215,
+    "seen": 1794148117.9503555,
+    "ast_hash": "83c4e2378902d825d094c09055015bf9",
+    "semantic_hash": "83c4e2378902d825d094c09055015bf9"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\.graphify_extract.json": {
+    "mtime": 1794148077.0913634,
+    "seen": 1794148117.9503586,
+    "ast_hash": "7a25f8a582f198d132b01183ae69eefb",
+    "semantic_hash": "7a25f8a582f198d132b01183ae69eefb"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\.graphify_incr.json": {
+    "mtime": 1794147777.6282117,
+    "seen": 1794148117.9503608,
+    "ast_hash": "da5128cf58bd7ad7eb2297bdfaa8b6af",
+    "semantic_hash": "da5128cf58bd7ad7eb2297bdfaa8b6af"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\.graphify_merged.json": {
+    "mtime": 1794148077.7065482,
+    "seen": 1794148117.950363,
+    "ast_hash": "5d634f0046046bad568bfdffa641c343",
+    "semantic_hash": "5d634f0046046bad568bfdffa641c343"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\.graphify_old.json": {
+    "mtime": 1794148076.9402335,
+    "seen": 1794148117.9503644,
+    "ast_hash": "693917b84de17e2613eacd04bd0dca5c",
+    "semantic_hash": "693917b84de17e2613eacd04bd0dca5c"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\.graphify_semantic.json": {
+    "mtime": 1794148076.992181,
+    "seen": 1794148117.9503663,
+    "ast_hash": "21f1ca4dc1cf8fdc9840a73a8991eae4",
+    "semantic_hash": "21f1ca4dc1cf8fdc9840a73a8991eae4"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Modbus.Client\\DeviceConnection.cs": {
+    "mtime": 1794141978.788474,
+    "seen": 1794148117.9505553,
+    "ast_hash": "c9e322cdcca4522e843f26046b9b692b",
+    "semantic_hash": "c9e322cdcca4522e843f26046b9b692b"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Modbus.Client\\Modbus.Client.csproj": {
+    "mtime": 1794141987.9669156,
+    "seen": 1794148117.9505577,
+    "ast_hash": "70297c112e40133adea4d7a033350693",
+    "semantic_hash": "70297c112e40133adea4d7a033350693"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusRabbitGateway\\DeviceEndpoint.cs": {
+    "mtime": 1794142032.103502,
+    "seen": 1794148117.9505918,
+    "ast_hash": "e209253955b4bbff5c8754928d9d11cf",
+    "semantic_hash": "e209253955b4bbff5c8754928d9d11cf"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusRabbitGateway\\DevicePoller.cs": {
+    "mtime": 1794144207.2904756,
+    "seen": 1794148117.9505937,
+    "ast_hash": "269df8a472498d6dbf94d444217fdb9f",
+    "semantic_hash": "269df8a472498d6dbf94d444217fdb9f"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusRabbitGateway\\GatewayOptions.cs": {
+    "mtime": 1794144230.1398447,
+    "seen": 1794148117.9505954,
+    "ast_hash": "2b4b4c7537ff33664a434537abdfa1ca",
+    "semantic_hash": "2b4b4c7537ff33664a434537abdfa1ca"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusRabbitGateway\\GatewayService.cs": {
+    "mtime": 1794144217.4927554,
+    "seen": 1794148117.9505968,
+    "ast_hash": "bbdfe3e65e4b2fd17590dc6a08dc878c",
+    "semantic_hash": "bbdfe3e65e4b2fd17590dc6a08dc878c"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusRabbitGateway\\MeasurementKeys.cs": {
+    "mtime": 1794142129.1639328,
+    "seen": 1794148117.9505985,
+    "ast_hash": "ffd4763470ff6852310897057166ece2",
+    "semantic_hash": "ffd4763470ff6852310897057166ece2"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusRabbitGateway\\MessageBuilder.cs": {
+    "mtime": 1794142129.0794148,
+    "seen": 1794148117.9505997,
+    "ast_hash": "2ff04e780a4a0ae0c1a909d2ed4c1c8b",
+    "semantic_hash": "2ff04e780a4a0ae0c1a909d2ed4c1c8b"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusRabbitGateway\\Messages.cs": {
+    "mtime": 1794142032.3084598,
+    "seen": 1794148117.950601,
+    "ast_hash": "17cf91e20f3cbcc378d9fafc8b89beb6",
+    "semantic_hash": "17cf91e20f3cbcc378d9fafc8b89beb6"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusRabbitGateway\\ModbusRabbitGateway.csproj": {
+    "mtime": 1794143189.9936855,
+    "seen": 1794148117.9506023,
+    "ast_hash": "46111e15f6b03662c88c5d9d9df7b563",
+    "semantic_hash": "46111e15f6b03662c88c5d9d9df7b563"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusRabbitGateway\\MqttCredentials.cs": {
+    "mtime": 1794143190.1999724,
+    "seen": 1794148117.9506035,
+    "ast_hash": "ab829837ee0f4ad95e69c3f84f98e732",
+    "semantic_hash": "ab829837ee0f4ad95e69c3f84f98e732"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusRabbitGateway\\MqttPublisher.cs": {
+    "mtime": 1794144403.7977989,
+    "seen": 1794148117.9506052,
+    "ast_hash": "c6519c445740a9fd30e3f8f5a60e53fd",
+    "semantic_hash": "c6519c445740a9fd30e3f8f5a60e53fd"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusRabbitGateway\\Program.cs": {
+    "mtime": 1794144230.2388809,
+    "seen": 1794148117.9506066,
+    "ast_hash": "1b0836fda78712025663c0e85d8070d3",
+    "semantic_hash": "1b0836fda78712025663c0e85d8070d3"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusRabbitGateway\\Publishing.cs": {
+    "mtime": 1794143190.105877,
+    "seen": 1794148117.9506085,
+    "ast_hash": "710dd7d0e9a04eb48023816a33dcb030",
+    "semantic_hash": "710dd7d0e9a04eb48023816a33dcb030"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\ModbusRabbitGateway.Tests\\GatewayAgainstDeviceTests.cs": {
+    "mtime": 1794144291.2804587,
+    "seen": 1794148117.9507103,
+    "ast_hash": "c60d0e8d68cd4f6440ceb783efb903bb",
+    "semantic_hash": "c60d0e8d68cd4f6440ceb783efb903bb"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\ModbusRabbitGateway.Tests\\GatewayOptionsTests.cs": {
+    "mtime": 1794142223.9666655,
+    "seen": 1794148117.9507117,
+    "ast_hash": "c2f06bf70ff52bd939a75e20fc4b05e5",
+    "semantic_hash": "c2f06bf70ff52bd939a75e20fc4b05e5"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\ModbusRabbitGateway.Tests\\MeasurementKeysTests.cs": {
+    "mtime": 1794142223.684424,
+    "seen": 1794148117.9507136,
+    "ast_hash": "236b83246eea50518bf2901dc33162ed",
+    "semantic_hash": "236b83246eea50518bf2901dc33162ed"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\ModbusRabbitGateway.Tests\\MessageBuilderTests.cs": {
+    "mtime": 1794142223.597847,
+    "seen": 1794148117.9507148,
+    "ast_hash": "835129f4ba20b461874cebceeb682da7",
+    "semantic_hash": "835129f4ba20b461874cebceeb682da7"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\ModbusRabbitGateway.Tests\\ModbusRabbitGateway.Tests.csproj": {
+    "mtime": 1794143289.8322113,
+    "seen": 1794148117.9507165,
+    "ast_hash": "5a9cc51b06a7e5ee3e9551118d7b0e1a",
+    "semantic_hash": "5a9cc51b06a7e5ee3e9551118d7b0e1a"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\ModbusRabbitGateway.Tests\\MqttCredentialsTests.cs": {
+    "mtime": 1794143327.3185053,
+    "seen": 1794148117.9507177,
+    "ast_hash": "5932a41635359f4e2a75b14ea7b6253a",
+    "semantic_hash": "5932a41635359f4e2a75b14ea7b6253a"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\ModbusRabbitGateway.Tests\\MqttPublisherTests.cs": {
+    "mtime": 1794143370.637375,
+    "seen": 1794148117.9507189,
+    "ast_hash": "402a8e2559df7e4ab9b6dd62a3712461",
+    "semantic_hash": "402a8e2559df7e4ab9b6dd62a3712461"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\.claude\\skills\\readTask\\README.md": {
+    "mtime": 1794140379.5305252,
+    "seen": 1794148117.9507363,
+    "ast_hash": "157843a188182adff4154fada431a9ac",
+    "semantic_hash": "157843a188182adff4154fada431a9ac"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\.claude\\skills\\readTask\\SKILL.md": {
+    "mtime": 1794139334.121117,
+    "seen": 1794148117.950738,
+    "ast_hash": "1674d008e7fa158f8469a9cc62b6522a",
+    "semantic_hash": "1674d008e7fa158f8469a9cc62b6522a"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\.graphify_uncached.txt": {
+    "mtime": 1794147813.8534887,
+    "seen": 1794148117.9507396,
+    "ast_hash": "8e0213523991ac8f4d535cecfe1d940c",
+    "semantic_hash": "8e0213523991ac8f4d535cecfe1d940c"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\Nachrichtenvertrag-LB03.md": {
+    "mtime": 1794144432.08428,
+    "seen": 1794148117.9507449,
+    "ast_hash": "27a0fe6a225d8955771c07af909a397a",
+    "semantic_hash": "27a0fe6a225d8955771c07af909a397a"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\SRS-LB03.md": {
+    "mtime": 1794147537.588324,
+    "seen": 1794148117.9507465,
+    "ast_hash": "7bb4b2d4dfa3cb61f60ed7e2d43ade5d",
+    "semantic_hash": "7bb4b2d4dfa3cb61f60ed7e2d43ade5d"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\nachweise\\2026-11-08-gateway-mit-master\\README.md": {
+    "mtime": 1794147493.4668005,
+    "seen": 1794148117.950758,
+    "ast_hash": "752a44e968e1bb822c3b2b9ccd9f5bd4",
+    "semantic_hash": "752a44e968e1bb822c3b2b9ccd9f5bd4"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\nachweise\\2026-11-08-gateway-mit-master\\ablauf.txt": {
+    "mtime": 1794147444.9695876,
+    "seen": 1794148117.9507594,
+    "ast_hash": "97497eab311278210e669372a84940a7",
+    "semantic_hash": "97497eab311278210e669372a84940a7"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\nachweise\\2026-11-08-gateway-mit-master\\diagnose.txt": {
+    "mtime": 1794147367.1551592,
+    "seen": 1794148117.9507606,
+    "ast_hash": "eb82df9c77800c59282b7f17b2e34a00",
+    "semantic_hash": "eb82df9c77800c59282b7f17b2e34a00"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\nachweise\\2026-11-08-gateway-mit-master\\gateway.txt": {
+    "mtime": 1794147443.140413,
+    "seen": 1794148117.9507625,
+    "ast_hash": "e7a98772a86fd0bed2505b5cdc2091fd",
+    "semantic_hash": "e7a98772a86fd0bed2505b5cdc2091fd"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\nachweise\\2026-11-08-gateway-mit-master\\ladesaeule.txt": {
+    "mtime": 1794147438.7822633,
+    "seen": 1794148117.9507637,
+    "ast_hash": "f73dd9e83fea3f1c41b87e8e6a876c4a",
+    "semantic_hash": "f73dd9e83fea3f1c41b87e8e6a876c4a"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\nachweise\\2026-11-08-gateway-mit-master\\master.txt": {
+    "mtime": 1794147436.3606744,
+    "seen": 1794148117.9507656,
+    "ast_hash": "dc62d00e64e654b6d62f81dd95f518b3",
+    "semantic_hash": "dc62d00e64e654b6d62f81dd95f518b3"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\nachweise\\2026-11-08-gateway-mit-master\\viewer.txt": {
+    "mtime": 1794147402.773996,
+    "seen": 1794148117.9507668,
+    "ast_hash": "16f338e045e933951542a7678f7c8b00",
+    "semantic_hash": "16f338e045e933951542a7678f7c8b00"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\nachweise\\2026-11-08-gateway-mit-master\\wetter.txt": {
+    "mtime": 1794147440.5312877,
+    "seen": 1794148117.9507685,
+    "ast_hash": "77b669a9c404645163f40701287d973a",
+    "semantic_hash": "77b669a9c404645163f40701287d973a"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\docs\\task-status\\aufgabe-03.md": {
+    "mtime": 1794140363.8227987,
+    "seen": 1794148117.9507697,
+    "ast_hash": "32524772565c12b4ac88429950a4d21d",
+    "semantic_hash": "32524772565c12b4ac88429950a4d21d"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\skills\\readTask\\README.md": {
+    "mtime": 1794140379.3576977,
+    "seen": 1794148117.9507716,
+    "ast_hash": "157843a188182adff4154fada431a9ac",
+    "semantic_hash": "157843a188182adff4154fada431a9ac"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\skills\\readTask\\SKILL.md": {
+    "mtime": 1794139334.121117,
+    "seen": 1794148117.9507728,
+    "ast_hash": "1674d008e7fa158f8469a9cc62b6522a",
+    "semantic_hash": "1674d008e7fa158f8469a9cc62b6522a"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\Modbus.Client\\README.md": {
+    "mtime": 1794142386.2087781,
+    "seen": 1794148117.950784,
+    "ast_hash": "63127f44552e686a4312b5244c7b38fd",
+    "semantic_hash": "63127f44552e686a4312b5244c7b38fd"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\src\\ModbusRabbitGateway\\README.md": {
+    "mtime": 1794144432.0832787,
+    "seen": 1794148117.9507883,
+    "ast_hash": "377b95e2318bd8b709b3af44046139eb",
+    "semantic_hash": "377b95e2318bd8b709b3af44046139eb"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\ModbusRabbitGateway.Tests\\README.md": {
+    "mtime": 1794144432.08428,
+    "seen": 1794148117.950807,
+    "ast_hash": "3f04f84d57e3dfca03347f6f97a1e8d8",
+    "semantic_hash": "3f04f84d57e3dfca03347f6f97a1e8d8"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\tests\\ModbusRabbitGateway.Tests\\measurement-keys.txt": {
+    "mtime": 1794142169.5177774,
+    "seen": 1794148117.9508083,
+    "ast_hash": "88770aaf17b77d40f938634b115e8dcf",
+    "semantic_hash": "88770aaf17b77d40f938634b115e8dcf"
+  },
+  "C:\\git_repos\\.NET\\dotnet-energy-twin-alpha\\dotNET Programmierung 2026 - Aufgabe 03.pdf": {
+    "mtime": 1794138877.0464962,
+    "seen": 1794148117.9508138,
+    "ast_hash": "37ab52e5793dcb5bf3c9860bfeb2f560",
+    "semantic_hash": "37ab52e5793dcb5bf3c9860bfeb2f560"
   }
 }

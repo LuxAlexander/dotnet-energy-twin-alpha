@@ -5,7 +5,7 @@ community: "TimeState & TimeLine"
 location: "L68"
 tags:
   - graphify/code
-  - graphify/INFERRED
+  - graphify/EXTRACTED
   - community/TimeState__TimeLine
 ---
 
@@ -17,4 +17,4 @@ tags:
 - [[SyncedClock.ApplyState()]] - `calls` [INFERRED]
 - [[TimeLine]] - `method` [EXTRACTED]
 
-#graphify/code #graphify/INFERRED #community/TimeState__TimeLine
+#graphify/code #graphify/EXTRACTED #community/TimeState__TimeLine

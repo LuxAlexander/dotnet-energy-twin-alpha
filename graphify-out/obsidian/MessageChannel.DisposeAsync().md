@@ -1,12 +1,12 @@
 ---
 source_file: "src/SimCore.TimeSync/MessageChannel.cs"
 type: "code"
-community: "CsvLogger"
+community: "Batterie-Simulator Loop (2)"
 location: "L62"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/CsvLogger
+  - community/Batterie-Simulator_Loop_2
 ---
 
 # MessageChannel.DisposeAsync()
@@ -16,4 +16,4 @@ tags:
 - [[TimeSyncServer.HandleClientAsync()]] - `calls` [INFERRED]
 - [[ValueTask]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/CsvLogger
+#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop_2

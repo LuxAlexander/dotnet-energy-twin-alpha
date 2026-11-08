@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/BatterySimulator/BatterieConfig.cs"
+source_file: "src/Devices/DualPortCharger/Models/ChargingPoint.cs"
 type: "code"
-community: "Gruppe 43"
-location: "L18"
+community: "Ladepunkt"
+location: "L27"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_43
+  - community/Ladepunkt
 ---
 
 # Efficiency
 
 ## Connections
-- [[BatterieConfig]] - `defines` [EXTRACTED]
+- [[ChargingPoint]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_43
+#graphify/code #graphify/EXTRACTED #community/Ladepunkt

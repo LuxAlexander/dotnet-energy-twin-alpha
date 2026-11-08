@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices.Common/Modbus/ModbusDeviceServer.cs"
+source_file: "tests/FieldDevices.Tests/FieldDeviceTests.cs"
 type: "code"
-community: "Batterie-Modbus & Update"
-location: "L92"
+community: "Batterie-Modbus & Update (2)"
+location: "L27"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Modbus__Update
+  - community/Batterie-Modbus__Update_2
 ---
 
 # Options
 
 ## Connections
-- [[ModbusDeviceServer]] - `defines` [EXTRACTED]
+- [[ModbusTestBase]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update
+#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update_2

@@ -1,12 +1,12 @@
 ---
 source_file: "src/SimCore.TimeSync/TimeSyncServer.cs"
 type: "code"
-community: "TimeSyncServer"
+community: "Sync-Nachrichten"
 location: "L68"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/TimeSyncServer
+  - community/Sync-Nachrichten
 ---
 
 # TimeSyncServer.RunAsync()
@@ -15,7 +15,7 @@ tags:
 - [[ByeMessage]] - `calls` [INFERRED]
 - [[CancellationToken]] - `references` [EXTRACTED]
 - [[DeviceTimeSourceTests.WithMaster_FollowsMasterClock()]] - `calls` [INFERRED]
-- [[Program.Main()_2]] - `calls` [INFERRED]
+- [[Program.Main()]] - `calls` [INFERRED]
 - [[Task]] - `references` [EXTRACTED]
 - [[TimeSyncIntegrationTests.InitializeAsync()]] - `calls` [INFERRED]
 - [[TimeSyncIntegrationTests.MasterShutdown_IsReported_AndSimulatorStopsTime()]] - `calls` [INFERRED]
@@ -27,4 +27,4 @@ tags:
 - [[TimeSyncServer.SendToAllAsync()]] - `calls` [EXTRACTED]
 - [[TimeSyncServer.Start()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/TimeSyncServer
+#graphify/code #graphify/EXTRACTED #community/Sync-Nachrichten

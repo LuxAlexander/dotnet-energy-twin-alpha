@@ -1,16 +1,16 @@
 ---
-source_file: "tests/Devices.Common.Tests/Devices.Common.Tests.csproj"
+source_file: "tests/FieldDevices.Tests/FieldDevices.Tests.csproj"
 type: "code"
-community: "Gruppe 83"
+community: "Gruppe 51"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_83
+  - community/Gruppe_51
 ---
 
 # coverlet.collector
 
 ## Connections
-- [[Devices.Common.Tests.csproj]] - `imports` [EXTRACTED]
+- [[FieldDevices.Tests.csproj]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_83
+#graphify/code #graphify/EXTRACTED #community/Gruppe_51

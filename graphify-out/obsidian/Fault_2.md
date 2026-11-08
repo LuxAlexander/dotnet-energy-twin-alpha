@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/PvSimulator/Devices/InverterStatus.cs"
+source_file: "src/Devices/KuehlhausSimulator/Enums.cs"
 type: "code"
-community: "PV-Namespaces"
-location: "L6"
+community: "Gruppe 68"
+location: "L9"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/PV-Namespaces
+  - community/Gruppe_68
 ---
 
 # Fault
 
 ## Connections
-- [[InverterStatus]] - `case_of` [EXTRACTED]
+- [[DeviceState]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/PV-Namespaces
+#graphify/code #graphify/EXTRACTED #community/Gruppe_68

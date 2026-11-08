@@ -5,7 +5,7 @@ community: "Batterie-Modbus & Update"
 location: "L70"
 tags:
   - graphify/code
-  - graphify/EXTRACTED
+  - graphify/INFERRED
   - community/Batterie-Modbus__Update
 ---
 
@@ -19,4 +19,4 @@ tags:
 - [[ModbusDeviceServer.Publish()]] - `calls` [INFERRED]
 - [[SimulationEngine.RunAsync()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update
+#graphify/code #graphify/INFERRED #community/Batterie-Modbus__Update

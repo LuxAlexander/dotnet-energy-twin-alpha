@@ -1,12 +1,12 @@
 ---
 source_file: "tests/Devices.Common.Tests/DeviceTimeSourceTests.cs"
 type: "code"
-community: "DeviceTimeSource"
+community: "DeviceTimeSource (2)"
 location: "L22"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/DeviceTimeSource
+  - community/DeviceTimeSource_2
 ---
 
 # DeviceTimeSourceTests.Standalone_RunsImmediately_WithLocalClock()
@@ -18,4 +18,4 @@ tags:
 - [[ManualTimeProvider]] - `calls` [EXTRACTED]
 - [[TimeSyncOptions]] - `calls` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/DeviceTimeSource
+#graphify/code #graphify/EXTRACTED #community/DeviceTimeSource_2

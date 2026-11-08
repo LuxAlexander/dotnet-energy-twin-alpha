@@ -12,7 +12,6 @@ tags:
 # DiagnosticSession.ParseValue()
 
 ## Connections
-- [[DiagnosticException]] - `calls` [INFERRED]
 - [[DiagnosticSession]] - `method` [EXTRACTED]
 - [[DiagnosticSession.WriteAsync()]] - `calls` [EXTRACTED]
 - [[RegisterDefinition]] - `references` [EXTRACTED]

@@ -1,17 +1,17 @@
 ---
-source_file: "src/SimCore.Time/SyncedClock.cs"
+source_file: "src/Devices/KuehlhausSimulator/Simulation/SimulationEngine.cs"
 type: "code"
-community: "SyncedClock"
-location: "L117"
+community: "WeatherClient & Anzeige"
+location: "L69"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/SyncedClock
+  - community/WeatherClient__Anzeige
 ---
 
 # RunId
 
 ## Connections
-- [[SyncedClock]] - `defines` [EXTRACTED]
+- [[SimulationEngine_2]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/SyncedClock
+#graphify/code #graphify/EXTRACTED #community/WeatherClient__Anzeige

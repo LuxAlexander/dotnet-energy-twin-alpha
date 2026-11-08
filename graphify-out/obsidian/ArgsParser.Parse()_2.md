@@ -1,12 +1,12 @@
 ---
-source_file: "src/Devices/KuehlhausSimulator/IO/ArgsParser.cs"
+source_file: "src/Devices/BatterySimulator/ArgsParser.cs"
 type: "code"
-community: "Gruppe 45"
+community: "Gruppe 105"
 location: "L48"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_45
+  - community/Gruppe_105
 ---
 
 # ArgsParser.Parse()
@@ -15,20 +15,14 @@ tags:
 - [[ArgsParser_2]] - `method` [EXTRACTED]
 - [[ArgsParser.NextValue()_2]] - `calls` [EXTRACTED]
 - [[ArgsParser.ParseNumber()_1]] - `calls` [EXTRACTED]
-- [[ArgsParser.ParsePositive()_1]] - `calls` [EXTRACTED]
-- [[KuehlhausArgsTests.DurationWithoutStandalone_IsRejected()]] - `calls` [EXTRACTED]
-- [[KuehlhausArgsTests.InvalidSetpoint_IsRejected()]] - `calls` [EXTRACTED]
-- [[KuehlhausArgsTests.StandaloneDefaults_MatchTheDeviceDocumentation()]] - `calls` [EXTRACTED]
-- [[KuehlhausArgsTests.UnknownOption_IsRejected()]] - `calls` [EXTRACTED]
-- [[KuehlhausArgsTests.Values_AreParsedWithDotAndComma()]] - `calls` [EXTRACTED]
-- [[KuehlhausArgsTests.WeatherOff_DisablesTheWeatherSimulator()]] - `calls` [EXTRACTED]
-- [[KuehlhausArgsTests.WithMaster_WeatherSimulatorIsDefault()]] - `calls` [EXTRACTED]
-- [[KuehlhausEngineTests.Kuehlhaus_RunsStandalone_WritesCsvAndStopsOnCancel()]] - `calls` [EXTRACTED]
-- [[KuehlhausEngineTests.Renderer_BuildsInteractiveLayout()]] - `calls` [EXTRACTED]
+- [[ArgsParser.Validate()]] - `calls` [EXTRACTED]
+- [[ArgsParserTests.Battery_InvalidConfig_Throws()]] - `calls` [EXTRACTED]
+- [[ArgsParserTests.Battery_ParsesConfig_TimeAndModbus()]] - `calls` [EXTRACTED]
+- [[ArgsParserTests.Battery_StandaloneOnlyOptions_RequireStandalone()]] - `calls` [EXTRACTED]
+- [[BatterieConfig]] - `calls` [INFERRED]
 - [[ModbusOptions.TryApply()]] - `calls` [EXTRACTED]
-- [[Program.Main()_1]] - `calls` [EXTRACTED]
-- [[SimulationConfig_1]] - `references` [EXTRACTED]
+- [[SimulatorOptions]] - `references` [EXTRACTED]
 - [[TimeSyncOptions.TryApply()]] - `calls` [EXTRACTED]
 - [[WeatherOptions.TryApply()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_45
+#graphify/code #graphify/EXTRACTED #community/Gruppe_105

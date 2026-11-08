@@ -1,12 +1,12 @@
 ---
-source_file: "src/ModbusDiagnosticClient/DeviceConnection.cs"
+source_file: "src/Modbus.Client/DeviceConnection.cs"
 type: "code"
-community: "Diagnose-Client Verbindung"
+community: "DeviceConnection (Modbus.Client)"
 location: "L73"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Diagnose-Client_Verbindung
+  - community/DeviceConnection_ModbusClient
 ---
 
 # DeviceConnection.ReadRegisters()
@@ -17,9 +17,6 @@ tags:
 - [[DeviceConnection.IsConnectionProblem()]] - `calls` [EXTRACTED]
 - [[DeviceConnection.IsModbusProblem()]] - `calls` [EXTRACTED]
 - [[DeviceConnection.Translate()]] - `calls` [EXTRACTED]
-- [[DiagnosticSession.PrintRawAsync()]] - `calls` [EXTRACTED]
-- [[DiagnosticSession.ReadAll()]] - `calls` [EXTRACTED]
-- [[DiagnosticSession.ReadHeader()]] - `calls` [EXTRACTED]
-- [[DiagnosticSession.WriteAsync()]] - `calls` [EXTRACTED]
+- [[DevicePoller.Poll()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/Diagnose-Client_Verbindung
+#graphify/code #graphify/EXTRACTED #community/DeviceConnection_ModbusClient

@@ -1,18 +1,18 @@
 ---
 source_file: "src/Devices/BatterySimulator/BatterieConfig.cs"
 type: "code"
-community: "Gruppe 43"
+community: "Gruppe 24"
 location: "L9"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_43
+  - community/Gruppe_24
 ---
 
 # BatterieConfig
 
 ## Connections
-- [[ArgsParser.Parse()]] - `calls` [INFERRED]
+- [[ArgsParser.Parse()_2]] - `calls` [INFERRED]
 - [[ArgsParser.Validate()]] - `references` [EXTRACTED]
 - [[Batterie]] - `references` [EXTRACTED]
 - [[BatterieConfig.cs]] - `contains` [EXTRACTED]
@@ -21,10 +21,10 @@ tags:
 - [[BatteryUnitTests.Update_TimeSpanAndSeconds_GiveSameResult()]] - `calls` [INFERRED]
 - [[CapacityKWh]] - `defines` [EXTRACTED]
 - [[CsvLogger]] - `references` [EXTRACTED]
-- [[CsvLogger.CreateAsync()]] - `references` [EXTRACTED]
+- [[CsvLogger.CreateAsync()_1]] - `references` [EXTRACTED]
 - [[DailyProfile]] - `references` [EXTRACTED]
-- [[DeviceId_1]] - `defines` [EXTRACTED]
-- [[Efficiency]] - `defines` [EXTRACTED]
+- [[DeviceId_2]] - `defines` [EXTRACTED]
+- [[Efficiency_1]] - `defines` [EXTRACTED]
 - [[MaxChargeKW]] - `defines` [EXTRACTED]
 - [[MaxDischargeKW]] - `defines` [EXTRACTED]
 - [[SimulatorOptions]] - `references` [EXTRACTED]
@@ -32,4 +32,4 @@ tags:
 - [[SocMinPercent]] - `defines` [EXTRACTED]
 - [[StartSocPercent]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_43
+#graphify/code #graphify/EXTRACTED #community/Gruppe_24

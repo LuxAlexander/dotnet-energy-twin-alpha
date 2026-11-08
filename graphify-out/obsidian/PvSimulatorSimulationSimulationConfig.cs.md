@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/PvSimulator/Simulation/SimulationConfig.cs"
 type: "code"
-community: "Bibliotheks-Namespaces"
+community: "PV-Namespaces"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Bibliotheks-Namespaces
+  - community/PV-Namespaces
 ---
 
 # PvSimulator/Simulation/SimulationConfig.cs
@@ -15,7 +15,6 @@ tags:
 - [[Devices.Common]] - `imports` [EXTRACTED]
 - [[Devices.Common.Modbus]] - `imports` [EXTRACTED]
 - [[EnergySimulator.Simulation]] - `contains` [EXTRACTED]
-- [[Shared.Config]] - `imports` [EXTRACTED]
-- [[SimulationConfig_2]] - `contains` [EXTRACTED]
+- [[SimulationConfig]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Bibliotheks-Namespaces
+#graphify/code #graphify/EXTRACTED #community/PV-Namespaces

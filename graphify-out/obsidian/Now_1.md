@@ -1,17 +1,17 @@
 ---
-source_file: "src/SimCore.Time/MasterClock.cs"
+source_file: "src/SimCore.Time/MonotonicUtcClock.cs"
 type: "code"
-community: "MasterClock"
-location: "L66"
+community: "DeviceTimeSource (2)"
+location: "L21"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/MasterClock
+  - community/DeviceTimeSource_2
 ---
 
 # Now
 
 ## Connections
-- [[MasterClock]] - `defines` [EXTRACTED]
+- [[MonotonicUtcClock]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/MasterClock
+#graphify/code #graphify/EXTRACTED #community/DeviceTimeSource_2

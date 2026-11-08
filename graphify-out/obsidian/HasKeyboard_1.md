@@ -1,17 +1,17 @@
 ---
-source_file: "src/SimulationMaster/MasterConsole.cs"
+source_file: "src/Devices.Common/AsyncConsole.cs"
 type: "code"
-community: "Zeitsync-Client & Konsole"
-location: "L31"
+community: "TimeSyncServer"
+location: "L14"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Zeitsync-Client__Konsole
+  - community/TimeSyncServer
 ---
 
 # HasKeyboard
 
 ## Connections
-- [[MasterConsole]] - `defines` [EXTRACTED]
+- [[AsyncConsole]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Zeitsync-Client__Konsole
+#graphify/code #graphify/EXTRACTED #community/TimeSyncServer

@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/DualPortCharger/Models/ChargingPoint.cs"
+source_file: "src/WeatherSimulator/Simulation/ManualWeather.cs"
 type: "code"
-community: "Ladepunkt"
-location: "L31"
+community: "Wettermodell & Tests"
+location: "L11"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Ladepunkt
+  - community/Wettermodell__Tests
 ---
 
 # TemperatureC
 
 ## Connections
-- [[ChargingPoint]] - `defines` [EXTRACTED]
+- [[ManualWeather]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Ladepunkt
+#graphify/code #graphify/EXTRACTED #community/Wettermodell__Tests

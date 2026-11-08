@@ -1,21 +1,16 @@
 ---
-source_file: "src/Shared.Config/OutputPaths.cs"
-type: "code"
-community: "Bibliotheks-Namespaces"
-location: "L1"
+source_file: "src/Shared.Config/README.md"
+type: "document"
+community: "Geräte-READMEs & Modelle"
 tags:
-  - graphify/code
-  - graphify/EXTRACTED
-  - community/Bibliotheks-Namespaces
+  - graphify/document
+  - graphify/INFERRED
+  - community/Geräte-READMEs__Modelle
 ---
 
 # Shared.Config
 
 ## Connections
-- [[BatterySimulatorCsvLogger.cs]] - `imports` [EXTRACTED]
-- [[DualPortChargerSimulationSimulationConfig.cs]] - `imports` [EXTRACTED]
-- [[KuehlhausSimulatorSimulationSimulationConfig.cs]] - `imports` [EXTRACTED]
-- [[OutputPaths.cs]] - `contains` [EXTRACTED]
-- [[PvSimulatorSimulationSimulationConfig.cs]] - `imports` [EXTRACTED]
+- [[Shared (gemeinsame Bausteine)]] - `conceptually_related_to` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/Bibliotheks-Namespaces
+#graphify/document #graphify/INFERRED #community/Geräte-READMEs__Modelle

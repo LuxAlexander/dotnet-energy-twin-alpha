@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/DualPortCharger/IO/InputHandler.cs"
 type: "code"
-community: "Batterie-Simulator Loop"
+community: "Batterie-Simulator Loop (3)"
 location: "L122"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Simulator_Loop
+  - community/Batterie-Simulator_Loop_3
 ---
 
 # InputHandler.ChangePowerLimit()
@@ -16,4 +16,4 @@ tags:
 - [[InputHandler]] - `method` [EXTRACTED]
 - [[InputHandler.HandleAsync()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop
+#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop_3

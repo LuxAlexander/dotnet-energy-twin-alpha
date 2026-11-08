@@ -1,17 +1,17 @@
 ---
 source_file: "tests/Weather.Tests/README.md"
 type: "document"
-community: "Gruppe 72"
+community: "Gruppe 99"
 tags:
   - graphify/document
   - graphify/EXTRACTED
-  - community/Gruppe_72
+  - community/Gruppe_99
 ---
 
 # WeatherModelTests
 
 ## Connections
 - [[Weather.Tests_1]] - `references` [EXTRACTED]
-- [[WeatherSimulator_1]] - `references` [EXTRACTED]
+- [[WeatherSimulator]] - `references` [EXTRACTED]
 
-#graphify/document #graphify/EXTRACTED #community/Gruppe_72
+#graphify/document #graphify/EXTRACTED #community/Gruppe_99

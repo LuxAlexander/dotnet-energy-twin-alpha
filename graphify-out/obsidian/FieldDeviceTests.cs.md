@@ -1,19 +1,19 @@
 ---
 source_file: "tests/FieldDevices.Tests/FieldDeviceTests.cs"
 type: "code"
-community: "PV-Namespaces"
+community: "Modbus-Tests"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/PV-Namespaces
+  - community/Modbus-Tests
 ---
 
 # FieldDeviceTests.cs
 
 ## Connections
 - [[ArgsParser]] - `imports` [EXTRACTED]
-- [[ArgsParser_3]] - `imports` [EXTRACTED]
+- [[ArgsParser_2]] - `imports` [EXTRACTED]
 - [[ArgsParserTests]] - `contains` [EXTRACTED]
 - [[Batterie_Sim]] - `imports` [EXTRACTED]
 - [[BatteryModbusTests]] - `contains` [EXTRACTED]
@@ -22,7 +22,7 @@ tags:
 - [[Devices.Common.Modbus]] - `imports` [EXTRACTED]
 - [[EnergySimulator.Devices]] - `imports` [EXTRACTED]
 - [[EnergySimulator.Simulation]] - `imports` [EXTRACTED]
-- [[FaultType]] - `imports` [EXTRACTED]
+- [[FaultType_1]] - `imports` [EXTRACTED]
 - [[FaultType_2]] - `imports` [EXTRACTED]
 - [[FieldDevices.Tests]] - `contains` [EXTRACTED]
 - [[Modbus.Contracts]] - `imports` [EXTRACTED]
@@ -34,4 +34,4 @@ tags:
 - [[system_net]] - `imports` [EXTRACTED]
 - [[system_net_sockets]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/PV-Namespaces
+#graphify/code #graphify/EXTRACTED #community/Modbus-Tests

@@ -14,7 +14,7 @@ tags:
 ## Connections
 - [[CancellationToken]] - `references` [EXTRACTED]
 - [[CsvLogger_1]] - `method` [EXTRACTED]
-- [[SimulationEngine.AdvanceAsync()]] - `calls` [INFERRED]
+- [[SimulationEngine.AdvanceAsync()_1]] - `calls` [INFERRED]
 - [[Task]] - `references` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop

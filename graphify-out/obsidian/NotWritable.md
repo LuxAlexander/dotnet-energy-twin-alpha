@@ -1,12 +1,12 @@
 ---
 source_file: "src/Modbus.Contracts/CommonRegisters.cs"
 type: "code"
-community: "Gruppe 48"
+community: "Gruppe 82"
 location: "L36"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_48
+  - community/Gruppe_82
 ---
 
 # NotWritable
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[WriteError]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_48
+#graphify/code #graphify/EXTRACTED #community/Gruppe_82

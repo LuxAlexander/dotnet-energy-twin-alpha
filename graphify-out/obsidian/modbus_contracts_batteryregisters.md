@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "concept"
-community: "Bibliotheks-Namespaces"
+community: "Modbus-Tests"
 tags:
   - graphify/concept
   - graphify/EXTRACTED
-  - community/Bibliotheks-Namespaces
+  - community/Modbus-Tests
 ---
 
 # modbus_contracts_batteryregisters
@@ -13,4 +13,4 @@ tags:
 ## Connections
 - [[BatteryModbus.cs]] - `imports` [EXTRACTED]
 
-#graphify/concept #graphify/EXTRACTED #community/Bibliotheks-Namespaces
+#graphify/concept #graphify/EXTRACTED #community/Modbus-Tests

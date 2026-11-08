@@ -1,11 +1,11 @@
 ---
 source_file: "src/SimCore.Time/SimCore.Time.csproj"
 type: "code"
-community: "Gruppe 68"
+community: "Gruppe 83"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_68
+  - community/Gruppe_83
 ---
 
 # SimCore.Time.csproj
@@ -13,10 +13,10 @@ tags:
 ## Connections
 - [[Devices.Common.csproj]] - `imports` [EXTRACTED]
 - [[EnergyTwin.sln]] - `contains` [EXTRACTED]
-- [[Microsoft.NET.Sdk_11]] - `references` [EXTRACTED]
+- [[Microsoft.NET.Sdk_9]] - `references` [EXTRACTED]
 - [[SimCore.Contracts.csproj]] - `imports` [EXTRACTED]
 - [[SimCore.Tests.csproj]] - `imports` [EXTRACTED]
 - [[SimCore.TimeSync.csproj]] - `imports` [EXTRACTED]
 - [[SimulationMaster.csproj]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_68
+#graphify/code #graphify/EXTRACTED #community/Gruppe_83

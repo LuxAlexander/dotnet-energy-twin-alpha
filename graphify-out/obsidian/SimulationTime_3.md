@@ -1,12 +1,12 @@
 ---
-source_file: "src/Devices/PvSimulator/Simulation/SimulationEngine.cs"
+source_file: "src/Devices/KuehlhausSimulator/Simulation/SimulationEngine.cs"
 type: "code"
-community: "PV-Engine & Fehler"
-location: "L53"
+community: "WeatherClient & Anzeige"
+location: "L66"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/PV-Engine__Fehler
+  - community/WeatherClient__Anzeige
 ---
 
 # SimulationTime
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[SimulationEngine_2]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/PV-Engine__Fehler
+#graphify/code #graphify/EXTRACTED #community/WeatherClient__Anzeige

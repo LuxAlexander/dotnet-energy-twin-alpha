@@ -1,12 +1,12 @@
 ---
 source_file: "src/Shared.Config/OutputPaths.cs"
 type: "code"
-community: "Gruppe 92"
-location: "L20"
+community: "OutputPaths"
+location: "L26"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_92
+  - community/OutputPaths
 ---
 
 # OutputPaths.FindRepositoryRoot()
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[OutputPaths]] - `method` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_92
+#graphify/code #graphify/EXTRACTED #community/OutputPaths

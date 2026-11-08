@@ -12,7 +12,6 @@ tags:
 
 ## Connections
 - [[Geraete-Register (Charger, PV, Batterie, Kuehlhaus)]] - `calls` [EXTRACTED]
-- [[Modbus.Contracts_2]] - `references` [EXTRACTED]
-- [[ModbusDiagnosticClient_2]] - `calls` [EXTRACTED]
+- [[Modbus.Contracts_1]] - `references` [EXTRACTED]
 
 #graphify/document #graphify/EXTRACTED #community/Geräte-READMEs__Modelle

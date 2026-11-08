@@ -1,12 +1,12 @@
 ---
 source_file: "tests/SimCore.Tests/TimeSyncIntegrationTests.cs"
 type: "code"
-community: "TimeSyncServer"
+community: "Sync-Nachrichten"
 location: "L29"
 tags:
   - graphify/code
   - graphify/INFERRED
-  - community/TimeSyncServer
+  - community/Sync-Nachrichten
 ---
 
 # TimeSyncIntegrationTests.InitializeAsync()
@@ -19,4 +19,4 @@ tags:
 - [[TimeSyncServer.RunAsync()]] - `calls` [INFERRED]
 - [[TimeSyncServer.Start()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/INFERRED #community/TimeSyncServer
+#graphify/code #graphify/INFERRED #community/Sync-Nachrichten

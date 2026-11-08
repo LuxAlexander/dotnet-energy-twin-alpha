@@ -1,12 +1,12 @@
 ---
 source_file: "tests/Devices.Common.Tests/ModbusDeviceServerTests.cs"
 type: "code"
-community: "RegisterCodec & Befehle"
+community: "RegisterCodec & Befehle (2)"
 location: "L224"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/RegisterCodec__Befehle
+  - community/RegisterCodec__Befehle_2
 ---
 
 # RegisterCodecTests
@@ -19,4 +19,4 @@ tags:
 - [[RegisterCodecTests.UInt32_RoundTrips()]] - `method` [EXTRACTED]
 - [[RegisterCodecTests.Validate_ChecksRangeTypeAndFiniteness()]] - `method` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/RegisterCodec__Befehle
+#graphify/code #graphify/EXTRACTED #community/RegisterCodec__Befehle_2

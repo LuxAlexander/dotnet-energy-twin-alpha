@@ -1,19 +1,22 @@
 ---
-source_file: "AGENTS.md"
+source_file: "src/SimulationMaster/README.md"
 type: "document"
-community: "Projekt-Doku & Geräte"
+community: "Devices.Common Tests"
 tags:
   - graphify/document
   - graphify/EXTRACTED
-  - community/Projekt-Doku__Geräte
+  - community/DevicesCommon_Tests
 ---
 
 # SimulationMaster
 
 ## Connections
-- [[Demo-Ablauf]] - `references` [EXTRACTED]
-- [[DualPortCharger]] - `shares_data_with` [EXTRACTED]
-- [[SimCore.TimeSync_1]] - `calls` [EXTRACTED]
-- [[start-all.ps1]] - `calls` [EXTRACTED]
+- [[DeviceTimeSourceTests_1]] - `conceptually_related_to` [INFERRED]
+- [[Master status display with deviation Delta]] - `references` [EXTRACTED]
+- [[MasterClock_1]] - `calls` [EXTRACTED]
+- [[SimulationMaster CLI options]] - `references` [EXTRACTED]
+- [[SimulationMaster key controls]] - `references` [EXTRACTED]
+- [[Time sync protocol v1 (TCP JSON lines, port 5100)]] - `implements` [EXTRACTED]
+- [[TimeSyncServer_1]] - `calls` [EXTRACTED]
 
-#graphify/document #graphify/EXTRACTED #community/Projekt-Doku__Geräte
+#graphify/document #graphify/EXTRACTED #community/DevicesCommon_Tests

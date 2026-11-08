@@ -20,6 +20,7 @@ tags:
 - [[ModbusDeviceServer.Validate()]] - `references` [EXTRACTED]
 - [[ModbusDeviceServerTests]] - `references` [EXTRACTED]
 - [[PvModbusTests]] - `references` [EXTRACTED]
+- [[RecordingPublisher]] - `references` [EXTRACTED]
 - [[TimeLine]] - `references` [EXTRACTED]
 - [[TimeSyncIntegrationTests]] - `references` [EXTRACTED]
 - [[TimeSyncServer]] - `references` [EXTRACTED]

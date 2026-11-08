@@ -5,7 +5,7 @@ community: "StepScheduler"
 location: "L83"
 tags:
   - graphify/code
-  - graphify/EXTRACTED
+  - graphify/INFERRED
   - community/StepScheduler
 ---
 
@@ -17,4 +17,4 @@ tags:
 - [[StepScheduler.Update()]] - `calls` [INFERRED]
 - [[StepSchedulerTests]] - `method` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/StepScheduler
+#graphify/code #graphify/INFERRED #community/StepScheduler

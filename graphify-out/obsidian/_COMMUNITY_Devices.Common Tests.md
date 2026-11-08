@@ -36,7 +36,7 @@ members: 44
 - [[RegisterFormatterTests_1]] - document - tests/ModbusDiagnosticClient.Tests/README.md
 - [[RegisterPlanRequirementTests_1]] - document - tests/FieldDevices.Tests/README.md
 - [[SimCore.Tests_1]] - document - tests/SimCore.Tests/README.md
-- [[SimulationMaster_2]] - document - src/SimulationMaster/README.md
+- [[SimulationMaster_1]] - document - src/SimulationMaster/README.md
 - [[SimulationMaster CLI options]] - document - src/SimulationMaster/README.md
 - [[SimulationMaster key controls]] - document - src/SimulationMaster/README.md
 - [[StepSchedulerTests_1]] - document - tests/Devices.Common.Tests/README.md

@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/PvSimulator/Simulation/PvModbus.cs"
 type: "code"
-community: "Batterie-Modbus & Update"
+community: "Batterie-Modbus & Update (4)"
 location: "L13"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Modbus__Update
+  - community/Batterie-Modbus__Update_4
 ---
 
 # PvModbus
@@ -24,7 +24,7 @@ tags:
 - [[PvModbus.cs]] - `contains` [EXTRACTED]
 - [[PvModbusTests]] - `references` [EXTRACTED]
 - [[PvSystem]] - `references` [EXTRACTED]
-- [[SimulationEngine_2]] - `references` [EXTRACTED]
-- [[StatusText_5]] - `defines` [EXTRACTED]
+- [[SimulationEngine]] - `references` [EXTRACTED]
+- [[StatusText_4]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update
+#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update_4

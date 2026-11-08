@@ -11,6 +11,6 @@ tags:
 # Vorzeichen Wirkleistung (positiv = Aufnahme)
 
 ## Connections
-- [[Modbus.Contracts_2]] - `conceptually_related_to` [EXTRACTED]
+- [[Modbus.Contracts_1]] - `conceptually_related_to` [EXTRACTED]
 
 #graphify/document #graphify/EXTRACTED #community/Geräte-READMEs__Modelle

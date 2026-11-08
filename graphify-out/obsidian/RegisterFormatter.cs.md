@@ -1,12 +1,12 @@
 ---
 source_file: "src/ModbusDiagnosticClient/RegisterFormatter.cs"
 type: "code"
-community: "Charger-Namespaces"
+community: "Gruppe 19"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Charger-Namespaces
+  - community/Gruppe_19
 ---
 
 # RegisterFormatter.cs
@@ -18,4 +18,4 @@ tags:
 - [[system_globalization]] - `imports` [EXTRACTED]
 - [[system_text]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Charger-Namespaces
+#graphify/code #graphify/EXTRACTED #community/Gruppe_19

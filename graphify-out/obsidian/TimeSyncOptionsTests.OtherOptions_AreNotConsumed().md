@@ -1,12 +1,12 @@
 ---
 source_file: "tests/Devices.Common.Tests/TimeSyncOptionsTests.cs"
 type: "code"
-community: "Gruppe 55"
+community: "Gruppe 44"
 location: "L68"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_55
+  - community/Gruppe_44
 ---
 
 # TimeSyncOptionsTests.OtherOptions_AreNotConsumed()
@@ -17,4 +17,4 @@ tags:
 - [[TimeSyncOptions.TryApply()]] - `calls` [EXTRACTED]
 - [[TimeSyncOptionsTests]] - `method` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_55
+#graphify/code #graphify/EXTRACTED #community/Gruppe_44

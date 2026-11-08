@@ -1,11 +1,11 @@
 ---
 source_file: "src/Devices.Common/README.md"
 type: "document"
-community: "Projekt-Doku & Geräte"
+community: "Projekt-Doku & Geräte (3)"
 tags:
   - graphify/document
   - graphify/EXTRACTED
-  - community/Projekt-Doku__Geräte
+  - community/Projekt-Doku__Geräte_3
 ---
 
 # StepScheduler
@@ -13,4 +13,4 @@ tags:
 ## Connections
 - [[DeviceTimeSource_1]] - `shares_data_with` [EXTRACTED]
 
-#graphify/document #graphify/EXTRACTED #community/Projekt-Doku__Geräte
+#graphify/document #graphify/EXTRACTED #community/Projekt-Doku__Geräte_3

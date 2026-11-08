@@ -1,8 +1,7 @@
 ---
-source_file: "src/SimulationMaster/MasterConsole.cs"
+source_file: ""
 type: "code"
 community: "Zeitsync-Client & Konsole"
-location: "L28"
 tags:
   - graphify/code
   - graphify/EXTRACTED
@@ -12,9 +11,7 @@ tags:
 # PromptKind
 
 ## Connections
-- [[MasterConsole]] - `contains` [EXTRACTED]
-- [[None_4]] - `case_of` [EXTRACTED]
-- [[Restart]] - `case_of` [EXTRACTED]
-- [[Speed_3]] - `case_of` [EXTRACTED]
+- [[MasterConsole]] - `references` [EXTRACTED]
+- [[MasterConsole.StartPrompt()]] - `references` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Zeitsync-Client__Konsole

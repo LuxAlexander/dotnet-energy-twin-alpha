@@ -1,25 +1,25 @@
 ---
 source_file: "src/Devices/PvSimulator/Devices/IDevice.cs"
 type: "code"
-community: "Gruppe 67"
+community: "Gruppe 91"
 location: "L3"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_67
+  - community/Gruppe_91
 ---
 
 # IDevice
 
 ## Connections
-- [[DailyEnergyKwh]] - `defines` [EXTRACTED]
+- [[DailyEnergyKwh_1]] - `defines` [EXTRACTED]
 - [[IDevice.ResetDailyEnergy()]] - `method` [EXTRACTED]
 - [[IDevice.StepContinuous()]] - `method` [EXTRACTED]
 - [[IDevice.cs]] - `contains` [EXTRACTED]
-- [[IsEnabled]] - `defines` [EXTRACTED]
-- [[Name]] - `defines` [EXTRACTED]
-- [[PowerKw_1]] - `defines` [EXTRACTED]
+- [[IsEnabled_1]] - `defines` [EXTRACTED]
+- [[Name_1]] - `defines` [EXTRACTED]
+- [[PowerKw_2]] - `defines` [EXTRACTED]
 - [[PvSystem]] - `implements` [EXTRACTED]
-- [[TotalEnergyKwh_1]] - `defines` [EXTRACTED]
+- [[TotalEnergyKwh_2]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_67
+#graphify/code #graphify/EXTRACTED #community/Gruppe_91

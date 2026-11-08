@@ -1,12 +1,12 @@
 ---
-source_file: "src/SimCore.Contracts/WeatherData.cs"
+source_file: "src/Shared/Weather/WeatherCondition.cs"
 type: "code"
-community: "Wettermodell & Tests"
-location: "L7"
+community: "Gruppe 38"
+location: "L6"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Wettermodell__Tests
+  - community/Gruppe_38
 ---
 
 # PartlyCloudy
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[WeatherCondition_1]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Wettermodell__Tests
+#graphify/code #graphify/EXTRACTED #community/Gruppe_38

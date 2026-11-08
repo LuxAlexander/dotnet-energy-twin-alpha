@@ -1,18 +1,18 @@
 ---
-source_file: "src/Devices/DualPortCharger/Program.cs"
+source_file: "src/SimulationMaster/Program.cs"
 type: "code"
-community: "Charger-Namespaces"
-location: "L6"
+community: "Zeit-Bibliotheken & Master"
+location: "L7"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Charger-Namespaces
+  - community/Zeit-Bibliotheken__Master
 ---
 
 # Program
 
 ## Connections
-- [[DualPortChargerProgram.cs]] - `contains` [EXTRACTED]
 - [[Program.Main()]] - `method` [EXTRACTED]
+- [[SimulationMasterProgram.cs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Charger-Namespaces
+#graphify/code #graphify/EXTRACTED #community/Zeit-Bibliotheken__Master

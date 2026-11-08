@@ -1,12 +1,12 @@
 ---
 source_file: "src/SimCore.TimeSync/TimeSyncServer.cs"
 type: "code"
-community: "TimeSyncServer"
+community: "Sync-Nachrichten"
 location: "L246"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/TimeSyncServer
+  - community/Sync-Nachrichten
 ---
 
 # TimeSyncServer.IsConnectionError()
@@ -17,4 +17,4 @@ tags:
 - [[TimeSyncServer.HandleClientAsync()]] - `calls` [EXTRACTED]
 - [[TimeSyncServer.SendToAllAsync()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/TimeSyncServer
+#graphify/code #graphify/EXTRACTED #community/Sync-Nachrichten

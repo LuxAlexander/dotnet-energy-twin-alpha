@@ -17,7 +17,7 @@ tags:
 - [[DualChargerSim.IO]] - `imports` [EXTRACTED]
 - [[DualChargerSim.Models]] - `imports` [EXTRACTED]
 - [[DualChargerSim.Simulation]] - `contains` [EXTRACTED]
-- [[SimulationEngine]] - `contains` [EXTRACTED]
+- [[SimulationEngine_1]] - `contains` [EXTRACTED]
 - [[system_globalization]] - `imports` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Charger-Namespaces

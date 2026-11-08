@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/KuehlhausSimulator/Simulation/SimulationEngine.cs"
+source_file: "src/Devices/BatterySimulator/Simulator.cs"
 type: "code"
-community: "WeatherClient & Anzeige"
-location: "L57"
+community: "Gruppe 21"
+location: "L31"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/WeatherClient__Anzeige
+  - community/Gruppe_21
 ---
 
 # Time
 
 ## Connections
-- [[SimulationEngine_1]] - `defines` [EXTRACTED]
+- [[Simulator]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/WeatherClient__Anzeige
+#graphify/code #graphify/EXTRACTED #community/Gruppe_21

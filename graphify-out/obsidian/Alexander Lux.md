@@ -1,17 +1,17 @@
 ---
 source_file: "README.md"
 type: "document"
-community: "Projekt-Doku & Geräte"
+community: "Zuständigkeiten LB03"
 tags:
   - graphify/document
   - graphify/EXTRACTED
-  - community/Projekt-Doku__Geräte
+  - community/Zuständigkeiten_LB03
 ---
 
 # Alexander Lux
 
 ## Connections
-- [[PvSimulator]] - `references` [EXTRACTED]
-- [[Zustaendigkeiten Team Alpha]] - `references` [EXTRACTED]
+- [[Nicht zugeteilt SRS, BrokerDocker, Viewer, Messwerte PVBatterieKuehlhaus, Nachweise, Skills AlexanderDominik]] - `references` [AMBIGUOUS]
+- [[Zustaendigkeiten Aufgabe 03 (neue Module)]] - `references` [EXTRACTED]
 
-#graphify/document #graphify/EXTRACTED #community/Projekt-Doku__Geräte
+#graphify/document #graphify/EXTRACTED #community/Zuständigkeiten_LB03

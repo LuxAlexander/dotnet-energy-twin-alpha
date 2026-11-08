@@ -12,8 +12,7 @@ tags:
 
 ## Connections
 - [[Kuehlhaus Registerplan 20-31]] - `references` [EXTRACTED]
-- [[Modbus.Contracts_2]] - `references` [EXTRACTED]
+- [[Modbus.Contracts_1]] - `references` [EXTRACTED]
 - [[RegisterPlan_1]] - `references` [EXTRACTED]
-- [[Schreiben und Pruefen (Register 1819)]] - `references` [EXTRACTED]
 
 #graphify/document #graphify/EXTRACTED #community/Geräte-READMEs__Modelle

@@ -11,9 +11,9 @@ tags:
 # Wettersimulator (HTTP 8080)
 
 ## Connections
-- [[DualPortCharger_1]] - `calls` [EXTRACTED]
-- [[KuehlhausSimulator_2]] - `calls` [EXTRACTED]
+- [[DualPortCharger]] - `calls` [EXTRACTED]
+- [[KuehlhausSimulator_1]] - `calls` [EXTRACTED]
 - [[Lokales Wettermodell (standalone)]] - `conceptually_related_to` [EXTRACTED]
-- [[PvSimulator_1]] - `calls` [INFERRED]
+- [[PvSimulator]] - `calls` [INFERRED]
 
 #graphify/document #graphify/EXTRACTED #community/Geräte-READMEs__Modelle

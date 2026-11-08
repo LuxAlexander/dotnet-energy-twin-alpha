@@ -1,22 +1,21 @@
 ---
-source_file: "src/ModbusDiagnosticClient/DeviceConnection.cs"
+source_file: "src/Modbus.Client/DeviceConnection.cs"
 type: "code"
-community: "Diagnose-Client Verbindung"
+community: "Modbus.Client-Fehler"
 location: "L8"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Diagnose-Client_Verbindung
+  - community/ModbusClient-Fehler
 ---
 
 # DiagnosticErrorKind
 
 ## Connections
-- [[Connection]] - `case_of` [EXTRACTED]
+- [[Connection_1]] - `case_of` [EXTRACTED]
 - [[DeviceConnection.cs]] - `contains` [EXTRACTED]
 - [[DiagnosticException]] - `references` [EXTRACTED]
-- [[DiagnosticSession.Prefix()]] - `references` [EXTRACTED]
 - [[Protocol]] - `case_of` [EXTRACTED]
 - [[Value]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Diagnose-Client_Verbindung
+#graphify/code #graphify/EXTRACTED #community/ModbusClient-Fehler

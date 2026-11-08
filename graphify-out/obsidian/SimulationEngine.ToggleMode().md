@@ -1,19 +1,19 @@
 ---
-source_file: "src/Devices/KuehlhausSimulator/Simulation/SimulationEngine.cs"
+source_file: "src/Devices/PvSimulator/Simulation/SimulationEngine.cs"
 type: "code"
-community: "Gruppe 58"
-location: "L93"
+community: "PV-Engine & Fehler"
+location: "L426"
 tags:
   - graphify/code
-  - graphify/INFERRED
-  - community/Gruppe_58
+  - graphify/EXTRACTED
+  - community/PV-Engine__Fehler
 ---
 
 # SimulationEngine.ToggleMode()
 
 ## Connections
-- [[InputHandler.HandleAsync()_1]] - `calls` [INFERRED]
-- [[Kuehlhaus.SetDoor()]] - `calls` [INFERRED]
-- [[SimulationEngine_1]] - `method` [EXTRACTED]
+- [[SimulationEngine]] - `method` [EXTRACTED]
+- [[SimulationEngine.HandleKey()]] - `calls` [EXTRACTED]
+- [[SimulationEngine.SetNotification()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/INFERRED #community/Gruppe_58
+#graphify/code #graphify/EXTRACTED #community/PV-Engine__Fehler

@@ -1,11 +1,11 @@
 ---
 source_file: "src/Shared.Config/Shared.Config.csproj"
 type: "concept"
-community: "Gruppe 68"
+community: "Gruppe 98"
 tags:
   - graphify/concept
   - graphify/EXTRACTED
-  - community/Gruppe_68
+  - community/Gruppe_98
 ---
 
 # Microsoft.NET.Sdk
@@ -13,4 +13,4 @@ tags:
 ## Connections
 - [[Shared.Config.csproj]] - `references` [EXTRACTED]
 
-#graphify/concept #graphify/EXTRACTED #community/Gruppe_68
+#graphify/concept #graphify/EXTRACTED #community/Gruppe_98

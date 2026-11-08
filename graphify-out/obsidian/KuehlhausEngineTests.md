@@ -1,12 +1,12 @@
 ---
 source_file: "tests/FieldDevices.Tests/ConsumerTests.cs"
 type: "code"
-community: "Gruppe 45"
+community: "Gruppe 61"
 location: "L371"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_45
+  - community/Gruppe_61
 ---
 
 # KuehlhausEngineTests
@@ -16,4 +16,4 @@ tags:
 - [[KuehlhausEngineTests.Kuehlhaus_RunsStandalone_WritesCsvAndStopsOnCancel()]] - `method` [EXTRACTED]
 - [[KuehlhausEngineTests.Renderer_BuildsInteractiveLayout()]] - `method` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_45
+#graphify/code #graphify/EXTRACTED #community/Gruppe_61

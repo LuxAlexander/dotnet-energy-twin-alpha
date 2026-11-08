@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/PvSimulator/Devices/IDevice.cs"
+source_file: "src/Devices/PvSimulator/Devices/PvSystem.cs"
 type: "code"
-community: "Gruppe 67"
-location: "L6"
+community: "PvSystem"
+location: "L17"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_67
+  - community/PvSystem
 ---
 
 # IsEnabled
 
 ## Connections
-- [[IDevice]] - `defines` [EXTRACTED]
+- [[PvSystem]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_67
+#graphify/code #graphify/EXTRACTED #community/PvSystem

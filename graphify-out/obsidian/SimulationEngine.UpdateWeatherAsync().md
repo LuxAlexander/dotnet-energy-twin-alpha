@@ -1,8 +1,8 @@
 ---
-source_file: "src/Devices/KuehlhausSimulator/Simulation/SimulationEngine.cs"
+source_file: "src/Devices/PvSimulator/Simulation/SimulationEngine.cs"
 type: "code"
 community: "Batterie-Simulator Loop"
-location: "L265"
+location: "L234"
 tags:
   - graphify/code
   - graphify/EXTRACTED
@@ -14,11 +14,11 @@ tags:
 ## Connections
 - [[CancellationToken]] - `references` [EXTRACTED]
 - [[DateTime]] - `references` [EXTRACTED]
-- [[SimulationEngine_1]] - `method` [EXTRACTED]
-- [[SimulationEngine.AdvanceAsync()_1]] - `calls` [EXTRACTED]
-- [[SimulationEngine.LocalOutsideTemperature()]] - `calls` [EXTRACTED]
-- [[SimulationEngine.StartRunAsync()]] - `calls` [EXTRACTED]
+- [[PvSystem.ApplyExternalWeather()]] - `calls` [INFERRED]
+- [[SimulationEngine]] - `method` [EXTRACTED]
+- [[SimulationEngine.AdvanceAsync()]] - `calls` [EXTRACTED]
+- [[SimulationEngine.German()]] - `calls` [EXTRACTED]
+- [[SimulationEngine.SetNotification()]] - `calls` [EXTRACTED]
 - [[Task]] - `references` [EXTRACTED]
-- [[WeatherFeed.UpdateAsync()]] - `calls` [INFERRED]
 
 #graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop

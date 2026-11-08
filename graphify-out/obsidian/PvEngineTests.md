@@ -1,12 +1,12 @@
 ---
 source_file: "tests/FieldDevices.Tests/FieldDeviceTests.cs"
 type: "code"
-community: "PV-Namespaces"
+community: "Modbus-Tests"
 location: "L380"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/PV-Namespaces
+  - community/Modbus-Tests
 ---
 
 # PvEngineTests
@@ -15,4 +15,4 @@ tags:
 - [[FieldDeviceTests.cs]] - `contains` [EXTRACTED]
 - [[PvEngineTests.Pv_RunsStandalone_WritesCsvAndStopsOnCancel()]] - `method` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/PV-Namespaces
+#graphify/code #graphify/EXTRACTED #community/Modbus-Tests

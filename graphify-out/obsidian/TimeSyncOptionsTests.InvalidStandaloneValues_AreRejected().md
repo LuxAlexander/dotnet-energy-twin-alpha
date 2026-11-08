@@ -1,12 +1,12 @@
 ---
 source_file: "tests/Devices.Common.Tests/TimeSyncOptionsTests.cs"
 type: "code"
-community: "TimeSyncOptions Tests"
+community: "Gruppe 48"
 location: "L58"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/TimeSyncOptions_Tests
+  - community/Gruppe_48
 ---
 
 # TimeSyncOptionsTests.InvalidStandaloneValues_AreRejected()
@@ -18,4 +18,4 @@ tags:
 - [[TimeSyncOptionsTests]] - `method` [EXTRACTED]
 - [[TimeSyncOptionsTests.Apply()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/TimeSyncOptions_Tests
+#graphify/code #graphify/EXTRACTED #community/Gruppe_48

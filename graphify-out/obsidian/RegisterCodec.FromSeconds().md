@@ -1,12 +1,12 @@
 ---
 source_file: "src/Modbus.Contracts/RegisterCodec.cs"
 type: "code"
-community: "RegisterCodec & Befehle"
+community: "RegisterCodec & Befehle (2)"
 location: "L50"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/RegisterCodec__Befehle
+  - community/RegisterCodec__Befehle_2
 ---
 
 # RegisterCodec.FromSeconds()
@@ -20,4 +20,4 @@ tags:
 - [[RegisterCodecTests.ModelTime_RoundTripsThroughSeconds()]] - `calls` [EXTRACTED]
 - [[RegisterFormatter.Value()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/RegisterCodec__Befehle
+#graphify/code #graphify/EXTRACTED #community/RegisterCodec__Befehle_2

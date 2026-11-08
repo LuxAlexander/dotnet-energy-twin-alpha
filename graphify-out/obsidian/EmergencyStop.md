@@ -1,17 +1,17 @@
 ---
 source_file: "src/Devices/BatterySimulator/Enum.cs"
 type: "code"
-community: "Gruppe 88"
+community: "Batterie-Modell"
 location: "L27"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_88
+  - community/Batterie-Modell
 ---
 
 # EmergencyStop
 
 ## Connections
-- [[FaultType]] - `case_of` [EXTRACTED]
+- [[FaultType_2]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_88
+#graphify/code #graphify/EXTRACTED #community/Batterie-Modell

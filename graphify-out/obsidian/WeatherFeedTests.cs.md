@@ -1,12 +1,12 @@
 ---
 source_file: "tests/Devices.Common.Tests/WeatherFeedTests.cs"
 type: "code"
-community: "Modbus-Tests"
+community: "Zeit-Bibliotheken & Master"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Modbus-Tests
+  - community/Zeit-Bibliotheken__Master
 ---
 
 # WeatherFeedTests.cs
@@ -17,4 +17,4 @@ tags:
 - [[SimCore.Contracts]] - `imports` [EXTRACTED]
 - [[WeatherFeedTests]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Modbus-Tests
+#graphify/code #graphify/EXTRACTED #community/Zeit-Bibliotheken__Master

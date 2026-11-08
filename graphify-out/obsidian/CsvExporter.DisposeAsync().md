@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/PvSimulator/Data/CsvExporter.cs"
 type: "code"
-community: "CsvLogger"
+community: "Batterie-Simulator Loop (2)"
 location: "L73"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/CsvLogger
+  - community/Batterie-Simulator_Loop_2
 ---
 
 # CsvExporter.DisposeAsync()
@@ -16,4 +16,4 @@ tags:
 - [[CsvFileWriter.DisposeAsync()]] - `calls` [INFERRED]
 - [[ValueTask]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/CsvLogger
+#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop_2

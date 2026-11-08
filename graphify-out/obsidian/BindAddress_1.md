@@ -1,17 +1,17 @@
 ---
-source_file: "src/SimulationMaster/MasterOptions.cs"
+source_file: "src/Devices.Common/Modbus/ModbusOptions.cs"
 type: "code"
-community: "Zeitsync-Client & Konsole"
-location: "L14"
+community: "Gruppe 89"
+location: "L31"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Zeitsync-Client__Konsole
+  - community/Gruppe_89
 ---
 
 # BindAddress
 
 ## Connections
-- [[MasterOptions]] - `defines` [EXTRACTED]
+- [[ModbusOptions]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Zeitsync-Client__Konsole
+#graphify/code #graphify/EXTRACTED #community/Gruppe_89

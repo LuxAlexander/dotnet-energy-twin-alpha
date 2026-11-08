@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/BatterySimulator/Simulator.cs"
 type: "code"
-community: "Gruppe 81"
+community: "Batterie-Modell"
 location: "L263"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_81
+  - community/Batterie-Modell
 ---
 
 # Simulator.SetSetpoint()
@@ -16,4 +16,4 @@ tags:
 - [[Simulator]] - `method` [EXTRACTED]
 - [[Simulator.HandleKey()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_81
+#graphify/code #graphify/EXTRACTED #community/Batterie-Modell

@@ -11,7 +11,7 @@ tags:
 # TimeState (Zeitvertrag als Gerade)
 
 ## Connections
-- [[SimCore.Contracts_2]] - `references` [EXTRACTED]
+- [[SimCore.Contracts_1]] - `references` [EXTRACTED]
 - [[Simulations-Master]] - `shares_data_with` [INFERRED]
 - [[SyncProtocol (JSON-Zeilen TCP 5100)]] - `shares_data_with` [EXTRACTED]
 

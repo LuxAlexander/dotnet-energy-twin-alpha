@@ -1,19 +1,18 @@
 ---
 source_file: "tests/ModbusDiagnosticClient.Tests/DiagnosticClientTests.cs"
 type: "code"
-community: "DeviceConnection"
+community: "Diagnose-Client Verbindung"
 location: "L30"
 tags:
   - graphify/code
-  - graphify/INFERRED
-  - community/DeviceConnection
+  - graphify/EXTRACTED
+  - community/Diagnose-Client_Verbindung
 ---
 
 # DiagnosticClientTests.Dispose()
 
 ## Connections
-- [[DeviceConnection.Dispose()]] - `calls` [INFERRED]
 - [[DiagnosticClientTests]] - `method` [EXTRACTED]
 - [[ModbusDeviceServer.Dispose()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/INFERRED #community/DeviceConnection
+#graphify/code #graphify/EXTRACTED #community/Diagnose-Client_Verbindung

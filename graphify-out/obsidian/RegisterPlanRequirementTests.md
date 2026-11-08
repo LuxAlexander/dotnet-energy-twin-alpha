@@ -1,12 +1,12 @@
 ---
 source_file: "tests/FieldDevices.Tests/FieldDeviceTests.cs"
 type: "code"
-community: "Master-Zeit Tests"
+community: "Registerpläne"
 location: "L292"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Master-Zeit_Tests
+  - community/Registerpläne
 ---
 
 # RegisterPlanRequirementTests
@@ -16,4 +16,4 @@ tags:
 - [[RegisterPlanRequirementTests.EveryDevicePlan_HasSetpointAndAtLeastThreeSpecificValues()]] - `method` [EXTRACTED]
 - [[RegisterPlanRequirementTests.Markdown_ListsAllRegisters_WithByteAndWordOrder()]] - `method` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Master-Zeit_Tests
+#graphify/code #graphify/EXTRACTED #community/Registerpläne

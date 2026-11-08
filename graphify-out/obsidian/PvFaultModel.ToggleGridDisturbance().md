@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/PvSimulator/Devices/PvFaultModel.cs"
 type: "code"
-community: "PV-Engine & Fehler"
+community: "PvFaultModel"
 location: "L70"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/PV-Engine__Fehler
+  - community/PvFaultModel
 ---
 
 # PvFaultModel.ToggleGridDisturbance()
@@ -15,4 +15,4 @@ tags:
 - [[PvFaultModel]] - `method` [EXTRACTED]
 - [[SimulationEngine.ToggleGrid()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/PV-Engine__Fehler
+#graphify/code #graphify/EXTRACTED #community/PvFaultModel

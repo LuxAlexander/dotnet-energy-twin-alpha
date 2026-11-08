@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/BatterySimulator/BatteryModbus.cs"
 type: "code"
-community: "Bibliotheks-Namespaces"
+community: "Modbus-Tests"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Bibliotheks-Namespaces
+  - community/Modbus-Tests
 ---
 
 # BatteryModbus.cs
@@ -19,4 +19,4 @@ tags:
 - [[Modbus.Contracts]] - `imports` [EXTRACTED]
 - [[modbus_contracts_batteryregisters]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Bibliotheks-Namespaces
+#graphify/code #graphify/EXTRACTED #community/Modbus-Tests

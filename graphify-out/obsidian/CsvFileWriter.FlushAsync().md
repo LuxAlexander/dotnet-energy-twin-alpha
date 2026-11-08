@@ -1,12 +1,12 @@
 ---
 source_file: "src/Shared/Data/CsvFileWriter.cs"
 type: "code"
-community: "Batterie-Simulator Loop"
+community: "Batterie-Simulator Loop (2)"
 location: "L60"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Simulator_Loop
+  - community/Batterie-Simulator_Loop_2
 ---
 
 # CsvFileWriter.FlushAsync()
@@ -18,4 +18,4 @@ tags:
 - [[CsvLogger.FlushAsync()_2]] - `calls` [INFERRED]
 - [[Task]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop
+#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop_2

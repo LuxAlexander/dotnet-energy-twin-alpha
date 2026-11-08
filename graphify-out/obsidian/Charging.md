@@ -1,17 +1,17 @@
 ---
 source_file: "src/Devices/BatterySimulator/Enum.cs"
 type: "code"
-community: "Gruppe 77"
+community: "Gruppe 106"
 location: "L13"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_77
+  - community/Gruppe_106
 ---
 
 # Charging
 
 ## Connections
-- [[DeviceState]] - `case_of` [EXTRACTED]
+- [[DeviceState_1]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_77
+#graphify/code #graphify/EXTRACTED #community/Gruppe_106

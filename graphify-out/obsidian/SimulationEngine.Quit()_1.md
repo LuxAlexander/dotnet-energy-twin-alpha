@@ -5,7 +5,7 @@ community: "WeatherClient & Anzeige"
 location: "L90"
 tags:
   - graphify/code
-  - graphify/INFERRED
+  - graphify/EXTRACTED
   - community/WeatherClient__Anzeige
 ---
 
@@ -13,6 +13,6 @@ tags:
 
 ## Connections
 - [[InputHandler.HandleAsync()_1]] - `calls` [INFERRED]
-- [[SimulationEngine_1]] - `method` [EXTRACTED]
+- [[SimulationEngine_2]] - `method` [EXTRACTED]
 
-#graphify/code #graphify/INFERRED #community/WeatherClient__Anzeige
+#graphify/code #graphify/EXTRACTED #community/WeatherClient__Anzeige

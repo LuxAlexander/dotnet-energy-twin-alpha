@@ -1,17 +1,19 @@
 ---
-source_file: "AGENTS.md"
+source_file: "src/SimCore.Contracts/README.md"
 type: "document"
-community: "Projekt-Doku & Geräte"
+community: "Geräte-READMEs & Modelle"
 tags:
   - graphify/document
   - graphify/EXTRACTED
-  - community/Projekt-Doku__Geräte
+  - community/Geräte-READMEs__Modelle
 ---
 
 # SimCore.Contracts
 
 ## Connections
-- [[Modbus.Contracts_1]] - `references` [EXTRACTED]
-- [[SimCore.Time_1]] - `references` [EXTRACTED]
+- [[ISimClock_1]] - `references` [EXTRACTED]
+- [[IWeatherService  WeatherData]] - `references` [EXTRACTED]
+- [[SyncProtocol (JSON-Zeilen TCP 5100)]] - `references` [EXTRACTED]
+- [[TimeState (Zeitvertrag als Gerade)]] - `references` [EXTRACTED]
 
-#graphify/document #graphify/EXTRACTED #community/Projekt-Doku__Geräte
+#graphify/document #graphify/EXTRACTED #community/Geräte-READMEs__Modelle

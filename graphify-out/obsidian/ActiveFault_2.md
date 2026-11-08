@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/PvSimulator/Devices/PvFaultModel.cs"
+source_file: "src/Devices/BatterySimulator/Batterie.cs"
 type: "code"
-community: "PvFaultModel"
-location: "L47"
+community: "Batterie-Modell"
+location: "L41"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/PvFaultModel
+  - community/Batterie-Modell
 ---
 
 # ActiveFault
 
 ## Connections
-- [[PvFaultModel]] - `defines` [EXTRACTED]
+- [[Batterie]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/PvFaultModel
+#graphify/code #graphify/EXTRACTED #community/Batterie-Modell

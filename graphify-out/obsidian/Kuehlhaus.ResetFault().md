@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/KuehlhausSimulator/Kuehlhaus.cs"
 type: "code"
-community: "Gruppe 57"
+community: "Gruppe 72"
 location: "L149"
 tags:
   - graphify/code
   - graphify/INFERRED
-  - community/Gruppe_57
+  - community/Gruppe_72
 ---
 
 # Kuehlhaus.ResetFault()
@@ -17,4 +17,4 @@ tags:
 - [[KuehlhausModelTests.CompressorFailure_IsAlwaysClearedByReset()]] - `calls` [INFERRED]
 - [[KuehlhausModelTests.OverTemperature_LatchesAndNeedsCoolDownBeforeReset()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/INFERRED #community/Gruppe_57
+#graphify/code #graphify/INFERRED #community/Gruppe_72

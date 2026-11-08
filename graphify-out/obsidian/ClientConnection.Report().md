@@ -12,7 +12,7 @@ tags:
 # ClientConnection.Report()
 
 ## Connections
-- [[ClientConnection_1]] - `method` [EXTRACTED]
+- [[ClientConnection]] - `method` [EXTRACTED]
 - [[DateTime]] - `references` [EXTRACTED]
 - [[PingMessage]] - `references` [EXTRACTED]
 - [[TimeSyncServer.HandleClientAsync()]] - `calls` [INFERRED]

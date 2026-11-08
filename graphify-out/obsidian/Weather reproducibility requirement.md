@@ -1,11 +1,11 @@
 ---
 source_file: "tests/Weather.Tests/README.md"
 type: "document"
-community: "Gruppe 72"
+community: "Gruppe 99"
 tags:
   - graphify/document
   - graphify/EXTRACTED
-  - community/Gruppe_72
+  - community/Gruppe_99
 ---
 
 # Weather reproducibility requirement
@@ -14,4 +14,4 @@ tags:
 - [[Deterministic weather (location, time, run seed)]] - `references` [EXTRACTED]
 - [[Weather.Tests_1]] - `implements` [EXTRACTED]
 
-#graphify/document #graphify/EXTRACTED #community/Gruppe_72
+#graphify/document #graphify/EXTRACTED #community/Gruppe_99

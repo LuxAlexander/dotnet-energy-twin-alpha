@@ -1,32 +1,17 @@
 ---
-source_file: "src/Devices/DualPortCharger/Models/Vehicle.cs"
+source_file: "src/Devices/DualPortCharger/Models/ChargingPoint.cs"
 type: "code"
-community: "Fahrzeug"
-location: "L6"
+community: "Ladepunkt"
+location: "L29"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Fahrzeug
+  - community/Ladepunkt
 ---
 
 # Vehicle
 
 ## Connections
-- [[BatteryCapacityKWh]] - `defines` [EXTRACTED]
-- [[ChargingPoint]] - `references` [EXTRACTED]
-- [[ChargingPoint.Connect()]] - `references` [EXTRACTED]
-- [[DualCharger]] - `references` [EXTRACTED]
-- [[DualCharger.Enqueue()]] - `references` [EXTRACTED]
-- [[HasDamagedInlet]] - `defines` [EXTRACTED]
-- [[IsFull]] - `defines` [EXTRACTED]
-- [[MaxChargePowerKW]] - `defines` [EXTRACTED]
-- [[ModelName]] - `defines` [EXTRACTED]
-- [[SocPercent_1]] - `defines` [EXTRACTED]
-- [[TargetSocPercent]] - `defines` [EXTRACTED]
-- [[Vehicle.AddEnergy()]] - `method` [EXTRACTED]
-- [[Vehicle.GetMaxPowerAtSoc()]] - `method` [EXTRACTED]
-- [[Vehicle.cs]] - `contains` [EXTRACTED]
-- [[VehicleCatalog.Create()]] - `references` [EXTRACTED]
-- [[VehicleCatalog.CreateRandom()]] - `references` [EXTRACTED]
+- [[ChargingPoint]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Fahrzeug
+#graphify/code #graphify/EXTRACTED #community/Ladepunkt

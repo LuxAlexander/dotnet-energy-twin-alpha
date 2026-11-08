@@ -13,7 +13,6 @@ tags:
 
 ## Connections
 - [[DateTime]] - `references` [EXTRACTED]
-- [[DeviceConnection]] - `references` [EXTRACTED]
 - [[DeviceTimeSource]] - `references` [EXTRACTED]
 - [[DiagnosticClientTests.ConnectionLoss_IsReportedAsConnectionError_AndReconnectsWhenDeviceIsBack()]] - `method` [EXTRACTED]
 - [[DiagnosticClientTests.Dispose()]] - `method` [EXTRACTED]

@@ -1,22 +1,28 @@
 ---
-source_file: "src/Devices/DualPortCharger/Program.cs"
+source_file: "src/SimulationMaster/Program.cs"
 type: "code"
-community: "Gruppe 82"
-location: "L8"
+community: "Sync-Nachrichten"
+location: "L9"
 tags:
   - graphify/code
-  - graphify/EXTRACTED
-  - community/Gruppe_82
+  - graphify/INFERRED
+  - community/Sync-Nachrichten
 ---
 
 # Program.Main()
 
 ## Connections
-- [[ArgsParser.IsHelpRequested()_1]] - `calls` [EXTRACTED]
-- [[ArgsParser.Parse()_1]] - `calls` [EXTRACTED]
+- [[MasterClock]] - `calls` [INFERRED]
+- [[MasterClock.Resume()]] - `calls` [INFERRED]
+- [[MasterConsole]] - `calls` [INFERRED]
+- [[MasterConsole.AddMessage()]] - `calls` [INFERRED]
+- [[MasterConsole.RunAsync()]] - `calls` [INFERRED]
+- [[MasterConsole.ShutdownAsync()]] - `calls` [INFERRED]
+- [[MasterOptions.Parse()]] - `calls` [EXTRACTED]
 - [[Program]] - `method` [EXTRACTED]
-- [[SimulationEngine]] - `calls` [INFERRED]
-- [[SimulationEngine.RunAsync()]] - `calls` [INFERRED]
 - [[Task]] - `references` [EXTRACTED]
+- [[TimeSyncServer]] - `calls` [INFERRED]
+- [[TimeSyncServer.RunAsync()]] - `calls` [INFERRED]
+- [[TimeSyncServer.Start()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_82
+#graphify/code #graphify/INFERRED #community/Sync-Nachrichten

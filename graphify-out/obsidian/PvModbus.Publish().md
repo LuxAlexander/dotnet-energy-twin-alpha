@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/PvSimulator/Simulation/PvModbus.cs"
 type: "code"
-community: "Batterie-Modbus & Update"
+community: "Batterie-Modbus & Update (4)"
 location: "L66"
 tags:
   - graphify/code
   - graphify/INFERRED
-  - community/Batterie-Modbus__Update
+  - community/Batterie-Modbus__Update_4
 ---
 
 # PvModbus.Publish()
@@ -23,4 +23,4 @@ tags:
 - [[PvModbusTests.Registers_StayReadable_WhileTimeIsPaused()]] - `calls` [INFERRED]
 - [[SimulationEngine.RunAsync()_2]] - `calls` [INFERRED]
 
-#graphify/code #graphify/INFERRED #community/Batterie-Modbus__Update
+#graphify/code #graphify/INFERRED #community/Batterie-Modbus__Update_4

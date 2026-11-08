@@ -1,30 +1,21 @@
 ---
 source_file: "src/Devices/KuehlhausSimulator/Kuehlhaus.cs"
 type: "code"
-community: "Gruppe 57"
-location: "L110"
+community: "Kühlhaus-Modell"
+location: "L114"
 tags:
   - graphify/code
-  - graphify/INFERRED
-  - community/Gruppe_57
+  - graphify/EXTRACTED
+  - community/Kühlhaus-Modell
 ---
 
 # Kuehlhaus.Update()
 
 ## Connections
 - [[Kuehlhaus]] - `method` [EXTRACTED]
-- [[Kuehlhaus.Update()]] - `calls` [EXTRACTED]
-- [[KuehlhausAutoModeTests.CountOpenSteps()]] - `calls` [INFERRED]
-- [[KuehlhausModbusTests.Publish_RunningCompressor_SetsRunningStateAndPower()]] - `calls` [INFERRED]
-- [[KuehlhausModbusTests.Publish_WritesHeaderAndSpecificRegisters()]] - `calls` [INFERRED]
-- [[KuehlhausModelTests.CompressorFailure_IsAlwaysClearedByReset()]] - `calls` [INFERRED]
-- [[KuehlhausModelTests.Compressor_SwitchesWithHysteresisAroundSetpoint()]] - `calls` [INFERRED]
-- [[KuehlhausModelTests.ElectricPowerAndEnergy_FollowCoolingPowerAndCop()]] - `calls` [INFERRED]
-- [[KuehlhausModelTests.LargeStep_StaysStableAndDoesNotOvershoot()]] - `calls` [INFERRED]
-- [[KuehlhausModelTests.OverTemperature_LatchesAndNeedsCoolDownBeforeReset()]] - `calls` [INFERRED]
-- [[KuehlhausModelTests.TurnOff_StopsCompressorAndReportsOffState()]] - `calls` [INFERRED]
-- [[KuehlhausModelTests.Update_UsesExactExponentialSolution()]] - `calls` [INFERRED]
-- [[SimulationEngine.AdvanceAsync()_1]] - `calls` [INFERRED]
-- [[SimulationEngine.StartRunAsync()]] - `calls` [INFERRED]
+- [[Kuehlhaus.GetCop()]] - `calls` [EXTRACTED]
+- [[Kuehlhaus.UpdateCompressor()]] - `calls` [EXTRACTED]
+- [[Kuehlhaus.UpdateState()]] - `calls` [EXTRACTED]
+- [[TimeSpan]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/INFERRED #community/Gruppe_57
+#graphify/code #graphify/EXTRACTED #community/Kühlhaus-Modell

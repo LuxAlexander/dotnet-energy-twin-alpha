@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/DualPortCharger/Models/DualCharger.cs"
+source_file: "src/Devices/DualPortCharger/Models/ChargingPoint.cs"
 type: "code"
-community: "DualCharger"
-location: "L32"
+community: "Ladepunkt"
+location: "L34"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/DualCharger
+  - community/Ladepunkt
 ---
 
 # AmbientTemperatureC
 
 ## Connections
-- [[DualCharger]] - `defines` [EXTRACTED]
+- [[ChargingPoint]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/DualCharger
+#graphify/code #graphify/EXTRACTED #community/Ladepunkt

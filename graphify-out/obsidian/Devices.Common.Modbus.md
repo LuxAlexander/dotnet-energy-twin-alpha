@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices.Common/Modbus/ModbusDeviceServer.cs"
 type: "code"
-community: "Bibliotheks-Namespaces"
+community: "Modbus-Tests"
 location: "L9"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Bibliotheks-Namespaces
+  - community/Modbus-Tests
 ---
 
 # Devices.Common.Modbus
@@ -31,4 +31,4 @@ tags:
 - [[SimulationArgsParser.cs]] - `imports` [EXTRACTED]
 - [[SimulatorOptions.cs]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Bibliotheks-Namespaces
+#graphify/code #graphify/EXTRACTED #community/Modbus-Tests

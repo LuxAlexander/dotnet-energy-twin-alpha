@@ -1,12 +1,12 @@
 ---
 source_file: "src/WeatherSimulator/Program.cs"
 type: "code"
-community: "Gruppe 61"
+community: "Gruppe 84"
 location: "L270"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_61
+  - community/Gruppe_84
 ---
 
 # SimTimeUtc
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[LastRequest]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_61
+#graphify/code #graphify/EXTRACTED #community/Gruppe_84

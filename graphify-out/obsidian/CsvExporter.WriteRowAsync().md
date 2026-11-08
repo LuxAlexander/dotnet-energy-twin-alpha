@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/PvSimulator/Data/CsvExporter.cs"
 type: "code"
-community: "WeatherFeed"
+community: "Batterie-Simulator Loop (2)"
 location: "L33"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/WeatherFeed
+  - community/Batterie-Simulator_Loop_2
 ---
 
 # CsvExporter.WriteRowAsync()
@@ -18,8 +18,8 @@ tags:
 - [[DateTime]] - `references` [EXTRACTED]
 - [[PvSystem]] - `references` [EXTRACTED]
 - [[SeasonInfo.FromMonth()]] - `calls` [EXTRACTED]
-- [[SimulationEngine.AdvanceAsync()_2]] - `calls` [INFERRED]
+- [[SimulationEngine.AdvanceAsync()]] - `calls` [INFERRED]
 - [[SimulationMode]] - `references` [EXTRACTED]
 - [[Task]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/WeatherFeed
+#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop_2

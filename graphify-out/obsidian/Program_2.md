@@ -1,18 +1,18 @@
 ---
-source_file: "src/SimulationMaster/Program.cs"
+source_file: "src/Devices/DualPortCharger/Program.cs"
 type: "code"
-community: "TimeSyncServer"
-location: "L7"
+community: "Charger-Namespaces"
+location: "L6"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/TimeSyncServer
+  - community/Charger-Namespaces
 ---
 
 # Program
 
 ## Connections
+- [[DualPortChargerProgram.cs]] - `contains` [EXTRACTED]
 - [[Program.Main()_2]] - `method` [EXTRACTED]
-- [[SimulationMasterProgram.cs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/TimeSyncServer
+#graphify/code #graphify/EXTRACTED #community/Charger-Namespaces

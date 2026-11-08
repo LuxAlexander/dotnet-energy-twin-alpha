@@ -1,12 +1,12 @@
 ---
 source_file: "src/Modbus.Contracts/RegisterPlan.cs"
 type: "code"
-community: "Gruppe 40"
+community: "Gruppe 19"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_40
+  - community/Gruppe_19
 ---
 
 # RegisterPlan.cs
@@ -17,4 +17,4 @@ tags:
 - [[system_globalization]] - `imports` [EXTRACTED]
 - [[system_text]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_40
+#graphify/code #graphify/EXTRACTED #community/Gruppe_19

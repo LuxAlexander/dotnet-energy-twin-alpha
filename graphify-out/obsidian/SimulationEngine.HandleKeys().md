@@ -13,7 +13,7 @@ tags:
 
 ## Connections
 - [[AsyncConsole.TryReadKey()]] - `calls` [EXTRACTED]
-- [[SimulationEngine_2]] - `method` [EXTRACTED]
+- [[SimulationEngine]] - `method` [EXTRACTED]
 - [[SimulationEngine.HandleKey()]] - `calls` [EXTRACTED]
 - [[SimulationEngine.RunAsync()_2]] - `calls` [EXTRACTED]
 

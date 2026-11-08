@@ -1,0 +1,14 @@
+15:15:56.567 +1s  Master läuft (Skript, Tempo 60, Start 2026-01-15 06:00), Wettersimulator läuft
+15:15:58.212 +3s  Ladesäule DC-01 gestartet (mit Master, Modbus 1504)
+15:15:59.847 +4s  Gateway und Viewer gestartet
+15:16:03.143 +8s  Nachweis 4: Diagnose-Client schreibt Leistungsgrenze=200
+15:16:06.045 +11s  Nachweis 4: Diagnose-Client schreibt Leistungsgrenze=999 (ungültig)
+15:16:11.194 +16s  Nachweis 5: Master pausiert (laut Zeitplan)
+15:16:21.076 +26s  Nachweis 5: Master setzt fort (laut Zeitplan)
+15:16:27.174 +32s  Nachweis 6: Ladesäule hart beendet (Geräteausfall)
+15:16:32.111 +37s  Nachweis 6: Ladesäule neu gestartet
+15:16:43.160 +48s  Nachweis 6: RabbitMQ gestoppt (docker stop rabbitmq)
+15:16:49.161 +54s  Nachweis 6: RabbitMQ gestartet (docker start rabbitmq)
+15:17:15.113 +80s  Master beendet sich geordnet (laut Zeitplan)
+15:17:23.059 +88s  Ende: Gateway, Ladesäule, Wetter beendet
+rabbitmq Up 35 seconds

@@ -1,25 +1,29 @@
 ---
 type: community
-cohesion: 0.20
-members: 10
+cohesion: 0.22
+members: 14
 ---
 
 # Gruppe 67
 
-**Cohesion:** 0.20 - loosely connected
-**Members:** 10 nodes
+**Cohesion:** 0.22 - loosely connected
+**Members:** 14 nodes
 
 ## Members
-- [[DailyEnergyKwh]] - code - src/Devices/PvSimulator/Devices/IDevice.cs
-- [[IDevice]] - code - src/Devices/PvSimulator/Devices/IDevice.cs
-- [[IDevice.ResetDailyEnergy()]] - code - src/Devices/PvSimulator/Devices/IDevice.cs
-- [[IDevice.StepContinuous()]] - code - src/Devices/PvSimulator/Devices/IDevice.cs
-- [[IDevice.cs]] - code - src/Devices/PvSimulator/Devices/IDevice.cs
-- [[IsEnabled]] - code - src/Devices/PvSimulator/Devices/IDevice.cs
-- [[Name]] - code - src/Devices/PvSimulator/Devices/IDevice.cs
-- [[PowerKw_1]] - code - src/Devices/PvSimulator/Devices/IDevice.cs
-- [[PvSystem.ResetDailyEnergy()]] - code - src/Devices/PvSimulator/Devices/PvSystem.cs
-- [[TotalEnergyKwh_1]] - code - src/Devices/PvSimulator/Devices/IDevice.cs
+- [[Autumn]] - code - src/Shared/Weather/Season.cs
+- [[Season]] - code - src/Shared/Weather/Season.cs
+- [[Season.cs]] - code - src/Shared/Weather/Season.cs
+- [[SeasonInfo]] - code - src/Shared/Weather/Season.cs
+- [[SeasonInfo.BaseAmbientC()]] - code - src/Shared/Weather/Season.cs
+- [[SeasonInfo.FromMonth()]] - code - src/Shared/Weather/Season.cs
+- [[SeasonInfo.IrradiationFactor()]] - code - src/Shared/Weather/Season.cs
+- [[SeasonInfo.SnowProbability()]] - code - src/Shared/Weather/Season.cs
+- [[SeasonInfo.SunriseHour()]] - code - src/Shared/Weather/Season.cs
+- [[SeasonInfo.SunsetHour()]] - code - src/Shared/Weather/Season.cs
+- [[SeasonInfo.ToGerman()]] - code - src/Shared/Weather/Season.cs
+- [[Spring]] - code - src/Shared/Weather/Season.cs
+- [[Summer]] - code - src/Shared/Weather/Season.cs
+- [[Winter]] - code - src/Shared/Weather/Season.cs
 
 ## Live Query (requires Dataview plugin)
 
@@ -29,13 +33,15 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 2 edges to [[_COMMUNITY_PvSystem]]
-- 2 edges to [[_COMMUNITY_WeatherFeed]]
+- 4 edges to [[_COMMUNITY_PvFaultModel]]
+- 4 edges to [[_COMMUNITY_Gruppe 38]]
+- 1 edge to [[_COMMUNITY_Shared Konsolenausgabe]]
+- 1 edge to [[_COMMUNITY_Batterie-Modbus & Update (4)]]
+- 1 edge to [[_COMMUNITY_Batterie-Simulator Loop (2)]]
+- 1 edge to [[_COMMUNITY_PV-Engine & Fehler]]
 - 1 edge to [[_COMMUNITY_PV-Namespaces]]
-- 1 edge to [[_COMMUNITY_Batterie-Modbus & Update]]
 
 ## Top bridge nodes
-- [[IDevice.StepContinuous()]] - degree 3, connects to 2 communities
-- [[PvSystem.ResetDailyEnergy()]] - degree 3, connects to 2 communities
-- [[IDevice]] - degree 9, connects to 1 community
-- [[IDevice.cs]] - degree 2, connects to 1 community
+- [[SeasonInfo.FromMonth()]] - degree 6, connects to 4 communities
+- [[Season]] - degree 20, connects to 3 communities
+- [[Season.cs]] - degree 3, connects to 1 community

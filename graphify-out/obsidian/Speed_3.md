@@ -1,17 +1,17 @@
 ---
-source_file: "src/SimulationMaster/MasterConsole.cs"
+source_file: "src/SimCore.Time/SyncedClock.cs"
 type: "code"
-community: "Zeitsync-Client & Konsole"
-location: "L28"
+community: "SyncedClock"
+location: "L112"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Zeitsync-Client__Konsole
+  - community/SyncedClock
 ---
 
 # Speed
 
 ## Connections
-- [[PromptKind_1]] - `case_of` [EXTRACTED]
+- [[SyncedClock]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Zeitsync-Client__Konsole
+#graphify/code #graphify/EXTRACTED #community/SyncedClock

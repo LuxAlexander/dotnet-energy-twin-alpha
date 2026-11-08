@@ -1,18 +1,19 @@
 ---
-source_file: "AGENTS.md"
+source_file: "src/Devices/BatterySimulator/README.md"
 type: "document"
-community: "Projekt-Doku & Geräte"
+community: "Geräte-READMEs & Modelle"
 tags:
   - graphify/document
   - graphify/EXTRACTED
-  - community/Projekt-Doku__Geräte
+  - community/Geräte-READMEs__Modelle
 ---
 
 # BatterySimulator
 
 ## Connections
-- [[Devices.Common_1]] - `calls` [EXTRACTED]
-- [[Dominik Zach]] - `references` [EXTRACTED]
-- [[Journal Dominik Zach]] - `references` [INFERRED]
+- [[Batterie Kommandozeilenargumente]] - `references` [EXTRACTED]
+- [[Geraete-Register (Charger, PV, Batterie, Kuehlhaus)]] - `implements` [INFERRED]
+- [[SOC-Modell Batteriespeicher]] - `conceptually_related_to` [EXTRACTED]
+- [[Simulations-Master]] - `calls` [EXTRACTED]
 
-#graphify/document #graphify/EXTRACTED #community/Projekt-Doku__Geräte
+#graphify/document #graphify/EXTRACTED #community/Geräte-READMEs__Modelle

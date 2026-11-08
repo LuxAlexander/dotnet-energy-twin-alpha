@@ -1,12 +1,12 @@
 ---
 source_file: "tests/ModbusDiagnosticClient.Tests/DiagnosticClientTests.cs"
 type: "code"
-community: "Gruppe 42"
+community: "Gruppe 57"
 location: "L203"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_42
+  - community/Gruppe_57
 ---
 
 # ClientOptionsTests
@@ -18,4 +18,4 @@ tags:
 - [[ClientOptionsTests.Parses_AllOptions_AndWrites()]] - `method` [EXTRACTED]
 - [[DiagnosticClientTests.cs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_42
+#graphify/code #graphify/EXTRACTED #community/Gruppe_57

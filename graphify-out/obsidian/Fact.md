@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "code"
-community: "Master-Zeit Tests"
+community: "Gruppe 23"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Master-Zeit_Tests
+  - community/Gruppe_23
 ---
 
 # Fact
@@ -41,6 +41,14 @@ tags:
 - [[DiagnosticClientTests.Write_AmbiguousOrUnknownTarget_ThrowsValueError()]] - `references` [EXTRACTED]
 - [[DiagnosticClientTests.Write_ReadOnlyWithoutForce_IsRefusedByClient()]] - `references` [EXTRACTED]
 - [[DiagnosticClientTests.Write_ValidSetpoint_IsAcceptedAndVisibleInDevice()]] - `references` [EXTRACTED]
+- [[GatewayAgainstDeviceTests.DeviceLost_GivesOfflineStatusWithoutMeasurements_ThenRecovers()]] - `references` [EXTRACTED]
+- [[GatewayAgainstDeviceTests.Poll_ReadsDeviceOverModbus_AndBuildsMessage()]] - `references` [EXTRACTED]
+- [[GatewayAgainstDeviceTests.Service_Once_PublishesGatewayStatusDeviceStatusAndMeasurements()]] - `references` [EXTRACTED]
+- [[GatewayAgainstDeviceTests.Status_IsRepeatedAfterInterval_WithOriginalSince_ForWildcardSubscribers()]] - `references` [EXTRACTED]
+- [[GatewayOptionsTests.Defaults_AreTheFourDemoDevices()]] - `references` [EXTRACTED]
+- [[GatewayOptionsTests.Device_ReplacesDefaults_WithHostPortAndUnit()]] - `references` [EXTRACTED]
+- [[GatewayOptionsTests.DuplicateDeviceId_IsRejected()]] - `references` [EXTRACTED]
+- [[GatewayOptionsTests.UnknownPrefix_SkipsTypeCheck()]] - `references` [EXTRACTED]
 - [[KuehlhausArgsTests.DurationWithoutStandalone_IsRejected()]] - `references` [EXTRACTED]
 - [[KuehlhausArgsTests.StandaloneDefaults_MatchTheDeviceDocumentation()]] - `references` [EXTRACTED]
 - [[KuehlhausArgsTests.UnknownOption_IsRejected()]] - `references` [EXTRACTED]
@@ -79,6 +87,17 @@ tags:
 - [[MasterClockTests.Resume_StartsAfterLeadTime_WithConfiguredSpeed()]] - `references` [EXTRACTED]
 - [[MasterClockTests.SetSpeed_ChangesRate_WithoutJump()]] - `references` [EXTRACTED]
 - [[MasterClockTests.SystemClockJump_DoesNotChangeSimTime()]] - `references` [EXTRACTED]
+- [[MeasurementKeysTests.Keys_AreUniqueAndAsciiSafe_InEveryPlan()]] - `references` [EXTRACTED]
+- [[MeasurementKeysTests.Keys_MatchTheRecordedCatalog()]] - `references` [EXTRACTED]
+- [[MessageBuilderTests.Build_FillsEnvelopeFromHeader_AndKeepsVirtualAndRealTimeApart()]] - `references` [EXTRACTED]
+- [[MessageBuilderTests.Build_MeasurementsComeFromRegisterPlan_WithKeyUnitAndText()]] - `references` [EXTRACTED]
+- [[MessageBuilderTests.Json_IsCamelCase_KeepsUmlautsAndUnits_AndOmitsMissingText()]] - `references` [EXTRACTED]
+- [[MessageBuilderTests.NonFiniteRegister_BecomesNull_AndQualityUncertain()]] - `references` [EXTRACTED]
+- [[MessageBuilderTests.Quality_NotStale_AtSpeedOne_WhenDeviceStepIsMinutes()]] - `references` [EXTRACTED]
+- [[MessageBuilderTests.Quality_PausedKeepsPublishing_WithSameSimTime()]] - `references` [EXTRACTED]
+- [[MessageBuilderTests.Quality_Stale_WhenRunningButSequenceStandsLongerThanModelLimit()]] - `references` [EXTRACTED]
+- [[MessageBuilderTests.Restart_NewRunWithSameSequence_CountsAsChange()]] - `references` [EXTRACTED]
+- [[MessageBuilderTests.WrongDevice_IsDecodeError_AndNoMessage()]] - `references` [EXTRACTED]
 - [[ModbusDeviceServerTests.Header_IsReadableWithIdentityStateAndTime()]] - `references` [EXTRACTED]
 - [[ModbusDeviceServerTests.PartialWriteOfFloat_IsRejected()]] - `references` [EXTRACTED]
 - [[ModbusDeviceServerTests.PowerSwitchAndReset_AreWritableCommands()]] - `references` [EXTRACTED]
@@ -89,6 +108,16 @@ tags:
 - [[ModbusDeviceServerTests.WriteSpanningReadOnlyAndWritable_IsRejectedCompletely()]] - `references` [EXTRACTED]
 - [[ModbusDeviceServerTests.WriteToReadOnlyRegister_IsRejected()]] - `references` [EXTRACTED]
 - [[ModbusDeviceServerTests.WriteToUnusedAddress_IsRejected()]] - `references` [EXTRACTED]
+- [[MqttCredentialsTests.BrokerAndConsoleOptions_AreParsed()]] - `references` [EXTRACTED]
+- [[MqttCredentialsTests.EnvFile_IsUsedWhenNoEnvironmentVariables()]] - `references` [EXTRACTED]
+- [[MqttCredentialsTests.EnvironmentVariables_WinOverFile_AndOptionWinsForUser()]] - `references` [EXTRACTED]
+- [[MqttCredentialsTests.Nothing_GivesAnonymous()]] - `references` [EXTRACTED]
+- [[MqttCredentialsTests.PasswordOption_IsRejected()]] - `references` [EXTRACTED]
+- [[MqttCredentialsTests.ToString_NeverShowsPassword()]] - `references` [EXTRACTED]
+- [[MqttPublisherTests.BrokerDown_FailsFast_WaitsForBackoff_ThenReconnectsAndRepublishesStatus()]] - `references` [EXTRACTED]
+- [[MqttPublisherTests.GatewayService_KeepsPollingDuringBrokerOutage_AndReportsOutageOnce()]] - `references` [EXTRACTED]
+- [[MqttPublisherTests.Publish_SendsWithQos1_RetainOnlyForStatus()]] - `references` [EXTRACTED]
+- [[MqttPublisherTests.WrongPassword_IsBrokerUnavailable_WithReadableMessage()]] - `references` [EXTRACTED]
 - [[PvEngineTests.Pv_RunsStandalone_WritesCsvAndStopsOnCancel()]] - `references` [EXTRACTED]
 - [[PvModbusTests.Header_ShowsGenerationAsNegativePower_AndPvSpecificValues()]] - `references` [EXTRACTED]
 - [[PvModbusTests.OnOffAndReset_AreApplied()]] - `references` [EXTRACTED]
@@ -151,4 +180,4 @@ tags:
 - [[WeatherModelTests.UnknownLocation_Throws()]] - `references` [EXTRACTED]
 - [[WeatherModelTests.Values_AreInPlausibleRanges()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Master-Zeit_Tests
+#graphify/code #graphify/EXTRACTED #community/Gruppe_23

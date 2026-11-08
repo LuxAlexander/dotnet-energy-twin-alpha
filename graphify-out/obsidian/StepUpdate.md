@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices.Common/StepScheduler.cs"
 type: "code"
-community: "StepScheduler"
+community: "StepScheduler (2)"
 location: "L23"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/StepScheduler
+  - community/StepScheduler_2
 ---
 
 # StepUpdate
@@ -17,4 +17,4 @@ tags:
 - [[StepScheduler.cs]] - `contains` [EXTRACTED]
 - [[StepUpdateKind]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/StepScheduler
+#graphify/code #graphify/EXTRACTED #community/StepScheduler_2

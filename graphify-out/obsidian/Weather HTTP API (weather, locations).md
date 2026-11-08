@@ -1,11 +1,11 @@
 ---
 source_file: "src/WeatherSimulator/README.md"
 type: "document"
-community: "Gruppe 72"
+community: "Gruppe 99"
 tags:
   - graphify/document
   - graphify/EXTRACTED
-  - community/Gruppe_72
+  - community/Gruppe_99
 ---
 
 # Weather HTTP API (/weather, /locations)
@@ -13,6 +13,6 @@ tags:
 ## Connections
 - [[Deterministic weather (location, time, run seed)]] - `conceptually_related_to` [EXTRACTED]
 - [[WeatherData_1]] - `references` [EXTRACTED]
-- [[WeatherSimulator_1]] - `implements` [EXTRACTED]
+- [[WeatherSimulator]] - `implements` [EXTRACTED]
 
-#graphify/document #graphify/EXTRACTED #community/Gruppe_72
+#graphify/document #graphify/EXTRACTED #community/Gruppe_99

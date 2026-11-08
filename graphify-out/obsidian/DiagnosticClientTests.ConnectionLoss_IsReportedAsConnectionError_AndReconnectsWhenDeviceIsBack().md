@@ -14,7 +14,6 @@ tags:
 ## Connections
 - [[DiagnosticClientTests]] - `method` [EXTRACTED]
 - [[DiagnosticClientTests.StartServer()]] - `calls` [EXTRACTED]
-- [[DiagnosticException]] - `references` [EXTRACTED]
 - [[DiagnosticSession.ExecuteAsync()]] - `calls` [INFERRED]
 - [[DiagnosticSession.ReadAll()]] - `calls` [INFERRED]
 - [[Fact]] - `references` [EXTRACTED]

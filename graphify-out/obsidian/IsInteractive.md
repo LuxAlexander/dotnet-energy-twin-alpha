@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/BatterySimulator/ConsoleDashboard.cs"
+source_file: "src/SimulationMaster/MasterConsole.cs"
 type: "code"
-community: "Gruppe 70"
-location: "L12"
+community: "Zeitsync-Client & Konsole"
+location: "L30"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_70
+  - community/Zeitsync-Client__Konsole
 ---
 
 # IsInteractive
 
 ## Connections
-- [[ConsoleDashboard]] - `defines` [EXTRACTED]
+- [[MasterConsole]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_70
+#graphify/code #graphify/EXTRACTED #community/Zeitsync-Client__Konsole

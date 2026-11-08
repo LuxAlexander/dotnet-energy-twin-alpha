@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "code"
-community: "Gruppe 51"
+community: "Gruppe 65"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_51
+  - community/Gruppe_65
 ---
 
 # TimeSpan
@@ -21,17 +21,20 @@ tags:
 - [[ChargingPoint]] - `references` [EXTRACTED]
 - [[ChargingPoint.Update()]] - `references` [EXTRACTED]
 - [[ChargingPoint.UpdateTemperature()]] - `references` [EXTRACTED]
-- [[ClientConnection_1]] - `references` [EXTRACTED]
+- [[ClientConnection]] - `references` [EXTRACTED]
 - [[ClientConnection.Snapshot()]] - `references` [EXTRACTED]
 - [[ClockOffsetEstimator]] - `references` [EXTRACTED]
 - [[DailyProfile.GetSetpoint()]] - `references` [EXTRACTED]
+- [[DevicePoller]] - `references` [EXTRACTED]
 - [[DeviceTimeSource.FormatSpan()]] - `references` [EXTRACTED]
 - [[DiagnosticSession]] - `references` [EXTRACTED]
 - [[DualCharger]] - `references` [EXTRACTED]
 - [[DualCharger.Tick()]] - `references` [EXTRACTED]
+- [[GatewayOptions]] - `references` [EXTRACTED]
 - [[InputHandler]] - `references` [EXTRACTED]
 - [[InputHandler_1]] - `references` [EXTRACTED]
-- [[Kuehlhaus.Update()_1]] - `references` [EXTRACTED]
+- [[Kuehlhaus.Update()]] - `references` [EXTRACTED]
+- [[ManualTime.Advance()]] - `references` [EXTRACTED]
 - [[ManualTimeProvider.Advance()]] - `references` [EXTRACTED]
 - [[ManualTimeProvider.Advance()_1]] - `references` [EXTRACTED]
 - [[ManualTimeProvider.JumpWallClock()]] - `references` [EXTRACTED]
@@ -41,6 +44,9 @@ tags:
 - [[MasterConsole.FormatSigned()]] - `references` [EXTRACTED]
 - [[MasterConsole.FormatSpan()]] - `references` [EXTRACTED]
 - [[MasterOptions]] - `references` [EXTRACTED]
+- [[MessageBuilder.Assess()]] - `references` [EXTRACTED]
+- [[MqttPublisher]] - `references` [EXTRACTED]
+- [[QualitySettings]] - `references` [EXTRACTED]
 - [[SimulationConfig]] - `references` [EXTRACTED]
 - [[SimulationConfig_1]] - `references` [EXTRACTED]
 - [[SimulationConfig_2]] - `references` [EXTRACTED]
@@ -61,4 +67,4 @@ tags:
 - [[TimeSyncServer]] - `references` [EXTRACTED]
 - [[WeatherFeed]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_51
+#graphify/code #graphify/EXTRACTED #community/Gruppe_65

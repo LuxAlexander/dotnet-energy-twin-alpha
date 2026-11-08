@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices.Common/Modbus/ModbusDeviceServer.cs"
 type: "code"
-community: "Zeit-Bibliotheken & Master"
+community: "Modbus-Tests"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Zeit-Bibliotheken__Master
+  - community/Modbus-Tests
 ---
 
 # ModbusDeviceServer.cs
@@ -25,4 +25,4 @@ tags:
 - [[system_globalization]] - `imports` [EXTRACTED]
 - [[system_net_sockets]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Zeit-Bibliotheken__Master
+#graphify/code #graphify/EXTRACTED #community/Modbus-Tests

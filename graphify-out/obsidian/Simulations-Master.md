@@ -11,10 +11,10 @@ tags:
 # Simulations-Master
 
 ## Connections
-- [[BatterySimulator_1]] - `calls` [EXTRACTED]
-- [[DualPortCharger_1]] - `calls` [EXTRACTED]
-- [[KuehlhausSimulator_2]] - `calls` [EXTRACTED]
-- [[PvSimulator_1]] - `calls` [EXTRACTED]
+- [[BatterySimulator]] - `calls` [EXTRACTED]
+- [[DualPortCharger]] - `calls` [EXTRACTED]
+- [[KuehlhausSimulator_1]] - `calls` [EXTRACTED]
+- [[PvSimulator]] - `calls` [EXTRACTED]
 - [[TimeState (Zeitvertrag als Gerade)]] - `shares_data_with` [INFERRED]
 
 #graphify/document #graphify/EXTRACTED #community/Geräte-READMEs__Modelle

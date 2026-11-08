@@ -1,0 +1,18 @@
+Die Starteinstellungen von src\Devices\DualPortCharger\Properties\launchSettings.json werden verwendet…
+--  Lauf 0  0,0 kW  0,0 kWh  | WARTE AUF MASTER 127.0.0.1:5100  | Modbus 127.0.0.1:1504 · Unit 1 · 0 Client(s)  | Wetter warte auf salzburg 
+2026-01-15 06:01  Lauf 1  0,0 kW  0,0 kWh  | Master 127.0.0.1:5100 · synchron · LÄUFT · x60 · Lauf 1 · Abweichung ≤ 18 ms (RTT 0,6 ms)  | Mo
+2026-01-15 06:06  Lauf 1  0,0 kW  0,0 kWh  | Master 127.0.0.1:5100 · synchron · LÄUFT · x60 · Lauf 1 · Abweichung ≤ 18 ms (RTT 0,6 ms)  | Mo
+2026-01-15 06:11  Lauf 1  120,0 kW  10,0 kWh  | Master 127.0.0.1:5100 · synchron · PAUSIERT · x60 · Lauf 1 · Abweichung ≤ 0 ms (RTT 0,6 ms) 
+2026-01-15 06:11  Lauf 1  120,0 kW  10,0 kWh  | Master 127.0.0.1:5100 · synchron · PAUSIERT · x60 · Lauf 1 · Abweichung ≤ 0 ms (RTT 0,5 ms) 
+2026-01-15 06:16  Lauf 1  120,0 kW  20,0 kWh  | Master 127.0.0.1:5100 · synchron · LÄUFT · x60 · Lauf 1 · Abweichung ≤ 16 ms (RTT 0,5 ms)  |
+Die Starteinstellungen von src\Devices\DualPortCharger\Properties\launchSettings.json werden verwendet…
+2026-01-15 06:26  Lauf 1  0,0 kW  0,0 kWh  | Master 127.0.0.1:5100 · synchron · LÄUFT · x60 · Lauf 1 · Abweichung ≤ 808 ms (RTT 26,9 ms)  | 
+2026-01-15 06:31  Lauf 1  150,0 kW  12,5 kWh  | Master 127.0.0.1:5100 · synchron · LÄUFT · x60 · Lauf 1 · Abweichung ≤ 13 ms (RTT 0,4 ms)  |
+2026-01-15 06:36  Lauf 1  150,0 kW  25,0 kWh  | Master 127.0.0.1:5100 · synchron · LÄUFT · x60 · Lauf 1 · Abweichung ≤ 15 ms (RTT 0,5 ms)  |
+2026-01-15 06:41  Lauf 1  150,0 kW  37,5 kWh  | Master 127.0.0.1:5100 · synchron · LÄUFT · x60 · Lauf 1 · Abweichung ≤ 16 ms (RTT 0,5 ms)  |
+2026-01-15 06:46  Lauf 1  150,0 kW  50,0 kWh  | Master 127.0.0.1:5100 · synchron · LÄUFT · x60 · Lauf 1 · Abweichung ≤ 14 ms (RTT 0,5 ms)  |
+2026-01-15 06:51  Lauf 1  150,0 kW  62,5 kWh  | Master 127.0.0.1:5100 · synchron · LÄUFT · x60 · Lauf 1 · Abweichung ≤ 13 ms (RTT 0,4 ms)  |
+2026-01-15 06:56  Lauf 1  150,0 kW  75,0 kWh  | Master 127.0.0.1:5100 · synchron · LÄUFT · x60 · Lauf 1 · Abweichung ≤ 13 ms (RTT 0,4 ms)  |
+2026-01-15 07:01  Lauf 1  150,0 kW  87,5 kWh  | Master 127.0.0.1:5100 · synchron · LÄUFT · x60 · Lauf 1 · Abweichung ≤ 12 ms (RTT 0,4 ms)  |
+2026-01-15 07:06  Lauf 1  150,0 kW  100,0 kWh  | Master 127.0.0.1:5100 · synchron · LÄUFT · x60 · Lauf 1 · Abweichung ≤ 12 ms (RTT 0,4 ms)  
+2026-01-15 07:11  Lauf 1  150,0 kW  112,5 kWh  | Master 127.0.0.1:5100 · synchron · LÄUFT · x60 · Lauf 1 · Abweichung ≤ 9 ms (RTT 0,3 ms)  |

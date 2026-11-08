@@ -12,8 +12,6 @@ tags:
 # DiagnosticSession.PrintRawAsync()
 
 ## Connections
-- [[DeviceConnection.ReadRegisters()]] - `calls` [EXTRACTED]
-- [[DiagnosticException]] - `calls` [INFERRED]
 - [[DiagnosticSession]] - `method` [EXTRACTED]
 - [[DiagnosticSession.ExecuteAsync()]] - `calls` [EXTRACTED]
 - [[Task]] - `references` [EXTRACTED]

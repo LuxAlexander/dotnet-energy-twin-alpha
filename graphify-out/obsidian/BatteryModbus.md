@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/BatterySimulator/BatteryModbus.cs"
 type: "code"
-community: "Batterie-Modbus & Update"
+community: "Batterie-Modbus & Update (3)"
 location: "L12"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Modbus__Update
+  - community/Batterie-Modbus__Update_3
 ---
 
 # BatteryModbus
@@ -25,6 +25,6 @@ tags:
 - [[IDisposable]] - `implements` [EXTRACTED]
 - [[ModbusDeviceServer]] - `references` [EXTRACTED]
 - [[Simulator]] - `references` [EXTRACTED]
-- [[StatusText_2]] - `defines` [EXTRACTED]
+- [[StatusText]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update
+#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update_3

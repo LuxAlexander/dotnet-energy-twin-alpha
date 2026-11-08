@@ -1,16 +1,16 @@
 ---
-source_file: "src/Devices/PvSimulator/PvSimulator.csproj"
+source_file: "src/Modbus.Contracts/Modbus.Contracts.csproj"
 type: "concept"
-community: "Gruppe 60"
+community: "Gruppe 98"
 tags:
   - graphify/concept
   - graphify/EXTRACTED
-  - community/Gruppe_60
+  - community/Gruppe_98
 ---
 
 # Microsoft.NET.Sdk
 
 ## Connections
-- [[PvSimulator.csproj]] - `references` [EXTRACTED]
+- [[Modbus.Contracts.csproj]] - `references` [EXTRACTED]
 
-#graphify/concept #graphify/EXTRACTED #community/Gruppe_60
+#graphify/concept #graphify/EXTRACTED #community/Gruppe_98

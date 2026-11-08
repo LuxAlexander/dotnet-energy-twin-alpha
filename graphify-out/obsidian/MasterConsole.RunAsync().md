@@ -18,7 +18,7 @@ tags:
 - [[MasterConsole.DrawAsync()]] - `calls` [EXTRACTED]
 - [[MasterConsole.HandleKey()]] - `calls` [EXTRACTED]
 - [[MasterConsole.Initialize()]] - `calls` [EXTRACTED]
-- [[Program.Main()_2]] - `calls` [INFERRED]
+- [[Program.Main()]] - `calls` [INFERRED]
 - [[Task]] - `references` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Zeitsync-Client__Konsole

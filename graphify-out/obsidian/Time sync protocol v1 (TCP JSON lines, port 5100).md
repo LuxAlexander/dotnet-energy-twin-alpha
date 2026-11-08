@@ -11,7 +11,7 @@ tags:
 # Time sync protocol v1 (TCP JSON lines, port 5100)
 
 ## Connections
-- [[SimulationMaster_2]] - `implements` [EXTRACTED]
+- [[SimulationMaster_1]] - `implements` [EXTRACTED]
 - [[SyncProtocolTests_1]] - `references` [EXTRACTED]
 - [[TimeSyncClient_1]] - `implements` [EXTRACTED]
 - [[TimeSyncServer_1]] - `implements` [EXTRACTED]

@@ -12,16 +12,16 @@ members: 18
 ## Members
 - [[BatteryCapacityKWh]] - code - src/Devices/DualPortCharger/Models/Vehicle.cs
 - [[ChargingPoint.Connect()]] - code - src/Devices/DualPortCharger/Models/ChargingPoint.cs
+- [[DualCharger.Enqueue()]] - code - src/Devices/DualPortCharger/Models/DualCharger.cs
 - [[HasDamagedInlet]] - code - src/Devices/DualPortCharger/Models/Vehicle.cs
 - [[IsFull]] - code - src/Devices/DualPortCharger/Models/Vehicle.cs
 - [[MaxChargePowerKW]] - code - src/Devices/DualPortCharger/Models/Vehicle.cs
 - [[ModelName]] - code - src/Devices/DualPortCharger/Models/Vehicle.cs
 - [[Models]] - code - src/Devices/DualPortCharger/Models/VehicleCatalog.cs
+- [[SimulationEngine.VehicleArrives()]] - code - src/Devices/DualPortCharger/Simulation/SimulationEngine.cs
 - [[SocPercent_1]] - code - src/Devices/DualPortCharger/Models/Vehicle.cs
 - [[TargetSocPercent]] - code - src/Devices/DualPortCharger/Models/Vehicle.cs
-- [[Vehicle_1]] - code - src/Devices/DualPortCharger/Models/Vehicle.cs
-- [[Vehicle.AddEnergy()]] - code - src/Devices/DualPortCharger/Models/Vehicle.cs
-- [[Vehicle.GetMaxPowerAtSoc()]] - code - src/Devices/DualPortCharger/Models/Vehicle.cs
+- [[Vehicle]] - code - src/Devices/DualPortCharger/Models/Vehicle.cs
 - [[Vehicle.cs]] - code - src/Devices/DualPortCharger/Models/Vehicle.cs
 - [[VehicleCatalog]] - code - src/Devices/DualPortCharger/Models/VehicleCatalog.cs
 - [[VehicleCatalog.Create()]] - code - src/Devices/DualPortCharger/Models/VehicleCatalog.cs
@@ -37,17 +37,19 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 3 edges to [[_COMMUNITY_Gruppe 51]]
+- 4 edges to [[_COMMUNITY_Ladepunkt]]
 - 3 edges to [[_COMMUNITY_DualCharger]]
-- 2 edges to [[_COMMUNITY_Batterie-Simulator Loop]]
+- 3 edges to [[_COMMUNITY_Batterie-Simulator Loop (3)]]
+- 2 edges to [[_COMMUNITY_Gruppe 65]]
 - 2 edges to [[_COMMUNITY_Charger-Namespaces]]
-- 2 edges to [[_COMMUNITY_Ladepunkt]]
-- 1 edge to [[_COMMUNITY_Register-Dekodierung]]
-- 1 edge to [[_COMMUNITY_Gruppe 43]]
+- 1 edge to [[_COMMUNITY_Gruppe 52]]
+- 1 edge to [[_COMMUNITY_Gruppe 56]]
+- 1 edge to [[_COMMUNITY_Gruppe 104]]
+- 1 edge to [[_COMMUNITY_Wettermodell & Tests (2)]]
 
 ## Top bridge nodes
-- [[VehicleCatalog.CreateRandom()]] - degree 6, connects to 3 communities
-- [[Vehicle_1]] - degree 16, connects to 2 communities
+- [[DualCharger.Enqueue()]] - degree 6, connects to 3 communities
+- [[Vehicle]] - degree 16, connects to 2 communities
+- [[VehicleCatalog.CreateRandom()]] - degree 6, connects to 2 communities
+- [[SimulationEngine.VehicleArrives()]] - degree 4, connects to 2 communities
 - [[ChargingPoint.Connect()]] - degree 3, connects to 2 communities
-- [[VehicleCatalog]] - degree 6, connects to 1 community
-- [[VehicleCatalog.Create()]] - degree 5, connects to 1 community

@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "concept"
-community: "Gruppe 53"
+community: "JSON-Serialisierung"
 tags:
   - graphify/concept
   - graphify/EXTRACTED
-  - community/Gruppe_53
+  - community/JSON-Serialisierung
 ---
 
 # microsoft_extensions_hosting
@@ -13,4 +13,4 @@ tags:
 ## Connections
 - [[WeatherSimulatorProgram.cs]] - `imports` [EXTRACTED]
 
-#graphify/concept #graphify/EXTRACTED #community/Gruppe_53
+#graphify/concept #graphify/EXTRACTED #community/JSON-Serialisierung

@@ -1,20 +1,26 @@
 ---
 type: community
-cohesion: 0.60
-members: 5
+cohesion: 0.24
+members: 11
 ---
 
 # Gruppe 89
 
-**Cohesion:** 0.60 - moderately connected
-**Members:** 5 nodes
+**Cohesion:** 0.24 - loosely connected
+**Members:** 11 nodes
 
 ## Members
-- [[IrradiationCalculator]] - code - src/Shared/Weather/IrradiationCalculator.cs
-- [[IrradiationCalculator.Calculate()]] - code - src/Shared/Weather/IrradiationCalculator.cs
-- [[IrradiationCalculator.GetWeatherFactor()]] - code - src/Shared/Weather/IrradiationCalculator.cs
-- [[IrradiationCalculator.IsDaylight()]] - code - src/Shared/Weather/IrradiationCalculator.cs
-- [[IrradiationCalculator.cs]] - code - src/Shared/Weather/IrradiationCalculator.cs
+- [[Bind]] - code - src/Devices.Common/Modbus/ModbusOptions.cs
+- [[BindAddress_1]] - code - src/Devices.Common/Modbus/ModbusOptions.cs
+- [[Disabled]] - code - src/Devices.Common/Modbus/ModbusOptions.cs
+- [[ModbusOptions]] - code - src/Devices.Common/Modbus/ModbusOptions.cs
+- [[ModbusOptions.ParseBind()]] - code - src/Devices.Common/Modbus/ModbusOptions.cs
+- [[ModbusOptions.ParsePort()]] - code - src/Devices.Common/Modbus/ModbusOptions.cs
+- [[ModbusOptions.ParseUnitId()]] - code - src/Devices.Common/Modbus/ModbusOptions.cs
+- [[ModbusOptions.TryApply()]] - code - src/Devices.Common/Modbus/ModbusOptions.cs
+- [[Port_2]] - code - src/Devices.Common/Modbus/ModbusOptions.cs
+- [[PrintRegisterPlan]] - code - src/Devices.Common/Modbus/ModbusOptions.cs
+- [[UnitId_1]] - code - src/Devices.Common/Modbus/ModbusOptions.cs
 
 ## Live Query (requires Dataview plugin)
 
@@ -24,14 +30,20 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 2 edges to [[_COMMUNITY_Gruppe 49]]
-- 2 edges to [[_COMMUNITY_Gruppe 47]]
-- 1 edge to [[_COMMUNITY_Batterie-Modbus & Update]]
-- 1 edge to [[_COMMUNITY_WeatherFeed]]
-- 1 edge to [[_COMMUNITY_PV-Namespaces]]
+- 2 edges to [[_COMMUNITY_Batterie-Modbus & Update]]
+- 2 edges to [[_COMMUNITY_Gruppe 37]]
+- 1 edge to [[_COMMUNITY_Batterie-Modbus & Update (2)]]
+- 1 edge to [[_COMMUNITY_RegisterCodec & Befehle]]
+- 1 edge to [[_COMMUNITY_ArgsParser]]
+- 1 edge to [[_COMMUNITY_Gruppe 66]]
+- 1 edge to [[_COMMUNITY_Zeitsync-Client & Konsole]]
+- 1 edge to [[_COMMUNITY_Gruppe 24]]
+- 1 edge to [[_COMMUNITY_Modbus-Tests]]
+- 1 edge to [[_COMMUNITY_ArgsParser (2)]]
+- 1 edge to [[_COMMUNITY_Gruppe 61]]
+- 1 edge to [[_COMMUNITY_Gruppe 105]]
+- 1 edge to [[_COMMUNITY_MQTT-Publisher & Zugangsdaten]]
 
 ## Top bridge nodes
-- [[IrradiationCalculator.Calculate()]] - degree 6, connects to 3 communities
-- [[IrradiationCalculator.IsDaylight()]] - degree 4, connects to 2 communities
-- [[IrradiationCalculator.GetWeatherFactor()]] - degree 3, connects to 1 community
-- [[IrradiationCalculator.cs]] - degree 2, connects to 1 community
+- [[ModbusOptions]] - degree 20, connects to 9 communities
+- [[ModbusOptions.TryApply()]] - degree 9, connects to 5 communities

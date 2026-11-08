@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices.Common/StepScheduler.cs"
+source_file: "src/Modbus.Contracts/CommonRegisters.cs"
 type: "code"
-community: "StepScheduler"
-location: "L7"
+community: "DeviceTimeSource"
+location: "L24"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/StepScheduler
+  - community/DeviceTimeSource
 ---
 
 # NoTime
 
 ## Connections
-- [[StepUpdateKind]] - `case_of` [EXTRACTED]
+- [[TimeStatus]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/StepScheduler
+#graphify/code #graphify/EXTRACTED #community/DeviceTimeSource

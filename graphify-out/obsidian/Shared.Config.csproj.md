@@ -1,11 +1,11 @@
 ---
 source_file: "src/Shared.Config/Shared.Config.csproj"
 type: "code"
-community: "Gruppe 68"
+community: "Gruppe 98"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_68
+  - community/Gruppe_98
 ---
 
 # Shared.Config.csproj
@@ -19,4 +19,4 @@ tags:
 - [[SimulationMaster.csproj]] - `imports` [EXTRACTED]
 - [[WeatherSimulator.csproj]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_68
+#graphify/code #graphify/EXTRACTED #community/Gruppe_98

@@ -1,17 +1,17 @@
 ---
-source_file: "src/SimCore.Time/MonotonicUtcClock.cs"
+source_file: "src/SimCore.Time/SyncedClock.cs"
 type: "code"
-community: "DeviceTimeSource"
-location: "L21"
+community: "SyncedClock"
+location: "L97"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/DeviceTimeSource
+  - community/SyncedClock
 ---
 
 # Now
 
 ## Connections
-- [[MonotonicUtcClock]] - `defines` [EXTRACTED]
+- [[SyncedClock]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/DeviceTimeSource
+#graphify/code #graphify/EXTRACTED #community/SyncedClock

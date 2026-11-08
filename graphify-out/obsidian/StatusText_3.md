@@ -1,8 +1,8 @@
 ---
-source_file: "src/Devices/DualPortCharger/Simulation/ChargerModbus.cs"
+source_file: "src/Devices/KuehlhausSimulator/Simulation/KuehlhausModbus.cs"
 type: "code"
 community: "Batterie-Modbus & Update"
-location: "L29"
+location: "L28"
 tags:
   - graphify/code
   - graphify/EXTRACTED
@@ -12,6 +12,6 @@ tags:
 # StatusText
 
 ## Connections
-- [[ChargerModbus]] - `defines` [EXTRACTED]
+- [[KuehlhausModbus]] - `defines` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update

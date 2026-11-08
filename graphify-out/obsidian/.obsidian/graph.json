@@ -1,7 +1,7 @@
 {
   "colorGroups": [
     {
-      "query": "tag:#community/Batterie-Modbus__Update",
+      "query": "tag:#community/MQTT-Publisher__Zugangsdaten",
       "color": {
         "a": 1,
         "rgb": 5142951
@@ -15,28 +15,28 @@
       }
     },
     {
-      "query": "tag:#community/Wettermodell__Tests",
+      "query": "tag:#community/Sync-Nachrichten",
       "color": {
         "a": 1,
         "rgb": 14767961
       }
     },
     {
-      "query": "tag:#community/Batterie-Simulator_Loop",
+      "query": "tag:#community/DevicesCommon_Tests",
       "color": {
         "a": 1,
         "rgb": 7780274
       }
     },
     {
-      "query": "tag:#community/Projekt-Doku__Ger\u00e4te",
+      "query": "tag:#community/WeatherClient__Anzeige",
       "color": {
         "a": 1,
         "rgb": 5873999
       }
     },
     {
-      "query": "tag:#community/DevicesCommon_Tests",
+      "query": "tag:#community/Batterie-Simulator_Loop",
       "color": {
         "a": 1,
         "rgb": 15583560
@@ -50,259 +50,259 @@
       }
     },
     {
-      "query": "tag:#community/Sync-Nachrichten",
-      "color": {
-        "a": 1,
-        "rgb": 16752039
-      }
-    },
-    {
-      "query": "tag:#community/WeatherClient__Anzeige",
-      "color": {
-        "a": 1,
-        "rgb": 10253663
-      }
-    },
-    {
-      "query": "tag:#community/Ger\u00e4te-READMEs__Modelle",
-      "color": {
-        "a": 1,
-        "rgb": 12234924
-      }
-    },
-    {
-      "query": "tag:#community/RegisterCodec__Befehle",
-      "color": {
-        "a": 1,
-        "rgb": 5142951
-      }
-    },
-    {
-      "query": "tag:#community/TimeSyncServer",
-      "color": {
-        "a": 1,
-        "rgb": 15896107
-      }
-    },
-    {
       "query": "tag:#community/Shared_Konsolenausgabe",
       "color": {
         "a": 1,
-        "rgb": 14767961
-      }
-    },
-    {
-      "query": "tag:#community/WeatherFeed",
-      "color": {
-        "a": 1,
-        "rgb": 7780274
-      }
-    },
-    {
-      "query": "tag:#community/Zeit-Bibliotheken__Master",
-      "color": {
-        "a": 1,
-        "rgb": 5873999
-      }
-    },
-    {
-      "query": "tag:#community/MasterClock",
-      "color": {
-        "a": 1,
-        "rgb": 15583560
-      }
-    },
-    {
-      "query": "tag:#community/DeviceTimeSource",
-      "color": {
-        "a": 1,
-        "rgb": 11565729
-      }
-    },
-    {
-      "query": "tag:#community/CsvLogger",
-      "color": {
-        "a": 1,
         "rgb": 16752039
-      }
-    },
-    {
-      "query": "tag:#community/Registerpl\u00e4ne",
-      "color": {
-        "a": 1,
-        "rgb": 10253663
-      }
-    },
-    {
-      "query": "tag:#community/Master-Zeit_Tests",
-      "color": {
-        "a": 1,
-        "rgb": 12234924
-      }
-    },
-    {
-      "query": "tag:#community/PV-Engine__Fehler",
-      "color": {
-        "a": 1,
-        "rgb": 5142951
-      }
-    },
-    {
-      "query": "tag:#community/Schreibpr\u00fcfung",
-      "color": {
-        "a": 1,
-        "rgb": 15896107
-      }
-    },
-    {
-      "query": "tag:#community/StepScheduler",
-      "color": {
-        "a": 1,
-        "rgb": 14767961
-      }
-    },
-    {
-      "query": "tag:#community/Bibliotheks-Namespaces",
-      "color": {
-        "a": 1,
-        "rgb": 7780274
-      }
-    },
-    {
-      "query": "tag:#community/K\u00fchlhaus-Modell",
-      "color": {
-        "a": 1,
-        "rgb": 5873999
-      }
-    },
-    {
-      "query": "tag:#community/TimeState__TimeLine",
-      "color": {
-        "a": 1,
-        "rgb": 15583560
-      }
-    },
-    {
-      "query": "tag:#community/PvSystem",
-      "color": {
-        "a": 1,
-        "rgb": 11565729
       }
     },
     {
       "query": "tag:#community/Batterie-Modell",
       "color": {
         "a": 1,
-        "rgb": 16752039
-      }
-    },
-    {
-      "query": "tag:#community/Ladepunkt",
-      "color": {
-        "a": 1,
         "rgb": 10253663
       }
     },
     {
-      "query": "tag:#community/PvFaultModel",
+      "query": "tag:#community/Batterie-Modbus__Update",
       "color": {
         "a": 1,
         "rgb": 12234924
       }
     },
     {
-      "query": "tag:#community/ArgsParser",
+      "query": "tag:#community/Ger\u00e4te-READMEs__Modelle",
       "color": {
         "a": 1,
         "rgb": 5142951
       }
     },
     {
-      "query": "tag:#community/SyncedClock",
+      "query": "tag:#community/Zeit-Bibliotheken__Master",
       "color": {
         "a": 1,
         "rgb": 15896107
       }
     },
     {
-      "query": "tag:#community/TimeSyncOptions_Tests",
+      "query": "tag:#community/MasterClock",
       "color": {
         "a": 1,
         "rgb": 14767961
       }
     },
     {
-      "query": "tag:#community/Charger-Namespaces",
+      "query": "tag:#community/Batterie-Modbus__Update_2",
       "color": {
         "a": 1,
         "rgb": 7780274
       }
     },
     {
-      "query": "tag:#community/PV-Namespaces",
+      "query": "tag:#community/Gateway-Optionen",
       "color": {
         "a": 1,
         "rgb": 5873999
       }
     },
     {
-      "query": "tag:#community/DeviceConnection",
+      "query": "tag:#community/Nachrichtenvertrag__Messwerte",
       "color": {
         "a": 1,
         "rgb": 15583560
       }
     },
     {
-      "query": "tag:#community/Register-Dekodierung",
+      "query": "tag:#community/Modbus-Tests",
       "color": {
         "a": 1,
         "rgb": 11565729
       }
     },
     {
-      "query": "tag:#community/Fahrzeug",
+      "query": "tag:#community/Batterie-Simulator_Loop_2",
       "color": {
         "a": 1,
         "rgb": 16752039
       }
     },
     {
-      "query": "tag:#community/DualCharger",
+      "query": "tag:#community/WeatherFeed",
       "color": {
         "a": 1,
         "rgb": 10253663
       }
     },
     {
-      "query": "tag:#community/Modbus-Tests",
+      "query": "tag:#community/Gruppe_19",
       "color": {
         "a": 1,
         "rgb": 12234924
       }
     },
     {
-      "query": "tag:#community/Gruppe_40",
+      "query": "tag:#community/Aufgabenabgleich_readTask",
       "color": {
         "a": 1,
         "rgb": 5142951
       }
     },
     {
-      "query": "tag:#community/Gruppe_41",
+      "query": "tag:#community/Gruppe_21",
       "color": {
         "a": 1,
         "rgb": 15896107
       }
     },
     {
-      "query": "tag:#community/Gruppe_42",
+      "query": "tag:#community/PvFaultModel",
       "color": {
         "a": 1,
         "rgb": 14767961
       }
     },
     {
-      "query": "tag:#community/Gruppe_43",
+      "query": "tag:#community/Gruppe_23",
+      "color": {
+        "a": 1,
+        "rgb": 7780274
+      }
+    },
+    {
+      "query": "tag:#community/Gruppe_24",
+      "color": {
+        "a": 1,
+        "rgb": 5873999
+      }
+    },
+    {
+      "query": "tag:#community/PV-Engine__Fehler",
+      "color": {
+        "a": 1,
+        "rgb": 15583560
+      }
+    },
+    {
+      "query": "tag:#community/TimeSyncServer",
+      "color": {
+        "a": 1,
+        "rgb": 11565729
+      }
+    },
+    {
+      "query": "tag:#community/Ladepunkt",
+      "color": {
+        "a": 1,
+        "rgb": 16752039
+      }
+    },
+    {
+      "query": "tag:#community/K\u00fchlhaus-Modell",
+      "color": {
+        "a": 1,
+        "rgb": 10253663
+      }
+    },
+    {
+      "query": "tag:#community/Registerpl\u00e4ne",
+      "color": {
+        "a": 1,
+        "rgb": 12234924
+      }
+    },
+    {
+      "query": "tag:#community/MessageBuilder-Tests",
+      "color": {
+        "a": 1,
+        "rgb": 5142951
+      }
+    },
+    {
+      "query": "tag:#community/Aufgabe_03__Nachweise",
+      "color": {
+        "a": 1,
+        "rgb": 15896107
+      }
+    },
+    {
+      "query": "tag:#community/Nachrichtentypen_Contract",
+      "color": {
+        "a": 1,
+        "rgb": 14767961
+      }
+    },
+    {
+      "query": "tag:#community/PvSystem",
+      "color": {
+        "a": 1,
+        "rgb": 7780274
+      }
+    },
+    {
+      "query": "tag:#community/Sync-Nachrichten_2",
+      "color": {
+        "a": 1,
+        "rgb": 5873999
+      }
+    },
+    {
+      "query": "tag:#community/Schreibpr\u00fcfung",
+      "color": {
+        "a": 1,
+        "rgb": 15583560
+      }
+    },
+    {
+      "query": "tag:#community/RegisterCodec__Befehle",
+      "color": {
+        "a": 1,
+        "rgb": 11565729
+      }
+    },
+    {
+      "query": "tag:#community/Gruppe_37",
+      "color": {
+        "a": 1,
+        "rgb": 16752039
+      }
+    },
+    {
+      "query": "tag:#community/Gruppe_38",
+      "color": {
+        "a": 1,
+        "rgb": 10253663
+      }
+    },
+    {
+      "query": "tag:#community/SyncedClock",
+      "color": {
+        "a": 1,
+        "rgb": 12234924
+      }
+    },
+    {
+      "query": "tag:#community/TimeState__TimeLine",
+      "color": {
+        "a": 1,
+        "rgb": 5142951
+      }
+    },
+    {
+      "query": "tag:#community/DevicePoller__Ger\u00e4tetests",
+      "color": {
+        "a": 1,
+        "rgb": 15896107
+      }
+    },
+    {
+      "query": "tag:#community/DeviceConnection_ModbusClient",
+      "color": {
+        "a": 1,
+        "rgb": 14767961
+      }
+    },
+    {
+      "query": "tag:#community/Gateway-Publisher",
       "color": {
         "a": 1,
         "rgb": 7780274
@@ -316,21 +316,21 @@
       }
     },
     {
-      "query": "tag:#community/Gruppe_45",
+      "query": "tag:#community/Fahrzeug",
       "color": {
         "a": 1,
         "rgb": 15583560
       }
     },
     {
-      "query": "tag:#community/Gruppe_46",
+      "query": "tag:#community/DualCharger",
       "color": {
         "a": 1,
         "rgb": 11565729
       }
     },
     {
-      "query": "tag:#community/Gruppe_47",
+      "query": "tag:#community/RegisterCodec__Befehle_2",
       "color": {
         "a": 1,
         "rgb": 16752039
@@ -344,14 +344,14 @@
       }
     },
     {
-      "query": "tag:#community/Gruppe_49",
+      "query": "tag:#community/PV-Namespaces",
       "color": {
         "a": 1,
         "rgb": 12234924
       }
     },
     {
-      "query": "tag:#community/Gruppe_50",
+      "query": "tag:#community/JSON-Serialisierung",
       "color": {
         "a": 1,
         "rgb": 5142951
@@ -372,21 +372,21 @@
       }
     },
     {
-      "query": "tag:#community/Gruppe_53",
+      "query": "tag:#community/DeviceTimeSource",
       "color": {
         "a": 1,
         "rgb": 7780274
       }
     },
     {
-      "query": "tag:#community/Gruppe_54",
+      "query": "tag:#community/Messwert-Schl\u00fcssel",
       "color": {
         "a": 1,
         "rgb": 5873999
       }
     },
     {
-      "query": "tag:#community/Gruppe_55",
+      "query": "tag:#community/Funktionsnachweis_mit_Master",
       "color": {
         "a": 1,
         "rgb": 15583560
@@ -407,21 +407,21 @@
       }
     },
     {
-      "query": "tag:#community/Gruppe_58",
+      "query": "tag:#community/StepScheduler",
       "color": {
         "a": 1,
         "rgb": 10253663
       }
     },
     {
-      "query": "tag:#community/Gruppe_59",
+      "query": "tag:#community/SRS_Gateway-Anforderungen",
       "color": {
         "a": 1,
         "rgb": 12234924
       }
     },
     {
-      "query": "tag:#community/Gruppe_60",
+      "query": "tag:#community/DeviceTimeSource_2",
       "color": {
         "a": 1,
         "rgb": 5142951
@@ -435,21 +435,21 @@
       }
     },
     {
-      "query": "tag:#community/Gruppe_62",
+      "query": "tag:#community/GatewayService",
       "color": {
         "a": 1,
         "rgb": 14767961
       }
     },
     {
-      "query": "tag:#community/Gruppe_63",
+      "query": "tag:#community/Bibliotheks-Namespaces",
       "color": {
         "a": 1,
         "rgb": 7780274
       }
     },
     {
-      "query": "tag:#community/Gruppe_64",
+      "query": "tag:#community/Diagnose-Client__ModbusClient",
       "color": {
         "a": 1,
         "rgb": 5873999
@@ -491,7 +491,7 @@
       }
     },
     {
-      "query": "tag:#community/Gruppe_70",
+      "query": "tag:#community/Batterie-Modbus__Update_3",
       "color": {
         "a": 1,
         "rgb": 5142951
@@ -512,56 +512,56 @@
       }
     },
     {
-      "query": "tag:#community/Gruppe_73",
+      "query": "tag:#community/Batterie-Modbus__Update_4",
       "color": {
         "a": 1,
         "rgb": 7780274
       }
     },
     {
-      "query": "tag:#community/Gruppe_74",
+      "query": "tag:#community/ArgsParser",
       "color": {
         "a": 1,
         "rgb": 5873999
       }
     },
     {
-      "query": "tag:#community/Gruppe_75",
+      "query": "tag:#community/Wettermodell__Tests",
       "color": {
         "a": 1,
         "rgb": 15583560
       }
     },
     {
-      "query": "tag:#community/Gruppe_76",
+      "query": "tag:#community/Status-Wiederholung__RabbitMQ",
       "color": {
         "a": 1,
         "rgb": 11565729
       }
     },
     {
-      "query": "tag:#community/Gruppe_77",
+      "query": "tag:#community/Wettermodell__Tests_2",
       "color": {
         "a": 1,
         "rgb": 16752039
       }
     },
     {
-      "query": "tag:#community/Gruppe_78",
+      "query": "tag:#community/Charger-Namespaces",
       "color": {
         "a": 1,
         "rgb": 10253663
       }
     },
     {
-      "query": "tag:#community/Gruppe_79",
+      "query": "tag:#community/Wettermodell__Tests_3",
       "color": {
         "a": 1,
         "rgb": 12234924
       }
     },
     {
-      "query": "tag:#community/Gruppe_80",
+      "query": "tag:#community/Wettermodell__Tests_4",
       "color": {
         "a": 1,
         "rgb": 5142951
@@ -596,7 +596,7 @@
       }
     },
     {
-      "query": "tag:#community/Gruppe_85",
+      "query": "tag:#community/RabbitMQ_unter_Docker",
       "color": {
         "a": 1,
         "rgb": 15583560
@@ -610,7 +610,7 @@
       }
     },
     {
-      "query": "tag:#community/Gruppe_87",
+      "query": "tag:#community/DeviceEndpoint",
       "color": {
         "a": 1,
         "rgb": 16752039
@@ -631,7 +631,7 @@
       }
     },
     {
-      "query": "tag:#community/Gruppe_90",
+      "query": "tag:#community/LB03-Projektstand",
       "color": {
         "a": 1,
         "rgb": 5142951
@@ -645,24 +645,283 @@
       }
     },
     {
-      "query": "tag:#community/Gruppe_92",
+      "query": "tag:#community/Qualit\u00e4tsstatus__Pause",
       "color": {
         "a": 1,
         "rgb": 14767961
       }
     },
     {
-      "query": "tag:#community/Gruppe_93",
+      "query": "tag:#community/ModbusClient-Fehler",
       "color": {
         "a": 1,
         "rgb": 7780274
       }
     },
     {
-      "query": "tag:#community/Gruppe_94",
+      "query": "tag:#community/Wettermodell__Tests_5",
       "color": {
         "a": 1,
         "rgb": 5873999
+      }
+    },
+    {
+      "query": "tag:#community/MessageBuilder",
+      "color": {
+        "a": 1,
+        "rgb": 15583560
+      }
+    },
+    {
+      "query": "tag:#community/Gruppe_96",
+      "color": {
+        "a": 1,
+        "rgb": 11565729
+      }
+    },
+    {
+      "query": "tag:#community/Batterie-Simulator_Loop_3",
+      "color": {
+        "a": 1,
+        "rgb": 16752039
+      }
+    },
+    {
+      "query": "tag:#community/Gruppe_98",
+      "color": {
+        "a": 1,
+        "rgb": 10253663
+      }
+    },
+    {
+      "query": "tag:#community/Gruppe_99",
+      "color": {
+        "a": 1,
+        "rgb": 12234924
+      }
+    },
+    {
+      "query": "tag:#community/Zust\u00e4ndigkeiten_LB03",
+      "color": {
+        "a": 1,
+        "rgb": 5142951
+      }
+    },
+    {
+      "query": "tag:#community/Gruppe_101",
+      "color": {
+        "a": 1,
+        "rgb": 15896107
+      }
+    },
+    {
+      "query": "tag:#community/Gruppe_102",
+      "color": {
+        "a": 1,
+        "rgb": 14767961
+      }
+    },
+    {
+      "query": "tag:#community/OutputPaths",
+      "color": {
+        "a": 1,
+        "rgb": 7780274
+      }
+    },
+    {
+      "query": "tag:#community/Gruppe_104",
+      "color": {
+        "a": 1,
+        "rgb": 5873999
+      }
+    },
+    {
+      "query": "tag:#community/Gruppe_105",
+      "color": {
+        "a": 1,
+        "rgb": 15583560
+      }
+    },
+    {
+      "query": "tag:#community/Gruppe_106",
+      "color": {
+        "a": 1,
+        "rgb": 11565729
+      }
+    },
+    {
+      "query": "tag:#community/StepScheduler_2",
+      "color": {
+        "a": 1,
+        "rgb": 16752039
+      }
+    },
+    {
+      "query": "tag:#community/Gruppe_108",
+      "color": {
+        "a": 1,
+        "rgb": 10253663
+      }
+    },
+    {
+      "query": "tag:#community/Gruppe_109",
+      "color": {
+        "a": 1,
+        "rgb": 12234924
+      }
+    },
+    {
+      "query": "tag:#community/ArgsParser_2",
+      "color": {
+        "a": 1,
+        "rgb": 5142951
+      }
+    },
+    {
+      "query": "tag:#community/Gruppe_111",
+      "color": {
+        "a": 1,
+        "rgb": 15896107
+      }
+    },
+    {
+      "query": "tag:#community/Gruppe_112",
+      "color": {
+        "a": 1,
+        "rgb": 14767961
+      }
+    },
+    {
+      "query": "tag:#community/Gruppe_113",
+      "color": {
+        "a": 1,
+        "rgb": 7780274
+      }
+    },
+    {
+      "query": "tag:#community/Gruppe_114",
+      "color": {
+        "a": 1,
+        "rgb": 5873999
+      }
+    },
+    {
+      "query": "tag:#community/Gruppe_115",
+      "color": {
+        "a": 1,
+        "rgb": 15583560
+      }
+    },
+    {
+      "query": "tag:#community/Gruppe_116",
+      "color": {
+        "a": 1,
+        "rgb": 11565729
+      }
+    },
+    {
+      "query": "tag:#community/Gruppe_117",
+      "color": {
+        "a": 1,
+        "rgb": 16752039
+      }
+    },
+    {
+      "query": "tag:#community/Projekt-Doku__Ger\u00e4te",
+      "color": {
+        "a": 1,
+        "rgb": 10253663
+      }
+    },
+    {
+      "query": "tag:#community/Gruppe_119",
+      "color": {
+        "a": 1,
+        "rgb": 12234924
+      }
+    },
+    {
+      "query": "tag:#community/Fehlerverhalten_Gateway",
+      "color": {
+        "a": 1,
+        "rgb": 5142951
+      }
+    },
+    {
+      "query": "tag:#community/readTask-Arbeitsschritte",
+      "color": {
+        "a": 1,
+        "rgb": 15896107
+      }
+    },
+    {
+      "query": "tag:#community/Gruppe_122",
+      "color": {
+        "a": 1,
+        "rgb": 14767961
+      }
+    },
+    {
+      "query": "tag:#community/Projekt-Doku__Ger\u00e4te_2",
+      "color": {
+        "a": 1,
+        "rgb": 7780274
+      }
+    },
+    {
+      "query": "tag:#community/Projekt-Doku__Ger\u00e4te_3",
+      "color": {
+        "a": 1,
+        "rgb": 5873999
+      }
+    },
+    {
+      "query": "tag:#community/Projekt-Doku__Ger\u00e4te_4",
+      "color": {
+        "a": 1,
+        "rgb": 15583560
+      }
+    },
+    {
+      "query": "tag:#community/Gruppe_126",
+      "color": {
+        "a": 1,
+        "rgb": 11565729
+      }
+    },
+    {
+      "query": "tag:#community/Projekt-Doku__Ger\u00e4te_5",
+      "color": {
+        "a": 1,
+        "rgb": 16752039
+      }
+    },
+    {
+      "query": "tag:#community/Projekt-Doku__Ger\u00e4te_6",
+      "color": {
+        "a": 1,
+        "rgb": 10253663
+      }
+    },
+    {
+      "query": "tag:#community/Gruppe_129",
+      "color": {
+        "a": 1,
+        "rgb": 12234924
+      }
+    },
+    {
+      "query": "tag:#community/Projekt-Doku__Ger\u00e4te_7",
+      "color": {
+        "a": 1,
+        "rgb": 5142951
+      }
+    },
+    {
+      "query": "tag:#community/Projekt-Doku__Ger\u00e4te_8",
+      "color": {
+        "a": 1,
+        "rgb": 15896107
       }
     }
   ]

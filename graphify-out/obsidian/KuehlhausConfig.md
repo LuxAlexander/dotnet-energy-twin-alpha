@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/KuehlhausSimulator/KuehlhausConfig.cs"
 type: "code"
-community: "Gruppe 59"
+community: "Gruppe 81"
 location: "L7"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_59
+  - community/Gruppe_81
 ---
 
 # KuehlhausConfig
@@ -15,7 +15,7 @@ tags:
 - [[AlarmHystereseK]] - `defines` [EXTRACTED]
 - [[AlarmTempC_1]] - `defines` [EXTRACTED]
 - [[COP]] - `defines` [EXTRACTED]
-- [[DeviceId_3]] - `defines` [EXTRACTED]
+- [[DeviceId_5]] - `defines` [EXTRACTED]
 - [[HystereseK]] - `defines` [EXTRACTED]
 - [[KaelteleistungKW]] - `defines` [EXTRACTED]
 - [[Kuehlhaus]] - `references` [EXTRACTED]
@@ -28,4 +28,4 @@ tags:
 - [[WaermekapazitaetKWhProK]] - `defines` [EXTRACTED]
 - [[ZusatzwaermeKW]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_59
+#graphify/code #graphify/EXTRACTED #community/Gruppe_81

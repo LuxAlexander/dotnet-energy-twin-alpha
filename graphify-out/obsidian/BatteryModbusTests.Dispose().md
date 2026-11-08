@@ -1,12 +1,12 @@
 ---
 source_file: "tests/FieldDevices.Tests/FieldDeviceTests.cs"
 type: "code"
-community: "Batterie-Modbus & Update"
+community: "Batterie-Modbus & Update (3)"
 location: "L195"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Modbus__Update
+  - community/Batterie-Modbus__Update_3
 ---
 
 # BatteryModbusTests.Dispose()
@@ -16,4 +16,4 @@ tags:
 - [[BatteryModbusTests]] - `method` [EXTRACTED]
 - [[ModbusTestBase.Dispose()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update
+#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update_3

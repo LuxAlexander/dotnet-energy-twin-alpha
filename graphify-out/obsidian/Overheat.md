@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/BatterySimulator/Enum.cs"
+source_file: "src/Devices/PvSimulator/Devices/FaultType.cs"
 type: "code"
-community: "Gruppe 88"
-location: "L28"
+community: "Gruppe 102"
+location: "L7"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_88
+  - community/Gruppe_102
 ---
 
 # Overheat
 
 ## Connections
-- [[FaultType]] - `case_of` [EXTRACTED]
+- [[FaultType_1]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_88
+#graphify/code #graphify/EXTRACTED #community/Gruppe_102

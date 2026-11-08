@@ -1,12 +1,12 @@
 ---
 source_file: "src/Shared/Data/CsvFileWriter.cs"
 type: "code"
-community: "Gruppe 73"
+community: "Gruppe 101"
 location: "L3"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_73
+  - community/Gruppe_101
 ---
 
 # Shared.Data
@@ -18,4 +18,4 @@ tags:
 - [[CsvSchema.cs]] - `contains` [EXTRACTED]
 - [[KuehlhausSimulatorIOCsvLogger.cs]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_73
+#graphify/code #graphify/EXTRACTED #community/Gruppe_101

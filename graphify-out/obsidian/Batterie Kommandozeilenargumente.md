@@ -11,6 +11,6 @@ tags:
 # Batterie Kommandozeilenargumente
 
 ## Connections
-- [[BatterySimulator_1]] - `references` [EXTRACTED]
+- [[BatterySimulator]] - `references` [EXTRACTED]
 
 #graphify/document #graphify/EXTRACTED #community/Geräte-READMEs__Modelle

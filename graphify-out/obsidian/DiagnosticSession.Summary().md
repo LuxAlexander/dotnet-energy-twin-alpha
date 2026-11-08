@@ -1,12 +1,12 @@
 ---
 source_file: "src/ModbusDiagnosticClient/DiagnosticSession.cs"
 type: "code"
-community: "Register-Dekodierung"
+community: "Gruppe 52"
 location: "L310"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Register-Dekodierung
+  - community/Gruppe_52
 ---
 
 # DiagnosticSession.Summary()
@@ -19,4 +19,4 @@ tags:
 - [[RegisterCodec.Decode()]] - `calls` [EXTRACTED]
 - [[RegisterFormatter.Short()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Register-Dekodierung
+#graphify/code #graphify/EXTRACTED #community/Gruppe_52

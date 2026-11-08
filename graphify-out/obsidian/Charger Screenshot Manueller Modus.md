@@ -1,11 +1,11 @@
 ---
 source_file: "docs/screenshots/DualPortCharger/Manueller_Modus.png"
 type: "image"
-community: "Gruppe 86"
+community: "Gruppe 115"
 tags:
   - graphify/image
   - graphify/EXTRACTED
-  - community/Gruppe_86
+  - community/Gruppe_115
 ---
 
 # Charger Screenshot: Manueller Modus
@@ -15,4 +15,4 @@ tags:
 - [[Charger key legend (PA1-2CDSFR+-OQ)]] - `references` [EXTRACTED]
 - [[MANUELL mode Punkt 1 CONNECTED, Punkt 2 FINISHED, message Laden gestoppt]] - `references` [EXTRACTED]
 
-#graphify/image #graphify/EXTRACTED #community/Gruppe_86
+#graphify/image #graphify/EXTRACTED #community/Gruppe_115

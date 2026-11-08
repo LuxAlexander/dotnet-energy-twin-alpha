@@ -26,9 +26,9 @@ tags:
 - [[ConsoleRenderer.ShutdownAsync()_1]] - `method` [EXTRACTED]
 - [[CultureInfo]] - `references` [EXTRACTED]
 - [[InputHandler_1]] - `references` [EXTRACTED]
-- [[IsInteractive_2]] - `defines` [EXTRACTED]
+- [[IsInteractive_3]] - `defines` [EXTRACTED]
 - [[KuehlhausSimulatorIOConsoleRenderer.cs]] - `contains` [EXTRACTED]
-- [[SimulationEngine_1]] - `references` [EXTRACTED]
-- [[Width_1]] - `defines` [EXTRACTED]
+- [[SimulationEngine_2]] - `references` [EXTRACTED]
+- [[Width_2]] - `defines` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/WeatherClient__Anzeige

@@ -1,16 +1,16 @@
 ---
-source_file: "tests/Weather.Tests/Weather.Tests.csproj"
+source_file: "tests/SimCore.Tests/SimCore.Tests.csproj"
 type: "concept"
-community: "Gruppe 69"
+community: "Gruppe 83"
 tags:
   - graphify/concept
   - graphify/EXTRACTED
-  - community/Gruppe_69
+  - community/Gruppe_83
 ---
 
 # Microsoft.NET.Sdk
 
 ## Connections
-- [[Weather.Tests.csproj]] - `references` [EXTRACTED]
+- [[SimCore.Tests.csproj]] - `references` [EXTRACTED]
 
-#graphify/concept #graphify/EXTRACTED #community/Gruppe_69
+#graphify/concept #graphify/EXTRACTED #community/Gruppe_83

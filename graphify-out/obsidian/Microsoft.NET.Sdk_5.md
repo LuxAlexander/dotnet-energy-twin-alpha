@@ -1,16 +1,16 @@
 ---
-source_file: "src/Modbus.Contracts/Modbus.Contracts.csproj"
+source_file: "src/ModbusDiagnosticClient/ModbusDiagnosticClient.csproj"
 type: "concept"
-community: "Gruppe 65"
+community: "Gruppe 98"
 tags:
   - graphify/concept
   - graphify/EXTRACTED
-  - community/Gruppe_65
+  - community/Gruppe_98
 ---
 
 # Microsoft.NET.Sdk
 
 ## Connections
-- [[Modbus.Contracts.csproj]] - `references` [EXTRACTED]
+- [[ModbusDiagnosticClient.csproj]] - `references` [EXTRACTED]
 
-#graphify/concept #graphify/EXTRACTED #community/Gruppe_65
+#graphify/concept #graphify/EXTRACTED #community/Gruppe_98

@@ -1,12 +1,12 @@
 ---
 source_file: "src/SimCore.Time/MonotonicUtcClock.cs"
 type: "code"
-community: "DeviceTimeSource"
+community: "Zeit-Bibliotheken & Master"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/DeviceTimeSource
+  - community/Zeit-Bibliotheken__Master
 ---
 
 # MonotonicUtcClock.cs
@@ -15,4 +15,4 @@ tags:
 - [[MonotonicUtcClock]] - `contains` [EXTRACTED]
 - [[SimCore.Time]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/DeviceTimeSource
+#graphify/code #graphify/EXTRACTED #community/Zeit-Bibliotheken__Master

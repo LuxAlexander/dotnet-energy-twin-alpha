@@ -1,17 +1,17 @@
 ---
-source_file: "src/SimulationMaster/MasterOptions.cs"
+source_file: "src/SimCore.TimeSync/TimeSyncServer.cs"
 type: "code"
-community: "Zeitsync-Client & Konsole"
-location: "L19"
+community: "Sync-Nachrichten"
+location: "L42"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Zeitsync-Client__Konsole
+  - community/Sync-Nachrichten
 ---
 
 # HeartbeatInterval
 
 ## Connections
-- [[MasterOptions]] - `defines` [EXTRACTED]
+- [[TimeSyncServer]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Zeitsync-Client__Konsole
+#graphify/code #graphify/EXTRACTED #community/Sync-Nachrichten

@@ -1,12 +1,12 @@
 ---
 source_file: "tests/FieldDevices.Tests/ConsumerTests.cs"
 type: "code"
-community: "Gruppe 45"
+community: "Gruppe 61"
 location: "L300"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_45
+  - community/Gruppe_61
 ---
 
 # KuehlhausArgsTests
@@ -21,4 +21,4 @@ tags:
 - [[KuehlhausArgsTests.WeatherOff_DisablesTheWeatherSimulator()]] - `method` [EXTRACTED]
 - [[KuehlhausArgsTests.WithMaster_WeatherSimulatorIsDefault()]] - `method` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_45
+#graphify/code #graphify/EXTRACTED #community/Gruppe_61

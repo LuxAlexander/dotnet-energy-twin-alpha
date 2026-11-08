@@ -1,20 +1,20 @@
 ---
 source_file: "src/Devices.Common/Weather/WeatherOptions.cs"
 type: "code"
-community: "Gruppe 52"
+community: "WeatherFeed"
 location: "L7"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_52
+  - community/WeatherFeed
 ---
 
 # WeatherOptions
 
 ## Connections
-- [[Location_1]] - `defines` [EXTRACTED]
-- [[SimulationConfig]] - `references` [EXTRACTED]
+- [[Location_2]] - `defines` [EXTRACTED]
 - [[SimulationConfig_1]] - `references` [EXTRACTED]
+- [[SimulationConfig_2]] - `references` [EXTRACTED]
 - [[SimulatorOptions]] - `references` [EXTRACTED]
 - [[Specified]] - `defines` [EXTRACTED]
 - [[Url]] - `defines` [EXTRACTED]
@@ -27,4 +27,4 @@ tags:
 - [[WeatherOptions.WithDefaultUrl()]] - `method` [EXTRACTED]
 - [[WeatherOptions.cs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_52
+#graphify/code #graphify/EXTRACTED #community/WeatherFeed

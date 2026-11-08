@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "concept"
-community: "Charger-Namespaces"
+community: "Gruppe 19"
 tags:
   - graphify/concept
   - graphify/EXTRACTED
-  - community/Charger-Namespaces
+  - community/Gruppe_19
 ---
 
 # system_globalization
@@ -16,6 +16,7 @@ tags:
 - [[ClientOptions.cs]] - `imports` [EXTRACTED]
 - [[ConsoleDashboard.cs]] - `imports` [EXTRACTED]
 - [[CsvFormat.cs]] - `imports` [EXTRACTED]
+- [[DeviceEndpoint.cs]] - `imports` [EXTRACTED]
 - [[DeviceTimeSource.cs]] - `imports` [EXTRACTED]
 - [[DiagnosticSession.cs]] - `imports` [EXTRACTED]
 - [[DualPortChargerIOArgsParser.cs]] - `imports` [EXTRACTED]
@@ -23,6 +24,8 @@ tags:
 - [[DualPortChargerIOCsvLogger.cs]] - `imports` [EXTRACTED]
 - [[DualPortChargerIOInputHandler.cs]] - `imports` [EXTRACTED]
 - [[DualPortChargerSimulationSimulationEngine.cs]] - `imports` [EXTRACTED]
+- [[GatewayOptions.cs]] - `imports` [EXTRACTED]
+- [[GatewayService.cs]] - `imports` [EXTRACTED]
 - [[KuehlhausSimulatorIOArgsParser.cs]] - `imports` [EXTRACTED]
 - [[KuehlhausSimulatorIOConsoleRenderer.cs]] - `imports` [EXTRACTED]
 - [[KuehlhausSimulatorIOCsvLogger.cs]] - `imports` [EXTRACTED]
@@ -31,6 +34,7 @@ tags:
 - [[KuehlhausSimulatorSimulationSimulationEngine.cs]] - `imports` [EXTRACTED]
 - [[MasterConsole.cs]] - `imports` [EXTRACTED]
 - [[MasterOptions.cs]] - `imports` [EXTRACTED]
+- [[MeasurementKeys.cs]] - `imports` [EXTRACTED]
 - [[ModbusDeviceServer.cs]] - `imports` [EXTRACTED]
 - [[ModbusOptions.cs]] - `imports` [EXTRACTED]
 - [[PvSimulatorSimulationSimulationEngine.cs]] - `imports` [EXTRACTED]
@@ -44,4 +48,4 @@ tags:
 - [[WeatherModel.cs]] - `imports` [EXTRACTED]
 - [[WeatherSimulatorProgram.cs]] - `imports` [EXTRACTED]
 
-#graphify/concept #graphify/EXTRACTED #community/Charger-Namespaces
+#graphify/concept #graphify/EXTRACTED #community/Gruppe_19

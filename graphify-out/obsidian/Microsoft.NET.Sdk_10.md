@@ -1,11 +1,11 @@
 ---
 source_file: "src/SimCore.TimeSync/SimCore.TimeSync.csproj"
 type: "concept"
-community: "Gruppe 68"
+community: "Gruppe 83"
 tags:
   - graphify/concept
   - graphify/EXTRACTED
-  - community/Gruppe_68
+  - community/Gruppe_83
 ---
 
 # Microsoft.NET.Sdk
@@ -13,4 +13,4 @@ tags:
 ## Connections
 - [[SimCore.TimeSync.csproj]] - `references` [EXTRACTED]
 
-#graphify/concept #graphify/EXTRACTED #community/Gruppe_68
+#graphify/concept #graphify/EXTRACTED #community/Gruppe_83

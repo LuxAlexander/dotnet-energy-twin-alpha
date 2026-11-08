@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/BatterySimulator/Batterie.cs"
 type: "code"
-community: "Batterie-Modbus & Update"
+community: "Batterie-Modbus & Update (2)"
 location: "L62"
 tags:
   - graphify/code
   - graphify/INFERRED
-  - community/Batterie-Modbus__Update
+  - community/Batterie-Modbus__Update_2
 ---
 
 # Batterie.Update()
@@ -20,4 +20,4 @@ tags:
 - [[Simulator.AdvanceAsync()]] - `calls` [INFERRED]
 - [[TimeSpan]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/INFERRED #community/Batterie-Modbus__Update
+#graphify/code #graphify/INFERRED #community/Batterie-Modbus__Update_2

@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "code"
-community: "WeatherClient & Anzeige"
+community: "Gruppe 69"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/WeatherClient__Anzeige
+  - community/Gruppe_69
 ---
 
 # FormattableString
@@ -14,4 +14,4 @@ tags:
 - [[ConsoleRenderer.F()]] - `references` [EXTRACTED]
 - [[ConsoleRenderer.F()_1]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/WeatherClient__Anzeige
+#graphify/code #graphify/EXTRACTED #community/Gruppe_69

@@ -1,12 +1,12 @@
 ---
 source_file: "tests/FieldDevices.Tests/FieldDeviceTests.cs"
 type: "code"
-community: "Batterie-Modbus & Update"
+community: "Batterie-Modbus & Update (4)"
 location: "L123"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Modbus__Update
+  - community/Batterie-Modbus__Update_4
 ---
 
 # PvModbusTests.PowerLimit_OutOfRange_IsRejected_AndDeviceKeepsValue()
@@ -21,4 +21,4 @@ tags:
 - [[PvModbusTests]] - `method` [EXTRACTED]
 - [[Theory]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update
+#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update_4

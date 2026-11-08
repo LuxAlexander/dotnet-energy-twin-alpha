@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "code"
-community: "DeviceConnection"
+community: "Batterie-Modbus & Update (2)"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/DeviceConnection
+  - community/Batterie-Modbus__Update_2
 ---
 
 # ModbusClient
@@ -15,4 +15,4 @@ tags:
 - [[ModbusDeviceServerTests]] - `references` [EXTRACTED]
 - [[ModbusTestBase]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/DeviceConnection
+#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update_2

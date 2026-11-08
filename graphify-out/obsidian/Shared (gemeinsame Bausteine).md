@@ -16,7 +16,7 @@ tags:
 - [[CsvFormat de-AT]] - `references` [EXTRACTED]
 - [[IrradiationCalculator_1]] - `references` [EXTRACTED]
 - [[Lokales Wettermodell (standalone)]] - `references` [EXTRACTED]
-- [[PvSimulator_1]] - `references` [EXTRACTED]
-- [[Shared.Config_1]] - `conceptually_related_to` [INFERRED]
+- [[PvSimulator]] - `references` [EXTRACTED]
+- [[Shared.Config]] - `conceptually_related_to` [INFERRED]
 
 #graphify/document #graphify/EXTRACTED #community/Geräte-READMEs__Modelle

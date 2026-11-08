@@ -1,28 +1,31 @@
 ---
 type: community
-cohesion: 0.38
-members: 13
+cohesion: 0.16
+members: 16
 ---
 
 # Gruppe 57
 
-**Cohesion:** 0.38 - loosely connected
-**Members:** 13 nodes
+**Cohesion:** 0.16 - loosely connected
+**Members:** 16 nodes
 
 ## Members
-- [[Kuehlhaus.ResetFault()]] - code - src/Devices/KuehlhausSimulator/Kuehlhaus.cs
-- [[Kuehlhaus.TurnOff()]] - code - src/Devices/KuehlhausSimulator/Kuehlhaus.cs
-- [[Kuehlhaus.Update()]] - code - src/Devices/KuehlhausSimulator/Kuehlhaus.cs
-- [[KuehlhausModelTests]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
-- [[KuehlhausModelTests.CompressorFailure_IsAlwaysClearedByReset()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
-- [[KuehlhausModelTests.Compressor_SwitchesWithHysteresisAroundSetpoint()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
-- [[KuehlhausModelTests.CreateRoom()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
-- [[KuehlhausModelTests.ElectricPowerAndEnergy_FollowCoolingPowerAndCop()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
-- [[KuehlhausModelTests.LargeStep_StaysStableAndDoesNotOvershoot()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
-- [[KuehlhausModelTests.OverTemperature_LatchesAndNeedsCoolDownBeforeReset()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
-- [[KuehlhausModelTests.Setpoint_OutsideMinus30To0_IsRejected()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
-- [[KuehlhausModelTests.TurnOff_StopsCompressorAndReportsOffState()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
-- [[KuehlhausModelTests.Update_UsesExactExponentialSolution()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
+- [[ClientOptions]] - code - src/ModbusDiagnosticClient/ClientOptions.cs
+- [[ClientOptions.IsHelpRequested()]] - code - src/ModbusDiagnosticClient/ClientOptions.cs
+- [[ClientOptions.NextValue()]] - code - src/ModbusDiagnosticClient/ClientOptions.cs
+- [[ClientOptions.Parse()]] - code - src/ModbusDiagnosticClient/ClientOptions.cs
+- [[ClientOptions.ParseInt()]] - code - src/ModbusDiagnosticClient/ClientOptions.cs
+- [[ClientOptionsTests]] - code - tests/ModbusDiagnosticClient.Tests/DiagnosticClientTests.cs
+- [[ClientOptionsTests.Defaults()]] - code - tests/ModbusDiagnosticClient.Tests/DiagnosticClientTests.cs
+- [[ClientOptionsTests.MissingValue_Throws()]] - code - tests/ModbusDiagnosticClient.Tests/DiagnosticClientTests.cs
+- [[ClientOptionsTests.Parses_AllOptions_AndWrites()]] - code - tests/ModbusDiagnosticClient.Tests/DiagnosticClientTests.cs
+- [[Host]] - code - src/ModbusDiagnosticClient/ClientOptions.cs
+- [[IsOneShot]] - code - src/ModbusDiagnosticClient/ClientOptions.cs
+- [[Once]] - code - src/ModbusDiagnosticClient/ClientOptions.cs
+- [[Port_1]] - code - src/ModbusDiagnosticClient/ClientOptions.cs
+- [[TimeoutMs]] - code - src/ModbusDiagnosticClient/ClientOptions.cs
+- [[UnitId]] - code - src/ModbusDiagnosticClient/ClientOptions.cs
+- [[Writes]] - code - src/ModbusDiagnosticClient/ClientOptions.cs
 
 ## Live Query (requires Dataview plugin)
 
@@ -32,18 +35,15 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 8 edges to [[_COMMUNITY_Kühlhaus-Modell]]
-- 8 edges to [[_COMMUNITY_Master-Zeit Tests]]
-- 5 edges to [[_COMMUNITY_Batterie-Modbus & Update]]
-- 2 edges to [[_COMMUNITY_Batterie-Simulator Loop]]
-- 2 edges to [[_COMMUNITY_Gruppe 58]]
-- 1 edge to [[_COMMUNITY_Gruppe 59]]
-- 1 edge to [[_COMMUNITY_Bibliotheks-Namespaces]]
-- 1 edge to [[_COMMUNITY_StepScheduler]]
+- 3 edges to [[_COMMUNITY_Gruppe 48]]
+- 3 edges to [[_COMMUNITY_Gruppe 23]]
+- 1 edge to [[_COMMUNITY_Gruppe 52]]
+- 1 edge to [[_COMMUNITY_Gruppe 19]]
+- 1 edge to [[_COMMUNITY_Modbus-Tests]]
 
 ## Top bridge nodes
-- [[Kuehlhaus.Update()]] - degree 15, connects to 4 communities
-- [[KuehlhausModelTests.CreateRoom()]] - degree 12, connects to 3 communities
-- [[Kuehlhaus.TurnOff()]] - degree 8, connects to 2 communities
-- [[KuehlhausModelTests.OverTemperature_LatchesAndNeedsCoolDownBeforeReset()]] - degree 7, connects to 2 communities
-- [[KuehlhausModelTests.CompressorFailure_IsAlwaysClearedByReset()]] - degree 6, connects to 2 communities
+- [[ClientOptions]] - degree 13, connects to 2 communities
+- [[ClientOptionsTests]] - degree 5, connects to 2 communities
+- [[ClientOptionsTests.MissingValue_Throws()]] - degree 4, connects to 2 communities
+- [[ClientOptions.Parse()]] - degree 7, connects to 1 community
+- [[ClientOptionsTests.Defaults()]] - degree 3, connects to 1 community

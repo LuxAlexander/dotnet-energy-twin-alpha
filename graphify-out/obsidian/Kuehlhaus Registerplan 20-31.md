@@ -12,6 +12,6 @@ tags:
 
 ## Connections
 - [[Gemeinsamer Registerkopf 0-19]] - `references` [EXTRACTED]
-- [[KuehlhausSimulator_2]] - `implements` [EXTRACTED]
+- [[KuehlhausSimulator_1]] - `implements` [EXTRACTED]
 
 #graphify/document #graphify/EXTRACTED #community/Geräte-READMEs__Modelle

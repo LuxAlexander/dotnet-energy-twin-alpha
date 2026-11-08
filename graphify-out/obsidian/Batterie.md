@@ -12,9 +12,9 @@ tags:
 # Batterie
 
 ## Connections
-- [[ActiveFault]] - `defines` [EXTRACTED]
+- [[ActiveFault_2]] - `defines` [EXTRACTED]
 - [[ActualKW]] - `defines` [EXTRACTED]
-- [[AmbientTemperatureC]] - `defines` [EXTRACTED]
+- [[AmbientTemperatureC_1]] - `defines` [EXTRACTED]
 - [[Batterie.CalculatePower()]] - `method` [EXTRACTED]
 - [[Batterie.GetDerateFactor()]] - `method` [EXTRACTED]
 - [[Batterie.GetTaperFactor()]] - `method` [EXTRACTED]
@@ -38,15 +38,15 @@ tags:
 - [[ConsoleDashboard.StatusLine()]] - `references` [EXTRACTED]
 - [[CsvLogger.LogAsync()]] - `references` [EXTRACTED]
 - [[DeviceId]] - `defines` [EXTRACTED]
-- [[DeviceState]] - `references` [EXTRACTED]
+- [[DeviceState_1]] - `references` [EXTRACTED]
 - [[DischargeKWh]] - `defines` [EXTRACTED]
 - [[EquivalentCycles]] - `defines` [EXTRACTED]
-- [[FaultType]] - `references` [EXTRACTED]
-- [[IsOn]] - `defines` [EXTRACTED]
+- [[FaultType_2]] - `references` [EXTRACTED]
+- [[IsOn_1]] - `defines` [EXTRACTED]
 - [[SetpointKW]] - `defines` [EXTRACTED]
 - [[Simulator]] - `references` [EXTRACTED]
 - [[SocPercent]] - `defines` [EXTRACTED]
-- [[State]] - `defines` [EXTRACTED]
+- [[State_1]] - `defines` [EXTRACTED]
 - [[TemperaturC]] - `defines` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Batterie-Modell

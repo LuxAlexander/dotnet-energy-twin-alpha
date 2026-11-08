@@ -12,7 +12,7 @@ tags:
 # PvEngineTests.Pv_RunsStandalone_WritesCsvAndStopsOnCancel()
 
 ## Connections
-- [[ArgsParser.Parse()_3]] - `calls` [EXTRACTED]
+- [[ArgsParser.Parse()]] - `calls` [EXTRACTED]
 - [[Fact]] - `references` [EXTRACTED]
 - [[PvEngineTests]] - `method` [EXTRACTED]
 - [[SimulationEngine.RunAsync()_2]] - `calls` [INFERRED]

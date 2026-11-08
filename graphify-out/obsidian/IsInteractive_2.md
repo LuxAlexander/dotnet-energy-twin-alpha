@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/KuehlhausSimulator/IO/ConsoleRenderer.cs"
+source_file: "src/Devices/BatterySimulator/ConsoleDashboard.cs"
 type: "code"
-community: "WeatherClient & Anzeige"
-location: "L21"
+community: "Gruppe 21"
+location: "L12"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/WeatherClient__Anzeige
+  - community/Gruppe_21
 ---
 
 # IsInteractive
 
 ## Connections
-- [[ConsoleRenderer_1]] - `defines` [EXTRACTED]
+- [[ConsoleDashboard]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/WeatherClient__Anzeige
+#graphify/code #graphify/EXTRACTED #community/Gruppe_21

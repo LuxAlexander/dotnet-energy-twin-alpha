@@ -1,12 +1,12 @@
 ---
 source_file: "src/SimCore.TimeSync/TimeSyncClientInfo.cs"
 type: "code"
-community: "Zeitsync-Client & Konsole"
+community: "Gruppe 65"
 location: "L10"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Zeitsync-Client__Konsole
+  - community/Gruppe_65
 ---
 
 # NotResponding
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[ClientConnectionState]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Zeitsync-Client__Konsole
+#graphify/code #graphify/EXTRACTED #community/Gruppe_65

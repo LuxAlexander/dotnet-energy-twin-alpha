@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/BatterySimulator/ConsoleDashboard.cs"
 type: "code"
-community: "Gruppe 70"
+community: "Gruppe 21"
 location: "L6"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_70
+  - community/Gruppe_21
 ---
 
 # ConsoleDashboard
@@ -21,7 +21,7 @@ tags:
 - [[ConsoleDashboard.StatusLine()]] - `method` [EXTRACTED]
 - [[ConsoleDashboard.cs]] - `contains` [EXTRACTED]
 - [[CultureInfo]] - `references` [EXTRACTED]
-- [[IsInteractive]] - `defines` [EXTRACTED]
+- [[IsInteractive_2]] - `defines` [EXTRACTED]
 - [[Simulator]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_70
+#graphify/code #graphify/EXTRACTED #community/Gruppe_21

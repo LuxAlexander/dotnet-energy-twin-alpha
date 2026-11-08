@@ -1,17 +1,17 @@
 ---
-source_file: "src/SimCore.TimeSync/TimeSyncClientInfo.cs"
+source_file: "src/Devices/DualPortCharger/Models/ChargingPointState.cs"
 type: "code"
-community: "Zeitsync-Client & Konsole"
-location: "L7"
+community: "Gruppe 108"
+location: "L9"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Zeitsync-Client__Konsole
+  - community/Gruppe_108
 ---
 
 # Connected
 
 ## Connections
-- [[ClientConnectionState]] - `case_of` [EXTRACTED]
+- [[ChargingPointState]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Zeitsync-Client__Konsole
+#graphify/code #graphify/EXTRACTED #community/Gruppe_108

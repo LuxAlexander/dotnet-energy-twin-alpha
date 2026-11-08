@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/PvSimulator/Data/CsvExporter.cs"
 type: "code"
-community: "Batterie-Simulator Loop"
+community: "Batterie-Simulator Loop (2)"
 location: "L27"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Simulator_Loop
+  - community/Batterie-Simulator_Loop_2
 ---
 
 # CsvExporter.CreateAsync()
@@ -18,4 +18,4 @@ tags:
 - [[SimulationEngine.RunAsync()_2]] - `calls` [EXTRACTED]
 - [[Task]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop
+#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop_2

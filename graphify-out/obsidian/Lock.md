@@ -1,20 +1,20 @@
 ---
 source_file: ""
 type: "code"
-community: "Batterie-Modbus & Update"
+community: "MasterClock"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Modbus__Update
+  - community/MasterClock
 ---
 
 # Lock
 
 ## Connections
-- [[ClientConnection_1]] - `references` [EXTRACTED]
+- [[ClientConnection]] - `references` [EXTRACTED]
 - [[MasterClock]] - `references` [EXTRACTED]
 - [[ModbusDeviceServer]] - `references` [EXTRACTED]
 - [[SyncedClock]] - `references` [EXTRACTED]
 - [[TimeSyncServer]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update
+#graphify/code #graphify/EXTRACTED #community/MasterClock

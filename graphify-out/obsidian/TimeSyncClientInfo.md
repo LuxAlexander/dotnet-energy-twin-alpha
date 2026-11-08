@@ -1,12 +1,12 @@
 ---
 source_file: "src/SimCore.TimeSync/TimeSyncClientInfo.cs"
 type: "code"
-community: "Zeitsync-Client & Konsole"
+community: "Gruppe 65"
 location: "L20"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Zeitsync-Client__Konsole
+  - community/Gruppe_65
 ---
 
 # TimeSyncClientInfo
@@ -21,4 +21,4 @@ tags:
 - [[TimeSyncClientInfo.cs]] - `contains` [EXTRACTED]
 - [[TimeSyncServer]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Zeitsync-Client__Konsole
+#graphify/code #graphify/EXTRACTED #community/Gruppe_65

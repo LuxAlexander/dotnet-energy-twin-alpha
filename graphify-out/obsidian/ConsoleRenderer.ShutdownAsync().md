@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/DualPortCharger/IO/ConsoleRenderer.cs"
 type: "code"
-community: "Batterie-Simulator Loop"
+community: "Gruppe 69"
 location: "L36"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Simulator_Loop
+  - community/Gruppe_69
 ---
 
 # ConsoleRenderer.ShutdownAsync()
@@ -17,4 +17,4 @@ tags:
 - [[SimulationEngine.RunAsync()]] - `calls` [INFERRED]
 - [[Task]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop
+#graphify/code #graphify/EXTRACTED #community/Gruppe_69

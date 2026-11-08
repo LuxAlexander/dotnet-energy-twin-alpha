@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/KuehlhausSimulator/IO/InputHandler.cs"
 type: "code"
-community: "Batterie-Simulator Loop"
+community: "WeatherClient & Anzeige"
 location: "L98"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Simulator_Loop
+  - community/WeatherClient__Anzeige
 ---
 
 # InputHandler.AskSetpointAsync()
@@ -19,4 +19,4 @@ tags:
 - [[SimulationEngine.TrySetSetpoint()]] - `calls` [INFERRED]
 - [[Task]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop
+#graphify/code #graphify/EXTRACTED #community/WeatherClient__Anzeige

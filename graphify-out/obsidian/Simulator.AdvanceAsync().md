@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/BatterySimulator/Simulator.cs"
 type: "code"
-community: "CsvLogger"
+community: "Batterie-Simulator Loop"
 location: "L140"
 tags:
   - graphify/code
   - graphify/INFERRED
-  - community/CsvLogger
+  - community/Batterie-Simulator_Loop
 ---
 
 # Simulator.AdvanceAsync()
@@ -25,4 +25,4 @@ tags:
 - [[Task]] - `references` [EXTRACTED]
 - [[WeatherFeed.UpdateAsync()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/INFERRED #community/CsvLogger
+#graphify/code #graphify/INFERRED #community/Batterie-Simulator_Loop

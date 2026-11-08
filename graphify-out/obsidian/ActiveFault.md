@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/BatterySimulator/Batterie.cs"
+source_file: "src/Devices/KuehlhausSimulator/Kuehlhaus.cs"
 type: "code"
-community: "Batterie-Modell"
-location: "L41"
+community: "Kühlhaus-Modell"
+location: "L91"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Modell
+  - community/Kühlhaus-Modell
 ---
 
 # ActiveFault
 
 ## Connections
-- [[Batterie]] - `defines` [EXTRACTED]
+- [[Kuehlhaus]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Modell
+#graphify/code #graphify/EXTRACTED #community/Kühlhaus-Modell

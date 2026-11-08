@@ -1,12 +1,12 @@
 ---
-source_file: "src/Shared/Weather/WeatherCondition.cs"
+source_file: "src/SimCore.Contracts/WeatherData.cs"
 type: "code"
-community: "Gruppe 47"
-location: "L7"
+community: "Wettermodell & Tests (4)"
+location: "L8"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_47
+  - community/Wettermodell__Tests_4
 ---
 
 # Overcast
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[WeatherCondition]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_47
+#graphify/code #graphify/EXTRACTED #community/Wettermodell__Tests_4

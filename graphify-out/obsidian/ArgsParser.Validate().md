@@ -1,19 +1,19 @@
 ---
 source_file: "src/Devices/BatterySimulator/ArgsParser.cs"
 type: "code"
-community: "Gruppe 75"
+community: "Gruppe 105"
 location: "L118"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_75
+  - community/Gruppe_105
 ---
 
 # ArgsParser.Validate()
 
 ## Connections
-- [[ArgsParser]] - `method` [EXTRACTED]
-- [[ArgsParser.Parse()]] - `calls` [EXTRACTED]
+- [[ArgsParser_2]] - `method` [EXTRACTED]
+- [[ArgsParser.Parse()_2]] - `calls` [EXTRACTED]
 - [[BatterieConfig]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_75
+#graphify/code #graphify/EXTRACTED #community/Gruppe_105

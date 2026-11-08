@@ -1,12 +1,12 @@
 ---
-source_file: "src/ModbusDiagnosticClient/DeviceConnection.cs"
+source_file: "src/Modbus.Client/DeviceConnection.cs"
 type: "code"
-community: "DeviceConnection"
+community: "DeviceConnection (Modbus.Client)"
 location: "L118"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/DeviceConnection
+  - community/DeviceConnection_ModbusClient
 ---
 
 # DeviceConnection.Translate()
@@ -20,4 +20,4 @@ tags:
 - [[DiagnosticException]] - `calls` [EXTRACTED]
 - [[Exception]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/DeviceConnection
+#graphify/code #graphify/EXTRACTED #community/DeviceConnection_ModbusClient

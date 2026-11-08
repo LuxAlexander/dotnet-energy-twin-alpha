@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "code"
-community: "Batterie-Simulator Loop"
+community: "Zeitsync-Client & Konsole"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Simulator_Loop
+  - community/Zeitsync-Client__Konsole
 ---
 
 # ConsoleKeyInfo
@@ -18,4 +18,4 @@ tags:
 - [[MasterConsole.HandlePromptKey()]] - `references` [EXTRACTED]
 - [[Simulator.HandleKey()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop
+#graphify/code #graphify/EXTRACTED #community/Zeitsync-Client__Konsole

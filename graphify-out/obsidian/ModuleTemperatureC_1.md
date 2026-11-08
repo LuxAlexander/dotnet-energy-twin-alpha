@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/PvSimulator/Devices/PvSystem.cs"
+source_file: "src/Devices/PvSimulator/Devices/PvFaultModel.cs"
 type: "code"
-community: "PvSystem"
-location: "L27"
+community: "PvFaultModel"
+location: "L36"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/PvSystem
+  - community/PvFaultModel
 ---
 
 # ModuleTemperatureC
 
 ## Connections
-- [[PvSystem]] - `defines` [EXTRACTED]
+- [[PvFaultModel]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/PvSystem
+#graphify/code #graphify/EXTRACTED #community/PvFaultModel

@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/BatterySimulator/Batterie.cs"
+source_file: "src/Devices/PvSimulator/Devices/PvSystem.cs"
 type: "code"
-community: "Batterie-Modell"
-location: "L39"
+community: "PvSystem"
+location: "L31"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Modell
+  - community/PvSystem
 ---
 
 # AmbientTemperatureC
 
 ## Connections
-- [[Batterie]] - `defines` [EXTRACTED]
+- [[PvSystem]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Modell
+#graphify/code #graphify/EXTRACTED #community/PvSystem

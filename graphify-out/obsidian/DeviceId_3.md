@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/KuehlhausSimulator/KuehlhausConfig.cs"
+source_file: "src/Devices/KuehlhausSimulator/Simulation/SimulationConfig.cs"
 type: "code"
-community: "Gruppe 59"
-location: "L10"
+community: "Gruppe 66"
+location: "L22"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_59
+  - community/Gruppe_66
 ---
 
 # DeviceId
 
 ## Connections
-- [[KuehlhausConfig]] - `defines` [EXTRACTED]
+- [[SimulationConfig_1]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_59
+#graphify/code #graphify/EXTRACTED #community/Gruppe_66

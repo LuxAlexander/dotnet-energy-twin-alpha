@@ -1,16 +1,16 @@
 ---
-source_file: "tests/ModbusDiagnosticClient.Tests/ModbusDiagnosticClient.Tests.csproj"
+source_file: "src/Devices/DualPortCharger/DualPortCharger.csproj"
 type: "concept"
-community: "Gruppe 65"
+community: "Gruppe 117"
 tags:
   - graphify/concept
   - graphify/EXTRACTED
-  - community/Gruppe_65
+  - community/Gruppe_117
 ---
 
 # Microsoft.NET.Sdk
 
 ## Connections
-- [[ModbusDiagnosticClient.Tests.csproj]] - `references` [EXTRACTED]
+- [[DualPortCharger.csproj]] - `references` [EXTRACTED]
 
-#graphify/concept #graphify/EXTRACTED #community/Gruppe_65
+#graphify/concept #graphify/EXTRACTED #community/Gruppe_117

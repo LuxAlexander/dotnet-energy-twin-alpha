@@ -1,25 +1,23 @@
 ---
-source_file: "src/Devices/PvSimulator/Devices/FaultType.cs"
+source_file: "src/Devices/BatterySimulator/Enum.cs"
 type: "code"
-community: "Gruppe 74"
-location: "L3"
+community: "Batterie-Modell"
+location: "L24"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_74
+  - community/Batterie-Modell
 ---
 
 # FaultType
 
 ## Connections
-- [[FaultType.cs]] - `contains` [EXTRACTED]
-- [[FaultTypeExtensions.ToGString()]] - `references` [EXTRACTED]
+- [[Batterie]] - `references` [EXTRACTED]
+- [[Batterie.TriggerFault()]] - `references` [EXTRACTED]
+- [[EmergencyStop]] - `case_of` [EXTRACTED]
+- [[Enum.cs]] - `contains` [EXTRACTED]
 - [[FieldDeviceTests.cs]] - `imports` [EXTRACTED]
-- [[GridVoltage]] - `case_of` [EXTRACTED]
-- [[Inverter]] - `case_of` [EXTRACTED]
-- [[None_2]] - `case_of` [EXTRACTED]
+- [[None_4]] - `case_of` [EXTRACTED]
 - [[Overheat_1]] - `case_of` [EXTRACTED]
-- [[PvFaultModel]] - `references` [EXTRACTED]
-- [[PvSystem]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_74
+#graphify/code #graphify/EXTRACTED #community/Batterie-Modell

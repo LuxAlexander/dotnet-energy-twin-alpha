@@ -1,12 +1,12 @@
 ---
 source_file: "src/SimCore.TimeSync/TimeSyncClient.cs"
 type: "code"
-community: "Sync-Nachrichten"
+community: "Sync-Nachrichten (2)"
 location: "L12"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Sync-Nachrichten
+  - community/Sync-Nachrichten_2
 ---
 
 # TimeSyncClient
@@ -16,8 +16,8 @@ tags:
 - [[DateTimeOffset]] - `references` [EXTRACTED]
 - [[DeviceTimeSource]] - `references` [EXTRACTED]
 - [[DeviceTimeSource.Create()]] - `calls` [INFERRED]
-- [[Endpoint_1]] - `defines` [EXTRACTED]
-- [[IsConnected_1]] - `defines` [EXTRACTED]
+- [[Endpoint]] - `defines` [EXTRACTED]
+- [[IsConnected]] - `defines` [EXTRACTED]
 - [[LastError]] - `defines` [EXTRACTED]
 - [[SyncedClock]] - `references` [EXTRACTED]
 - [[TimeSpan]] - `references` [EXTRACTED]
@@ -35,4 +35,4 @@ tags:
 - [[TimeSyncIntegrationTests.SimulatorStarted_BeforeMaster_ConnectsLater()]] - `calls` [INFERRED]
 - [[TimeSyncIntegrationTests.StartSimulator()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/Sync-Nachrichten
+#graphify/code #graphify/EXTRACTED #community/Sync-Nachrichten_2

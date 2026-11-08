@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/BatterySimulator/Simulator.cs"
 type: "code"
-community: "Gruppe 44"
+community: "Gruppe 21"
 location: "L13"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_44
+  - community/Gruppe_21
 ---
 
 # Simulator
@@ -26,13 +26,13 @@ tags:
 - [[DateTime]] - `references` [EXTRACTED]
 - [[DeviceTimeSource]] - `references` [EXTRACTED]
 - [[DeviceTimeSource.Create()]] - `calls` [EXTRACTED]
-- [[IsFinished]] - `defines` [EXTRACTED]
-- [[Message]] - `defines` [EXTRACTED]
-- [[ModbusStatus]] - `defines` [EXTRACTED]
-- [[Mode]] - `defines` [EXTRACTED]
+- [[IsFinished_1]] - `defines` [EXTRACTED]
+- [[Message_1]] - `defines` [EXTRACTED]
+- [[ModbusStatus_2]] - `defines` [EXTRACTED]
+- [[Mode_3]] - `defines` [EXTRACTED]
 - [[QuitRequested]] - `defines` [EXTRACTED]
-- [[RunId_1]] - `defines` [EXTRACTED]
-- [[SimulationTime]] - `defines` [EXTRACTED]
+- [[RunId_5]] - `defines` [EXTRACTED]
+- [[SimulationTime_2]] - `defines` [EXTRACTED]
 - [[Simulator.AdvanceAsync()]] - `method` [EXTRACTED]
 - [[Simulator.ClearPromptAsync()]] - `method` [EXTRACTED]
 - [[Simulator.HandleKey()]] - `method` [EXTRACTED]
@@ -47,10 +47,10 @@ tags:
 - [[StepScheduler]] - `references` [EXTRACTED]
 - [[StepSeconds]] - `defines` [EXTRACTED]
 - [[Task]] - `references` [EXTRACTED]
-- [[Time]] - `defines` [EXTRACTED]
+- [[Time_2]] - `defines` [EXTRACTED]
 - [[TimeSpan]] - `references` [EXTRACTED]
 - [[WeatherClient]] - `calls` [INFERRED]
 - [[WeatherFeed]] - `references` [EXTRACTED]
-- [[WeatherStatus]] - `defines` [EXTRACTED]
+- [[WeatherStatus_2]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_44
+#graphify/code #graphify/EXTRACTED #community/Gruppe_21

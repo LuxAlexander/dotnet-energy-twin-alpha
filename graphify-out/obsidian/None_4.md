@@ -1,17 +1,17 @@
 ---
-source_file: "src/SimulationMaster/MasterConsole.cs"
+source_file: "src/Devices/BatterySimulator/Enum.cs"
 type: "code"
-community: "Zeitsync-Client & Konsole"
-location: "L28"
+community: "Batterie-Modell"
+location: "L26"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Zeitsync-Client__Konsole
+  - community/Batterie-Modell
 ---
 
 # None
 
 ## Connections
-- [[PromptKind_1]] - `case_of` [EXTRACTED]
+- [[FaultType_2]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Zeitsync-Client__Konsole
+#graphify/code #graphify/EXTRACTED #community/Batterie-Modell

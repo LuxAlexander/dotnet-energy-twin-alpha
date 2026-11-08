@@ -1,16 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "TimeSyncServer"
+community: "MQTT-Publisher & Zugangsdaten"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/TimeSyncServer
+  - community/MQTT-Publisher__Zugangsdaten
 ---
 
 # IAsyncLifetime
 
 ## Connections
+- [[MqttPublisherTests]] - `implements` [EXTRACTED]
 - [[TimeSyncIntegrationTests]] - `implements` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/TimeSyncServer
+#graphify/code #graphify/EXTRACTED #community/MQTT-Publisher__Zugangsdaten

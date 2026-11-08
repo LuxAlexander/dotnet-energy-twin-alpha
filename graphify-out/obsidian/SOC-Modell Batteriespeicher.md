@@ -11,6 +11,6 @@ tags:
 # SOC-Modell Batteriespeicher
 
 ## Connections
-- [[BatterySimulator_1]] - `conceptually_related_to` [EXTRACTED]
+- [[BatterySimulator]] - `conceptually_related_to` [EXTRACTED]
 
 #graphify/document #graphify/EXTRACTED #community/Geräte-READMEs__Modelle

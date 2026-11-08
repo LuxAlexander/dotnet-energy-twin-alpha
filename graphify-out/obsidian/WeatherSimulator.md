@@ -1,19 +1,20 @@
 ---
-source_file: "AGENTS.md"
+source_file: "src/WeatherSimulator/README.md"
 type: "document"
-community: "Projekt-Doku & Geräte"
+community: "Gruppe 99"
 tags:
   - graphify/document
   - graphify/EXTRACTED
-  - community/Projekt-Doku__Geräte
+  - community/Gruppe_99
 ---
 
 # WeatherSimulator
 
 ## Connections
-- [[PvSimulator]] - `shares_data_with` [EXTRACTED]
-- [[WeatherClient_1]] - `calls` [EXTRACTED]
-- [[Wetter HTTP weather Port 8080]] - `implements` [EXTRACTED]
-- [[start-all.ps1]] - `calls` [EXTRACTED]
+- [[Deterministic weather (location, time, run seed)]] - `implements` [EXTRACTED]
+- [[LB01 SeasonIrradiationCalculator basis]] - `references` [EXTRACTED]
+- [[Manual weather override keys]] - `references` [EXTRACTED]
+- [[Weather HTTP API (weather, locations)]] - `implements` [EXTRACTED]
+- [[WeatherModelTests_1]] - `references` [EXTRACTED]
 
-#graphify/document #graphify/EXTRACTED #community/Projekt-Doku__Geräte
+#graphify/document #graphify/EXTRACTED #community/Gruppe_99

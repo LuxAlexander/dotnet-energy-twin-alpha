@@ -12,9 +12,9 @@ tags:
 # DiagnosticSession
 
 ## Connections
-- [[Connection_1]] - `defines` [EXTRACTED]
+- [[AK-12 Diagnose-Client funktioniert weiter]] - `references` [INFERRED]
+- [[Connection]] - `defines` [EXTRACTED]
 - [[CultureInfo]] - `references` [EXTRACTED]
-- [[DeviceConnection]] - `references` [EXTRACTED]
 - [[DeviceType]] - `references` [EXTRACTED]
 - [[DiagnosticClientTests]] - `references` [EXTRACTED]
 - [[DiagnosticSession.ConnectAsync()]] - `method` [EXTRACTED]
@@ -35,6 +35,8 @@ tags:
 - [[DiagnosticSession.WatchAsync()]] - `method` [EXTRACTED]
 - [[DiagnosticSession.WriteAsync()]] - `method` [EXTRACTED]
 - [[DiagnosticSession.cs]] - `contains` [EXTRACTED]
+- [[ModbusDiagnosticClient (Diagnose-Konsole)]] - `references` [EXTRACTED]
+- [[Nachweis 4 Sollwert-Kette 200 kW angenommen, 999 kW abgelehnt (erfüllt)]] - `references` [INFERRED]
 - [[Plan_5]] - `defines` [EXTRACTED]
 - [[RegisterPlan]] - `references` [EXTRACTED]
 - [[TextWriter]] - `references` [EXTRACTED]

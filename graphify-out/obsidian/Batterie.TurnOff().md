@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/BatterySimulator/Batterie.cs"
 type: "code"
-community: "Gruppe 81"
+community: "Batterie-Modell"
 location: "L209"
 tags:
   - graphify/code
   - graphify/INFERRED
-  - community/Gruppe_81
+  - community/Batterie-Modell
 ---
 
 # Batterie.TurnOff()
@@ -16,4 +16,4 @@ tags:
 - [[BatteryModbus.ProcessCommands()]] - `calls` [INFERRED]
 - [[Simulator.HandleKey()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/INFERRED #community/Gruppe_81
+#graphify/code #graphify/INFERRED #community/Batterie-Modell

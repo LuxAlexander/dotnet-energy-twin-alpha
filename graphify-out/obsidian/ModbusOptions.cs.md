@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices.Common/Modbus/ModbusOptions.cs"
 type: "code"
-community: "Charger-Namespaces"
+community: "Modbus-Tests"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Charger-Namespaces
+  - community/Modbus-Tests
 ---
 
 # ModbusOptions.cs
@@ -17,4 +17,4 @@ tags:
 - [[system_globalization]] - `imports` [EXTRACTED]
 - [[system_net]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Charger-Namespaces
+#graphify/code #graphify/EXTRACTED #community/Modbus-Tests

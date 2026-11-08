@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "code"
-community: "CsvLogger"
+community: "Batterie-Simulator Loop (2)"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/CsvLogger
+  - community/Batterie-Simulator_Loop_2
 ---
 
 # IAsyncDisposable
@@ -17,5 +17,6 @@ tags:
 - [[CsvLogger_1]] - `implements` [EXTRACTED]
 - [[CsvLogger_2]] - `implements` [EXTRACTED]
 - [[MessageChannel]] - `implements` [EXTRACTED]
+- [[MqttPublisher]] - `implements` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/CsvLogger
+#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop_2

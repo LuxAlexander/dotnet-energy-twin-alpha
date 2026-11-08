@@ -12,7 +12,6 @@ tags:
 # DiagnosticSession.ReadHeader()
 
 ## Connections
-- [[DeviceConnection.ReadRegisters()]] - `calls` [EXTRACTED]
 - [[DiagnosticSession]] - `method` [EXTRACTED]
 - [[DiagnosticSession.PrintHeaderAsync()]] - `calls` [EXTRACTED]
 - [[DiagnosticSession.PrintInfoAsync()]] - `calls` [EXTRACTED]

@@ -1,17 +1,17 @@
 ---
-source_file: "tests/FieldDevices.Tests/FieldDeviceTests.cs"
+source_file: "src/Devices.Common/DeviceTimeSource.cs"
 type: "code"
-community: "Batterie-Modbus & Update"
-location: "L27"
+community: "DeviceTimeSource"
+location: "L52"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Modbus__Update
+  - community/DeviceTimeSource
 ---
 
 # Options
 
 ## Connections
-- [[ModbusTestBase]] - `defines` [EXTRACTED]
+- [[DeviceTimeSource]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update
+#graphify/code #graphify/EXTRACTED #community/DeviceTimeSource

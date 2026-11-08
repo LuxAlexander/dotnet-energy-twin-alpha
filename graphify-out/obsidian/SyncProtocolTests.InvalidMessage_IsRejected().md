@@ -1,12 +1,12 @@
 ---
 source_file: "tests/SimCore.Tests/SyncProtocolTests.cs"
 type: "code"
-community: "TimeSyncOptions Tests"
+community: "Gruppe 48"
 location: "L43"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/TimeSyncOptions_Tests
+  - community/Gruppe_48
 ---
 
 # SyncProtocolTests.InvalidMessage_IsRejected()
@@ -18,4 +18,4 @@ tags:
 - [[SyncProtocolTests]] - `method` [EXTRACTED]
 - [[Theory]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/TimeSyncOptions_Tests
+#graphify/code #graphify/EXTRACTED #community/Gruppe_48

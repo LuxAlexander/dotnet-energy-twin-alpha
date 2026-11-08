@@ -1,20 +1,21 @@
 ---
-source_file: "src/Devices/DualPortCharger/IO/CsvLogger.cs"
+source_file: "src/Devices/BatterySimulator/CsvLogger.cs"
 type: "code"
-community: "CsvLogger"
-location: "L31"
+community: "Batterie-Simulator Loop"
+location: "L28"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/CsvLogger
+  - community/Batterie-Simulator_Loop
 ---
 
 # CsvLogger.CreateAsync()
 
 ## Connections
+- [[BatterieConfig]] - `references` [EXTRACTED]
 - [[CancellationToken]] - `references` [EXTRACTED]
-- [[CsvLogger_1]] - `method` [EXTRACTED]
-- [[SimulationEngine.RunAsync()]] - `calls` [EXTRACTED]
+- [[CsvLogger]] - `method` [EXTRACTED]
+- [[Simulator.RunAsync()]] - `calls` [EXTRACTED]
 - [[Task]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/CsvLogger
+#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop

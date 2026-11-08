@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/PvSimulator/Simulation/PvModbus.cs"
+source_file: "src/Devices.Common/DeviceTimeSource.cs"
 type: "code"
-community: "Batterie-Modbus & Update"
-location: "L31"
+community: "DeviceTimeSource"
+location: "L71"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Modbus__Update
+  - community/DeviceTimeSource
 ---
 
 # StatusText
 
 ## Connections
-- [[PvModbus]] - `defines` [EXTRACTED]
+- [[DeviceTimeSource]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update
+#graphify/code #graphify/EXTRACTED #community/DeviceTimeSource

@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/DualPortCharger/Models/ChargingPoint.cs"
+source_file: "src/Devices/PvSimulator/Devices/PvSystem.cs"
 type: "code"
-community: "Ladepunkt"
-location: "L30"
+community: "PvSystem"
+location: "L21"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Ladepunkt
+  - community/PvSystem
 ---
 
-# PowerKW
+# PowerKw
 
 ## Connections
-- [[ChargingPoint]] - `defines` [EXTRACTED]
+- [[PvSystem]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Ladepunkt
+#graphify/code #graphify/EXTRACTED #community/PvSystem

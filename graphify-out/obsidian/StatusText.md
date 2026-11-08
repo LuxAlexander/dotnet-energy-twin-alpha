@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices.Common/DeviceTimeSource.cs"
+source_file: "src/Devices/BatterySimulator/BatteryModbus.cs"
 type: "code"
-community: "DeviceTimeSource"
-location: "L71"
+community: "Batterie-Modbus & Update (3)"
+location: "L34"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/DeviceTimeSource
+  - community/Batterie-Modbus__Update_3
 ---
 
 # StatusText
 
 ## Connections
-- [[DeviceTimeSource]] - `defines` [EXTRACTED]
+- [[BatteryModbus]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/DeviceTimeSource
+#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update_3

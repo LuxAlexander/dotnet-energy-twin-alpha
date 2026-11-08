@@ -16,6 +16,6 @@ tags:
 - [[Kuehlhaus.TriggerFault()]] - `calls` [EXTRACTED]
 - [[Kuehlhaus.TurnOff()]] - `calls` [EXTRACTED]
 - [[Kuehlhaus.TurnOn()]] - `calls` [EXTRACTED]
-- [[Kuehlhaus.Update()_1]] - `calls` [EXTRACTED]
+- [[Kuehlhaus.Update()]] - `calls` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Kühlhaus-Modell

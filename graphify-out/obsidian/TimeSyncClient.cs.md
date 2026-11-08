@@ -1,12 +1,12 @@
 ---
 source_file: "src/SimCore.TimeSync/TimeSyncClient.cs"
 type: "code"
-community: "Zeit-Bibliotheken & Master"
+community: "Modbus-Tests"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Zeit-Bibliotheken__Master
+  - community/Modbus-Tests
 ---
 
 # TimeSyncClient.cs
@@ -19,4 +19,4 @@ tags:
 - [[system_collections_concurrent]] - `imports` [EXTRACTED]
 - [[system_net_sockets]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Zeit-Bibliotheken__Master
+#graphify/code #graphify/EXTRACTED #community/Modbus-Tests

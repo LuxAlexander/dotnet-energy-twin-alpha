@@ -14,8 +14,8 @@ tags:
 ## Connections
 - [[ConcurrentQueue]] - `references` [EXTRACTED]
 - [[CultureInfo]] - `references` [EXTRACTED]
-- [[HasKeyboard_1]] - `defines` [EXTRACTED]
-- [[IsInteractive_3]] - `defines` [EXTRACTED]
+- [[HasKeyboard]] - `defines` [EXTRACTED]
+- [[IsInteractive]] - `defines` [EXTRACTED]
 - [[KeyResult]] - `contains` [EXTRACTED]
 - [[MasterClock]] - `references` [EXTRACTED]
 - [[MasterConsole.AddMessage()]] - `method` [EXTRACTED]
@@ -40,12 +40,12 @@ tags:
 - [[MasterConsole.TogglePause()]] - `method` [EXTRACTED]
 - [[MasterConsole.cs]] - `contains` [EXTRACTED]
 - [[MasterOptions]] - `references` [EXTRACTED]
-- [[Program.Main()_2]] - `calls` [INFERRED]
-- [[PromptKind]] - `references` [EXTRACTED]
-- [[PromptKind_1]] - `contains` [EXTRACTED]
+- [[Program.Main()]] - `calls` [INFERRED]
+- [[PromptKind_1]] - `references` [EXTRACTED]
+- [[PromptKind]] - `contains` [EXTRACTED]
 - [[StringBuilder]] - `references` [EXTRACTED]
 - [[TimeSpan]] - `references` [EXTRACTED]
 - [[TimeSyncServer]] - `references` [EXTRACTED]
-- [[Width_2]] - `defines` [EXTRACTED]
+- [[Width]] - `defines` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Zeitsync-Client__Konsole

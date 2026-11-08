@@ -12,8 +12,8 @@ tags:
 # TimeSyncServer.Register()
 
 ## Connections
-- [[ClientConnection]] - `references` [EXTRACTED]
-- [[ClientConnection_1]] - `calls` [EXTRACTED]
+- [[ClientConnection]] - `calls` [EXTRACTED]
+- [[ClientConnection_1]] - `references` [EXTRACTED]
 - [[HelloMessage]] - `references` [EXTRACTED]
 - [[MessageChannel]] - `references` [EXTRACTED]
 - [[TimeSyncServer]] - `method` [EXTRACTED]

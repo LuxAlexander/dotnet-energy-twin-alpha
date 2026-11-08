@@ -12,7 +12,7 @@ tags:
 # HelloMessage
 
 ## Connections
-- [[ClientConnection_1]] - `references` [EXTRACTED]
+- [[ClientConnection]] - `references` [EXTRACTED]
 - [[SyncMessage]] - `inherits` [EXTRACTED]
 - [[SyncMessages.cs]] - `contains` [EXTRACTED]
 - [[SyncProtocolTests.Messages()]] - `calls` [INFERRED]

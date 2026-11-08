@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "concept"
-community: "Gruppe 40"
+community: "Gruppe 19"
 tags:
   - graphify/concept
   - graphify/EXTRACTED
-  - community/Gruppe_40
+  - community/Gruppe_19
 ---
 
 # system_threading_tasks
@@ -16,4 +16,4 @@ tags:
 - [[DailyProfile.cs]] - `imports` [EXTRACTED]
 - [[Enum.cs]] - `imports` [EXTRACTED]
 
-#graphify/concept #graphify/EXTRACTED #community/Gruppe_40
+#graphify/concept #graphify/EXTRACTED #community/Gruppe_19

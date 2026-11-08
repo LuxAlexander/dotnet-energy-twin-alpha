@@ -11,9 +11,9 @@ tags:
 # Geraete-Register (Charger, PV, Batterie, Kuehlhaus)
 
 ## Connections
-- [[BatterySimulator_1]] - `implements` [INFERRED]
-- [[DualPortCharger_1]] - `implements` [EXTRACTED]
-- [[Modbus.Contracts_2]] - `references` [EXTRACTED]
+- [[BatterySimulator]] - `implements` [INFERRED]
+- [[DualPortCharger]] - `implements` [EXTRACTED]
+- [[Modbus.Contracts_1]] - `references` [EXTRACTED]
 - [[RegisterPlans.For(DeviceType)]] - `calls` [EXTRACTED]
 
 #graphify/document #graphify/EXTRACTED #community/Geräte-READMEs__Modelle

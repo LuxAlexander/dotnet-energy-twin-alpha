@@ -1,21 +1,27 @@
 ---
 type: community
-cohesion: 0.53
-members: 6
+cohesion: 0.17
+members: 12
 ---
 
 # Gruppe 82
 
-**Cohesion:** 0.53 - moderately connected
-**Members:** 6 nodes
+**Cohesion:** 0.17 - loosely connected
+**Members:** 12 nodes
 
 ## Members
-- [[ArgsParser_1]] - code - src/Devices/DualPortCharger/IO/ArgsParser.cs
-- [[ArgsParser.IsHelpRequested()_1]] - code - src/Devices/DualPortCharger/IO/ArgsParser.cs
-- [[ArgsParser.NextValue()_1]] - code - src/Devices/DualPortCharger/IO/ArgsParser.cs
-- [[ArgsParser.Parse()_1]] - code - src/Devices/DualPortCharger/IO/ArgsParser.cs
-- [[ArgsParser.ParsePositive()]] - code - src/Devices/DualPortCharger/IO/ArgsParser.cs
-- [[Program.Main()]] - code - src/Devices/DualPortCharger/Program.cs
+- [[CommonRegisters.cs]] - code - src/Modbus.Contracts/CommonRegisters.cs
+- [[Fault_1]] - code - src/Modbus.Contracts/CommonRegisters.cs
+- [[IncompleteValue]] - code - src/Modbus.Contracts/CommonRegisters.cs
+- [[InvalidValue]] - code - src/Modbus.Contracts/CommonRegisters.cs
+- [[None_1]] - code - src/Modbus.Contracts/CommonRegisters.cs
+- [[NotWritable]] - code - src/Modbus.Contracts/CommonRegisters.cs
+- [[Off]] - code - src/Modbus.Contracts/CommonRegisters.cs
+- [[OperatingState]] - code - src/Modbus.Contracts/CommonRegisters.cs
+- [[Running]] - code - src/Modbus.Contracts/CommonRegisters.cs
+- [[Standby]] - code - src/Modbus.Contracts/CommonRegisters.cs
+- [[WriteError]] - code - src/Modbus.Contracts/CommonRegisters.cs
+- [[WriteOutcome]] - code - src/ModbusDiagnosticClient/DiagnosticSession.cs
 
 ## Live Query (requires Dataview plugin)
 
@@ -25,15 +31,17 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 2 edges to [[_COMMUNITY_Charger-Namespaces]]
-- 2 edges to [[_COMMUNITY_Batterie-Simulator Loop]]
-- 1 edge to [[_COMMUNITY_Gruppe 64]]
-- 1 edge to [[_COMMUNITY_Gruppe 55]]
+- 2 edges to [[_COMMUNITY_Batterie-Modbus & Update]]
+- 1 edge to [[_COMMUNITY_DeviceTimeSource]]
+- 1 edge to [[_COMMUNITY_Registerpläne]]
 - 1 edge to [[_COMMUNITY_Gruppe 52]]
-- 1 edge to [[_COMMUNITY_Gruppe 56]]
-- 1 edge to [[_COMMUNITY_Gruppe 41]]
+- 1 edge to [[_COMMUNITY_Schreibprüfung]]
+- 1 edge to [[_COMMUNITY_Diagnose-Client Verbindung]]
+- 1 edge to [[_COMMUNITY_Gruppe 19]]
+- 1 edge to [[_COMMUNITY_Modbus-Tests]]
 
 ## Top bridge nodes
-- [[ArgsParser.Parse()_1]] - degree 8, connects to 4 communities
-- [[Program.Main()]] - degree 6, connects to 3 communities
-- [[ArgsParser_1]] - degree 5, connects to 1 community
+- [[CommonRegisters.cs]] - degree 6, connects to 4 communities
+- [[WriteError]] - degree 8, connects to 2 communities
+- [[WriteOutcome]] - degree 3, connects to 2 communities
+- [[OperatingState]] - degree 6, connects to 1 community

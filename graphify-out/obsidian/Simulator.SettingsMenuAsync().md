@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/BatterySimulator/Simulator.cs"
 type: "code"
-community: "Batterie-Simulator Loop"
+community: "TimeSyncServer"
 location: "L270"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Simulator_Loop
+  - community/TimeSyncServer
 ---
 
 # Simulator.SettingsMenuAsync()
@@ -20,4 +20,4 @@ tags:
 - [[Simulator.PromptAsync()]] - `calls` [EXTRACTED]
 - [[Task]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop
+#graphify/code #graphify/EXTRACTED #community/TimeSyncServer

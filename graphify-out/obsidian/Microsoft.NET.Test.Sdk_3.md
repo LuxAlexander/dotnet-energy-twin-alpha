@@ -1,16 +1,16 @@
 ---
-source_file: "tests/SimCore.Tests/SimCore.Tests.csproj"
+source_file: "tests/Devices.Common.Tests/Devices.Common.Tests.csproj"
 type: "code"
-community: "Gruppe 85"
+community: "Gruppe 113"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_85
+  - community/Gruppe_113
 ---
 
 # Microsoft.NET.Test.Sdk
 
 ## Connections
-- [[SimCore.Tests.csproj]] - `imports` [EXTRACTED]
+- [[Devices.Common.Tests.csproj]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_85
+#graphify/code #graphify/EXTRACTED #community/Gruppe_113

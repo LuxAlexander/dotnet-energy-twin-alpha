@@ -1,12 +1,12 @@
 ---
 source_file: "src/WeatherSimulator/Simulation/WeatherModel.cs"
 type: "code"
-community: "Wettermodell & Tests"
+community: "Wettermodell & Tests (2)"
 location: "L176"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Wettermodell__Tests
+  - community/Wettermodell__Tests_2
 ---
 
 # WeatherModel.SunHeightDegrees()
@@ -16,4 +16,4 @@ tags:
 - [[WeatherModel]] - `method` [EXTRACTED]
 - [[WeatherModel.Get()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Wettermodell__Tests
+#graphify/code #graphify/EXTRACTED #community/Wettermodell__Tests_2

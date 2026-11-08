@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices.Common/AsyncConsole.cs"
 type: "code"
-community: "Batterie-Simulator Loop"
+community: "TimeSyncServer"
 location: "L10"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Simulator_Loop
+  - community/TimeSyncServer
 ---
 
 # AsyncConsole
@@ -15,7 +15,7 @@ tags:
 - [[AsyncConsole.ReadLineAsync()]] - `method` [EXTRACTED]
 - [[AsyncConsole.TryReadKey()]] - `method` [EXTRACTED]
 - [[AsyncConsole.cs]] - `contains` [EXTRACTED]
-- [[HasKeyboard]] - `defines` [EXTRACTED]
+- [[HasKeyboard_1]] - `defines` [EXTRACTED]
 - [[TimeSpan]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop
+#graphify/code #graphify/EXTRACTED #community/TimeSyncServer

@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices.Common/Modbus/ModbusDeviceServer.cs"
 type: "code"
-community: "Batterie-Modbus & Update"
+community: "DeviceTimeSource"
 location: "L196"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Modbus__Update
+  - community/DeviceTimeSource
 ---
 
 # ModbusDeviceServer.MapStatus()
@@ -17,4 +17,4 @@ tags:
 - [[ModbusDeviceServer.Publish()]] - `calls` [EXTRACTED]
 - [[TimeStatus]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update
+#graphify/code #graphify/EXTRACTED #community/DeviceTimeSource

@@ -1,21 +1,20 @@
 ---
-source_file: "AGENTS.md"
+source_file: "src/Devices/DualPortCharger/README.md"
 type: "document"
-community: "Projekt-Doku & Geräte"
+community: "Geräte-READMEs & Modelle"
 tags:
   - graphify/document
   - graphify/EXTRACTED
-  - community/Projekt-Doku__Geräte
+  - community/Geräte-READMEs__Modelle
 ---
 
 # DualPortCharger
 
 ## Connections
-- [[Devices.Common_1]] - `calls` [EXTRACTED]
-- [[Journal Susanne Lastowicka]] - `references` [INFERRED]
-- [[ModbusDiagnosticClient_1]] - `shares_data_with` [EXTRACTED]
-- [[SimulationMaster_1]] - `shares_data_with` [EXTRACTED]
-- [[Susanne Lastowicka]] - `references` [EXTRACTED]
-- [[Trennung Modell und Rahmen]] - `conceptually_related_to` [INFERRED]
+- [[Charger Kommandozeilenargumente]] - `references` [EXTRACTED]
+- [[Gemeinsames Leistungsbudget der Ladepunkte]] - `conceptually_related_to` [EXTRACTED]
+- [[Geraete-Register (Charger, PV, Batterie, Kuehlhaus)]] - `implements` [EXTRACTED]
+- [[Simulations-Master]] - `calls` [EXTRACTED]
+- [[Wettersimulator (HTTP 8080)]] - `calls` [EXTRACTED]
 
-#graphify/document #graphify/EXTRACTED #community/Projekt-Doku__Geräte
+#graphify/document #graphify/EXTRACTED #community/Geräte-READMEs__Modelle

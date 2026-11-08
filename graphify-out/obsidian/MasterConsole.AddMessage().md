@@ -17,6 +17,6 @@ tags:
 - [[MasterConsole.Restart()]] - `calls` [EXTRACTED]
 - [[MasterConsole.SubmitPrompt()]] - `calls` [EXTRACTED]
 - [[MasterConsole.TogglePause()]] - `calls` [EXTRACTED]
-- [[Program.Main()_2]] - `calls` [INFERRED]
+- [[Program.Main()]] - `calls` [INFERRED]
 
 #graphify/code #graphify/EXTRACTED #community/Zeitsync-Client__Konsole

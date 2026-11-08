@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/DualPortCharger/Models/ChargingPoint.cs"
 type: "code"
-community: "Gruppe 51"
+community: "Ladepunkt"
 location: "L176"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_51
+  - community/Ladepunkt
 ---
 
 # ChargingPoint.UpdateTemperature()
@@ -16,4 +16,4 @@ tags:
 - [[ChargingPoint.Update()]] - `calls` [EXTRACTED]
 - [[TimeSpan]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_51
+#graphify/code #graphify/EXTRACTED #community/Ladepunkt

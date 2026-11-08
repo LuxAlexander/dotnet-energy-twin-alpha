@@ -1,12 +1,12 @@
 ---
 source_file: "tests/FieldDevices.Tests/FieldDeviceTests.cs"
 type: "code"
-community: "Batterie-Modbus & Update"
+community: "Batterie-Modbus & Update (2)"
 location: "L18"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Modbus__Update
+  - community/Batterie-Modbus__Update_2
 ---
 
 # ModbusTestBase
@@ -27,7 +27,7 @@ tags:
 - [[ModbusTestBase.ReadFloat()]] - `method` [EXTRACTED]
 - [[ModbusTestBase.WaitUntil()]] - `method` [EXTRACTED]
 - [[ModbusTestBase.WriteFloat()]] - `method` [EXTRACTED]
-- [[Options_2]] - `defines` [EXTRACTED]
+- [[Options_1]] - `defines` [EXTRACTED]
 - [[PvModbusTests]] - `inherits` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update
+#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update_2

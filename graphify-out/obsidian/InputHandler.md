@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/DualPortCharger/IO/InputHandler.cs"
 type: "code"
-community: "Batterie-Simulator Loop"
+community: "Batterie-Simulator Loop (3)"
 location: "L11"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Simulator_Loop
+  - community/Batterie-Simulator_Loop_3
 ---
 
 # InputHandler
@@ -21,7 +21,7 @@ tags:
 - [[InputHandler.HandlePendingKeysAsync()]] - `method` [EXTRACTED]
 - [[InputHandler.ToggleCharging()]] - `method` [EXTRACTED]
 - [[InputHandler.WaitForQuitAsync()]] - `method` [EXTRACTED]
-- [[SimulationEngine]] - `references` [EXTRACTED]
+- [[SimulationEngine_1]] - `references` [EXTRACTED]
 - [[TimeSpan]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop
+#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop_3

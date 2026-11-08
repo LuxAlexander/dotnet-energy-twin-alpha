@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/BatterySimulator/CsvLogger.cs"
 type: "code"
-community: "CsvLogger"
+community: "Batterie-Simulator Loop"
 location: "L8"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/CsvLogger
+  - community/Batterie-Simulator_Loop
 ---
 
 # CsvLogger
@@ -14,7 +14,7 @@ tags:
 ## Connections
 - [[BatterieConfig]] - `references` [EXTRACTED]
 - [[BatterySimulatorCsvLogger.cs]] - `contains` [EXTRACTED]
-- [[CsvLogger.CreateAsync()]] - `method` [EXTRACTED]
+- [[CsvLogger.CreateAsync()_1]] - `method` [EXTRACTED]
 - [[CsvLogger.DisposeAsync()]] - `method` [EXTRACTED]
 - [[CsvLogger.FlushAsync()]] - `method` [EXTRACTED]
 - [[CsvLogger.LogAsync()]] - `method` [EXTRACTED]
@@ -24,4 +24,4 @@ tags:
 - [[Simulator.AdvanceAsync()]] - `references` [EXTRACTED]
 - [[StreamWriter]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/CsvLogger
+#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop

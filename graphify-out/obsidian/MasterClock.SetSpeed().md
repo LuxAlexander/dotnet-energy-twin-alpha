@@ -1,12 +1,12 @@
 ---
 source_file: "src/SimCore.Time/MasterClock.cs"
 type: "code"
-community: "Master-Zeit Tests"
+community: "Gruppe 23"
 location: "L100"
 tags:
   - graphify/code
   - graphify/INFERRED
-  - community/Master-Zeit_Tests
+  - community/Gruppe_23
 ---
 
 # MasterClock.SetSpeed()
@@ -30,4 +30,4 @@ tags:
 - [[TimeState]] - `references` [EXTRACTED]
 - [[TimeSyncIntegrationTests.TwoSimulators_FollowStartPauseSpeedAndRestart()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/INFERRED #community/Master-Zeit_Tests
+#graphify/code #graphify/INFERRED #community/Gruppe_23

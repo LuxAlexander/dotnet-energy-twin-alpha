@@ -1,28 +1,27 @@
 ---
-source_file: "src/Devices/BatterySimulator/ArgsParser.cs"
+source_file: "src/Devices/PvSimulator/Simulation/ArgsParser.cs"
 type: "code"
-community: "Gruppe 75"
-location: "L48"
+community: "ArgsParser (2)"
+location: "L47"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_75
+  - community/ArgsParser_2
 ---
 
 # ArgsParser.Parse()
 
 ## Connections
 - [[ArgsParser]] - `method` [EXTRACTED]
+- [[ArgsParser.Canonical()]] - `calls` [EXTRACTED]
 - [[ArgsParser.NextValue()]] - `calls` [EXTRACTED]
-- [[ArgsParser.ParseNumber()]] - `calls` [EXTRACTED]
-- [[ArgsParser.Validate()]] - `calls` [EXTRACTED]
-- [[ArgsParserTests.Battery_InvalidConfig_Throws()]] - `calls` [EXTRACTED]
-- [[ArgsParserTests.Battery_ParsesConfig_TimeAndModbus()]] - `calls` [EXTRACTED]
-- [[ArgsParserTests.Battery_StandaloneOnlyOptions_RequireStandalone()]] - `calls` [EXTRACTED]
-- [[BatterieConfig]] - `calls` [INFERRED]
+- [[ArgsParser.ParsePositive()]] - `calls` [EXTRACTED]
+- [[ArgsParserTests.Pv_Defaults_AndLb01Shortcuts()]] - `calls` [EXTRACTED]
+- [[ArgsParserTests.Pv_InvalidValues_Throw()]] - `calls` [EXTRACTED]
+- [[ArgsParserTests.Pv_StandaloneOptions_RequireStandalone()]] - `calls` [EXTRACTED]
 - [[ModbusOptions.TryApply()]] - `calls` [EXTRACTED]
-- [[SimulatorOptions]] - `references` [EXTRACTED]
+- [[PvEngineTests.Pv_RunsStandalone_WritesCsvAndStopsOnCancel()]] - `calls` [EXTRACTED]
+- [[SimulationConfig]] - `references` [EXTRACTED]
 - [[TimeSyncOptions.TryApply()]] - `calls` [EXTRACTED]
-- [[WeatherOptions.TryApply()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_75
+#graphify/code #graphify/EXTRACTED #community/ArgsParser_2

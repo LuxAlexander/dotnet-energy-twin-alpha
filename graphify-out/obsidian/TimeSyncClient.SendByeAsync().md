@@ -1,12 +1,12 @@
 ---
 source_file: "src/SimCore.TimeSync/TimeSyncClient.cs"
 type: "code"
-community: "Sync-Nachrichten"
+community: "Sync-Nachrichten (2)"
 location: "L185"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Sync-Nachrichten
+  - community/Sync-Nachrichten_2
 ---
 
 # TimeSyncClient.SendByeAsync()
@@ -19,4 +19,4 @@ tags:
 - [[TimeSyncClient]] - `method` [EXTRACTED]
 - [[TimeSyncClient.RunConnectionAsync()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Sync-Nachrichten
+#graphify/code #graphify/EXTRACTED #community/Sync-Nachrichten_2

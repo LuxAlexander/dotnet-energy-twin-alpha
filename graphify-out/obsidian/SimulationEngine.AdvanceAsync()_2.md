@@ -1,29 +1,28 @@
 ---
-source_file: "src/Devices/PvSimulator/Simulation/SimulationEngine.cs"
+source_file: "src/Devices/KuehlhausSimulator/Simulation/SimulationEngine.cs"
 type: "code"
-community: "WeatherFeed"
-location: "L153"
+community: "Batterie-Simulator Loop (2)"
+location: "L206"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/WeatherFeed
+  - community/Batterie-Simulator_Loop_2
 ---
 
 # SimulationEngine.AdvanceAsync()
 
 ## Connections
+- [[AutoModeController.Step()_1]] - `calls` [INFERRED]
 - [[CancellationToken]] - `references` [EXTRACTED]
-- [[CsvExporter]] - `references` [EXTRACTED]
-- [[CsvExporter.FlushAsync()]] - `calls` [INFERRED]
-- [[CsvExporter.WriteRowAsync()]] - `calls` [INFERRED]
-- [[PvSystem.ResetDailyEnergy()]] - `calls` [INFERRED]
-- [[PvSystem.StepContinuous()]] - `calls` [INFERRED]
+- [[CsvLogger_2]] - `references` [EXTRACTED]
+- [[CsvLogger.FlushAsync()_2]] - `calls` [INFERRED]
+- [[CsvLogger.WriteAsync()_1]] - `calls` [INFERRED]
+- [[Kuehlhaus.Update()_1]] - `calls` [INFERRED]
 - [[SimulationEngine_2]] - `method` [EXTRACTED]
-- [[SimulationEngine.RunAsync()_2]] - `calls` [EXTRACTED]
-- [[SimulationEngine.SetNotification()]] - `calls` [EXTRACTED]
-- [[SimulationEngine.UpdateAutoWeather()]] - `calls` [EXTRACTED]
+- [[SimulationEngine.RunAsync()_1]] - `calls` [EXTRACTED]
+- [[SimulationEngine.StartRunAsync()]] - `calls` [EXTRACTED]
 - [[SimulationEngine.UpdateWeatherAsync()_1]] - `calls` [EXTRACTED]
 - [[StepScheduler.Update()]] - `calls` [INFERRED]
 - [[Task]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/WeatherFeed
+#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop_2

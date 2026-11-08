@@ -12,7 +12,7 @@ tags:
 # PingMessage
 
 ## Connections
-- [[ClientConnection_1]] - `references` [EXTRACTED]
+- [[ClientConnection]] - `references` [EXTRACTED]
 - [[ClientConnection.Report()]] - `references` [EXTRACTED]
 - [[DateTime]] - `references` [EXTRACTED]
 - [[SyncMessage]] - `inherits` [EXTRACTED]

@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices.Common/Weather/WeatherFeed.cs"
+source_file: "src/Devices.Common/DeviceTimeSource.cs"
 type: "code"
-community: "WeatherFeed"
-location: "L38"
+community: "DeviceTimeSource"
+location: "L58"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/WeatherFeed
+  - community/DeviceTimeSource
 ---
 
 # Status
 
 ## Connections
-- [[WeatherFeed]] - `defines` [EXTRACTED]
+- [[DeviceTimeSource]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/WeatherFeed
+#graphify/code #graphify/EXTRACTED #community/DeviceTimeSource

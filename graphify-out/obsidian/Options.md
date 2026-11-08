@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices.Common/DeviceTimeSource.cs"
+source_file: "src/Devices.Common/Modbus/ModbusDeviceServer.cs"
 type: "code"
-community: "DeviceTimeSource"
-location: "L52"
+community: "Batterie-Modbus & Update"
+location: "L92"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/DeviceTimeSource
+  - community/Batterie-Modbus__Update
 ---
 
 # Options
 
 ## Connections
-- [[DeviceTimeSource]] - `defines` [EXTRACTED]
+- [[ModbusDeviceServer]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/DeviceTimeSource
+#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update

@@ -1,12 +1,12 @@
 ---
 source_file: "src/Shared/Data/CsvFormat.cs"
 type: "code"
-community: "Gruppe 73"
+community: "Gruppe 101"
 location: "L10"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_73
+  - community/Gruppe_101
 ---
 
 # CsvFormat
@@ -16,4 +16,4 @@ tags:
 - [[CsvFormat.cs]] - `contains` [EXTRACTED]
 - [[CultureInfo]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_73
+#graphify/code #graphify/EXTRACTED #community/Gruppe_101

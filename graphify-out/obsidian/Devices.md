@@ -1,16 +1,17 @@
 ---
-source_file: "Devices"
+source_file: "src/ModbusRabbitGateway/GatewayOptions.cs"
 type: "code"
-community: "Gruppe 90"
+community: "Gateway-Optionen"
+location: "L17"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_90
+  - community/Gateway-Optionen
 ---
 
 # Devices
 
 ## Connections
-- [[EnergyTwin.sln]] - `contains` [EXTRACTED]
+- [[GatewayOptions]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_90
+#graphify/code #graphify/EXTRACTED #community/Gateway-Optionen

@@ -1,12 +1,12 @@
 ---
 source_file: "src/ModbusDiagnosticClient/DiagnosticSession.cs"
 type: "code"
-community: "Gruppe 48"
+community: "Gruppe 82"
 location: "L7"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_48
+  - community/Gruppe_82
 ---
 
 # WriteOutcome
@@ -16,4 +16,4 @@ tags:
 - [[DiagnosticSession.cs]] - `contains` [EXTRACTED]
 - [[WriteError]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_48
+#graphify/code #graphify/EXTRACTED #community/Gruppe_82

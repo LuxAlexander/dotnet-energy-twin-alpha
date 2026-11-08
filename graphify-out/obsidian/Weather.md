@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/BatterySimulator/SimulatorOptions.cs"
+source_file: "src/Devices/PvSimulator/Devices/PvSystem.cs"
 type: "code"
-community: "Gruppe 71"
-location: "L29"
+community: "PvSystem"
+location: "L18"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_71
+  - community/PvSystem
 ---
 
 # Weather
 
 ## Connections
-- [[SimulatorOptions]] - `defines` [EXTRACTED]
+- [[PvSystem]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_71
+#graphify/code #graphify/EXTRACTED #community/PvSystem

@@ -1,12 +1,12 @@
 ---
 source_file: "src/SimCore.TimeSync/MessageChannel.cs"
 type: "code"
-community: "Sync-Nachrichten"
+community: "Sync-Nachrichten (2)"
 location: "L33"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Sync-Nachrichten
+  - community/Sync-Nachrichten_2
 ---
 
 # RemoteEndPoint
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[MessageChannel]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Sync-Nachrichten
+#graphify/code #graphify/EXTRACTED #community/Sync-Nachrichten_2

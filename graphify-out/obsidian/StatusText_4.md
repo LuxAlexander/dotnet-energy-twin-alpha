@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/KuehlhausSimulator/Simulation/KuehlhausModbus.cs"
+source_file: "src/Devices/PvSimulator/Simulation/PvModbus.cs"
 type: "code"
-community: "Batterie-Modbus & Update"
-location: "L28"
+community: "Batterie-Modbus & Update (4)"
+location: "L31"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Modbus__Update
+  - community/Batterie-Modbus__Update_4
 ---
 
 # StatusText
 
 ## Connections
-- [[KuehlhausModbus]] - `defines` [EXTRACTED]
+- [[PvModbus]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update
+#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update_4

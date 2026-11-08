@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/BatterySimulator/BatterieConfig.cs"
+source_file: "src/Devices/PvSimulator/Simulation/SimulationConfig.cs"
 type: "code"
-community: "Gruppe 43"
-location: "L11"
+community: "ArgsParser"
+location: "L12"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_43
+  - community/ArgsParser
 ---
 
 # DeviceId
 
 ## Connections
-- [[BatterieConfig]] - `defines` [EXTRACTED]
+- [[SimulationConfig]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_43
+#graphify/code #graphify/EXTRACTED #community/ArgsParser

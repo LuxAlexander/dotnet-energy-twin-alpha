@@ -1,17 +1,13 @@
 ---
 source_file: "docs/development-journal/alexander-lux.md"
 type: "document"
-community: "Projekt-Doku & Geräte"
+community: "Projekt-Doku & Geräte (7)"
 tags:
   - graphify/document
   - graphify/EXTRACTED
-  - community/Projekt-Doku__Geräte
+  - community/Projekt-Doku__Geräte_7
 ---
 
 # Journal Alexander Lux
 
-## Connections
-- [[Entwicklungsjournal]] - `references` [EXTRACTED]
-- [[PvSimulator]] - `references` [INFERRED]
-
-#graphify/document #graphify/EXTRACTED #community/Projekt-Doku__Geräte
+#graphify/document #graphify/EXTRACTED #community/Projekt-Doku__Geräte_7

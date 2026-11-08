@@ -1,12 +1,12 @@
 ---
 source_file: "tests/Devices.Common.Tests/DeviceTimeSourceTests.cs"
 type: "code"
-community: "TimeSyncServer"
+community: "Sync-Nachrichten"
 location: "L66"
 tags:
   - graphify/code
   - graphify/INFERRED
-  - community/TimeSyncServer
+  - community/Sync-Nachrichten
 ---
 
 # DeviceTimeSourceTests.WithMaster_FollowsMasterClock()
@@ -24,4 +24,4 @@ tags:
 - [[TimeSyncServer.RunAsync()]] - `calls` [INFERRED]
 - [[TimeSyncServer.Start()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/INFERRED #community/TimeSyncServer
+#graphify/code #graphify/INFERRED #community/Sync-Nachrichten

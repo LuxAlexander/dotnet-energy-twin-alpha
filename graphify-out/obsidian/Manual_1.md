@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/PvSimulator/Simulation/SimulationMode.cs"
+source_file: "src/WeatherSimulator/Simulation/WeatherModel.cs"
 type: "code"
-community: "Shared Konsolenausgabe"
-location: "L7"
+community: "Wettermodell & Tests (2)"
+location: "L21"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Shared_Konsolenausgabe
+  - community/Wettermodell__Tests_2
 ---
 
 # Manual
 
 ## Connections
-- [[SimulationMode]] - `case_of` [EXTRACTED]
+- [[WeatherModel]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Shared_Konsolenausgabe
+#graphify/code #graphify/EXTRACTED #community/Wettermodell__Tests_2

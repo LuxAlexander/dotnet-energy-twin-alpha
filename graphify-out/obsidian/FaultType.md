@@ -1,23 +1,22 @@
 ---
-source_file: "src/Devices/BatterySimulator/Enum.cs"
+source_file: "src/Devices/KuehlhausSimulator/Enums.cs"
 type: "code"
-community: "Gruppe 88"
-location: "L24"
+community: "Gruppe 68"
+location: "L13"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_88
+  - community/Gruppe_68
 ---
 
 # FaultType
 
 ## Connections
-- [[Batterie]] - `references` [EXTRACTED]
-- [[Batterie.TriggerFault()]] - `references` [EXTRACTED]
-- [[EmergencyStop]] - `case_of` [EXTRACTED]
-- [[Enum.cs]] - `contains` [EXTRACTED]
-- [[FieldDeviceTests.cs]] - `imports` [EXTRACTED]
-- [[None]] - `case_of` [EXTRACTED]
-- [[Overheat]] - `case_of` [EXTRACTED]
+- [[CompressorFailure]] - `case_of` [EXTRACTED]
+- [[Enums.cs]] - `contains` [EXTRACTED]
+- [[Kuehlhaus]] - `references` [EXTRACTED]
+- [[Kuehlhaus.TriggerFault()]] - `references` [EXTRACTED]
+- [[None_2]] - `case_of` [EXTRACTED]
+- [[OverTemperature]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_88
+#graphify/code #graphify/EXTRACTED #community/Gruppe_68

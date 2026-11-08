@@ -1,12 +1,12 @@
 ---
 source_file: "docker/docker-compose.yml"
 type: "code"
-community: "Gruppe 62"
+community: "Gruppe 86"
 location: "L10"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_62
+  - community/Gruppe_86
 ---
 
 # environment
@@ -16,4 +16,4 @@ tags:
 - [[RABBITMQ_DEFAULT_USER]] - `contains` [EXTRACTED]
 - [[rabbitmq]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_62
+#graphify/code #graphify/EXTRACTED #community/Gruppe_86

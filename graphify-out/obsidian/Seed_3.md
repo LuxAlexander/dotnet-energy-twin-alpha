@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/PvSimulator/Simulation/SimulationConfig.cs"
+source_file: "src/Devices/BatterySimulator/SimulatorOptions.cs"
 type: "code"
-community: "ArgsParser"
-location: "L18"
+community: "Gruppe 24"
+location: "L20"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/ArgsParser
+  - community/Gruppe_24
 ---
 
 # Seed
 
 ## Connections
-- [[SimulationConfig_2]] - `defines` [EXTRACTED]
+- [[SimulatorOptions]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/ArgsParser
+#graphify/code #graphify/EXTRACTED #community/Gruppe_24

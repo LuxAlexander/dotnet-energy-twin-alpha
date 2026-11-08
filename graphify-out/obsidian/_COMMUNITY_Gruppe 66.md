@@ -1,25 +1,29 @@
 ---
 type: community
-cohesion: 0.40
-members: 10
+cohesion: 0.14
+members: 14
 ---
 
 # Gruppe 66
 
-**Cohesion:** 0.40 - moderately connected
-**Members:** 10 nodes
+**Cohesion:** 0.14 - loosely connected
+**Members:** 14 nodes
 
 ## Members
-- [[ConsoleRenderer]] - code - src/Devices/DualPortCharger/IO/ConsoleRenderer.cs
-- [[ConsoleRenderer.Bar()]] - code - src/Devices/DualPortCharger/IO/ConsoleRenderer.cs
-- [[ConsoleRenderer.BuildLines()]] - code - src/Devices/DualPortCharger/IO/ConsoleRenderer.cs
-- [[ConsoleRenderer.BuildStatusLine()]] - code - src/Devices/DualPortCharger/IO/ConsoleRenderer.cs
-- [[ConsoleRenderer.DrawAsync()]] - code - src/Devices/DualPortCharger/IO/ConsoleRenderer.cs
-- [[ConsoleRenderer.F()]] - code - src/Devices/DualPortCharger/IO/ConsoleRenderer.cs
-- [[ConsoleRenderer.Fit()]] - code - src/Devices/DualPortCharger/IO/ConsoleRenderer.cs
-- [[ConsoleRenderer.FormatPoint()]] - code - src/Devices/DualPortCharger/IO/ConsoleRenderer.cs
-- [[IsInteractive_1]] - code - src/Devices/DualPortCharger/IO/ConsoleRenderer.cs
-- [[Width]] - code - src/Devices/DualPortCharger/IO/ConsoleRenderer.cs
+- [[CoolingPowerKW_1]] - code - src/Devices/KuehlhausSimulator/Simulation/SimulationConfig.cs
+- [[DeviceId_3]] - code - src/Devices/KuehlhausSimulator/Simulation/SimulationConfig.cs
+- [[Duration]] - code - src/Devices/KuehlhausSimulator/Simulation/SimulationConfig.cs
+- [[DurationHours]] - code - src/Devices/KuehlhausSimulator/Simulation/SimulationConfig.cs
+- [[IsShortRun]] - code - src/Devices/KuehlhausSimulator/Simulation/SimulationConfig.cs
+- [[Modbus_1]] - code - src/Devices/KuehlhausSimulator/Simulation/SimulationConfig.cs
+- [[OutputDirectory_1]] - code - src/Devices/KuehlhausSimulator/Simulation/SimulationConfig.cs
+- [[Seed_1]] - code - src/Devices/KuehlhausSimulator/Simulation/SimulationConfig.cs
+- [[SetpointC_1]] - code - src/Devices/KuehlhausSimulator/Simulation/SimulationConfig.cs
+- [[SimulationConfig_1]] - code - src/Devices/KuehlhausSimulator/Simulation/SimulationConfig.cs
+- [[Step_1]] - code - src/Devices/KuehlhausSimulator/Simulation/SimulationConfig.cs
+- [[StepMinutes_1]] - code - src/Devices/KuehlhausSimulator/Simulation/SimulationConfig.cs
+- [[TimeSync_1]] - code - src/Devices/KuehlhausSimulator/Simulation/SimulationConfig.cs
+- [[Weather_1]] - code - src/Devices/KuehlhausSimulator/Simulation/SimulationConfig.cs
 
 ## Live Query (requires Dataview plugin)
 
@@ -29,17 +33,14 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 8 edges to [[_COMMUNITY_Batterie-Simulator Loop]]
-- 4 edges to [[_COMMUNITY_Gruppe 41]]
-- 1 edge to [[_COMMUNITY_Charger-Namespaces]]
-- 1 edge to [[_COMMUNITY_CsvLogger]]
-- 1 edge to [[_COMMUNITY_Shared Konsolenausgabe]]
-- 1 edge to [[_COMMUNITY_Ladepunkt]]
+- 1 edge to [[_COMMUNITY_Gruppe 65]]
+- 1 edge to [[_COMMUNITY_Gruppe 89]]
 - 1 edge to [[_COMMUNITY_WeatherClient & Anzeige]]
+- 1 edge to [[_COMMUNITY_Gruppe 44]]
+- 1 edge to [[_COMMUNITY_WeatherFeed]]
+- 1 edge to [[_COMMUNITY_Gruppe 61]]
+- 1 edge to [[_COMMUNITY_Bibliotheks-Namespaces]]
+- 1 edge to [[_COMMUNITY_Gruppe 81]]
 
 ## Top bridge nodes
-- [[ConsoleRenderer]] - degree 17, connects to 4 communities
-- [[ConsoleRenderer.BuildLines()]] - degree 7, connects to 2 communities
-- [[ConsoleRenderer.DrawAsync()]] - degree 7, connects to 2 communities
-- [[ConsoleRenderer.F()]] - degree 5, connects to 1 community
-- [[ConsoleRenderer.FormatPoint()]] - degree 5, connects to 1 community
+- [[SimulationConfig_1]] - degree 21, connects to 8 communities

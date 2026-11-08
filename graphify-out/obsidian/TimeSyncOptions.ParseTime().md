@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices.Common/TimeSyncOptions.cs"
 type: "code"
-community: "Gruppe 55"
+community: "Gruppe 44"
 location: "L71"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_55
+  - community/Gruppe_44
 ---
 
 # TimeSyncOptions.ParseTime()
@@ -16,4 +16,4 @@ tags:
 - [[TimeSyncOptions]] - `method` [EXTRACTED]
 - [[TimeSyncOptions.TryApply()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_55
+#graphify/code #graphify/EXTRACTED #community/Gruppe_44

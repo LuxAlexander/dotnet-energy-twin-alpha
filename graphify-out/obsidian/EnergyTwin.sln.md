@@ -1,18 +1,17 @@
 ---
 source_file: "EnergyTwin.sln"
 type: "code"
-community: "Gruppe 90"
+community: "Gruppe 51"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_90
+  - community/Gruppe_51
 ---
 
 # EnergyTwin.sln
 
 ## Connections
 - [[BatterySimulator.csproj]] - `contains` [EXTRACTED]
-- [[Devices]] - `contains` [EXTRACTED]
 - [[Devices.Common.Tests.csproj]] - `contains` [EXTRACTED]
 - [[Devices.Common.csproj]] - `contains` [EXTRACTED]
 - [[DualPortCharger.csproj]] - `contains` [EXTRACTED]
@@ -34,4 +33,4 @@ tags:
 - [[src]] - `contains` [EXTRACTED]
 - [[tests]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_90
+#graphify/code #graphify/EXTRACTED #community/Gruppe_51

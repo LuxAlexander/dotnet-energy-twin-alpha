@@ -1,12 +1,12 @@
 ---
 source_file: "src/Shared/Data/CsvFileWriter.cs"
 type: "code"
-community: "CsvLogger"
+community: "Batterie-Simulator Loop (2)"
 location: "L9"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/CsvLogger
+  - community/Batterie-Simulator_Loop_2
 ---
 
 # CsvFileWriter
@@ -20,8 +20,8 @@ tags:
 - [[CsvFileWriter.WriteRowAsync()]] - `method` [EXTRACTED]
 - [[CsvFileWriter.cs]] - `contains` [EXTRACTED]
 - [[CsvLogger_2]] - `references` [EXTRACTED]
-- [[FilePath_4]] - `defines` [EXTRACTED]
+- [[FilePath_3]] - `defines` [EXTRACTED]
 - [[IAsyncDisposable]] - `implements` [EXTRACTED]
 - [[StreamWriter]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/CsvLogger
+#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop_2

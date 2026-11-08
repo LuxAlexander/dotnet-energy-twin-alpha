@@ -12,7 +12,6 @@ tags:
 # DiagnosticSession.ReadAll()
 
 ## Connections
-- [[DeviceConnection.ReadRegisters()]] - `calls` [EXTRACTED]
 - [[DiagnosticClientTests.ConnectionLoss_IsReportedAsConnectionError_AndReconnectsWhenDeviceIsBack()]] - `calls` [INFERRED]
 - [[DiagnosticSession]] - `method` [EXTRACTED]
 - [[DiagnosticSession.PrintAllAsync()]] - `calls` [EXTRACTED]

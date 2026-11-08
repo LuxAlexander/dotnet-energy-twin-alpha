@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/DualPortCharger/IO/ConsoleRenderer.cs"
+source_file: "src/SimulationMaster/MasterConsole.cs"
 type: "code"
-community: "Gruppe 66"
-location: "L23"
+community: "Zeitsync-Client & Konsole"
+location: "L32"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_66
+  - community/Zeitsync-Client__Konsole
 ---
 
 # Width
 
 ## Connections
-- [[ConsoleRenderer]] - `defines` [EXTRACTED]
+- [[MasterConsole]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_66
+#graphify/code #graphify/EXTRACTED #community/Zeitsync-Client__Konsole

@@ -1,16 +1,16 @@
 ---
-source_file: "src/SimulationMaster/SimulationMaster.csproj"
+source_file: "src/WeatherSimulator/WeatherSimulator.csproj"
 type: "concept"
-community: "Gruppe 68"
+community: "Gruppe 96"
 tags:
   - graphify/concept
   - graphify/EXTRACTED
-  - community/Gruppe_68
+  - community/Gruppe_96
 ---
 
 # Microsoft.NET.Sdk
 
 ## Connections
-- [[SimulationMaster.csproj]] - `references` [EXTRACTED]
+- [[WeatherSimulator.csproj]] - `references` [EXTRACTED]
 
-#graphify/concept #graphify/EXTRACTED #community/Gruppe_68
+#graphify/concept #graphify/EXTRACTED #community/Gruppe_96

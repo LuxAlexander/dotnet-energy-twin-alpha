@@ -1,12 +1,12 @@
 ---
 source_file: "src/Modbus.Contracts/RegisterCodec.cs"
 type: "code"
-community: "RegisterCodec & Befehle"
+community: "RegisterCodec & Befehle (2)"
 location: "L13"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/RegisterCodec__Befehle
+  - community/RegisterCodec__Befehle_2
 ---
 
 # RegisterCodec.DecodeUInt32()
@@ -20,4 +20,4 @@ tags:
 - [[RegisterCodec.DecodeFloat32()]] - `calls` [EXTRACTED]
 - [[RegisterCodecTests.UInt32_RoundTrips()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/RegisterCodec__Befehle
+#graphify/code #graphify/EXTRACTED #community/RegisterCodec__Befehle_2

@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/DualPortCharger/Simulation/SimulationConfig.cs"
+source_file: "src/Devices/KuehlhausSimulator/Simulation/SimulationConfig.cs"
 type: "code"
-community: "Gruppe 56"
-location: "L28"
+community: "Gruppe 66"
+location: "L41"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_56
+  - community/Gruppe_66
 ---
 
 # TimeSync
 
 ## Connections
-- [[SimulationConfig]] - `defines` [EXTRACTED]
+- [[SimulationConfig_1]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_56
+#graphify/code #graphify/EXTRACTED #community/Gruppe_66

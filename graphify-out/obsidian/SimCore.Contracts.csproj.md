@@ -1,11 +1,11 @@
 ---
 source_file: "src/SimCore.Contracts/SimCore.Contracts.csproj"
 type: "code"
-community: "Gruppe 68"
+community: "Gruppe 98"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_68
+  - community/Gruppe_98
 ---
 
 # SimCore.Contracts.csproj
@@ -13,7 +13,7 @@ tags:
 ## Connections
 - [[Devices.Common.csproj]] - `imports` [EXTRACTED]
 - [[EnergyTwin.sln]] - `contains` [EXTRACTED]
-- [[Microsoft.NET.Sdk_9]] - `references` [EXTRACTED]
+- [[Microsoft.NET.Sdk_8]] - `references` [EXTRACTED]
 - [[Modbus.Contracts.csproj]] - `imports` [EXTRACTED]
 - [[ModbusDiagnosticClient.csproj]] - `imports` [EXTRACTED]
 - [[Shared.Config.csproj]] - `imports` [EXTRACTED]
@@ -22,4 +22,4 @@ tags:
 - [[SimulationMaster.csproj]] - `imports` [EXTRACTED]
 - [[WeatherSimulator.csproj]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_68
+#graphify/code #graphify/EXTRACTED #community/Gruppe_98

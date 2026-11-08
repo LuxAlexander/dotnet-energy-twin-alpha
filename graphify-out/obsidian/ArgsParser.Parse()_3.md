@@ -1,27 +1,24 @@
 ---
-source_file: "src/Devices/PvSimulator/Simulation/ArgsParser.cs"
+source_file: "src/Devices/DualPortCharger/IO/ArgsParser.cs"
 type: "code"
-community: "ArgsParser"
-location: "L47"
+community: "Gruppe 37"
+location: "L45"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/ArgsParser
+  - community/Gruppe_37
 ---
 
 # ArgsParser.Parse()
 
 ## Connections
 - [[ArgsParser_3]] - `method` [EXTRACTED]
-- [[ArgsParser.Canonical()]] - `calls` [EXTRACTED]
 - [[ArgsParser.NextValue()_3]] - `calls` [EXTRACTED]
 - [[ArgsParser.ParsePositive()_2]] - `calls` [EXTRACTED]
-- [[ArgsParserTests.Pv_Defaults_AndLb01Shortcuts()]] - `calls` [EXTRACTED]
-- [[ArgsParserTests.Pv_InvalidValues_Throw()]] - `calls` [EXTRACTED]
-- [[ArgsParserTests.Pv_StandaloneOptions_RequireStandalone()]] - `calls` [EXTRACTED]
 - [[ModbusOptions.TryApply()]] - `calls` [EXTRACTED]
-- [[PvEngineTests.Pv_RunsStandalone_WritesCsvAndStopsOnCancel()]] - `calls` [EXTRACTED]
+- [[Program.Main()_2]] - `calls` [EXTRACTED]
 - [[SimulationConfig_2]] - `references` [EXTRACTED]
 - [[TimeSyncOptions.TryApply()]] - `calls` [EXTRACTED]
+- [[WeatherOptions.TryApply()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/ArgsParser
+#graphify/code #graphify/EXTRACTED #community/Gruppe_37

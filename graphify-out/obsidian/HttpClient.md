@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "code"
-community: "WeatherClient & Anzeige"
+community: "Batterie-Modbus & Update (3)"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/WeatherClient__Anzeige
+  - community/Batterie-Modbus__Update_3
 ---
 
 # HttpClient
@@ -13,4 +13,4 @@ tags:
 ## Connections
 - [[WeatherClient]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/WeatherClient__Anzeige
+#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update_3

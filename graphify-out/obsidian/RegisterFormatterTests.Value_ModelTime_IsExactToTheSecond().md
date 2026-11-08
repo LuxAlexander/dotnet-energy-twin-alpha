@@ -1,12 +1,12 @@
 ---
 source_file: "tests/ModbusDiagnosticClient.Tests/DiagnosticClientTests.cs"
 type: "code"
-community: "Register-Dekodierung"
+community: "RegisterCodec & Befehle (2)"
 location: "L263"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Register-Dekodierung
+  - community/RegisterCodec__Befehle_2
 ---
 
 # RegisterFormatterTests.Value_ModelTime_IsExactToTheSecond()
@@ -20,4 +20,4 @@ tags:
 - [[RegisterFormatter.Value()]] - `calls` [EXTRACTED]
 - [[RegisterFormatterTests]] - `method` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Register-Dekodierung
+#graphify/code #graphify/EXTRACTED #community/RegisterCodec__Befehle_2

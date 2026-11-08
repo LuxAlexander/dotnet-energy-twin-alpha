@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "code"
-community: "TimeSyncOptions Tests"
+community: "Gruppe 48"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/TimeSyncOptions_Tests
+  - community/Gruppe_48
 ---
 
 # InlineData
@@ -18,8 +18,11 @@ tags:
 - [[BatteryModbusTests.Setpoint_BeyondConfiguredPower_IsRejected()]] - `references` [EXTRACTED]
 - [[ClientOptionsTests.Invalid_Throws()]] - `references` [EXTRACTED]
 - [[DiagnosticClientTests.Write_InvalidValue_IsRefusedByClientBeforeSending()]] - `references` [EXTRACTED]
+- [[GatewayOptionsTests.InvalidValues_AreRejectedWithGermanMessage()]] - `references` [EXTRACTED]
 - [[KuehlhausArgsTests.InvalidSetpoint_IsRejected()]] - `references` [EXTRACTED]
 - [[MasterClockTests.SetSpeed_OutOfRange_IsRejected()]] - `references` [EXTRACTED]
+- [[MeasurementKeysTests.From_MakesAsciiSnakeCase()]] - `references` [EXTRACTED]
+- [[MessageBuilderTests.Quality_FollowsTimeStatusAndRunningFlag()]] - `references` [EXTRACTED]
 - [[ModbusDeviceServerTests.InvalidValue_IsRejected_AndOldValueStays()]] - `references` [EXTRACTED]
 - [[PvModbusTests.PowerLimit_OutOfRange_IsRejected_AndDeviceKeepsValue()]] - `references` [EXTRACTED]
 - [[SyncProtocolTests.InvalidMessage_IsRejected()]] - `references` [EXTRACTED]
@@ -27,4 +30,4 @@ tags:
 - [[TimeSyncOptionsTests.Master_InvalidEndpoint_IsRejected()]] - `references` [EXTRACTED]
 - [[TimeSyncOptionsTests.Master_ParsesHostAndPort()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/TimeSyncOptions_Tests
+#graphify/code #graphify/EXTRACTED #community/Gruppe_48

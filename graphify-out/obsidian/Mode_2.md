@@ -1,17 +1,17 @@
 ---
-source_file: "src/SimCore.Contracts/ISimClock.cs"
+source_file: "src/SimCore.Time/SyncedClock.cs"
 type: "code"
-community: "Gruppe 63"
-location: "L14"
+community: "SyncedClock"
+location: "L103"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_63
+  - community/SyncedClock
 ---
 
 # Mode
 
 ## Connections
-- [[ISimClock]] - `defines` [EXTRACTED]
+- [[SyncedClock]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_63
+#graphify/code #graphify/EXTRACTED #community/SyncedClock

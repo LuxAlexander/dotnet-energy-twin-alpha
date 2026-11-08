@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/DualPortCharger/Simulation/AutoModeController.cs"
 type: "code"
-community: "Gruppe 51"
+community: "Gruppe 65"
 location: "L71"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_51
+  - community/Gruppe_65
 ---
 
 # AutoModeController.RandomDwellTime()
@@ -16,4 +16,4 @@ tags:
 - [[AutoModeController.HandleDepartures()]] - `calls` [EXTRACTED]
 - [[TimeSpan]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_51
+#graphify/code #graphify/EXTRACTED #community/Gruppe_65

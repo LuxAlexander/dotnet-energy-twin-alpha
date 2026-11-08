@@ -1,12 +1,12 @@
 ---
 source_file: "tests/Devices.Common.Tests/TimeSyncOptionsTests.cs"
 type: "code"
-community: "TimeSyncOptions Tests"
+community: "Gruppe 44"
 location: "L5"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/TimeSyncOptions_Tests
+  - community/Gruppe_44
 ---
 
 # TimeSyncOptionsTests.Apply()
@@ -20,4 +20,4 @@ tags:
 - [[TimeSyncOptionsTests.Master_ParsesHostAndPort()]] - `calls` [EXTRACTED]
 - [[TimeSyncOptionsTests.Standalone_TakesStartAndSpeed_WithCommaOrDot()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/TimeSyncOptions_Tests
+#graphify/code #graphify/EXTRACTED #community/Gruppe_44

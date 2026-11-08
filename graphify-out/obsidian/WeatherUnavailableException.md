@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices.Common/Weather/WeatherClient.cs"
 type: "code"
-community: "WeatherFeed"
+community: "Batterie-Simulator Loop"
 location: "L10"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/WeatherFeed
+  - community/Batterie-Simulator_Loop
 ---
 
 # WeatherUnavailableException
@@ -17,4 +17,4 @@ tags:
 - [[WeatherClient.GetAsync()]] - `calls` [EXTRACTED]
 - [[WeatherClient.cs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/WeatherFeed
+#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop

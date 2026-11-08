@@ -1,12 +1,12 @@
 ---
-source_file: "src/ModbusDiagnosticClient/DeviceConnection.cs"
+source_file: "src/Modbus.Client/DeviceConnection.cs"
 type: "code"
-community: "Modbus-Tests"
+community: "Modbus.Client-Fehler"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Modbus-Tests
+  - community/ModbusClient-Fehler
 ---
 
 # DeviceConnection.cs
@@ -15,10 +15,9 @@ tags:
 - [[DeviceConnection]] - `contains` [EXTRACTED]
 - [[DiagnosticErrorKind]] - `contains` [EXTRACTED]
 - [[DiagnosticException]] - `contains` [EXTRACTED]
-- [[Modbus.Contracts]] - `imports` [EXTRACTED]
-- [[ModbusDiagnosticClient]] - `contains` [EXTRACTED]
+- [[Modbus.Client]] - `contains` [EXTRACTED]
 - [[easymodbus]] - `imports` [EXTRACTED]
 - [[easymodbus_exceptions]] - `imports` [EXTRACTED]
 - [[system_net_sockets]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Modbus-Tests
+#graphify/code #graphify/EXTRACTED #community/ModbusClient-Fehler

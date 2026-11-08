@@ -1,12 +1,12 @@
 ---
-source_file: "src/SimCore.Contracts/WeatherData.cs"
+source_file: "src/Shared/Weather/WeatherCondition.cs"
 type: "code"
-community: "Wettermodell & Tests"
-location: "L6"
+community: "Gruppe 38"
+location: "L5"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Wettermodell__Tests
+  - community/Gruppe_38
 ---
 
 # Sunny
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[WeatherCondition_1]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Wettermodell__Tests
+#graphify/code #graphify/EXTRACTED #community/Gruppe_38

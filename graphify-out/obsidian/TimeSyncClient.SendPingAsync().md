@@ -1,12 +1,12 @@
 ---
 source_file: "src/SimCore.TimeSync/TimeSyncClient.cs"
 type: "code"
-community: "Sync-Nachrichten"
+community: "Sync-Nachrichten (2)"
 location: "L172"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Sync-Nachrichten
+  - community/Sync-Nachrichten_2
 ---
 
 # TimeSyncClient.SendPingAsync()
@@ -20,4 +20,4 @@ tags:
 - [[TimeSyncClient]] - `method` [EXTRACTED]
 - [[TimeSyncClient.PingLoopAsync()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Sync-Nachrichten
+#graphify/code #graphify/EXTRACTED #community/Sync-Nachrichten_2

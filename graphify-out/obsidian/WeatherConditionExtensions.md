@@ -1,12 +1,12 @@
 ---
 source_file: "src/Shared/Weather/WeatherCondition.cs"
 type: "code"
-community: "Gruppe 47"
+community: "Gruppe 38"
 location: "L13"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_47
+  - community/Gruppe_38
 ---
 
 # WeatherConditionExtensions
@@ -16,4 +16,4 @@ tags:
 - [[WeatherConditionExtensions.IsDayWeather()]] - `method` [EXTRACTED]
 - [[WeatherConditionExtensions.ToGerman()]] - `method` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_47
+#graphify/code #graphify/EXTRACTED #community/Gruppe_38

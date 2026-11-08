@@ -1,16 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "DeviceConnection"
+community: "DeviceConnection (Modbus.Client)"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/DeviceConnection
+  - community/DeviceConnection_ModbusClient
 ---
 
 # Exception
 
 ## Connections
+- [[BrokerUnavailableException]] - `inherits` [EXTRACTED]
 - [[DeviceConnection.Describe()]] - `references` [EXTRACTED]
 - [[DeviceConnection.IsConnectionProblem()]] - `references` [EXTRACTED]
 - [[DeviceConnection.IsModbusProblem()]] - `references` [EXTRACTED]
@@ -19,4 +20,4 @@ tags:
 - [[TimeSyncServer.IsConnectionError()]] - `references` [EXTRACTED]
 - [[WeatherUnavailableException]] - `inherits` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/DeviceConnection
+#graphify/code #graphify/EXTRACTED #community/DeviceConnection_ModbusClient

@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/KuehlhausSimulator/IO/CsvLogger.cs"
+source_file: "src/Devices/PvSimulator/Data/CsvExporter.cs"
 type: "code"
-community: "Batterie-Simulator Loop"
-location: "L21"
+community: "Batterie-Simulator Loop (2)"
+location: "L22"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Batterie-Simulator_Loop
+  - community/Batterie-Simulator_Loop_2
 ---
 
 # FilePath
 
 ## Connections
-- [[CsvLogger_2]] - `defines` [EXTRACTED]
+- [[CsvExporter]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop
+#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop_2

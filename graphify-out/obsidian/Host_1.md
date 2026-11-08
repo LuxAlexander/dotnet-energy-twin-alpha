@@ -1,12 +1,12 @@
 ---
-source_file: "src/ModbusDiagnosticClient/DeviceConnection.cs"
+source_file: "src/Modbus.Client/DeviceConnection.cs"
 type: "code"
-community: "DeviceConnection"
+community: "DeviceConnection (Modbus.Client)"
 location: "L45"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/DeviceConnection
+  - community/DeviceConnection_ModbusClient
 ---
 
 # Host
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[DeviceConnection]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/DeviceConnection
+#graphify/code #graphify/EXTRACTED #community/DeviceConnection_ModbusClient

@@ -1,12 +1,12 @@
 ---
 source_file: "src/SimCore.TimeSync/TimeSyncServer.cs"
 type: "code"
-community: "TimeSyncServer"
+community: "Sync-Nachrichten"
 location: "L13"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/TimeSyncServer
+  - community/Sync-Nachrichten
 ---
 
 # TimeSyncServer
@@ -14,12 +14,12 @@ tags:
 ## Connections
 - [[CancellationTokenSource]] - `references` [EXTRACTED]
 - [[Channel]] - `references` [EXTRACTED]
-- [[ClientConnection]] - `references` [EXTRACTED]
-- [[ClientConnection_1]] - `contains` [EXTRACTED]
+- [[ClientConnection_1]] - `references` [EXTRACTED]
+- [[ClientConnection]] - `contains` [EXTRACTED]
 - [[Clients]] - `defines` [EXTRACTED]
 - [[DeviceTimeSourceTests.WithMaster_FollowsMasterClock()]] - `calls` [INFERRED]
 - [[Dictionary]] - `references` [EXTRACTED]
-- [[HeartbeatInterval]] - `defines` [EXTRACTED]
+- [[HeartbeatInterval_1]] - `defines` [EXTRACTED]
 - [[IPEndPoint]] - `references` [EXTRACTED]
 - [[IReadOnlyList]] - `references` [EXTRACTED]
 - [[List]] - `references` [EXTRACTED]
@@ -27,7 +27,9 @@ tags:
 - [[Lock]] - `references` [EXTRACTED]
 - [[MasterClock]] - `references` [EXTRACTED]
 - [[MasterConsole]] - `references` [EXTRACTED]
-- [[Program.Main()_2]] - `calls` [INFERRED]
+- [[Program.Main()]] - `calls` [INFERRED]
+- [[Skript-Master (MasterClock + TimeSyncServer, fester Pausenplan)]] - `references` [EXTRACTED]
+- [[Skript-Master statt Master-Konsole (umgeleitetes Terminal)]] - `calls` [EXTRACTED]
 - [[Task]] - `references` [EXTRACTED]
 - [[TcpListener]] - `references` [EXTRACTED]
 - [[TimeSpan]] - `references` [EXTRACTED]
@@ -50,4 +52,4 @@ tags:
 - [[TimeSyncServer.Start()]] - `method` [EXTRACTED]
 - [[TimeSyncServer.cs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/TimeSyncServer
+#graphify/code #graphify/EXTRACTED #community/Sync-Nachrichten

@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/PvSimulator/Devices/PvSystem.cs"
+source_file: "src/Devices/PvSimulator/Devices/IDevice.cs"
 type: "code"
-community: "PvSystem"
-location: "L21"
+community: "Gruppe 91"
+location: "L7"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/PvSystem
+  - community/Gruppe_91
 ---
 
 # PowerKw
 
 ## Connections
-- [[PvSystem]] - `defines` [EXTRACTED]
+- [[IDevice]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/PvSystem
+#graphify/code #graphify/EXTRACTED #community/Gruppe_91

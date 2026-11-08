@@ -1,12 +1,12 @@
 ---
 source_file: "tests/FieldDevices.Tests/FieldDeviceTests.cs"
 type: "code"
-community: "Gruppe 43"
+community: "Gruppe 24"
 location: "L411"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_43
+  - community/Gruppe_24
 ---
 
 # BatteryUnitTests
@@ -16,4 +16,4 @@ tags:
 - [[BatteryUnitTests.Update_TimeSpanAndSeconds_GiveSameResult()]] - `method` [EXTRACTED]
 - [[FieldDeviceTests.cs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_43
+#graphify/code #graphify/EXTRACTED #community/Gruppe_24

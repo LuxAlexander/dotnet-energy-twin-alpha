@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "code"
-community: "TimeSyncServer"
+community: "Sync-Nachrichten"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/TimeSyncServer
+  - community/Sync-Nachrichten
 ---
 
 # IPEndPoint
@@ -13,4 +13,4 @@ tags:
 ## Connections
 - [[TimeSyncServer]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/TimeSyncServer
+#graphify/code #graphify/EXTRACTED #community/Sync-Nachrichten

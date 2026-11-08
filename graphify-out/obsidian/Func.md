@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "code"
-community: "Gruppe 52"
+community: "MQTT-Publisher & Zugangsdaten"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_52
+  - community/MQTT-Publisher__Zugangsdaten
 ---
 
 # Func
@@ -15,8 +15,11 @@ tags:
 - [[ModbusDeviceServer]] - `references` [EXTRACTED]
 - [[ModbusOptions.TryApply()]] - `references` [EXTRACTED]
 - [[ModbusTestBase.WaitUntil()]] - `references` [EXTRACTED]
+- [[MqttCredentials.Resolve()]] - `references` [EXTRACTED]
+- [[MqttCredentialsTests.Env()]] - `references` [EXTRACTED]
+- [[MqttPublisherTests.WaitForAsync()]] - `references` [EXTRACTED]
 - [[TimeSyncIntegrationTests.WaitUntilAsync()]] - `references` [EXTRACTED]
 - [[TimeSyncOptions.TryApply()]] - `references` [EXTRACTED]
 - [[WeatherOptions.TryApply()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_52
+#graphify/code #graphify/EXTRACTED #community/MQTT-Publisher__Zugangsdaten

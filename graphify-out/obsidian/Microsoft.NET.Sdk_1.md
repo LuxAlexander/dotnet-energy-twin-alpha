@@ -1,16 +1,16 @@
 ---
-source_file: "src/Devices/BatterySimulator/BatterySimulator.csproj"
+source_file: "src/Devices/PvSimulator/PvSimulator.csproj"
 type: "concept"
-community: "Gruppe 76"
+community: "Gruppe 51"
 tags:
   - graphify/concept
   - graphify/EXTRACTED
-  - community/Gruppe_76
+  - community/Gruppe_51
 ---
 
 # Microsoft.NET.Sdk
 
 ## Connections
-- [[BatterySimulator.csproj]] - `references` [EXTRACTED]
+- [[PvSimulator.csproj]] - `references` [EXTRACTED]
 
-#graphify/concept #graphify/EXTRACTED #community/Gruppe_76
+#graphify/concept #graphify/EXTRACTED #community/Gruppe_51

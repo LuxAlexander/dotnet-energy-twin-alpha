@@ -1,12 +1,12 @@
 ---
 source_file: "src/Shared/Weather/Season.cs"
 type: "code"
-community: "Gruppe 49"
+community: "Gruppe 67"
 location: "L15"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_49
+  - community/Gruppe_67
 ---
 
 # SeasonInfo.FromMonth()
@@ -19,4 +19,4 @@ tags:
 - [[SimulationEngine.Draw()]] - `calls` [EXTRACTED]
 - [[SimulationEngine.UpdateAutoWeather()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_49
+#graphify/code #graphify/EXTRACTED #community/Gruppe_67

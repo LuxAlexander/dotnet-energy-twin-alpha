@@ -1,12 +1,12 @@
 ---
 source_file: "src/SimCore.Time/ClockOffsetEstimator.cs"
 type: "code"
-community: "Gruppe 54"
+community: "Gruppe 71"
 location: "L27"
 tags:
   - graphify/code
   - graphify/INFERRED
-  - community/Gruppe_54
+  - community/Gruppe_71
 ---
 
 # ClockOffsetEstimator.AddSample()
@@ -19,4 +19,4 @@ tags:
 - [[DateTimeOffset]] - `references` [EXTRACTED]
 - [[SyncedClock.AddSyncSample()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/INFERRED #community/Gruppe_54
+#graphify/code #graphify/INFERRED #community/Gruppe_71

@@ -1,18 +1,19 @@
 ---
 source_file: "src/Modbus.Contracts/RegisterCodec.cs"
 type: "code"
-community: "RegisterCodec & Befehle"
+community: "RegisterCodec & Befehle (2)"
 location: "L7"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/RegisterCodec__Befehle
+  - community/RegisterCodec__Befehle_2
 ---
 
 # RegisterCodec
 
 ## Connections
 - [[DateTime]] - `references` [EXTRACTED]
+- [[Messwertnachricht]] - `references` [EXTRACTED]
 - [[RegisterCodec.Decode()]] - `method` [EXTRACTED]
 - [[RegisterCodec.DecodeFloat32()]] - `method` [EXTRACTED]
 - [[RegisterCodec.DecodeUInt32()]] - `method` [EXTRACTED]
@@ -23,4 +24,4 @@ tags:
 - [[RegisterCodec.ToSeconds()]] - `method` [EXTRACTED]
 - [[RegisterCodec.cs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/RegisterCodec__Befehle
+#graphify/code #graphify/EXTRACTED #community/RegisterCodec__Befehle_2

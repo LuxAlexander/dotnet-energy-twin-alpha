@@ -1,12 +1,12 @@
 ---
 source_file: "tests/Devices.Common.Tests/ModbusDeviceServerTests.cs"
 type: "code"
-community: "RegisterCodec & Befehle"
+community: "RegisterCodec & Befehle (2)"
 location: "L203"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/RegisterCodec__Befehle
+  - community/RegisterCodec__Befehle_2
 ---
 
 # ModbusDeviceServerTests.Registers_StayReadable_WhilePaused_AndKeepLastState()
@@ -22,4 +22,4 @@ tags:
 - [[RegisterCodec.DecodeUInt32()]] - `calls` [EXTRACTED]
 - [[RegisterCodec.FromSeconds()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/RegisterCodec__Befehle
+#graphify/code #graphify/EXTRACTED #community/RegisterCodec__Befehle_2

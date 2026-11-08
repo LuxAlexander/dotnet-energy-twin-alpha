@@ -1,18 +1,18 @@
 ---
 source_file: "src/Devices/DualPortCharger/Models/Vehicle.cs"
 type: "code"
-community: "Fahrzeug"
+community: "Ladepunkt"
 location: "L53"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Fahrzeug
+  - community/Ladepunkt
 ---
 
 # Vehicle.GetMaxPowerAtSoc()
 
 ## Connections
 - [[ChargingPoint.GetDemandKW()]] - `calls` [EXTRACTED]
-- [[Vehicle_1]] - `method` [EXTRACTED]
+- [[Vehicle]] - `method` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Fahrzeug
+#graphify/code #graphify/EXTRACTED #community/Ladepunkt

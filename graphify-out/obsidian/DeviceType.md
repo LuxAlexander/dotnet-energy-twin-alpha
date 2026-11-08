@@ -13,7 +13,7 @@ tags:
 
 ## Connections
 - [[Battery]] - `case_of` [EXTRACTED]
-- [[Charger_1]] - `case_of` [EXTRACTED]
+- [[Charger]] - `case_of` [EXTRACTED]
 - [[CommonRegisters.cs]] - `contains` [EXTRACTED]
 - [[DiagnosticSession]] - `references` [EXTRACTED]
 - [[IndustrialConsumer]] - `case_of` [EXTRACTED]

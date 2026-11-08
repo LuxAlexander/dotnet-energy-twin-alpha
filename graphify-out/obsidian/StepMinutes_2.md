@@ -1,12 +1,12 @@
 ---
-source_file: "src/Devices/PvSimulator/Simulation/SimulationConfig.cs"
+source_file: "src/Devices/DualPortCharger/Simulation/SimulationConfig.cs"
 type: "code"
-community: "ArgsParser"
-location: "L13"
+community: "Gruppe 37"
+location: "L18"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/ArgsParser
+  - community/Gruppe_37
 ---
 
 # StepMinutes
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[SimulationConfig_2]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/ArgsParser
+#graphify/code #graphify/EXTRACTED #community/Gruppe_37

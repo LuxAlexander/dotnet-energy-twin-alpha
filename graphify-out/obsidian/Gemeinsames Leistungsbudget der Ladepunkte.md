@@ -11,6 +11,6 @@ tags:
 # Gemeinsames Leistungsbudget der Ladepunkte
 
 ## Connections
-- [[DualPortCharger_1]] - `conceptually_related_to` [EXTRACTED]
+- [[DualPortCharger]] - `conceptually_related_to` [EXTRACTED]
 
 #graphify/document #graphify/EXTRACTED #community/Geräte-READMEs__Modelle

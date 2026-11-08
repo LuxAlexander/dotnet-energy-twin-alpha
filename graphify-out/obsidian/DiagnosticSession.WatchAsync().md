@@ -13,7 +13,6 @@ tags:
 
 ## Connections
 - [[CancellationToken]] - `references` [EXTRACTED]
-- [[DiagnosticException]] - `calls` [INFERRED]
 - [[DiagnosticSession]] - `method` [EXTRACTED]
 - [[DiagnosticSession.ExecuteAsync()]] - `calls` [EXTRACTED]
 - [[DiagnosticSession.Prefix()]] - `calls` [EXTRACTED]

@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/PvSimulator/Devices/PvFaultModel.cs"
+source_file: "src/Devices/PvSimulator/Devices/PvSystem.cs"
 type: "code"
-community: "PvFaultModel"
-location: "L38"
+community: "PvSystem"
+location: "L29"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/PvFaultModel
+  - community/PvSystem
 ---
 
 # SoilingLossPercent
 
 ## Connections
-- [[PvFaultModel]] - `defines` [EXTRACTED]
+- [[PvSystem]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/PvFaultModel
+#graphify/code #graphify/EXTRACTED #community/PvSystem

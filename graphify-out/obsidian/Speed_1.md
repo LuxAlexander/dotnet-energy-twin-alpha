@@ -1,17 +1,17 @@
 ---
-source_file: "src/SimCore.Time/MasterClock.cs"
+source_file: "src/SimulationMaster/MasterOptions.cs"
 type: "code"
-community: "MasterClock"
-location: "L79"
+community: "Zeitsync-Client & Konsole"
+location: "L17"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/MasterClock
+  - community/Zeitsync-Client__Konsole
 ---
 
 # Speed
 
 ## Connections
-- [[MasterClock]] - `defines` [EXTRACTED]
+- [[MasterOptions]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/MasterClock
+#graphify/code #graphify/EXTRACTED #community/Zeitsync-Client__Konsole

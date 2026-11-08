@@ -1,24 +1,28 @@
 ---
 type: community
-cohesion: 0.28
-members: 9
+cohesion: 0.38
+members: 13
 ---
 
 # Gruppe 72
 
-**Cohesion:** 0.28 - loosely connected
-**Members:** 9 nodes
+**Cohesion:** 0.38 - loosely connected
+**Members:** 13 nodes
 
 ## Members
-- [[Deterministic weather (location, time, run seed)]] - document - src/WeatherSimulator/README.md
-- [[LB01 SeasonIrradiationCalculator basis]] - document - src/WeatherSimulator/README.md
-- [[Manual weather override keys]] - document - src/WeatherSimulator/README.md
-- [[Weather HTTP API (weather, locations)]] - document - src/WeatherSimulator/README.md
-- [[Weather reproducibility requirement]] - document - tests/Weather.Tests/README.md
-- [[Weather.Tests_1]] - document - tests/Weather.Tests/README.md
-- [[WeatherData_1]] - document - src/WeatherSimulator/README.md
-- [[WeatherModelTests_1]] - document - tests/Weather.Tests/README.md
-- [[WeatherSimulator_1]] - document - src/WeatherSimulator/README.md
+- [[Kuehlhaus.ResetFault()]] - code - src/Devices/KuehlhausSimulator/Kuehlhaus.cs
+- [[Kuehlhaus.TurnOff()]] - code - src/Devices/KuehlhausSimulator/Kuehlhaus.cs
+- [[Kuehlhaus.Update()_1]] - code - src/Devices/KuehlhausSimulator/Kuehlhaus.cs
+- [[KuehlhausModelTests]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
+- [[KuehlhausModelTests.CompressorFailure_IsAlwaysClearedByReset()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
+- [[KuehlhausModelTests.Compressor_SwitchesWithHysteresisAroundSetpoint()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
+- [[KuehlhausModelTests.CreateRoom()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
+- [[KuehlhausModelTests.ElectricPowerAndEnergy_FollowCoolingPowerAndCop()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
+- [[KuehlhausModelTests.LargeStep_StaysStableAndDoesNotOvershoot()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
+- [[KuehlhausModelTests.OverTemperature_LatchesAndNeedsCoolDownBeforeReset()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
+- [[KuehlhausModelTests.Setpoint_OutsideMinus30To0_IsRejected()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
+- [[KuehlhausModelTests.TurnOff_StopsCompressorAndReportsOffState()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
+- [[KuehlhausModelTests.Update_UsesExactExponentialSolution()]] - code - tests/FieldDevices.Tests/ConsumerTests.cs
 
 ## Live Query (requires Dataview plugin)
 
@@ -26,3 +30,21 @@ members: 9
 TABLE source_file, type FROM #community/Gruppe_72
 SORT file.name ASC
 ```
+
+## Connections to other communities
+- 8 edges to [[_COMMUNITY_Kühlhaus-Modell]]
+- 8 edges to [[_COMMUNITY_Gruppe 23]]
+- 4 edges to [[_COMMUNITY_Batterie-Modbus & Update (2)]]
+- 2 edges to [[_COMMUNITY_Batterie-Simulator Loop (2)]]
+- 2 edges to [[_COMMUNITY_Gruppe 109]]
+- 1 edge to [[_COMMUNITY_Bibliotheks-Namespaces]]
+- 1 edge to [[_COMMUNITY_Gruppe 81]]
+- 1 edge to [[_COMMUNITY_Batterie-Modbus & Update]]
+- 1 edge to [[_COMMUNITY_StepScheduler]]
+
+## Top bridge nodes
+- [[Kuehlhaus.Update()_1]] - degree 15, connects to 4 communities
+- [[KuehlhausModelTests.CreateRoom()]] - degree 12, connects to 3 communities
+- [[Kuehlhaus.TurnOff()]] - degree 8, connects to 2 communities
+- [[KuehlhausModelTests.OverTemperature_LatchesAndNeedsCoolDownBeforeReset()]] - degree 7, connects to 2 communities
+- [[KuehlhausModelTests.CompressorFailure_IsAlwaysClearedByReset()]] - degree 6, connects to 2 communities

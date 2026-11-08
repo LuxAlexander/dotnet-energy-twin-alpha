@@ -1,11 +1,11 @@
 ---
 source_file: "docs/screenshots/DualPortCharger/Automatischer_Modus.png"
 type: "image"
-community: "Gruppe 86"
+community: "Gruppe 115"
 tags:
   - graphify/image
   - graphify/EXTRACTED
-  - community/Gruppe_86
+  - community/Gruppe_115
 ---
 
 # Charger key legend (P/A/1-2/C/D/S/F/R/+-/O/Q)
@@ -14,4 +14,4 @@ tags:
 - [[Charger Screenshot Automatischer Modus]] - `references` [EXTRACTED]
 - [[Charger Screenshot Manueller Modus]] - `references` [EXTRACTED]
 
-#graphify/image #graphify/EXTRACTED #community/Gruppe_86
+#graphify/image #graphify/EXTRACTED #community/Gruppe_115

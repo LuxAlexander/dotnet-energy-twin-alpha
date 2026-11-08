@@ -1,8 +1,8 @@
 ---
-source_file: "src/Devices/DualPortCharger/Simulation/SimulationEngine.cs"
+source_file: "src/Devices/PvSimulator/Simulation/SimulationEngine.cs"
 type: "code"
 community: "Batterie-Simulator Loop"
-location: "L163"
+location: "L153"
 tags:
   - graphify/code
   - graphify/EXTRACTED
@@ -12,16 +12,18 @@ tags:
 # SimulationEngine.AdvanceAsync()
 
 ## Connections
-- [[AutoModeController.Step()]] - `calls` [INFERRED]
 - [[CancellationToken]] - `references` [EXTRACTED]
-- [[CsvLogger_1]] - `references` [EXTRACTED]
-- [[CsvLogger.FlushAsync()_1]] - `calls` [INFERRED]
-- [[CsvLogger.WriteAsync()]] - `calls` [INFERRED]
-- [[DualCharger.Tick()]] - `calls` [EXTRACTED]
+- [[CsvExporter]] - `references` [EXTRACTED]
+- [[CsvExporter.FlushAsync()]] - `calls` [INFERRED]
+- [[CsvExporter.WriteRowAsync()]] - `calls` [INFERRED]
+- [[PvSystem.ResetDailyEnergy()]] - `calls` [INFERRED]
+- [[PvSystem.StepContinuous()]] - `calls` [INFERRED]
 - [[SimulationEngine]] - `method` [EXTRACTED]
-- [[SimulationEngine.RunAsync()]] - `calls` [EXTRACTED]
+- [[SimulationEngine.RunAsync()_2]] - `calls` [EXTRACTED]
+- [[SimulationEngine.SetNotification()]] - `calls` [EXTRACTED]
+- [[SimulationEngine.UpdateAutoWeather()]] - `calls` [EXTRACTED]
+- [[SimulationEngine.UpdateWeatherAsync()]] - `calls` [EXTRACTED]
 - [[StepScheduler.Update()]] - `calls` [INFERRED]
 - [[Task]] - `references` [EXTRACTED]
-- [[WeatherFeed.UpdateAsync()]] - `calls` [INFERRED]
 
 #graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop

@@ -1,18 +1,18 @@
 ---
 source_file: "src/SimCore.TimeSync/MessageChannel.cs"
 type: "code"
-community: "Sync-Nachrichten"
+community: "Sync-Nachrichten (2)"
 location: "L11"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Sync-Nachrichten
+  - community/Sync-Nachrichten_2
 ---
 
 # MessageChannel
 
 ## Connections
-- [[ClientConnection_1]] - `references` [EXTRACTED]
+- [[ClientConnection]] - `references` [EXTRACTED]
 - [[IAsyncDisposable]] - `implements` [EXTRACTED]
 - [[MessageChannel.DisposeAsync()]] - `method` [EXTRACTED]
 - [[MessageChannel.ReceiveAsync()]] - `method` [EXTRACTED]
@@ -33,4 +33,4 @@ tags:
 - [[TimeSyncServer.Register()]] - `references` [EXTRACTED]
 - [[UTF8Encoding]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Sync-Nachrichten
+#graphify/code #graphify/EXTRACTED #community/Sync-Nachrichten_2

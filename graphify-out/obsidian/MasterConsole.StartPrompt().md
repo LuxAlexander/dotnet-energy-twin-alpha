@@ -14,6 +14,6 @@ tags:
 ## Connections
 - [[MasterConsole]] - `method` [EXTRACTED]
 - [[MasterConsole.HandleKey()]] - `calls` [EXTRACTED]
-- [[PromptKind]] - `references` [EXTRACTED]
+- [[PromptKind_1]] - `references` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Zeitsync-Client__Konsole

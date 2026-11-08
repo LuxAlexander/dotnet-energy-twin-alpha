@@ -1,12 +1,12 @@
 ---
 source_file: "src/SimCore.Time/SyncedClock.cs"
 type: "code"
-community: "SyncedClock"
+community: "TimeState & TimeLine"
 location: "L161"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/SyncedClock
+  - community/TimeState__TimeLine
 ---
 
 # SyncedClock.EvaluationTime()
@@ -17,4 +17,4 @@ tags:
 - [[SyncedClock.StateNow()]] - `calls` [EXTRACTED]
 - [[SyncedClock.StatusCore()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/SyncedClock
+#graphify/code #graphify/EXTRACTED #community/TimeState__TimeLine

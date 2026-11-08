@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices.Common/Weather/WeatherClient.cs"
 type: "code"
-community: "Gruppe 53"
+community: "JSON-Serialisierung"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_53
+  - community/JSON-Serialisierung
 ---
 
 # WeatherClient.cs
@@ -21,4 +21,4 @@ tags:
 - [[system_text_json]] - `imports` [EXTRACTED]
 - [[system_text_json_serialization]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_53
+#graphify/code #graphify/EXTRACTED #community/JSON-Serialisierung

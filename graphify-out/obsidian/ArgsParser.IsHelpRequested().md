@@ -1,12 +1,12 @@
 ---
-source_file: "src/Devices/BatterySimulator/ArgsParser.cs"
+source_file: "src/Devices/PvSimulator/Simulation/ArgsParser.cs"
 type: "code"
-community: "Gruppe 75"
-location: "L45"
+community: "ArgsParser (2)"
+location: "L44"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_75
+  - community/ArgsParser_2
 ---
 
 # ArgsParser.IsHelpRequested()
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[ArgsParser]] - `method` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_75
+#graphify/code #graphify/EXTRACTED #community/ArgsParser_2

@@ -1,12 +1,12 @@
 ---
 source_file: "src/WeatherSimulator/Program.cs"
 type: "code"
-community: "Gruppe 53"
+community: "JSON-Serialisierung"
 location: "L298"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_53
+  - community/JSON-Serialisierung
 ---
 
 # Program
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[WeatherSimulatorProgram.cs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_53
+#graphify/code #graphify/EXTRACTED #community/JSON-Serialisierung

@@ -1,12 +1,12 @@
 ---
-source_file: "src/Devices/BatterySimulator/ArgsParser.cs"
+source_file: "src/Devices/PvSimulator/Simulation/ArgsParser.cs"
 type: "code"
-community: "Gruppe 75"
-location: "L132"
+community: "ArgsParser (2)"
+location: "L140"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_75
+  - community/ArgsParser_2
 ---
 
 # ArgsParser.NextValue()
@@ -15,4 +15,4 @@ tags:
 - [[ArgsParser]] - `method` [EXTRACTED]
 - [[ArgsParser.Parse()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_75
+#graphify/code #graphify/EXTRACTED #community/ArgsParser_2

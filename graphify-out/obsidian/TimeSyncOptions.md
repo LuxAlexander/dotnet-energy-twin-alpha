@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices.Common/TimeSyncOptions.cs"
 type: "code"
-community: "Gruppe 55"
+community: "Gruppe 44"
 location: "L11"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_55
+  - community/Gruppe_44
 ---
 
 # TimeSyncOptions
@@ -28,7 +28,7 @@ tags:
 - [[SimulationConfig_1]] - `references` [EXTRACTED]
 - [[SimulationConfig_2]] - `references` [EXTRACTED]
 - [[SimulatorOptions]] - `references` [EXTRACTED]
-- [[Standalone]] - `defines` [EXTRACTED]
+- [[Standalone_1]] - `defines` [EXTRACTED]
 - [[StandaloneSpeed]] - `defines` [EXTRACTED]
 - [[StandaloneStart]] - `defines` [EXTRACTED]
 - [[TimeSyncOptions.ParseEndpoint()]] - `method` [EXTRACTED]
@@ -40,4 +40,4 @@ tags:
 - [[TimeSyncOptionsTests.Defaults_UseLocalMaster()]] - `calls` [INFERRED]
 - [[TimeSyncOptionsTests.OtherOptions_AreNotConsumed()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_55
+#graphify/code #graphify/EXTRACTED #community/Gruppe_44

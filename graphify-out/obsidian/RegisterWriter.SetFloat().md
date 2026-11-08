@@ -5,7 +5,7 @@ community: "Batterie-Modbus & Update"
 location: "L43"
 tags:
   - graphify/code
-  - graphify/INFERRED
+  - graphify/EXTRACTED
   - community/Batterie-Modbus__Update
 ---
 
@@ -15,4 +15,4 @@ tags:
 - [[ModbusDeviceServer.Publish()]] - `calls` [INFERRED]
 - [[RegisterWriter]] - `method` [EXTRACTED]
 
-#graphify/code #graphify/INFERRED #community/Batterie-Modbus__Update
+#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update

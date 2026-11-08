@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/BatterySimulator/SimulatorOptions.cs"
+source_file: "src/Devices/PvSimulator/Simulation/SimulationConfig.cs"
 type: "code"
-community: "Gruppe 71"
-location: "L23"
+community: "ArgsParser"
+location: "L30"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_71
+  - community/ArgsParser
 ---
 
 # TimeSync
 
 ## Connections
-- [[SimulatorOptions]] - `defines` [EXTRACTED]
+- [[SimulationConfig]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_71
+#graphify/code #graphify/EXTRACTED #community/ArgsParser

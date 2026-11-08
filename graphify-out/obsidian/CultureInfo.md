@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "code"
-community: "CsvLogger"
+community: "WeatherClient & Anzeige"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/CsvLogger
+  - community/WeatherClient__Anzeige
 ---
 
 # CultureInfo
@@ -20,6 +20,7 @@ tags:
 - [[CsvLogger_2]] - `references` [EXTRACTED]
 - [[DeviceTimeSource]] - `references` [EXTRACTED]
 - [[DiagnosticSession]] - `references` [EXTRACTED]
+- [[GatewayService]] - `references` [EXTRACTED]
 - [[InputHandler_1]] - `references` [EXTRACTED]
 - [[MasterConsole]] - `references` [EXTRACTED]
 - [[Program_1]] - `references` [EXTRACTED]
@@ -29,4 +30,4 @@ tags:
 - [[SimulationEngine_2]] - `references` [EXTRACTED]
 - [[Simulator]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/CsvLogger
+#graphify/code #graphify/EXTRACTED #community/WeatherClient__Anzeige

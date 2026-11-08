@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/KuehlhausSimulator/IO/ConsoleRenderer.cs"
+source_file: "src/Devices/DualPortCharger/IO/ConsoleRenderer.cs"
 type: "code"
-community: "WeatherClient & Anzeige"
+community: "Gruppe 69"
 location: "L23"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/WeatherClient__Anzeige
+  - community/Gruppe_69
 ---
 
 # Width
 
 ## Connections
-- [[ConsoleRenderer_1]] - `defines` [EXTRACTED]
+- [[ConsoleRenderer]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/WeatherClient__Anzeige
+#graphify/code #graphify/EXTRACTED #community/Gruppe_69

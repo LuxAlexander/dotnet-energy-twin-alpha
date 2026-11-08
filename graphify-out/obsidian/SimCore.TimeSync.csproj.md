@@ -1,11 +1,11 @@
 ---
 source_file: "src/SimCore.TimeSync/SimCore.TimeSync.csproj"
 type: "code"
-community: "Gruppe 68"
+community: "Gruppe 83"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_68
+  - community/Gruppe_83
 ---
 
 # SimCore.TimeSync.csproj
@@ -19,4 +19,4 @@ tags:
 - [[SimCore.Time.csproj]] - `imports` [EXTRACTED]
 - [[SimulationMaster.csproj]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_68
+#graphify/code #graphify/EXTRACTED #community/Gruppe_83

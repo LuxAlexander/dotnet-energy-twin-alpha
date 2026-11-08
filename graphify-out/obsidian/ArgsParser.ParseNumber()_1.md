@@ -1,12 +1,12 @@
 ---
-source_file: "src/Devices/KuehlhausSimulator/IO/ArgsParser.cs"
+source_file: "src/Devices/BatterySimulator/ArgsParser.cs"
 type: "code"
-community: "Gruppe 45"
-location: "L151"
+community: "Gruppe 105"
+location: "L140"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_45
+  - community/Gruppe_105
 ---
 
 # ArgsParser.ParseNumber()
@@ -14,6 +14,5 @@ tags:
 ## Connections
 - [[ArgsParser_2]] - `method` [EXTRACTED]
 - [[ArgsParser.Parse()_2]] - `calls` [EXTRACTED]
-- [[ArgsParser.ParsePositive()_1]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_45
+#graphify/code #graphify/EXTRACTED #community/Gruppe_105

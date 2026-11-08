@@ -11,6 +11,6 @@ tags:
 # PV Stoerungen
 
 ## Connections
-- [[PvSimulator_1]] - `conceptually_related_to` [EXTRACTED]
+- [[PvSimulator]] - `conceptually_related_to` [EXTRACTED]
 
 #graphify/document #graphify/EXTRACTED #community/Geräte-READMEs__Modelle

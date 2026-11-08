@@ -1,12 +1,12 @@
 ---
 source_file: "src/Modbus.Contracts/CommonRegisters.cs"
 type: "code"
-community: "Gruppe 48"
+community: "Gruppe 82"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_48
+  - community/Gruppe_82
 ---
 
 # CommonRegisters.cs
@@ -19,4 +19,4 @@ tags:
 - [[TimeStatus]] - `contains` [EXTRACTED]
 - [[WriteError]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_48
+#graphify/code #graphify/EXTRACTED #community/Gruppe_82

@@ -1,16 +1,17 @@
 ---
-source_file: "src/Shared.Config/README.md"
-type: "document"
-community: "Geräte-READMEs & Modelle"
+source_file: "src/Shared.Config/OutputPaths.cs"
+type: "code"
+community: "OutputPaths"
+location: "L1"
 tags:
-  - graphify/document
-  - graphify/INFERRED
-  - community/Geräte-READMEs__Modelle
+  - graphify/code
+  - graphify/EXTRACTED
+  - community/OutputPaths
 ---
 
 # Shared.Config
 
 ## Connections
-- [[Shared (gemeinsame Bausteine)]] - `conceptually_related_to` [INFERRED]
+- [[OutputPaths.cs]] - `contains` [EXTRACTED]
 
-#graphify/document #graphify/INFERRED #community/Geräte-READMEs__Modelle
+#graphify/code #graphify/EXTRACTED #community/OutputPaths

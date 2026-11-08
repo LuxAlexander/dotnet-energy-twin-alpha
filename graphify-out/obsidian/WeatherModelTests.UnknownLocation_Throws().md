@@ -1,12 +1,12 @@
 ---
 source_file: "tests/Weather.Tests/WeatherModelTests.cs"
 type: "code"
-community: "Wettermodell & Tests"
+community: "Wettermodell & Tests (3)"
 location: "L48"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Wettermodell__Tests
+  - community/Wettermodell__Tests_3
 ---
 
 # WeatherModelTests.UnknownLocation_Throws()
@@ -18,4 +18,4 @@ tags:
 - [[WeatherModelTests]] - `method` [EXTRACTED]
 - [[WeatherModelTests.NewModel()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Wettermodell__Tests
+#graphify/code #graphify/EXTRACTED #community/Wettermodell__Tests_3

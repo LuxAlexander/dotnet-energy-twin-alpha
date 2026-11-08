@@ -1,23 +1,21 @@
 ---
-source_file: "src/Devices/PvSimulator/Simulation/ArgsParser.cs"
+source_file: "src/Devices/DualPortCharger/IO/ArgsParser.cs"
 type: "code"
-community: "ArgsParser"
-location: "L8"
+community: "Gruppe 37"
+location: "L13"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/ArgsParser
+  - community/Gruppe_37
 ---
 
 # ArgsParser
 
 ## Connections
-- [[ArgsParser.Canonical()]] - `method` [EXTRACTED]
 - [[ArgsParser.IsHelpRequested()_3]] - `method` [EXTRACTED]
 - [[ArgsParser.NextValue()_3]] - `method` [EXTRACTED]
 - [[ArgsParser.Parse()_3]] - `method` [EXTRACTED]
 - [[ArgsParser.ParsePositive()_2]] - `method` [EXTRACTED]
-- [[FieldDeviceTests.cs]] - `imports` [EXTRACTED]
-- [[SimulationArgsParser.cs]] - `contains` [EXTRACTED]
+- [[DualPortChargerIOArgsParser.cs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/ArgsParser
+#graphify/code #graphify/EXTRACTED #community/Gruppe_37

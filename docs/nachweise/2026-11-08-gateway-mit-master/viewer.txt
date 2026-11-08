@@ -1,0 +1,44 @@
+15:15:58.699 VIEWER verbunden (Success), Abo energytwin/#
+15:16:01.098 energytwin/gateway/GW-01/status  STATUS {"schemaVersion":1,"gatewayId":"GW-01","state":"online","sinceUtc":"2026-11-08T14:16:00.910Z"}
+15:16:01.179 energytwin/devices/DC-01/status  STATUS {"schemaVersion":1,"deviceId":"DC-01","state":"online","sinceUtc":"2026-11-08T14:16:01.082Z","lastSimTime":"2026-01-15T06:01:22","lastRunId":1,"lastSeq":2}
+15:16:01.245 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:01:22 lauf=1 seq=2 nr=1 good/running leistungsgrenze=150 kW schreibfehler=0 wirkleistung=0 kW
+15:16:02.138 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:01:22 lauf=1 seq=2 nr=2 good/running leistungsgrenze=150 kW schreibfehler=0 wirkleistung=0 kW
+15:16:03.126 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:01:22 lauf=1 seq=2 nr=3 good/running leistungsgrenze=150 kW schreibfehler=0 wirkleistung=0 kW
+15:16:04.142 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:06:22 lauf=1 seq=3 nr=4 good/running leistungsgrenze=150 kW schreibfehler=0 wirkleistung=0 kW
+15:16:05.130 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:06:22 lauf=1 seq=3 nr=5 good/running leistungsgrenze=200 kW schreibfehler=0 wirkleistung=0 kW
+15:16:06.126 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:06:22 lauf=1 seq=3 nr=6 good/running leistungsgrenze=200 kW schreibfehler=0 wirkleistung=0 kW
+15:16:07.137 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:06:22 lauf=1 seq=3 nr=7 good/running leistungsgrenze=200 kW schreibfehler=0 wirkleistung=0 kW
+15:16:08.133 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:11:22 lauf=1 seq=4 nr=8 good/running leistungsgrenze=200 kW schreibfehler=0 wirkleistung=120 kW
+15:16:09.138 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:11:22 lauf=1 seq=4 nr=9 good/running leistungsgrenze=200 kW schreibfehler=0 wirkleistung=120 kW
+15:16:10.130 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:11:22 lauf=1 seq=4 nr=10 good/running leistungsgrenze=200 kW schreibfehler=0 wirkleistung=120 kW
+15:16:11.137 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:11:22 lauf=1 seq=4 nr=11 good/running leistungsgrenze=200 kW schreibfehler=0 wirkleistung=120 kW
+15:16:12.141 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:11:22 lauf=1 seq=4 nr=12 good/running leistungsgrenze=200 kW schreibfehler=0 wirkleistung=120 kW
+15:16:13.133 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:11:22 lauf=1 seq=4 nr=13 good/paused leistungsgrenze=200 kW schreibfehler=0 wirkleistung=120 kW
+15:16:14.129 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:11:22 lauf=1 seq=4 nr=14 good/paused leistungsgrenze=200 kW schreibfehler=0 wirkleistung=120 kW
+15:16:15.133 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:11:22 lauf=1 seq=4 nr=15 good/paused leistungsgrenze=200 kW schreibfehler=0 wirkleistung=120 kW
+15:16:16.125 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:11:22 lauf=1 seq=4 nr=16 good/paused leistungsgrenze=200 kW schreibfehler=0 wirkleistung=120 kW
+15:16:17.137 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:11:22 lauf=1 seq=4 nr=17 good/paused leistungsgrenze=200 kW schreibfehler=0 wirkleistung=120 kW
+15:16:18.129 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:11:22 lauf=1 seq=4 nr=18 good/paused leistungsgrenze=200 kW schreibfehler=0 wirkleistung=120 kW
+15:16:19.141 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:11:22 lauf=1 seq=4 nr=19 good/paused leistungsgrenze=200 kW schreibfehler=0 wirkleistung=120 kW
+15:16:20.129 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:11:22 lauf=1 seq=4 nr=20 good/paused leistungsgrenze=200 kW schreibfehler=0 wirkleistung=120 kW
+15:16:21.140 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:11:22 lauf=1 seq=4 nr=21 good/paused leistungsgrenze=200 kW schreibfehler=0 wirkleistung=120 kW
+15:16:22.136 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:11:22 lauf=1 seq=4 nr=22 good/paused leistungsgrenze=200 kW schreibfehler=0 wirkleistung=120 kW
+15:16:23.128 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:16:22 lauf=1 seq=5 nr=23 good/running leistungsgrenze=200 kW schreibfehler=0 wirkleistung=120 kW
+15:16:24.136 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:16:22 lauf=1 seq=5 nr=24 good/running leistungsgrenze=200 kW schreibfehler=0 wirkleistung=120 kW
+15:16:25.133 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:16:22 lauf=1 seq=5 nr=25 good/running leistungsgrenze=200 kW schreibfehler=0 wirkleistung=120 kW
+15:16:26.140 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:16:22 lauf=1 seq=5 nr=26 good/running leistungsgrenze=200 kW schreibfehler=0 wirkleistung=120 kW
+15:16:27.129 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:16:22 lauf=1 seq=5 nr=27 good/running leistungsgrenze=200 kW schreibfehler=0 wirkleistung=120 kW
+15:16:28.132 energytwin/devices/DC-01/status  STATUS {"schemaVersion":1,"deviceId":"DC-01","state":"offline","error":"Lesen ab Adresse 0 (50 Register): Verbindung zu 127.0.0.1:1504 (Unit 1) abgebrochen oder keine Antwort innerhalb 1000 ms (Unable to write data to the transport connection: Eine vorhandene Verbindung wurde vom Remotehost geschlossen..).","sinceUtc":"2026-11-08T14:16:28.082Z","lastSimTime":"2026-01-15T06:16:22","lastRunId":1,"lastSeq":5}
+15:16:31.160 energytwin/gateway/GW-01/status  STATUS {"schemaVersion":1,"gatewayId":"GW-01","state":"online","sinceUtc":"2026-11-08T14:16:00.910Z"}
+15:16:33.740 energytwin/devices/DC-01/status  STATUS {"schemaVersion":1,"deviceId":"DC-01","state":"online","sinceUtc":"2026-11-08T14:16:33.177Z","lastSimTime":"2026-01-15T06:26:56","lastRunId":1,"lastSeq":2}
+15:16:33.784 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:26:56 lauf=1 seq=2 nr=28 good/running leistungsgrenze=150 kW schreibfehler=0 wirkleistung=0 kW
+15:16:34.140 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:26:56 lauf=1 seq=2 nr=29 good/running leistungsgrenze=150 kW schreibfehler=0 wirkleistung=0 kW
+15:16:35.128 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:26:56 lauf=1 seq=2 nr=30 good/running leistungsgrenze=150 kW schreibfehler=0 wirkleistung=0 kW
+15:16:36.139 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:26:56 lauf=1 seq=2 nr=31 good/running leistungsgrenze=150 kW schreibfehler=0 wirkleistung=0 kW
+15:16:37.132 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:26:56 lauf=1 seq=2 nr=32 good/running leistungsgrenze=150 kW schreibfehler=0 wirkleistung=0 kW
+15:16:38.127 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:26:56 lauf=1 seq=2 nr=33 good/running leistungsgrenze=150 kW schreibfehler=0 wirkleistung=0 kW
+15:16:39.135 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:31:56 lauf=1 seq=3 nr=34 good/running leistungsgrenze=150 kW schreibfehler=0 wirkleistung=150 kW
+15:16:40.127 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:31:56 lauf=1 seq=3 nr=35 good/running leistungsgrenze=150 kW schreibfehler=0 wirkleistung=150 kW
+15:16:41.131 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:31:56 lauf=1 seq=3 nr=36 good/running leistungsgrenze=150 kW schreibfehler=0 wirkleistung=150 kW
+15:16:42.139 energytwin/devices/DC-01/measurements  DC-01 sim=2026-01-15T06:31:56 lauf=1 seq=3 nr=37 good/running leistungsgrenze=150 kW schreibfehler=0 wirkleistung=150 kW
+15:16:42.774 VIEWER beendet

@@ -23,7 +23,7 @@ tags:
 - [[KuehlhausModbus.cs]] - `contains` [EXTRACTED]
 - [[KuehlhausModbusTests]] - `references` [EXTRACTED]
 - [[ModbusDeviceServer]] - `references` [EXTRACTED]
-- [[SimulationEngine_1]] - `references` [EXTRACTED]
-- [[StatusText_4]] - `defines` [EXTRACTED]
+- [[SimulationEngine_2]] - `references` [EXTRACTED]
+- [[StatusText_3]] - `defines` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update

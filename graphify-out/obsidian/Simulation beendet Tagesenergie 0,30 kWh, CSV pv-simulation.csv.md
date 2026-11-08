@@ -1,11 +1,11 @@
 ---
 source_file: "docs/screenshots/PvSimulator/Inverter_Fehler.png"
 type: "image"
-community: "Gruppe 80"
+community: "Gruppe 112"
 tags:
   - graphify/image
   - graphify/EXTRACTED
-  - community/Gruppe_80
+  - community/Gruppe_112
 ---
 
 # Simulation beendet: Tagesenergie 0,30 kWh, CSV pv-simulation.csv
@@ -14,4 +14,4 @@ tags:
 - [[CSV-Pfad datapv-simulation.csv (teilweise geschwaerzt)]] - `conceptually_related_to` [INFERRED]
 - [[PV Simulator Screenshot Inverter-Fehler (LB01)]] - `references` [EXTRACTED]
 
-#graphify/image #graphify/EXTRACTED #community/Gruppe_80
+#graphify/image #graphify/EXTRACTED #community/Gruppe_112

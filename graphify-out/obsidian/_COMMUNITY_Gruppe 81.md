@@ -1,21 +1,27 @@
 ---
 type: community
-cohesion: 0.40
-members: 6
+cohesion: 0.17
+members: 12
 ---
 
 # Gruppe 81
 
-**Cohesion:** 0.40 - moderately connected
-**Members:** 6 nodes
+**Cohesion:** 0.17 - loosely connected
+**Members:** 12 nodes
 
 ## Members
-- [[Batterie.ResetFault()]] - code - src/Devices/BatterySimulator/Batterie.cs
-- [[Batterie.SetPower()]] - code - src/Devices/BatterySimulator/Batterie.cs
-- [[Batterie.TurnOff()]] - code - src/Devices/BatterySimulator/Batterie.cs
-- [[Batterie.TurnOn()]] - code - src/Devices/BatterySimulator/Batterie.cs
-- [[Simulator.HandleKey()]] - code - src/Devices/BatterySimulator/Simulator.cs
-- [[Simulator.SetSetpoint()]] - code - src/Devices/BatterySimulator/Simulator.cs
+- [[AlarmHystereseK]] - code - src/Devices/KuehlhausSimulator/KuehlhausConfig.cs
+- [[AlarmTempC_1]] - code - src/Devices/KuehlhausSimulator/KuehlhausConfig.cs
+- [[COP]] - code - src/Devices/KuehlhausSimulator/KuehlhausConfig.cs
+- [[DeviceId_5]] - code - src/Devices/KuehlhausSimulator/KuehlhausConfig.cs
+- [[HystereseK]] - code - src/Devices/KuehlhausSimulator/KuehlhausConfig.cs
+- [[KaelteleistungKW]] - code - src/Devices/KuehlhausSimulator/KuehlhausConfig.cs
+- [[KuehlhausConfig]] - code - src/Devices/KuehlhausSimulator/KuehlhausConfig.cs
+- [[SimulationConfig.ToModelConfig()]] - code - src/Devices/KuehlhausSimulator/Simulation/SimulationConfig.cs
+- [[SollTempC]] - code - src/Devices/KuehlhausSimulator/KuehlhausConfig.cs
+- [[WaermedurchgangKWProK]] - code - src/Devices/KuehlhausSimulator/KuehlhausConfig.cs
+- [[WaermekapazitaetKWhProK]] - code - src/Devices/KuehlhausSimulator/KuehlhausConfig.cs
+- [[ZusatzwaermeKW]] - code - src/Devices/KuehlhausSimulator/KuehlhausConfig.cs
 
 ## Live Query (requires Dataview plugin)
 
@@ -25,18 +31,13 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 5 edges to [[_COMMUNITY_Batterie-Modbus & Update]]
-- 5 edges to [[_COMMUNITY_Batterie-Simulator Loop]]
-- 4 edges to [[_COMMUNITY_Batterie-Modell]]
-- 2 edges to [[_COMMUNITY_DeviceTimeSource]]
-- 2 edges to [[_COMMUNITY_Gruppe 44]]
-- 1 edge to [[_COMMUNITY_CsvLogger]]
-- 1 edge to [[_COMMUNITY_Gruppe 43]]
-- 1 edge to [[_COMMUNITY_Gruppe 88]]
+- 1 edge to [[_COMMUNITY_Kühlhaus-Modell]]
+- 1 edge to [[_COMMUNITY_Gruppe 66]]
+- 1 edge to [[_COMMUNITY_Gruppe 72]]
+- 1 edge to [[_COMMUNITY_Gruppe 68]]
+- 1 edge to [[_COMMUNITY_Gruppe 109]]
+- 1 edge to [[_COMMUNITY_WeatherClient & Anzeige]]
 
 ## Top bridge nodes
-- [[Batterie.SetPower()]] - degree 8, connects to 5 communities
-- [[Simulator.HandleKey()]] - degree 13, connects to 4 communities
-- [[Batterie.ResetFault()]] - degree 3, connects to 2 communities
-- [[Batterie.TurnOff()]] - degree 3, connects to 2 communities
-- [[Batterie.TurnOn()]] - degree 3, connects to 2 communities
+- [[KuehlhausConfig]] - degree 15, connects to 4 communities
+- [[SimulationConfig.ToModelConfig()]] - degree 3, connects to 2 communities

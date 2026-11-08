@@ -1,17 +1,17 @@
 ---
-source_file: "src/Modbus.Contracts/CommonRegisters.cs"
+source_file: "src/Devices/BatterySimulator/Enum.cs"
 type: "code"
-community: "Gruppe 48"
-location: "L16"
+community: "Gruppe 106"
+location: "L12"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_48
+  - community/Gruppe_106
 ---
 
 # Standby
 
 ## Connections
-- [[OperatingState]] - `case_of` [EXTRACTED]
+- [[DeviceState_1]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_48
+#graphify/code #graphify/EXTRACTED #community/Gruppe_106

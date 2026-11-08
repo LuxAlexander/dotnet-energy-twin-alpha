@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/BatterySimulator/ConsoleDashboard.cs"
 type: "code"
-community: "Gruppe 40"
+community: "Gruppe 19"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_40
+  - community/Gruppe_19
 ---
 
 # ConsoleDashboard.cs
@@ -16,4 +16,4 @@ tags:
 - [[ConsoleDashboard]] - `contains` [EXTRACTED]
 - [[system_globalization]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_40
+#graphify/code #graphify/EXTRACTED #community/Gruppe_19

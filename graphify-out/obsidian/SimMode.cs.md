@@ -1,12 +1,12 @@
 ---
 source_file: "src/SimCore.Contracts/SimMode.cs"
 type: "code"
-community: "Gruppe 63"
+community: "Gruppe 88"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_63
+  - community/Gruppe_88
 ---
 
 # SimMode.cs
@@ -15,4 +15,4 @@ tags:
 - [[SimCore.Contracts]] - `contains` [EXTRACTED]
 - [[SimMode]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_63
+#graphify/code #graphify/EXTRACTED #community/Gruppe_88

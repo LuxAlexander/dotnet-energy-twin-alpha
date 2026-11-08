@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/DualPortCharger/IO/CsvLogger.cs"
 type: "code"
-community: "CsvLogger"
+community: "Batterie-Simulator Loop"
 location: "L78"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/CsvLogger
+  - community/Batterie-Simulator_Loop
 ---
 
 # CsvLogger.DisposeAsync()
@@ -15,4 +15,4 @@ tags:
 - [[CsvLogger_1]] - `method` [EXTRACTED]
 - [[ValueTask]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/CsvLogger
+#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop

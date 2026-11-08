@@ -1,12 +1,12 @@
 ---
-source_file: "src/ModbusDiagnosticClient/DeviceConnection.cs"
+source_file: "src/Modbus.Client/DeviceConnection.cs"
 type: "code"
-community: "Diagnose-Client Verbindung"
+community: "Modbus.Client-Fehler"
 location: "L14"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Diagnose-Client_Verbindung
+  - community/ModbusClient-Fehler
 ---
 
 # Protocol
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[DiagnosticErrorKind]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Diagnose-Client_Verbindung
+#graphify/code #graphify/EXTRACTED #community/ModbusClient-Fehler

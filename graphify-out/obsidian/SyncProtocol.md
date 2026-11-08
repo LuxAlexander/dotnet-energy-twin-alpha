@@ -1,12 +1,12 @@
 ---
 source_file: "src/SimCore.Contracts/SyncProtocol.cs"
 type: "code"
-community: "WeatherClient & Anzeige"
+community: "Sync-Nachrichten"
 location: "L7"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/WeatherClient__Anzeige
+  - community/Sync-Nachrichten
 ---
 
 # SyncProtocol
@@ -18,4 +18,4 @@ tags:
 - [[SyncProtocol.Serialize()]] - `method` [EXTRACTED]
 - [[SyncProtocol.cs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/WeatherClient__Anzeige
+#graphify/code #graphify/EXTRACTED #community/Sync-Nachrichten

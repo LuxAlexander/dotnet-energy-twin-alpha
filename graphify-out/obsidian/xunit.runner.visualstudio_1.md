@@ -1,16 +1,16 @@
 ---
-source_file: "tests/FieldDevices.Tests/FieldDevices.Tests.csproj"
+source_file: "tests/ModbusDiagnosticClient.Tests/ModbusDiagnosticClient.Tests.csproj"
 type: "code"
-community: "Gruppe 60"
+community: "Gruppe 114"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_60
+  - community/Gruppe_114
 ---
 
 # xunit.runner.visualstudio
 
 ## Connections
-- [[FieldDevices.Tests.csproj]] - `imports` [EXTRACTED]
+- [[ModbusDiagnosticClient.Tests.csproj]] - `imports` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_60
+#graphify/code #graphify/EXTRACTED #community/Gruppe_114

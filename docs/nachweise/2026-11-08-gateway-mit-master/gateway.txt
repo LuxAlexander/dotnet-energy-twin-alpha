@@ -1,0 +1,88 @@
+EasyModbus Client Library Version: 1.0.0.0
+Copyright (c) Stefan Rossmann Engineering Solutions
+
+Modbus–RabbitMQ-Gateway GW-01 – Ziel: MQTT 127.0.0.1:1883 (Benutzer user (Passwort aus Umgebungsvariable ENERGYTWIN_MQTT_PASSWORD))
+Geräte: DC-01=127.0.0.1:1504 · Intervall 1 s
+Beenden mit Q oder Strg+C.
+DC-01   ONLINE
+DC-01   Sim 2026-01-15 06:01:22  Lauf 1   Seq 2     Nr 1      good/running     Wirkleistung 0 kW
+DC-01   Sim 2026-01-15 06:01:22  Lauf 1   Seq 2     Nr 2      good/running     Wirkleistung 0 kW
+DC-01   Sim 2026-01-15 06:01:22  Lauf 1   Seq 2     Nr 3      good/running     Wirkleistung 0 kW
+DC-01   Sim 2026-01-15 06:06:22  Lauf 1   Seq 3     Nr 4      good/running     Wirkleistung 0 kW
+DC-01   Sim 2026-01-15 06:06:22  Lauf 1   Seq 3     Nr 5      good/running     Wirkleistung 0 kW
+DC-01   Sim 2026-01-15 06:06:22  Lauf 1   Seq 3     Nr 6      good/running     Wirkleistung 0 kW
+DC-01   Sim 2026-01-15 06:06:22  Lauf 1   Seq 3     Nr 7      good/running     Wirkleistung 0 kW
+DC-01   Sim 2026-01-15 06:11:22  Lauf 1   Seq 4     Nr 8      good/running     Wirkleistung 120 kW
+DC-01   Sim 2026-01-15 06:11:22  Lauf 1   Seq 4     Nr 9      good/running     Wirkleistung 120 kW
+DC-01   Sim 2026-01-15 06:11:22  Lauf 1   Seq 4     Nr 10     good/running     Wirkleistung 120 kW
+DC-01   Sim 2026-01-15 06:11:22  Lauf 1   Seq 4     Nr 11     good/running     Wirkleistung 120 kW
+DC-01   Sim 2026-01-15 06:11:22  Lauf 1   Seq 4     Nr 12     good/running     Wirkleistung 120 kW
+DC-01   Sim 2026-01-15 06:11:22  Lauf 1   Seq 4     Nr 13     good/paused      Wirkleistung 120 kW
+DC-01   Sim 2026-01-15 06:11:22  Lauf 1   Seq 4     Nr 14     good/paused      Wirkleistung 120 kW
+DC-01   Sim 2026-01-15 06:11:22  Lauf 1   Seq 4     Nr 15     good/paused      Wirkleistung 120 kW
+DC-01   Sim 2026-01-15 06:11:22  Lauf 1   Seq 4     Nr 16     good/paused      Wirkleistung 120 kW
+DC-01   Sim 2026-01-15 06:11:22  Lauf 1   Seq 4     Nr 17     good/paused      Wirkleistung 120 kW
+DC-01   Sim 2026-01-15 06:11:22  Lauf 1   Seq 4     Nr 18     good/paused      Wirkleistung 120 kW
+DC-01   Sim 2026-01-15 06:11:22  Lauf 1   Seq 4     Nr 19     good/paused      Wirkleistung 120 kW
+DC-01   Sim 2026-01-15 06:11:22  Lauf 1   Seq 4     Nr 20     good/paused      Wirkleistung 120 kW
+DC-01   Sim 2026-01-15 06:11:22  Lauf 1   Seq 4     Nr 21     good/paused      Wirkleistung 120 kW
+DC-01   Sim 2026-01-15 06:11:22  Lauf 1   Seq 4     Nr 22     good/paused      Wirkleistung 120 kW
+DC-01   Sim 2026-01-15 06:16:22  Lauf 1   Seq 5     Nr 23     good/running     Wirkleistung 120 kW
+DC-01   Sim 2026-01-15 06:16:22  Lauf 1   Seq 5     Nr 24     good/running     Wirkleistung 120 kW
+DC-01   Sim 2026-01-15 06:16:22  Lauf 1   Seq 5     Nr 25     good/running     Wirkleistung 120 kW
+DC-01   Sim 2026-01-15 06:16:22  Lauf 1   Seq 5     Nr 26     good/running     Wirkleistung 120 kW
+DC-01   Sim 2026-01-15 06:16:22  Lauf 1   Seq 5     Nr 27     good/running     Wirkleistung 120 kW
+DC-01   OFFLINE: Lesen ab Adresse 0 (50 Register): Verbindung zu 127.0.0.1:1504 (Unit 1) abgebrochen oder keine Antwort innerhalb 1000 ms (Unable to write data to the transport connection: Eine vorhandene Verbindung wurde vom Remotehost geschlossen..). – neuer Versuch im nächsten Intervall
+DC-01   ONLINE
+DC-01   Sim 2026-01-15 06:26:56  Lauf 1   Seq 2     Nr 28     good/running     Wirkleistung 0 kW
+DC-01   Sim 2026-01-15 06:26:56  Lauf 1   Seq 2     Nr 29     good/running     Wirkleistung 0 kW
+DC-01   Sim 2026-01-15 06:26:56  Lauf 1   Seq 2     Nr 30     good/running     Wirkleistung 0 kW
+DC-01   Sim 2026-01-15 06:26:56  Lauf 1   Seq 2     Nr 31     good/running     Wirkleistung 0 kW
+DC-01   Sim 2026-01-15 06:26:56  Lauf 1   Seq 2     Nr 32     good/running     Wirkleistung 0 kW
+DC-01   Sim 2026-01-15 06:26:56  Lauf 1   Seq 2     Nr 33     good/running     Wirkleistung 0 kW
+DC-01   Sim 2026-01-15 06:31:56  Lauf 1   Seq 3     Nr 34     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 06:31:56  Lauf 1   Seq 3     Nr 35     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 06:31:56  Lauf 1   Seq 3     Nr 36     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 06:31:56  Lauf 1   Seq 3     Nr 37     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 06:31:56  Lauf 1   Seq 3     Nr 38     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 06:36:56  Lauf 1   Seq 4     Nr 39     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 06:36:56  Lauf 1   Seq 4     Nr 40     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 06:36:56  Lauf 1   Seq 4     Nr 41     good/running     Wirkleistung 150 kW
+BROKER NICHT ERREICHBAR: Keine Verbindung zu Broker 127.0.0.1:1883: Verbindung bei der Anmeldung geschlossen – startet der Broker gerade, oder sind die Zugangsdaten falsch? (Benutzer user (Passwort aus Umgebungsvariable ENERGYTWIN_MQTT_PASSWORD)) – Geräte werden weiter gelesen, Messwerte bis zur Wiederverbindung verworfen, Neuversuch automatisch.
+DC-01   Sim 2026-01-15 06:36:56  Lauf 1   Seq 4     Nr 42     good/running     Wirkleistung 150 kW  [nicht übertragen]
+DC-01   Sim 2026-01-15 06:36:56  Lauf 1   Seq 4     Nr 43     good/running     Wirkleistung 150 kW  [nicht übertragen]
+DC-01   Sim 2026-01-15 06:41:56  Lauf 1   Seq 5     Nr 44     good/running     Wirkleistung 150 kW  [nicht übertragen]
+DC-01   Sim 2026-01-15 06:41:56  Lauf 1   Seq 5     Nr 45     good/running     Wirkleistung 150 kW  [nicht übertragen]
+DC-01   Sim 2026-01-15 06:41:56  Lauf 1   Seq 5     Nr 46     good/running     Wirkleistung 150 kW  [nicht übertragen]
+DC-01   Sim 2026-01-15 06:41:56  Lauf 1   Seq 5     Nr 47     good/running     Wirkleistung 150 kW  [nicht übertragen]
+DC-01   Sim 2026-01-15 06:46:56  Lauf 1   Seq 6     Nr 48     good/running     Wirkleistung 150 kW  [nicht übertragen]
+DC-01   Sim 2026-01-15 06:46:56  Lauf 1   Seq 6     Nr 49     good/running     Wirkleistung 150 kW  [nicht übertragen]
+DC-01   Sim 2026-01-15 06:46:56  Lauf 1   Seq 6     Nr 50     good/running     Wirkleistung 150 kW  [nicht übertragen]
+DC-01   Sim 2026-01-15 06:46:56  Lauf 1   Seq 6     Nr 51     good/running     Wirkleistung 150 kW  [nicht übertragen]
+BROKER WIEDER VERBUNDEN – 10 Nachricht(en) in der Ausfallzeit nicht übertragen; Status-Nachrichten wurden nachgeholt.
+DC-01   Sim 2026-01-15 06:46:56  Lauf 1   Seq 6     Nr 52     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 06:51:56  Lauf 1   Seq 7     Nr 53     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 06:51:56  Lauf 1   Seq 7     Nr 54     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 06:51:56  Lauf 1   Seq 7     Nr 55     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 06:51:56  Lauf 1   Seq 7     Nr 56     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 06:51:56  Lauf 1   Seq 7     Nr 57     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 06:56:56  Lauf 1   Seq 8     Nr 58     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 06:56:56  Lauf 1   Seq 8     Nr 59     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 06:56:56  Lauf 1   Seq 8     Nr 60     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 06:56:56  Lauf 1   Seq 8     Nr 61     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 06:56:56  Lauf 1   Seq 8     Nr 62     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 07:01:56  Lauf 1   Seq 9     Nr 63     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 07:01:56  Lauf 1   Seq 9     Nr 64     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 07:01:56  Lauf 1   Seq 9     Nr 65     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 07:01:56  Lauf 1   Seq 9     Nr 66     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 07:01:56  Lauf 1   Seq 9     Nr 67     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 07:06:56  Lauf 1   Seq 10    Nr 68     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 07:06:56  Lauf 1   Seq 10    Nr 69     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 07:06:56  Lauf 1   Seq 10    Nr 70     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 07:06:56  Lauf 1   Seq 10    Nr 71     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 07:06:56  Lauf 1   Seq 10    Nr 72     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 07:11:56  Lauf 1   Seq 11    Nr 73     good/running     Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 07:11:56  Lauf 1   Seq 11    Nr 74     bad/masterLost  Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 07:11:56  Lauf 1   Seq 11    Nr 75     bad/masterLost  Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 07:11:56  Lauf 1   Seq 11    Nr 76     bad/masterLost  Wirkleistung 150 kW
+DC-01   Sim 2026-01-15 07:11:56  Lauf 1   Seq 11    Nr 77     bad/masterLost  Wirkleistung 150 kW

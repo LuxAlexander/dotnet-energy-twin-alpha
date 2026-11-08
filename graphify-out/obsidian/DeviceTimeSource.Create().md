@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices.Common/DeviceTimeSource.cs"
 type: "code"
-community: "DeviceTimeSource"
+community: "DeviceTimeSource (2)"
 location: "L34"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/DeviceTimeSource
+  - community/DeviceTimeSource_2
 ---
 
 # DeviceTimeSource.Create()
@@ -28,4 +28,4 @@ tags:
 - [[TimeSyncClient]] - `calls` [INFERRED]
 - [[TimeSyncOptions]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/DeviceTimeSource
+#graphify/code #graphify/EXTRACTED #community/DeviceTimeSource_2

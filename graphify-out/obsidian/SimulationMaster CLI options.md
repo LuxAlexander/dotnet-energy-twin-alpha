@@ -11,6 +11,6 @@ tags:
 # SimulationMaster CLI options
 
 ## Connections
-- [[SimulationMaster_2]] - `references` [EXTRACTED]
+- [[SimulationMaster_1]] - `references` [EXTRACTED]
 
 #graphify/document #graphify/EXTRACTED #community/DevicesCommon_Tests

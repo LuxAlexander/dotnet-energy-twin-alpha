@@ -1,17 +1,17 @@
 ---
-source_file: "src/ModbusDiagnosticClient/DeviceConnection.cs"
+source_file: "src/Devices.Common/Modbus/ModbusOptions.cs"
 type: "code"
-community: "DeviceConnection"
-location: "L46"
+community: "Gruppe 89"
+location: "L25"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/DeviceConnection
+  - community/Gruppe_89
 ---
 
 # Port
 
 ## Connections
-- [[DeviceConnection]] - `defines` [EXTRACTED]
+- [[ModbusOptions]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/DeviceConnection
+#graphify/code #graphify/EXTRACTED #community/Gruppe_89

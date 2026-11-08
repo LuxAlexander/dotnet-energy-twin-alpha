@@ -1,12 +1,12 @@
 ---
 source_file: "tests/SimCore.Tests/MasterClockTests.cs"
 type: "code"
-community: "Master-Zeit Tests"
+community: "Gruppe 23"
 location: "L34"
 tags:
   - graphify/code
   - graphify/INFERRED
-  - community/Master-Zeit_Tests
+  - community/Gruppe_23
 ---
 
 # MasterClockTests.Resume_StartsAfterLeadTime_WithConfiguredSpeed()
@@ -18,4 +18,4 @@ tags:
 - [[MasterClock.Resume()]] - `calls` [INFERRED]
 - [[MasterClockTests]] - `method` [EXTRACTED]
 
-#graphify/code #graphify/INFERRED #community/Master-Zeit_Tests
+#graphify/code #graphify/INFERRED #community/Gruppe_23

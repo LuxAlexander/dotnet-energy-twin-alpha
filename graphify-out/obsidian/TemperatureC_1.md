@@ -1,17 +1,17 @@
 ---
-source_file: "src/WeatherSimulator/Program.cs"
+source_file: "src/Devices/DualPortCharger/Models/ChargingPoint.cs"
 type: "code"
-community: "Gruppe 61"
-location: "L275"
+community: "Ladepunkt"
+location: "L31"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_61
+  - community/Ladepunkt
 ---
 
 # TemperatureC
 
 ## Connections
-- [[LastRequest]] - `defines` [EXTRACTED]
+- [[ChargingPoint]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_61
+#graphify/code #graphify/EXTRACTED #community/Ladepunkt

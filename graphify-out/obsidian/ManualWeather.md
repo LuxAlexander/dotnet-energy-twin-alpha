@@ -12,7 +12,7 @@ tags:
 # ManualWeather
 
 ## Connections
-- [[CloudCoverPercent_1]] - `defines` [EXTRACTED]
+- [[CloudCoverPercent]] - `defines` [EXTRACTED]
 - [[IsActive]] - `defines` [EXTRACTED]
 - [[ManualWeather.ApplyPreset()]] - `method` [EXTRACTED]
 - [[ManualWeather.Clear()]] - `method` [EXTRACTED]
@@ -20,13 +20,13 @@ tags:
 - [[ManualWeather.SetTemperature()]] - `method` [EXTRACTED]
 - [[ManualWeather.SetWind()]] - `method` [EXTRACTED]
 - [[ManualWeather.cs]] - `contains` [EXTRACTED]
-- [[PrecipitationMmPerHour_1]] - `defines` [EXTRACTED]
-- [[TemperatureC_2]] - `defines` [EXTRACTED]
+- [[PrecipitationMmPerHour]] - `defines` [EXTRACTED]
+- [[TemperatureC]] - `defines` [EXTRACTED]
 - [[WeatherModel]] - `references` [EXTRACTED]
 - [[WeatherModelTests.Clear_RemovesManualOverride()]] - `calls` [INFERRED]
 - [[WeatherModelTests.ManualOverride_AppliesToAllLocations()]] - `calls` [INFERRED]
 - [[WeatherModelTests.NewModel()]] - `calls` [INFERRED]
 - [[WeatherModelTests.RainPreset_ProducesPrecipitation()]] - `calls` [INFERRED]
-- [[WindSpeedMs_1]] - `defines` [EXTRACTED]
+- [[WindSpeedMs]] - `defines` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Wettermodell__Tests

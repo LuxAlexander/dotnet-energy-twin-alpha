@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/BatterySimulator/Enum.cs"
+source_file: "src/Devices/PvSimulator/Simulation/SimulationMode.cs"
 type: "code"
-community: "Gruppe 44"
-location: "L22"
+community: "Shared Konsolenausgabe"
+location: "L7"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_44
+  - community/Shared_Konsolenausgabe
 ---
 
 # Manual
 
 ## Connections
-- [[ControlMode]] - `case_of` [EXTRACTED]
+- [[SimulationMode]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_44
+#graphify/code #graphify/EXTRACTED #community/Shared_Konsolenausgabe

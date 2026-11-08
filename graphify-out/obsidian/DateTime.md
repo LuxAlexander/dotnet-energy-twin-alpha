@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "code"
-community: "WeatherFeed"
+community: "Wettermodell & Tests (2)"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/WeatherFeed
+  - community/Wettermodell__Tests_2
 ---
 
 # DateTime
@@ -20,6 +20,7 @@ tags:
 - [[ChargerModbus.Publish()]] - `references` [EXTRACTED]
 - [[ClientConnection.Report()]] - `references` [EXTRACTED]
 - [[ConsoleDisplay.Render()]] - `references` [EXTRACTED]
+- [[Contract.FormatSimTime()]] - `references` [EXTRACTED]
 - [[CsvExporter.WriteRowAsync()]] - `references` [EXTRACTED]
 - [[CsvLogger.LogAsync()]] - `references` [EXTRACTED]
 - [[CsvLogger.WriteAsync()]] - `references` [EXTRACTED]
@@ -31,6 +32,7 @@ tags:
 - [[DualCharger.ProcessQueue()]] - `references` [EXTRACTED]
 - [[DualCharger.Tick()]] - `references` [EXTRACTED]
 - [[FakeWeatherService.GetAsync()]] - `references` [EXTRACTED]
+- [[GatewayAgainstDeviceTests]] - `references` [EXTRACTED]
 - [[HeaderValues]] - `references` [EXTRACTED]
 - [[IDevice.StepContinuous()]] - `references` [EXTRACTED]
 - [[ISimClock]] - `references` [EXTRACTED]
@@ -44,6 +46,8 @@ tags:
 - [[MasterOptions]] - `references` [EXTRACTED]
 - [[MasterOptions.ParseTime()]] - `references` [EXTRACTED]
 - [[MasterOptions.TryParseTime()]] - `references` [EXTRACTED]
+- [[MessageBuilderTests]] - `references` [EXTRACTED]
+- [[MessageBuilderTests.ChargerRegisters()]] - `references` [EXTRACTED]
 - [[ModbusDeviceServer]] - `references` [EXTRACTED]
 - [[ModbusDeviceServerTests.Header()]] - `references` [EXTRACTED]
 - [[ModbusTestBase]] - `references` [EXTRACTED]
@@ -91,4 +95,4 @@ tags:
 - [[WeatherModel.SunHeightDegrees()]] - `references` [EXTRACTED]
 - [[WeatherModel.TemperatureC()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/WeatherFeed
+#graphify/code #graphify/EXTRACTED #community/Wettermodell__Tests_2

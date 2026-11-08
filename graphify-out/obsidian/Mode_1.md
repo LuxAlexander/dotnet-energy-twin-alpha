@@ -12,6 +12,6 @@ tags:
 # Mode
 
 ## Connections
-- [[SimulationEngine_2]] - `defines` [EXTRACTED]
+- [[SimulationEngine]] - `defines` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/PV-Engine__Fehler

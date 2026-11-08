@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/KuehlhausSimulator/Kuehlhaus.cs"
+source_file: "src/Devices/DualPortCharger/Models/DualCharger.cs"
 type: "code"
-community: "Kühlhaus-Modell"
-location: "L50"
+community: "DualCharger"
+location: "L16"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Kühlhaus-Modell
+  - community/DualCharger
 ---
 
 # IsOn
 
 ## Connections
-- [[Kuehlhaus]] - `defines` [EXTRACTED]
+- [[DualCharger]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Kühlhaus-Modell
+#graphify/code #graphify/EXTRACTED #community/DualCharger

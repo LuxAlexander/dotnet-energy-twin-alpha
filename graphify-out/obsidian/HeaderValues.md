@@ -5,7 +5,7 @@ community: "Batterie-Modbus & Update"
 location: "L18"
 tags:
   - graphify/code
-  - graphify/INFERRED
+  - graphify/EXTRACTED
   - community/Batterie-Modbus__Update
 ---
 
@@ -23,4 +23,4 @@ tags:
 - [[OperatingState]] - `references` [EXTRACTED]
 - [[PvModbus.Publish()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/INFERRED #community/Batterie-Modbus__Update
+#graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update

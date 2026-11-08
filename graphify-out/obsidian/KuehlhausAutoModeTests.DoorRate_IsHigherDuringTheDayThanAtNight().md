@@ -1,12 +1,12 @@
 ---
 source_file: "tests/FieldDevices.Tests/ConsumerTests.cs"
 type: "code"
-community: "Gruppe 58"
+community: "Gruppe 104"
 location: "L442"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_58
+  - community/Gruppe_104
 ---
 
 # KuehlhausAutoModeTests.DoorRate_IsHigherDuringTheDayThanAtNight()
@@ -17,4 +17,4 @@ tags:
 - [[Fact]] - `references` [EXTRACTED]
 - [[KuehlhausAutoModeTests]] - `method` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_58
+#graphify/code #graphify/EXTRACTED #community/Gruppe_104

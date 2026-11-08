@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/BatterySimulator/BatterieConfig.cs"
 type: "code"
-community: "Gruppe 43"
+community: "Gruppe 24"
 location: "L13"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_43
+  - community/Gruppe_24
 ---
 
 # MaxChargeKW
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[BatterieConfig]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_43
+#graphify/code #graphify/EXTRACTED #community/Gruppe_24

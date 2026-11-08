@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices.Common/StepScheduler.cs"
+source_file: "src/SimCore.Time/MasterClock.cs"
 type: "code"
-community: "StepScheduler"
-location: "L51"
+community: "MasterClock"
+location: "L80"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/StepScheduler
+  - community/MasterClock
 ---
 
 # RunId
 
 ## Connections
-- [[StepScheduler]] - `defines` [EXTRACTED]
+- [[MasterClock]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/StepScheduler
+#graphify/code #graphify/EXTRACTED #community/MasterClock

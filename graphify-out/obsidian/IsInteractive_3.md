@@ -1,17 +1,17 @@
 ---
-source_file: "src/SimulationMaster/MasterConsole.cs"
+source_file: "src/Devices/KuehlhausSimulator/IO/ConsoleRenderer.cs"
 type: "code"
-community: "Zeitsync-Client & Konsole"
-location: "L30"
+community: "WeatherClient & Anzeige"
+location: "L21"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Zeitsync-Client__Konsole
+  - community/WeatherClient__Anzeige
 ---
 
 # IsInteractive
 
 ## Connections
-- [[MasterConsole]] - `defines` [EXTRACTED]
+- [[ConsoleRenderer_1]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Zeitsync-Client__Konsole
+#graphify/code #graphify/EXTRACTED #community/WeatherClient__Anzeige

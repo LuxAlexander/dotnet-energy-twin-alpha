@@ -1,16 +1,16 @@
 ---
 source_file: "src/WeatherSimulator/README.md"
 type: "document"
-community: "Gruppe 72"
+community: "Gruppe 99"
 tags:
   - graphify/document
   - graphify/EXTRACTED
-  - community/Gruppe_72
+  - community/Gruppe_99
 ---
 
 # Manual weather override keys
 
 ## Connections
-- [[WeatherSimulator_1]] - `references` [EXTRACTED]
+- [[WeatherSimulator]] - `references` [EXTRACTED]
 
-#graphify/document #graphify/EXTRACTED #community/Gruppe_72
+#graphify/document #graphify/EXTRACTED #community/Gruppe_99

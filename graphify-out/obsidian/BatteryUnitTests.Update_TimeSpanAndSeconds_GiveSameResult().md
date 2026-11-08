@@ -1,12 +1,12 @@
 ---
 source_file: "tests/FieldDevices.Tests/FieldDeviceTests.cs"
 type: "code"
-community: "Gruppe 43"
+community: "Gruppe 24"
 location: "L413"
 tags:
   - graphify/code
   - graphify/INFERRED
-  - community/Gruppe_43
+  - community/Gruppe_24
 ---
 
 # BatteryUnitTests.Update_TimeSpanAndSeconds_GiveSameResult()
@@ -19,4 +19,4 @@ tags:
 - [[BatteryUnitTests]] - `method` [EXTRACTED]
 - [[Fact]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/INFERRED #community/Gruppe_43
+#graphify/code #graphify/INFERRED #community/Gruppe_24

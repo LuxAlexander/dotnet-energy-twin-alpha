@@ -1,17 +1,16 @@
 ---
 source_file: "src/Devices.Common/README.md"
 type: "document"
-community: "Projekt-Doku & Geräte"
+community: "Projekt-Doku & Geräte (4)"
 tags:
   - graphify/document
   - graphify/EXTRACTED
-  - community/Projekt-Doku__Geräte
+  - community/Projekt-Doku__Geräte_4
 ---
 
 # WeatherClient
 
 ## Connections
 - [[WeatherFeed_1]] - `calls` [EXTRACTED]
-- [[WeatherSimulator]] - `calls` [EXTRACTED]
 
-#graphify/document #graphify/EXTRACTED #community/Projekt-Doku__Geräte
+#graphify/document #graphify/EXTRACTED #community/Projekt-Doku__Geräte_4

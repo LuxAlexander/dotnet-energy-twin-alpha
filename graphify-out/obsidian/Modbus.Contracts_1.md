@@ -1,20 +1,21 @@
 ---
-source_file: "AGENTS.md"
+source_file: "src/Modbus.Contracts/README.md"
 type: "document"
-community: "Projekt-Doku & Geräte"
+community: "Geräte-READMEs & Modelle"
 tags:
   - graphify/document
   - graphify/EXTRACTED
-  - community/Projekt-Doku__Geräte
+  - community/Geräte-READMEs__Modelle
 ---
 
 # Modbus.Contracts
 
 ## Connections
-- [[Devices.Common_1]] - `references` [EXTRACTED]
-- [[Modbus Registerkopf 0-19]] - `implements` [EXTRACTED]
-- [[ModbusDeviceServer_1]] - `calls` [EXTRACTED]
-- [[ModbusDiagnosticClient_1]] - `calls` [EXTRACTED]
-- [[SimCore.Contracts_1]] - `references` [EXTRACTED]
+- [[Gemeinsamer Registerkopf 0-19]] - `references` [EXTRACTED]
+- [[Geraete-Register (Charger, PV, Batterie, Kuehlhaus)]] - `references` [EXTRACTED]
+- [[RegisterCodec_1]] - `references` [EXTRACTED]
+- [[RegisterPlan_1]] - `references` [EXTRACTED]
+- [[RegisterPlans.For(DeviceType)]] - `references` [EXTRACTED]
+- [[Vorzeichen Wirkleistung (positiv = Aufnahme)]] - `conceptually_related_to` [EXTRACTED]
 
-#graphify/document #graphify/EXTRACTED #community/Projekt-Doku__Geräte
+#graphify/document #graphify/EXTRACTED #community/Geräte-READMEs__Modelle

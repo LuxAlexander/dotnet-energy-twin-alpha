@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/DualPortCharger/Models/ChargingPoint.cs"
+source_file: "src/Devices/KuehlhausSimulator/Kuehlhaus.cs"
 type: "code"
-community: "Ladepunkt"
-location: "L35"
+community: "Kühlhaus-Modell"
+location: "L78"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Ladepunkt
+  - community/Kühlhaus-Modell
 ---
 
 # EnergyKWh
 
 ## Connections
-- [[ChargingPoint]] - `defines` [EXTRACTED]
+- [[Kuehlhaus]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Ladepunkt
+#graphify/code #graphify/EXTRACTED #community/Kühlhaus-Modell

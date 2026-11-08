@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "code"
-community: "Gruppe 54"
+community: "Gruppe 71"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_54
+  - community/Gruppe_71
 ---
 
 # Queue
@@ -14,4 +14,4 @@ tags:
 - [[ClockOffsetEstimator]] - `references` [EXTRACTED]
 - [[DualCharger]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_54
+#graphify/code #graphify/EXTRACTED #community/Gruppe_71

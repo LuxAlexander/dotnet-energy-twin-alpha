@@ -15,7 +15,7 @@ tags:
 - [[AutoModeController.Step()]] - `calls` [EXTRACTED]
 - [[Random]] - `references` [EXTRACTED]
 - [[SimulationEngine.VehicleArrives()]] - `calls` [EXTRACTED]
-- [[Vehicle_1]] - `references` [EXTRACTED]
+- [[Vehicle]] - `references` [EXTRACTED]
 - [[VehicleCatalog]] - `method` [EXTRACTED]
 - [[VehicleCatalog.Create()]] - `calls` [EXTRACTED]
 

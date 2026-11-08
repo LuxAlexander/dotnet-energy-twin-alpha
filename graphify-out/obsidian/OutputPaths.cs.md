@@ -1,18 +1,18 @@
 ---
 source_file: "src/Shared.Config/OutputPaths.cs"
 type: "code"
-community: "Gruppe 92"
+community: "OutputPaths"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_92
+  - community/OutputPaths
 ---
 
 # OutputPaths.cs
 
 ## Connections
 - [[OutputPaths]] - `contains` [EXTRACTED]
-- [[Shared.Config]] - `contains` [EXTRACTED]
+- [[Shared.Config_1]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_92
+#graphify/code #graphify/EXTRACTED #community/OutputPaths

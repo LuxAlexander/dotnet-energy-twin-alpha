@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/KuehlhausSimulator/Kuehlhaus.cs"
 type: "code"
-community: "Gruppe 57"
+community: "Gruppe 72"
 location: "L172"
 tags:
   - graphify/code
   - graphify/INFERRED
-  - community/Gruppe_57
+  - community/Gruppe_72
 ---
 
 # Kuehlhaus.TurnOff()
@@ -21,4 +21,4 @@ tags:
 - [[KuehlhausModelTests.TurnOff_StopsCompressorAndReportsOffState()]] - `calls` [INFERRED]
 - [[KuehlhausModelTests.Update_UsesExactExponentialSolution()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/INFERRED #community/Gruppe_57
+#graphify/code #graphify/INFERRED #community/Gruppe_72

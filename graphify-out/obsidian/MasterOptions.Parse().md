@@ -17,6 +17,6 @@ tags:
 - [[MasterOptions.ParseNumber()]] - `calls` [EXTRACTED]
 - [[MasterOptions.ParseTime()]] - `calls` [EXTRACTED]
 - [[MasterOptions.Value()]] - `calls` [EXTRACTED]
-- [[Program.Main()_2]] - `calls` [EXTRACTED]
+- [[Program.Main()]] - `calls` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Zeitsync-Client__Konsole

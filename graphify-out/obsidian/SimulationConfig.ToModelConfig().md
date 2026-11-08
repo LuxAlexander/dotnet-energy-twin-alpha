@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/KuehlhausSimulator/Simulation/SimulationConfig.cs"
 type: "code"
-community: "Gruppe 59"
+community: "Gruppe 81"
 location: "L55"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_59
+  - community/Gruppe_81
 ---
 
 # SimulationConfig.ToModelConfig()
@@ -14,6 +14,6 @@ tags:
 ## Connections
 - [[KuehlhausConfig]] - `references` [EXTRACTED]
 - [[SimulationConfig_1]] - `method` [EXTRACTED]
-- [[SimulationEngine_1]] - `calls` [INFERRED]
+- [[SimulationEngine_2]] - `calls` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_59
+#graphify/code #graphify/EXTRACTED #community/Gruppe_81

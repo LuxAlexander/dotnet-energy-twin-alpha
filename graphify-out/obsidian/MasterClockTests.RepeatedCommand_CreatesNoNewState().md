@@ -1,12 +1,12 @@
 ---
 source_file: "tests/SimCore.Tests/MasterClockTests.cs"
 type: "code"
-community: "Master-Zeit Tests"
+community: "Gruppe 23"
 location: "L160"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Master-Zeit_Tests
+  - community/Gruppe_23
 ---
 
 # MasterClockTests.RepeatedCommand_CreatesNoNewState()
@@ -18,4 +18,4 @@ tags:
 - [[MasterClockTests]] - `method` [EXTRACTED]
 - [[MasterClockTests.CreateRunning()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Master-Zeit_Tests
+#graphify/code #graphify/EXTRACTED #community/Gruppe_23

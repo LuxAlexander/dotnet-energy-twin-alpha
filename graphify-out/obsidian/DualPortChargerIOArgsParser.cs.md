@@ -12,7 +12,7 @@ tags:
 # DualPortCharger/IO/ArgsParser.cs
 
 ## Connections
-- [[ArgsParser_1]] - `contains` [EXTRACTED]
+- [[ArgsParser_3]] - `contains` [EXTRACTED]
 - [[Devices.Common]] - `imports` [EXTRACTED]
 - [[Devices.Common.Modbus]] - `imports` [EXTRACTED]
 - [[Devices.Common.Weather]] - `imports` [EXTRACTED]

@@ -1,8 +1,8 @@
 ---
-source_file: "src/Devices/BatterySimulator/BatteryModbus.cs"
+source_file: "src/Devices/DualPortCharger/Simulation/ChargerModbus.cs"
 type: "code"
 community: "Batterie-Modbus & Update"
-location: "L34"
+location: "L29"
 tags:
   - graphify/code
   - graphify/EXTRACTED
@@ -12,6 +12,6 @@ tags:
 # StatusText
 
 ## Connections
-- [[BatteryModbus]] - `defines` [EXTRACTED]
+- [[ChargerModbus]] - `defines` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Batterie-Modbus__Update

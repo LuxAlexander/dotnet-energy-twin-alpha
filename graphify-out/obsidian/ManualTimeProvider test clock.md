@@ -4,7 +4,7 @@ type: "document"
 community: "Devices.Common Tests"
 tags:
   - graphify/document
-  - graphify/INFERRED
+  - graphify/EXTRACTED
   - community/DevicesCommon_Tests
 ---
 
@@ -14,4 +14,4 @@ tags:
 - [[SimCore.Tests_1]] - `references` [EXTRACTED]
 - [[System.TimeProvider injection]] - `implements` [INFERRED]
 
-#graphify/document #graphify/INFERRED #community/DevicesCommon_Tests
+#graphify/document #graphify/EXTRACTED #community/DevicesCommon_Tests

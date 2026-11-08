@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "code"
-community: "TimeSyncOptions Tests"
+community: "Gruppe 48"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/TimeSyncOptions_Tests
+  - community/Gruppe_48
 ---
 
 # InvalidDataException
@@ -13,4 +13,4 @@ tags:
 ## Connections
 - [[SyncProtocolTests.InvalidMessage_IsRejected()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/TimeSyncOptions_Tests
+#graphify/code #graphify/EXTRACTED #community/Gruppe_48

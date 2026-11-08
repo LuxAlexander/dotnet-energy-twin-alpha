@@ -1,12 +1,12 @@
 ---
-source_file: "src/ModbusDiagnosticClient/DeviceConnection.cs"
+source_file: "src/Modbus.Client/DeviceConnection.cs"
 type: "code"
-community: "DeviceConnection"
+community: "DeviceConnection (Modbus.Client)"
 location: "L116"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/DeviceConnection
+  - community/DeviceConnection_ModbusClient
 ---
 
 # DeviceConnection.Dispose()
@@ -14,7 +14,6 @@ tags:
 ## Connections
 - [[DeviceConnection]] - `method` [EXTRACTED]
 - [[DeviceConnection.Close()]] - `calls` [EXTRACTED]
-- [[DiagnosticClientTests.Dispose()]] - `calls` [INFERRED]
-- [[DiagnosticSession.ConnectAsync()]] - `calls` [EXTRACTED]
+- [[DevicePoller.Dispose()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/DeviceConnection
+#graphify/code #graphify/EXTRACTED #community/DeviceConnection_ModbusClient

@@ -1,17 +1,16 @@
 ---
 source_file: "docs/devices/KuehlhausSimulator/umsetzung-lb02.md"
 type: "document"
-community: "Projekt-Doku & Geräte"
+community: "Projekt-Doku & Geräte (2)"
 tags:
   - graphify/document
-  - graphify/EXTRACTED
-  - community/Projekt-Doku__Geräte
+  - graphify/INFERRED
+  - community/Projekt-Doku__Geräte_2
 ---
 
 # Kühlhaus Umsetzungsanleitung LB02
 
 ## Connections
-- [[KuehlhausSimulator_1]] - `references` [EXTRACTED]
 - [[Modbus-im-Gerät Muster]] - `references` [INFERRED]
 
-#graphify/document #graphify/EXTRACTED #community/Projekt-Doku__Geräte
+#graphify/document #graphify/INFERRED #community/Projekt-Doku__Geräte_2

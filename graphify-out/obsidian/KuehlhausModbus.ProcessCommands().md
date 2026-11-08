@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/KuehlhausSimulator/Simulation/KuehlhausModbus.cs"
 type: "code"
-community: "Batterie-Modbus & Update"
+community: "Batterie-Modbus & Update (2)"
 location: "L38"
 tags:
   - graphify/code
   - graphify/INFERRED
-  - community/Batterie-Modbus__Update
+  - community/Batterie-Modbus__Update_2
 ---
 
 # KuehlhausModbus.ProcessCommands()
@@ -25,4 +25,4 @@ tags:
 - [[ModbusDeviceServer.TryDequeueCommand()]] - `calls` [INFERRED]
 - [[SimulationEngine.RunAsync()_1]] - `calls` [INFERRED]
 
-#graphify/code #graphify/INFERRED #community/Batterie-Modbus__Update
+#graphify/code #graphify/INFERRED #community/Batterie-Modbus__Update_2

@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/BatterySimulator/Batterie.cs"
 type: "code"
-community: "Gruppe 81"
+community: "Batterie-Modell"
 location: "L58"
 tags:
   - graphify/code
   - graphify/INFERRED
-  - community/Gruppe_81
+  - community/Batterie-Modell
 ---
 
 # Batterie.SetPower()
@@ -21,4 +21,4 @@ tags:
 - [[Simulator.SetSetpoint()]] - `calls` [INFERRED]
 - [[Simulator.SettingsMenuAsync()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/INFERRED #community/Gruppe_81
+#graphify/code #graphify/INFERRED #community/Batterie-Modell

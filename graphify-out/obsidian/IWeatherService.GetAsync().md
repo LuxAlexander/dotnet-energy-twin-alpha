@@ -1,12 +1,12 @@
 ---
 source_file: "src/SimCore.Contracts/IWeatherService.cs"
 type: "code"
-community: "WeatherFeed"
+community: "Batterie-Simulator Loop"
 location: "L10"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/WeatherFeed
+  - community/Batterie-Simulator_Loop
 ---
 
 # IWeatherService.GetAsync()
@@ -21,4 +21,4 @@ tags:
 - [[WeatherData]] - `references` [EXTRACTED]
 - [[WeatherFeed.UpdateAsync()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/WeatherFeed
+#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop

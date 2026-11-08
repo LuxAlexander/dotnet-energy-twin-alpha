@@ -12,7 +12,7 @@ tags:
 # SimulationEngine.StatusLine()
 
 ## Connections
-- [[SimulationEngine_2]] - `method` [EXTRACTED]
+- [[SimulationEngine]] - `method` [EXTRACTED]
 - [[SimulationEngine.RunAsync()_2]] - `calls` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/PV-Engine__Fehler

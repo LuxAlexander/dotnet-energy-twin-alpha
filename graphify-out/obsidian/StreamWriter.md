@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "code"
-community: "CsvLogger"
+community: "Batterie-Simulator Loop"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/CsvLogger
+  - community/Batterie-Simulator_Loop
 ---
 
 # StreamWriter
@@ -16,4 +16,4 @@ tags:
 - [[CsvLogger_1]] - `references` [EXTRACTED]
 - [[MessageChannel]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/CsvLogger
+#graphify/code #graphify/EXTRACTED #community/Batterie-Simulator_Loop

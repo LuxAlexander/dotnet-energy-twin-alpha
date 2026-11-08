@@ -1,19 +1,19 @@
 ---
 source_file: "src/SimCore.TimeSync/TimeSyncServer.cs"
 type: "code"
-community: "TimeState & TimeLine"
+community: "Sync-Nachrichten"
 location: "L282"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/TimeState__TimeLine
+  - community/Sync-Nachrichten
 ---
 
 # ClientConnection.MarkClosed()
 
 ## Connections
-- [[ClientConnection_1]] - `method` [EXTRACTED]
+- [[ClientConnection]] - `method` [EXTRACTED]
 - [[DateTimeOffset]] - `references` [EXTRACTED]
 - [[TimeSyncServer.HandleClientAsync()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/TimeState__TimeLine
+#graphify/code #graphify/EXTRACTED #community/Sync-Nachrichten

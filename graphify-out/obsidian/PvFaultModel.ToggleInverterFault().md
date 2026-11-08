@@ -1,12 +1,12 @@
 ---
 source_file: "src/Devices/PvSimulator/Devices/PvFaultModel.cs"
 type: "code"
-community: "PV-Engine & Fehler"
+community: "PvFaultModel"
 location: "L66"
 tags:
   - graphify/code
   - graphify/INFERRED
-  - community/PV-Engine__Fehler
+  - community/PvFaultModel
 ---
 
 # PvFaultModel.ToggleInverterFault()
@@ -16,4 +16,4 @@ tags:
 - [[PvModbusTests.OnOffAndReset_AreApplied()]] - `calls` [INFERRED]
 - [[SimulationEngine.ToggleFault()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/INFERRED #community/PV-Engine__Fehler
+#graphify/code #graphify/INFERRED #community/PvFaultModel

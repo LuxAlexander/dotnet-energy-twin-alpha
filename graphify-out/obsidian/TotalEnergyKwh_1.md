@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/PvSimulator/Devices/IDevice.cs"
+source_file: "src/Devices/DualPortCharger/Models/DualCharger.cs"
 type: "code"
-community: "Gruppe 67"
-location: "L9"
+community: "DualCharger"
+location: "L42"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_67
+  - community/DualCharger
 ---
 
-# TotalEnergyKwh
+# TotalEnergyKWh
 
 ## Connections
-- [[IDevice]] - `defines` [EXTRACTED]
+- [[DualCharger]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_67
+#graphify/code #graphify/EXTRACTED #community/DualCharger

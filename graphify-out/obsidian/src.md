@@ -1,11 +1,11 @@
 ---
 source_file: "src"
 type: "code"
-community: "Gruppe 90"
+community: "Gruppe 51"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_90
+  - community/Gruppe_51
 ---
 
 # src
@@ -13,4 +13,4 @@ tags:
 ## Connections
 - [[EnergyTwin.sln]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_90
+#graphify/code #graphify/EXTRACTED #community/Gruppe_51

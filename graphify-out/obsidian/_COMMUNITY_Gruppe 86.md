@@ -1,20 +1,26 @@
 ---
 type: community
-cohesion: 0.50
-members: 5
+cohesion: 0.18
+members: 11
 ---
 
 # Gruppe 86
 
-**Cohesion:** 0.50 - moderately connected
-**Members:** 5 nodes
+**Cohesion:** 0.18 - loosely connected
+**Members:** 11 nodes
 
 ## Members
-- [[AUTO mode, Punkt 1 CHARGING VW ID.3 120 kW, Limit 150 kW]] - image - docs/screenshots/DualPortCharger/Automatischer_Modus.png
-- [[Charger Screenshot Automatischer Modus]] - image - docs/screenshots/DualPortCharger/Automatischer_Modus.png
-- [[Charger Screenshot Manueller Modus]] - image - docs/screenshots/DualPortCharger/Manueller_Modus.png
-- [[Charger key legend (PA1-2CDSFR+-OQ)]] - image - docs/screenshots/DualPortCharger/Automatischer_Modus.png
-- [[MANUELL mode Punkt 1 CONNECTED, Punkt 2 FINISHED, message Laden gestoppt]] - image - docs/screenshots/DualPortCharger/Manueller_Modus.png
+- [[RABBITMQ_DEFAULT_PASS]] - code - docker/docker-compose.yml
+- [[RABBITMQ_DEFAULT_USER]] - code - docker/docker-compose.yml
+- [[command]] - code - docker/docker-compose.yml
+- [[container_name]] - code - docker/docker-compose.yml
+- [[docker-compose.yml]] - code - docker/docker-compose.yml
+- [[environment]] - code - docker/docker-compose.yml
+- [[image]] - code - docker/docker-compose.yml
+- [[ports]] - code - docker/docker-compose.yml
+- [[rabbitmq]] - code - docker/docker-compose.yml
+- [[services]] - code - docker/docker-compose.yml
+- [[volumes]] - code - docker/docker-compose.yml
 
 ## Live Query (requires Dataview plugin)
 

@@ -1,12 +1,12 @@
 ---
 source_file: "src/ModbusDiagnosticClient/RegisterFormatter.cs"
 type: "code"
-community: "Register-Dekodierung"
+community: "Gruppe 52"
 location: "L50"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Register-Dekodierung
+  - community/Gruppe_52
 ---
 
 # RegisterFormatter.Table()
@@ -21,4 +21,4 @@ tags:
 - [[RegisterFormatter.Raw()]] - `calls` [EXTRACTED]
 - [[RegisterFormatter.Value()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Register-Dekodierung
+#graphify/code #graphify/EXTRACTED #community/Gruppe_52

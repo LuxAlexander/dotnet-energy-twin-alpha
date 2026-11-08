@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/PvSimulator/Devices/PvSystem.cs"
+source_file: "src/Devices/PvSimulator/Devices/PvFaultModel.cs"
 type: "code"
-community: "PvSystem"
-location: "L28"
+community: "PvFaultModel"
+location: "L37"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/PvSystem
+  - community/PvFaultModel
 ---
 
 # GridVoltageV
 
 ## Connections
-- [[PvSystem]] - `defines` [EXTRACTED]
+- [[PvFaultModel]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/PvSystem
+#graphify/code #graphify/EXTRACTED #community/PvFaultModel

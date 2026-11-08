@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices.Common/Modbus/ModbusOptions.cs"
+source_file: "src/ModbusDiagnosticClient/ClientOptions.cs"
 type: "code"
-community: "Gruppe 64"
-location: "L26"
+community: "Gruppe 57"
+location: "L30"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_64
+  - community/Gruppe_57
 ---
 
 # UnitId
 
 ## Connections
-- [[ModbusOptions]] - `defines` [EXTRACTED]
+- [[ClientOptions]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_64
+#graphify/code #graphify/EXTRACTED #community/Gruppe_57

@@ -1,17 +1,17 @@
 ---
-source_file: "src/Devices/BatterySimulator/Enum.cs"
+source_file: "src/Devices/PvSimulator/Devices/InverterStatus.cs"
 type: "code"
-community: "Gruppe 77"
-location: "L15"
+community: "PV-Namespaces"
+location: "L6"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Gruppe_77
+  - community/PV-Namespaces
 ---
 
 # Fault
 
 ## Connections
-- [[DeviceState]] - `case_of` [EXTRACTED]
+- [[InverterStatus]] - `case_of` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Gruppe_77
+#graphify/code #graphify/EXTRACTED #community/PV-Namespaces

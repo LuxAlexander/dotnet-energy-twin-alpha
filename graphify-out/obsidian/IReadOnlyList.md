@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "code"
-community: "Register-Dekodierung"
+community: "Gruppe 52"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Register-Dekodierung
+  - community/Gruppe_52
 ---
 
 # IReadOnlyList
@@ -20,8 +20,13 @@ tags:
 - [[DiagnosticSession.DescribeDevice()]] - `references` [EXTRACTED]
 - [[DiagnosticSession.Summary()]] - `references` [EXTRACTED]
 - [[DualCharger]] - `references` [EXTRACTED]
+- [[GatewayOptions]] - `references` [EXTRACTED]
+- [[GatewayOptions.Next()]] - `references` [EXTRACTED]
+- [[GatewayOptions.Parse()]] - `references` [EXTRACTED]
+- [[GatewayService]] - `references` [EXTRACTED]
 - [[LocationCatalog]] - `references` [EXTRACTED]
 - [[MasterClock]] - `references` [EXTRACTED]
+- [[MeasurementMessage]] - `references` [EXTRACTED]
 - [[RegisterDefinition]] - `references` [EXTRACTED]
 - [[RegisterFormatter.Table()]] - `references` [EXTRACTED]
 - [[RegisterPlan]] - `references` [EXTRACTED]
@@ -31,4 +36,4 @@ tags:
 - [[TimeSyncServer]] - `references` [EXTRACTED]
 - [[VehicleCatalog]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Register-Dekodierung
+#graphify/code #graphify/EXTRACTED #community/Gruppe_52

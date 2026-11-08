@@ -1,18 +1,18 @@
 ---
 source_file: "src/Devices/DualPortCharger/Simulation/SimulationEngine.cs"
 type: "code"
-community: "Gruppe 41"
+community: "Gruppe 56"
 location: "L76"
 tags:
   - graphify/code
-  - graphify/INFERRED
-  - community/Gruppe_41
+  - graphify/EXTRACTED
+  - community/Gruppe_56
 ---
 
 # SimulationEngine.Quit()
 
 ## Connections
 - [[InputHandler.HandleAsync()]] - `calls` [INFERRED]
-- [[SimulationEngine]] - `method` [EXTRACTED]
+- [[SimulationEngine_1]] - `method` [EXTRACTED]
 
-#graphify/code #graphify/INFERRED #community/Gruppe_41
+#graphify/code #graphify/EXTRACTED #community/Gruppe_56
