@@ -96,3 +96,17 @@
 **Artefact:** `src/Devices/WindSimulator/` (gelöscht), `EnergyTwin.sln`, `README.md`, `AGENTS.md`, `TimeAndModbus.md`
 **Test:** `dotnet build EnergyTwin.sln`
 **Comment:** Historische Hinweise auf Wind in den Journalen und im Archiv bleiben unverändert.
+
+## 2026-11-08 – LB03: Eigener Skill `readTask`
+**Done:** Aufgabe 03 (PDF) gelesen, besonders §6 (eigener Skill pro Person). Neuen Ordner `skills/` angelegt mit dem Skill `readTask`: liest ein Aufgabenblatt, extrahiert alle Anforderungen (Pflicht, optional, Abgabe, Bewertung, Nachweise), gleicht sie mit dem Projektstand ab (erfüllt / teilweise erfüllt / nicht erfüllt / nicht nachgewiesen) und schlägt eine Reihenfolge der offenen Arbeiten vor. Der Skill arbeitet nur lesend. Das README dokumentiert die Punkte aus der Aufgabenstellung: verantwortliche Person, Zweck, Aufruf, Kontext, Arbeitsschritte, Grenzen, Beispielaufruf, Quelle und Lizenz.
+**KI:** Claude Sonnet 5.5 => Lesen der Aufgabenstellung, Entwurf und Formulierung des Skills; die Anforderungen daran (Nutzen, Aufruf, Reihenfolge) stammen von Susanne.
+**Artefact:** `skills/readTask/SKILL.md`, `skills/readTask/README.md`
+**Test:** Noch kein vollständiger Lauf. Das Beispiel im README beruht auf einer Stichprobe (`docker/docker-compose.yml` vorhanden, kein Gateway und keine SRS im Repo). Der echte Aufruf `/readTask Aufgabe 03` mit Ergebnis muss noch dokumentiert werden.
+**Comment:** Claude Code lädt Skills aus `.claude/skills/`; `skills/` ist die versionierte Ablage, zum Verwenden kopieren (Anleitung im Skill-README). Nicht committet.
+
+### Nachtrag 2026-11-08 – Erster Einsatz von `readTask` für Aufgabe 03
+**Done:** Den Skill `readTask` auf Aufgabe 03 angewendet: PDF (7 Seiten) gelesen, 28 Anforderungen extrahiert und mit dem Repo abgeglichen. Ergebnis: 3 erfüllt, 6 teilweise erfüllt, 16 nicht erfüllt (davon 1 optional), 3 nicht nachgewiesen. Gefunden u. a.: Passwort fest in `docker/docker-compose.yml`, `docker/rabbitmq.conf` ist ein leerer Ordner statt einer Datei, Image ohne genaue Version, keine `.env.example`, kein Gateway, kein Viewer, keine SRS, PDF zu Aufgabe 03 ist committet. Vorgeschlagene Reihenfolge: SRS und Nachrichtenvertrag → Broker → Gateway → Veröffentlichen/Robustheit → Viewer → Doku → Nachweise → Abgabe; Skills von Alexander und Dominik parallel. Bericht als Anwendungsnachweis des Skills gespeichert, Beispiel im Skill-README auf den echten Lauf umgestellt.
+**KI:** Claude Opus 5.5 => Ausführung der Skill-Schritte (Lesen, Abgleich, Bewertung, Reihenfolge), Bericht.
+**Artefact:** `docs/task-status/aufgabe-03.md`, `skills/readTask/README.md` (Beispiel), `.claude/skills/readTask/README.md` (Kopie)
+**Test:** Kein Build und kein Testlauf (der Skill arbeitet nur lesend). Statusurteile beruhen auf Dateien, `git log` und den Nachweisen in `AGENTS.md`.
+**Comment:** Fünf offene Fragen ans Team (AMQP oder MQTT, Gateway als eigenes Projekt, Zuständigkeiten für Gateway/Viewer/Broker, Verhalten in der Pause, Themen der anderen Skills). Die KI hat die Befunde zu Compose und `.gitignore` direkt an den Dateien belegt; die Prüfung des Berichts durch Susanne steht noch aus. Nicht committet.
