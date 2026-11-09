@@ -1,0 +1,14 @@
+<div class="metrics">
+    @foreach (var metric in Metrics)
+    {
+        <article class="metric">
+            <h2>@metric.Label</h2>
+            <div class="metric-value @metric.Tone">@metric.Value <span>@metric.Unit</span></div>
+            <p class="muted small">@metric.Description</p>
+        </article>
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired] public IReadOnlyList<Metric> Metrics { get; set; } = [];
+}

@@ -1,0 +1,84 @@
+@page "/instanz/neu"
+@inject InstanceStore Instances
+@inject NavigationManager Navigation
+
+<PageTitle>Instanz anlegen · EnergyTwin</PageTitle>
+<h1>Instanz anlegen</h1>
+<p class="muted">Gerätetyp wählen, Kennung und Port werden vorgeschlagen. Speichern allein startet keinen Prozess; der Start erfolgt über die Instanzseite.</p>
+
+<div class="catalog-filters">
+    <label>Gerätetyp
+        <select @bind="_kind">
+            @foreach (var kind in InstanceStore.Addable)
+            {
+                <option value="@kind">@LabelFor(kind)</option>
+            }
+        </select>
+    </label>
+    <label>Kennung <input type="text" @bind="_id" /></label>
+    <label>Modbus-Port <input type="number" @bind="_port" /></label>
+    <label>Standort
+        <select @bind="_location">
+            @foreach (var location in Locations)
+            {
+                <option value="@location">@location</option>
+            }
+        </select>
+    </label>
+    <button @onclick="SuggestAgain">Vorschlag neu wählen</button>
+    <button class="primary" @onclick="Add">Anlegen</button>
+    <a class="button-like" href="/">Abbrechen</a>
+</div>
+
+@if (_error is not null)
+{
+    <p class="small" role="alert" style="color: var(--gold)">@_error</p>
+}
+<p class="muted small">Bei Kennungs- oder Portkonflikten meldet die Speicherung abgelehnt. Ein vorab freier Port ist bis zum Start nicht garantiert.</p>
+
+@code {
+    private static readonly string[] Locations = { "Salzburg", "Wien", "Innsbruck", "Tamanrasset", "Neumayer III" };
+
+    private ModuleKind _kind = ModuleKind.Pv;
+    private string _id = string.Empty;
+    private string _location = "Salzburg";
+    private int _port;
+    private string? _error;
+
+    protected override void OnInitialized() => SuggestAgain();
+
+    private void SuggestAgain()
+    {
+        _id = Instances.SuggestId(_kind);
+        _port = Instances.SuggestModbusPort();
+        _error = null;
+    }
+
+    private static string LabelFor(ModuleKind kind) => kind switch
+    {
+        ModuleKind.Pv => "PV-Anlage",
+        ModuleKind.Battery => "Batteriespeicher",
+        ModuleKind.Charger => "DC-Ladesäule",
+        _ => "Kühlhaus"
+    };
+
+    private async Task Add()
+    {
+        var added = Instances.TryAdd(new InstanceConfig(
+            _id.Trim(), _kind, _id.Trim(), GroupFor(_kind), _location.Trim(), _port, null, null));
+        if (added is null)
+        {
+            _error = Instances.LastError ?? "Kennung oder Port im Konflikt.";
+            return;
+        }
+        Navigation.NavigateTo($"/module/{added.Id}");
+    }
+
+    private static string GroupFor(ModuleKind kind) => kind switch
+    {
+        ModuleKind.Pv => "PV-Anlagen",
+        ModuleKind.Battery => "Batteriespeicher",
+        ModuleKind.Charger => "Ladesäulen",
+        _ => "Kühlhäuser"
+    };
+}

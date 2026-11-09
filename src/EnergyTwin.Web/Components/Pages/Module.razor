@@ -1,0 +1,394 @@
+@page "/module/{Id}"
+@inject PreviewCatalog Catalog
+@inject InstanceStore InstanceStore
+@inject ProcessManager Processes
+@inject LiveStore Store
+@inject LiveTrends Trends
+@inject NavigationManager Navigation
+@implements IDisposable
+
+@if (_module is null)
+{
+    <PageTitle>Instanz nicht gefunden · EnergyTwin</PageTitle>
+    <h1>Instanz nicht gefunden</h1><p>Diese Kennung ist im Ansichtskatalog nicht vorhanden.</p><a href="/">Zur Übersicht</a>
+}
+else
+{
+    <PageTitle>@(_module.Name) · EnergyTwin</PageTitle>
+    <div class="page-heading"><span class="eyebrow">@_module.Group / @_module.Location</span><h1>@_module.Name</h1>
+        <div class="status-row"><span>Prozess: @StatusText</span><span>Verbindung: @_snapshot.Connection</span><span>Simulation: @SimulationText</span></div>
+    </div>
+    <nav class="view-tabs" aria-label="Modulansichten">
+        @foreach (var view in Enum.GetValues<ModuleView>())
+        {
+            <button class="@(_view == view ? "selected" : null)" aria-pressed="@(_view == view)" @onclick="() => _view = view">@ViewLabel(view)</button>
+        }
+    </nav>
+    @if (_view == ModuleView.Overview)
+    {
+        @switch (_module.Kind)
+        {
+            case ModuleKind.Pv:
+            case ModuleKind.Battery:
+            case ModuleKind.Charger:
+            case ModuleKind.ColdStore:
+                @if (_live is not null)
+                {
+                    <MetricCards Metrics="LiveView.DeviceMetrics(_module.Kind, _live)" />
+                    <p class="muted small">Live-Daten · Qualität @_live.Quality (@_live.QualityReason) @Freshness</p>
+                    @switch (_module.Kind)
+                    {
+                        case ModuleKind.Pv:
+                            <LiveChart Title="@LiveView.ChartTitle(_module.Kind)" Unit="@LiveView.Unit(_module.Kind)"
+                                       Description="@LiveView.ChartDescription(_module.Kind)" RunId="@ChartRunId"
+                                       SeriesKeys="LiveView.ChartSeries(_module.Kind)" SeriesOf="TrendOf" />
+                            <div class="control-panel"><div><h2>Leistungsbegrenzung</h2><p class="muted">Geräterückmeldung folgt mit dem Befehlsvertrag.</p></div><label>Limit (%) <input type="number" value="100" disabled /></label><button disabled>Übernehmen</button></div>
+                            break;
+                        case ModuleKind.Battery:
+                            <LiveChart Title="@LiveView.ChartTitle(_module.Kind)" Unit="@LiveView.Unit(_module.Kind)"
+                                       Description="@LiveView.ChartDescription(_module.Kind)" RunId="@ChartRunId"
+                                       SeriesKeys="LiveView.ChartSeries(_module.Kind)" SeriesOf="TrendOf" />
+                            <section class="detail-panel"><div class="section-heading"><h2>Speicherfüllstand</h2><span>@SocPercent</span></div><div class="trend-progress"><progress value="@SocValue" max="100" aria-label="Ladezustand"></progress></div><p class="muted">Positive Leistung bedeutet Laden, negative Leistung Entladen.</p></section>
+                            <div class="control-panel"><h2>Leistungssollwert</h2><label>Leistung (kW) <input type="number" value="4.2" disabled /></label><button disabled>Übernehmen</button></div>
+                            break;
+                        case ModuleKind.Charger:
+                            <div class="charging-ports">
+                                @for (var port = 1; port <= 2; port++)
+                                {
+                                    <section class="detail-panel"><span class="eyebrow">@($"Anschluss {port}")</span><h2>@ChargerPortHeading(port)</h2>
+                                        @if (PortSoc(port) is { } soc)
+                                        {
+                                            <progress value="@soc" max="100" aria-label="@($"Ladezustand Anschluss {port}")"></progress><p>@($"{soc:0} % · {PortLeistung(port):0.#} kW")</p>
+                                        }
+                                        else { <p class="muted">Kein Fahrzeug oder kein Ladezustand sichtbar.</p> }
+                                        <button disabled>Ladepunkt bedienen</button>
+                                    </section>
+                                }
+                            </div>
+                            <div class="control-panel"><div><h2>Leistungsgrenze</h2><p class="muted">Geräterückmeldung folgt mit dem Befehlsvertrag.</p></div><label>Grenze (kW) <input type="number" value="100" disabled /></label><button disabled>Übernehmen</button></div>
+                            break;
+                        case ModuleKind.ColdStore:
+                            <LiveChart Title="@LiveView.ChartTitle(_module.Kind)" Unit="@LiveView.Unit(_module.Kind)"
+                                       Description="@LiveView.ChartDescription(_module.Kind)" RunId="@ChartRunId"
+                                       SeriesKeys="LiveView.ChartSeries(_module.Kind)" SeriesOf="TrendOf" />
+                            <section class="detail-panel"><span class="eyebrow">Temperaturführung</span><h2 class="blue">@IstTemp °C → Soll @SollTemp °C</h2><p>Ist- und Solltemperatur im gemeinsamen Verlauf.</p></section>
+                            <div class="control-panel"><h2>Solltemperatur</h2><label>Temperatur (°C) <input type="number" value="-18" disabled /></label><button disabled>Übernehmen</button></div>
+                            break;
+                    }
+                }
+                else
+                {
+                    <MetricCards Metrics="_module.Metrics" />
+                    @switch (_module.Kind)
+                    {
+                        case ModuleKind.Pv:
+                            <PreviewChart ModuleId="@_module.Id" />
+                            <div class="control-panel"><div><h2>Leistungsbegrenzung</h2><p class="muted">Übernahme mit Geräterückmeldung folgt.</p></div><label>Limit (%) <input type="number" value="100" disabled /></label><button disabled>Übernehmen</button></div>
+                            break;
+                        case ModuleKind.Battery: <PreviewChart ModuleId="@_module.Id" />
+                            <section class="detail-panel"><div class="section-heading"><h2>Speicherfüllstand</h2><span class="green">68 % · Beispiel</span></div><progress value="68" max="100" aria-label="Beispiel-Ladezustand: 68 Prozent"></progress><p class="muted">Positive Leistung bedeutet Laden, negative Leistung Entladen.</p></section>
+                            <div class="control-panel"><h2>Leistungssollwert</h2><label>Leistung (kW) <input type="number" value="4.2" disabled /></label><button disabled>Übernehmen</button></div>
+                            break;
+                        case ModuleKind.Charger:
+                            <div class="charging-ports">
+                                @for (var port = 1; port <= 2; port++)
+                                {
+                                    <section class="detail-panel"><span class="eyebrow">@($"Anschluss {port} · Beispiel")</span><h2>@(port == 1 ? "Fahrzeug lädt" : "Kein Fahrzeug")</h2>
+                                        @if (port == 1) { <progress value="42" max="100" aria-label="Beispiel-Ladezustand Fahrzeug: 42 Prozent"></progress><p>42 % · 62 kW</p> }
+                                        else { <p class="muted">Bereit für den nächsten Ladevorgang.</p> }
+                                        <button disabled>Ladepunkt bedienen</button>
+                                    </section>
+                                }
+                            </div>
+                            break;
+                        case ModuleKind.ColdStore: <PreviewChart ModuleId="@_module.Id" />
+                            <section class="detail-panel"><span class="eyebrow">Temperaturführung · Beispiel</span><h2 class="blue">−18,2 °C → Soll −18,0 °C</h2><p>Ist- und Solltemperatur im gemeinsamen Beispielverlauf.</p></section>
+                            <div class="control-panel"><h2>Solltemperatur</h2><label>Temperatur (°C) <input type="number" value="-18" disabled /></label><button disabled>Übernehmen</button></div>
+                            break;
+                    }
+                    <p class="muted small">Keine Live-Daten für diese Kennung. Angezeigt werden ausdrücklich markierte Beispieldaten; Fachlichkeit folgt, sobald Messwerte empfangen werden.</p>
+                }
+                break;
+            case ModuleKind.Weather:
+                @if (_weatherLive is not null)
+                {
+                    @foreach (var weather in _weatherAll)
+                    {
+                        <section class="detail-panel"><span class="eyebrow">@weather.Location</span>
+                            <h2>@weather.Condition (@(weather.Mode == "manual" ? "manuell" : "automatisch"))</h2>
+                            <p>@WeatherSummary(weather)</p>
+                            <p class="muted small">Empfangen um @LiveView.FormatTime(weather.ReceivedAt) @FreshnessText(weather)</p>
+                        </section>
+                    }
+                }
+                else
+                {
+                    <MetricCards Metrics="_module.Metrics" />
+                    <section class="detail-panel"><h2>Standorte</h2><p>Salzburg · Wien · Innsbruck · Tamanrasset · Neumayer III</p><p class="muted">Die Kennzahlen oben sind Beispiele für Salzburg. Ohne Wetterdienst bleiben die Werte Beispieldaten.</p></section>
+                }
+                <div class="control-panel"><div><h2>Wetter gezielt ändern</h2><p class="muted">Standortbezogene Übersteuerung folgt mit dem Befehlsvertrag.</p></div><button disabled>Manuell einstellen</button><button disabled>Automatik</button></div>
+                break;
+            case ModuleKind.Master:
+                <div class="control-panel"><h2>Anlagenweite Steuerung</h2><button disabled>Pause / Fortsetzen</button><button disabled>Tempo ändern</button><button disabled>Neuer Lauf</button></div>
+                <div class="empty-state"><h2>Synchronisation</h2><p>Noch keine echten Gerätemeldungen angebunden.</p></div>
+                break;
+            case ModuleKind.Broker:
+                <section class="detail-panel"><h2>Verbindung der Weboberfläche</h2><p>@_snapshot.Connection</p><p class="muted small">Empfangene Topics: @(_snapshot.Messages.Length) · verworfene Nachrichten: @_snapshot.Rejected</p><p class="muted">Diese Anzeige meldet die MQTT-Verbindung der Weboberfläche, nicht den Broker-Prozess selbst.</p></section>
+                break;
+            case ModuleKind.Gateway:
+                @if (_gatewayStatus is null)
+                {
+                    <section class="detail-panel"><h2>Verbindungen und Zustand</h2><p>Keine Gateway-Statusnachricht empfangen. Status-Topic: energytwin/gateway/&lt;ID&gt;/status.</p><p class="muted">Diese Anzeige behauptet keinen laufenden Gateway-Prozess.</p></section>
+                }
+                else
+                {
+                    <section class="detail-panel"><h2>Gateway-Status</h2><p>@LiveStore.Text(_gatewayStatus.Data, "state")</p><pre class="live-json">@_gatewayStatus.Data.GetRawText()</pre></section>
+                }
+                break;
+        }
+    }
+    else if (_view == ModuleView.Settings)
+    {
+        @if (_config is null)
+        {
+            <h2>Instanzkonfiguration</h2><p>Keine gespeicherte Instanz unter dieser Kennung.</p>
+        }
+        else
+        {
+            <h2>Instanzkonfiguration</h2>
+            <dl><dt>Kennung</dt><dd>@_config.Id</dd><dt>Ansicht</dt><dd>@_config.Group</dd><dt>Zuordnung</dt><dd>@_config.Location</dd>
+                @if (_config.ModbusPort is { } modbusPort) { <dt>Modbus-Port</dt><dd>@modbusPort</dd> }
+                @if (_config.HttpPort is { } httpPort) { <dt>HTTP-Port</dt><dd>@httpPort</dd> }
+                @if (_config.Speed is { } speed) { <dt>Tempo</dt><dd>@speed ×</dd> }
+                <dt>Speicher</dt><dd>@InstanceStore.FilePath</dd></dl>
+            <div class="control-panel">
+                <span>Prozess: @RunStateText</span>
+                <button @onclick="StartInstance" disabled="@(_runState is InstanceRunState.ManagedRunning or InstanceRunState.ExternallyReachable || _busy)">Starten</button>
+                <button @onclick="StopInstance" disabled="@_busy">Beenden</button>
+                @if (_config.Kind is ModuleKind.Pv or ModuleKind.Battery or ModuleKind.Charger or ModuleKind.ColdStore)
+                {
+                    <button @onclick="DeleteInstance" disabled="@(_busy)">Löschen</button>
+                }
+            </div>
+            <p class="muted small">@(_result ?? (_busy ? "Aktion läuft…" : "Start und Stopp betreffen unsere Simulatoren: auch nach einem Webdienst-Neustart werden sie an Port und Kommandozeile erkannt und beendet; Programm fremder Anbieter wird geschützt. Bearbeitung der Konfiguration folgt."))</p>
+        }
+    }
+    else if (_view == ModuleView.Diagnostics)
+    {
+        @if (_isFieldDevice && _live is not null)
+        {
+            <table class="chart-data register-table"><caption>Registerwerte der letzten Nachricht · @_live.SimTime · Lauf @_live.RunId</caption>
+                <thead><tr><th scope="col">Register</th><th scope="col">Name</th><th scope="col">Wert</th><th scope="col">Einheit</th></tr></thead>
+                <tbody>
+                    @foreach (var measurement in _live.Values)
+                    {
+                        <tr><th scope="row">@measurement.Address</th><td>@(string.IsNullOrEmpty(measurement.Name) ? measurement.Key : measurement.Name)</td><td>@LiveView.Format(measurement.Value)</td><td>@measurement.Unit</td></tr>
+                    }
+                </tbody>
+            </table>
+            <p class="muted small">@_live.Quality (@_live.QualityReason) · Sequenz @_live.Seq · empfangen um @LiveView.FormatTime(_live.ReceivedAt)</p>
+        }
+        else
+        {
+            <div class="empty-state"><h2>@ViewLabel(ModuleView.Diagnostics)</h2><p>@(_isFieldDevice ? "Keine Messwerte empfangen. Registerwerte erscheinen, sobald Geräte-Daten über das Gateway empfangen werden." : "Keine Daten angebunden. Hier erscheinen später Status- und Verbindungsinformationen.")</p></div>
+        }
+    }
+    else
+    {
+        <div class="empty-state"><h2>Noch keine Laufzeitmeldungen</h2><p>@(_isFieldDevice && _live is not null ? "Lesender Empfang aktiv. Ereignisliste folgt." : "Ansichtsvorschau oder Beispielmodus. Alle Kennzahlen können Beispieldaten sein.")</p></div>
+    }
+    <details class="messages"><summary>Meldungen dieser Ansicht</summary><p>@MessageSummary</p></details>
+}
+
+@code {
+    [Parameter] public string Id { get; set; } = string.Empty;
+    private ModulePreview? _module;
+    private InstanceConfig? _config;
+    private ModuleView _view;
+    private (bool Connected, string Connection, long Generation, int Rejected, LiveMessage[] Messages) _snapshot;
+    private DeviceLive? _live;
+    private IReadOnlyList<WeatherLive> _weatherAll = Array.Empty<WeatherLive>();
+    private WeatherLive? _weatherLive;
+    private LiveMessage? _gatewayStatus;
+    private PeriodicTimer? _timer;
+    private CancellationTokenSource? _timerCts;
+    private bool _disposed;
+    private InstanceRunState _runState;
+    private bool _busy;
+    private string? _result;
+
+    private string RunStateText => _runState switch
+    {
+        InstanceRunState.ManagedRunning => "läuft verwaltet",
+        InstanceRunState.ExternallyReachable => "läuft extern erreichbar",
+        _ => "gestoppt oder unbekannt"
+    };
+
+    private async Task StartInstance()
+    {
+        if (_config is null || _busy) return;
+        _busy = true;
+        try
+        {
+            var result = await Processes.StartAsync(_config, ProcessManager.CommandFor(_config, InstanceStore.Instances.Where(instance => instance.ModbusPort is { }).ToList()));
+            _result = result.Detail;
+            Refresh();
+        }
+        finally { _busy = false; StateHasChanged(); }
+    }
+
+    private async Task StopInstance()
+    {
+        if (_config is null || _busy) return;
+        _busy = true;
+        try
+        {
+            var result = await Processes.StopAsync(_config);
+            _result = result?.Detail ?? "Nichts beendet.";
+            Refresh();
+        }
+        finally { _busy = false; StateHasChanged(); }
+    }
+
+    private void DeleteInstance()
+    {
+        if (_config is null) return;
+        InstanceStore.Remove(_config.Id);
+        Navigation.NavigateTo("/");
+    }
+
+    private bool _isFieldDevice => _module?.Kind is ModuleKind.Pv or ModuleKind.Battery or ModuleKind.Charger or ModuleKind.ColdStore;
+
+    protected override void OnParametersSet()
+    {
+        _config = InstanceStore.Find(Id);
+        // Verwaltungskatalog als Beispiel-Fallback; für neue Instanzen bleibt der Katalog ohne echte Kennzahlen.
+        var fallbackMetrics = _config is null ? null : Catalog.Find(_config.Id)?.Metrics;
+        _module = _config is null
+            ? null
+            : new ModulePreview(_config.Id, _config.Name, _config.Group, _config.Kind, _config.Location,
+                fallbackMetrics ?? new[] { new Metric("Kennzahl", "—", "", "neutral", "Noch keine Live-Daten und keine Beispieldaten") });
+        _view = ModuleView.Overview;
+        Refresh();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+        _timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
+        _timerCts = new CancellationTokenSource();
+        try
+        {
+            while (await _timer.WaitForNextTickAsync(_timerCts.Token))
+            {
+                if (_disposed) return;
+                Refresh();
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+        catch (OperationCanceledException) { }
+    }
+
+    private void Refresh()
+    {
+        _snapshot = Store.Snapshot();
+        _runState = _config is null ? InstanceRunState.NotTracked : Processes.State(_config);
+        _live = null;
+        _weatherAll = Array.Empty<WeatherLive>();
+        _weatherLive = null;
+        _gatewayStatus = null;
+        if (_module is null) return;
+        if (_isFieldDevice)
+        {
+            var topic = $"energytwin/devices/{_module.Id}/measurements";
+            _live = LiveView.Device(
+                _snapshot.Messages.FirstOrDefault(message => message.Topic == topic),
+                _snapshot.Messages.FirstOrDefault(message => message.Topic == $"energytwin/devices/{_module.Id}/status"));
+        }
+        else if (_module.Kind == ModuleKind.Weather)
+        {
+            _weatherAll = new[] { "salzburg", "wien", "innsbruck", "tamanrasset", "neumayer" }
+                .Select(location => LiveView.Weather(_snapshot.Messages.FirstOrDefault(message =>
+                    message.Topic == $"energytwin/weather/{location}/measurements")))
+                .Where(weather => weather is not null).Cast<WeatherLive>().ToArray();
+            _weatherLive = _weatherAll.FirstOrDefault();
+        }
+        else if (_module.Kind == ModuleKind.Gateway)
+        {
+            _gatewayStatus = _snapshot.Messages.FirstOrDefault(message =>
+                message.Topic.StartsWith("energytwin/gateway/", StringComparison.Ordinal) &&
+                message.Topic.EndsWith("/status", StringComparison.Ordinal));
+        }
+    }
+
+    private string ChartTopic => $"energytwin/devices/{_module?.Id}/measurements";
+    private IReadOnlyList<TrendPoint> TrendOf(string key) => Trends.Series(ChartTopic, key);
+    private string ChartRunId => LiveView.ChartSeries(_module?.Kind ?? ModuleKind.Pv)
+        .Select(series => Trends.SeriesInfo(ChartTopic, series.Key))
+        .FirstOrDefault(info => info.Count > 0).RunId is { Length: > 0 } runId ? runId : string.Empty;
+
+    private string StatusText => _module?.Kind switch
+    {
+        ModuleKind.Pv or ModuleKind.Battery or ModuleKind.Charger or ModuleKind.ColdStore => _live?.State ?? "unbekannt",
+        ModuleKind.Broker => _snapshot.Connected ? "verbunden" : "getrennt",
+        ModuleKind.Gateway => _gatewayStatus is null ? "unbekannt" : LiveStore.Text(_gatewayStatus.Data, "state"),
+        ModuleKind.Weather => _weatherLive is null ? "unbekannt" : "Wetterdienst empfangen",
+        _ => "unbekannt"
+    };
+    private string SimulationText => _module?.Kind switch
+    {
+        ModuleKind.Pv or ModuleKind.Battery or ModuleKind.Charger or ModuleKind.ColdStore => _live is null ? "unbekannt" : $"{_live.Quality} · {_live.QualityReason}",
+        ModuleKind.Weather => _weatherLive?.RunId is { Length: > 0 } run ? $"Lauf {run}" : "unbekannt",
+        _ => "unbekannt"
+    };
+    private string Freshness => _live?.State == "offline" ? "· Gerät offline" : _live is null ? "" :
+        (DateTimeOffset.UtcNow - _live.ReceivedAt).TotalSeconds > 15 ? "· veraltet, letzte um " + LiveView.FormatTime(_live.ReceivedAt) : "";
+
+    private string FreshnessText(WeatherLive weather) =>
+        (DateTimeOffset.UtcNow - weather.ReceivedAt).TotalSeconds > 15 ? "(veraltet)" : "";
+
+    private string WeatherSummary(WeatherLive weather) =>
+        $"{LiveView.Format(LiveView.Measurement(weather.Values, "temperature_c"))} °C · " +
+        $"{LiveView.Format(LiveView.Measurement(weather.Values, "irradiation_w_m2"))} W/m² · " +
+        $"{LiveView.Format(LiveView.Measurement(weather.Values, "wind_speed_m_s"))} m/s";
+
+    private double? SocValue => _live is null ? null : LiveView.Measurement(_live.Values, "ladezustand_soc");
+    private string SocPercent => $"{LiveView.Format(SocValue)} %";
+    private string IstTemp => LiveView.Format(_live is null ? null : LiveView.Measurement(_live.Values, "raumtemperatur"));
+    private string SollTemp => LiveView.Format(_live is null ? null : LiveView.Measurement(_live.Values, "solltemperatur"));
+
+    private double? PortSoc(int port) => _live is null ? null : LiveView.Measurement(_live.Values, $"punkt_{port}_soc");
+    private double? PortLeistung(int port) => _live is null ? null : LiveView.Measurement(_live.Values, $"punkt_{port}_leistung");
+    private string ChargerPortHeading(int port) => PortSoc(port) is { } soc && soc > 0 ? "Fahrzeug lädt" : "Kein Fahrzeug";
+
+    private string MessageSummary => _module?.Kind switch
+    {
+        ModuleKind.Pv or ModuleKind.Battery or ModuleKind.Charger or ModuleKind.ColdStore => _live is not null
+            ? "Lesender Empfang aktiv. Fachliche Aktionen bleiben deaktiviert, bis der Befehlsvertrag steht."
+            : "Keine Messwerte empfangen; alle Kennzahlen sind Beispieldaten oder Platzhalter.",
+        ModuleKind.Gateway => _gatewayStatus is null
+            ? "Ansichtsvorschau geladen. Keine Gateway-Nachricht empfangen."
+            : "Gateway-Statusnachricht empfangen. Fachliche Aktionen folgen.",
+        ModuleKind.Broker => "MQTT-Verbindung der Weboberfläche wird angezeigt.",
+        ModuleKind.Weather => _weatherLive is not null ? "Wetternachrichten empfangen." : "Keine Wetternachrichten empfangen; Beispieldaten möglich.",
+        _ => "Ansichtsvorschau. Platzhalteransicht ohne Bedienbefehle."
+    };
+
+    private string ViewLabel(ModuleView view) => view switch
+    {
+        ModuleView.Overview => "Übersicht",
+        ModuleView.Settings => "Einstellungen",
+        ModuleView.Diagnostics => _isFieldDevice ? "Register" : "Diagnose",
+        _ => "Meldungen"
+    };
+
+    public void Dispose()
+    {
+        _disposed = true;
+        _timer?.Dispose();
+        _timerCts?.Cancel();
+        _timerCts?.Dispose();
+    }
+
+    private enum ModuleView { Overview, Settings, Diagnostics, Messages }
+}

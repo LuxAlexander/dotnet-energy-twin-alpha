@@ -42,6 +42,10 @@ Leere Zuständigkeitsfelder bleiben unzugeteilt.
 
 ## LB03 starten
 
+Zusätzliche lokale Weboberfläche: [EnergyTwin.Web](src/EnergyTwin.Web/README.md).
+Das erste Blazor-Grundgerüst zeigt ausschließlich gekennzeichnete Beispieldaten und Modulansichten;
+RabbitMQ-Bedienung und Prozessverwaltung sind noch nicht angebunden.
+
 Einrichtung und vollständige Startfolge: [`docker/README.md`](docker/README.md).
 Nach einmaliger Einrichtung von `docker/.env`, aus dem Repository-Root:
 

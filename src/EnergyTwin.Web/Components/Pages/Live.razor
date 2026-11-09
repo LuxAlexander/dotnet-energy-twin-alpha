@@ -1,0 +1,106 @@
+@page "/"
+@using EnergyTwin.Web.Live
+@using System.Text.Json
+@implements IAsyncDisposable
+@inject LiveStore Store
+
+<PageTitle>Live-Anlage · EnergyTwin</PageTitle>
+<div class="page-heading"><span class="eyebrow">RabbitMQ · Nur lesender Empfang</span><h1>Live-Anlage</h1><p>Messwerte und Status aus dem lokalen System. Prozesszustände werden nicht überwacht.</p></div>
+<div class="overview-summary" role="status"><strong>@_snapshot.Connection</strong><span>@_snapshot.Messages.Length empfangene Topics</span><span>@_snapshot.Rejected verworfene Nachrichten</span></div>
+<p class="muted">Die Zeit im Messwert ist virtuelle Zeit; die Empfangszeit ist reale UTC-Zeit. Master-Steuerung und Gerätebefehle sind noch nicht angebunden.</p>
+<div class="catalog-filters"><label for="live-search">Topic oder Instanz suchen<input id="live-search" type="search" @bind="_search" @bind:event="oninput" /></label></div>
+@if (_snapshot.Messages.Length == 0)
+{
+    <div class="empty-state"><h2>Noch keine Nachrichten</h2><p>RabbitMQ sowie Gateway und gegebenenfalls Wetterdienst mit MQTT müssen separat laufen. Gerätestatus wird standardmäßig spätestens nach 30 Sekunden wiederholt.</p></div>
+}
+@foreach (var message in _snapshot.Messages.Where(m => m.Topic.Contains(_search.Trim(), StringComparison.OrdinalIgnoreCase)))
+{
+    var data = message.Data;
+    <section class="detail-panel" @key="message.Topic">
+        <div class="section-heading"><h2>@message.Topic</h2><span class="muted small">Empfang: @message.ReceivedAt.ToString("HH:mm:ss 'UTC'")</span></div>
+        <p class="@(IsConfirmed(message) ? "green" : "orange")">@Validity(message)</p>
+        @if (data.TryGetProperty("measurements", out var measurements))
+        {
+            <div class="status-row"><span>Virtuelle Zeit: @Field(data, "simTime", "simTimeUtc")</span><span>Lauf: @LiveStore.Text(data, "runId")</span><span>Sequenz: @LiveStore.Text(data, "seq")</span><span>Qualität: @Field(data, "quality", "mode") / @Field(data, "qualityReason", "condition")</span></div>
+            <div class="metrics">
+            @foreach (var value in measurements.EnumerateArray())
+            {
+                <article class="metric"><h2>@Field(value, "name", "key")</h2><p class="metric-value">@FormatValue(value) <span>@LiveStore.Text(value, "unit")</span></p>@if (value.TryGetProperty("address", out var address)) { <p class="muted small">Register @address</p> }</article>
+            }
+            </div>
+        }
+        else
+        {
+            <p>Zustand: @Field(data, "state", "status")</p>
+            @if (data.TryGetProperty("error", out var error)) { <p>@error</p> }
+        }
+        <details class="messages"><summary>Nachricht und Diagnose</summary><pre class="live-json">@JsonSerializer.Serialize(data, JsonOptions)</pre></details>
+    </section>
+}
+@if (_snapshot.Messages.Length > 0 && !_snapshot.Messages.Any(m => m.Topic.Contains(_search.Trim(), StringComparison.OrdinalIgnoreCase)))
+{
+    <p class="empty-state">Keine Topics passen zum Suchbegriff.</p>
+}
+
+@code {
+    private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
+    private readonly CancellationTokenSource _stop = new();
+    private Task? _refreshTask;
+    private string _search = string.Empty;
+    private (bool Connected, string Connection, long Generation, int Rejected, LiveMessage[] Messages) _snapshot;
+    protected override void OnInitialized() => _snapshot = Store.Snapshot();
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender) _refreshTask = RefreshAsync();
+        return Task.CompletedTask;
+    }
+    private async Task RefreshAsync()
+    {
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
+        try
+        {
+            while (await timer.WaitForNextTickAsync(_stop.Token))
+                await InvokeAsync(() => { _snapshot = Store.Snapshot(); StateHasChanged(); });
+        }
+        catch (OperationCanceledException) when (_stop.IsCancellationRequested) { }
+    }
+    private bool IsConfirmed(LiveMessage message) => Validity(message) == "Empfang aktuell bestätigt";
+    private string Validity(LiveMessage message)
+    {
+        if (!_snapshot.Connected || message.Generation != _snapshot.Generation) return "Letzter Stand – nach Verbindungsunterbrechung nicht bestätigt";
+        var age = DateTimeOffset.UtcNow - message.ReceivedAt;
+        if (message.Topic.StartsWith("energytwin/weather/", StringComparison.Ordinal))
+        {
+            var status = _snapshot.Messages.FirstOrDefault(m => m.Topic == "energytwin/weather/status");
+            if (status is null || status.Generation != _snapshot.Generation) return "Wetterstatus fehlt – Gültigkeit unbestätigt";
+            var state = LiveStore.Text(status.Data, "status");
+            if (state is not ("paused" or "continued")) return $"Wetter nicht aktuell bestätigt: {state}";
+            if (message.Topic.EndsWith("/measurements", StringComparison.Ordinal) && new[] { "sourceSession", "masterSession", "runId" }.Any(key => LiveStore.Text(message.Data, key) == "—" || LiveStore.Text(message.Data, key) != LiveStore.Text(status.Data, key))) return "Wetter gehört nicht zum bestätigten Lauf";
+            // Retained Zustände sind keine Bestätigung, dass der Prozess noch lebt.
+            return state == "paused" ? "Gespeicherter Pausenstand – keine aktuelle Prozessbestätigung" : age > TimeSpan.FromSeconds(15) ? "Wetterstand älter als 15 Sekunden – nicht aktuell bestätigt" : "Wetterstand empfangen – gespeicherte Nachrichten möglich";
+        }
+        if (age > TimeSpan.FromSeconds(message.Topic.EndsWith("/status", StringComparison.Ordinal) ? 45 : 15)) return "Empfang veraltet – letzter Stand, nicht aktuell bestätigt";
+        if (message.Topic.EndsWith("/measurements", StringComparison.Ordinal))
+        {
+            var statusTopic = message.Topic[..^"measurements".Length] + "status";
+            var status = _snapshot.Messages.FirstOrDefault(m => m.Topic == statusTopic);
+            if (status is not null && status.Generation == _snapshot.Generation && LiveStore.Text(status.Data, "state") is "offline" or "decodeError") return "Gerät meldet Ausfall oder Dekodierfehler – letzte Werte";
+            if (LiveStore.Text(message.Data, "quality") != "good") return "Messqualität eingeschränkt – Quelle und Qualitätsgrund prüfen";
+        }
+        return "Empfang aktuell bestätigt";
+    }
+    private static string Field(JsonElement value, string first, string second) => value.TryGetProperty(first, out var field) ? field.ToString() : LiveStore.Text(value, second);
+    private static string FormatValue(JsonElement value)
+    {
+        if (value.TryGetProperty("text", out var text) && text.ValueKind == JsonValueKind.String) return text.GetString() ?? "—";
+        return value.TryGetProperty("value", out var number) && number.ValueKind == JsonValueKind.Number && number.TryGetDouble(out var parsed) && double.IsFinite(parsed)
+            ? parsed.ToString("0.###", System.Globalization.CultureInfo.GetCultureInfo("de-DE")) : "Ungültig / fehlt";
+    }
+    public async ValueTask DisposeAsync()
+    {
+        await _stop.CancelAsync();
+        if (_refreshTask is not null) await _refreshTask;
+        _stop.Dispose();
+    }
+}
+

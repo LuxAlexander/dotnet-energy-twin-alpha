@@ -1,0 +1,28 @@
+<section class="chart-section">
+<div class="section-heading"><h2>@Title</h2><span class="muted small">Beispiel · Lauf 7 · @ModuleId</span></div>
+<div class="chart-axis">@foreach (var label in AxisLabels) { <span>@label</span> }</div>
+<svg class="chart" viewBox="0 0 600 180" preserveAspectRatio="none" role="img" aria-label="@(Title + ": Beispielwerte, keine Live-Daten. Zahlen in der Wertetabelle.")">
+<path class="chart-grid" d="M0 1 H600 M0 60 H600 M0 120 H600 M0 179 H600" />
+<polyline class="chart-line" points="@Points(Values)" />
+@if (IsColdStore) { <polyline class="chart-target" points="0,90 600,90" /> }
+</svg>
+<div class="chart-times"><span>08:00</span><span>10:00</span><span>12:00</span></div>
+<p class="muted small">Virtuelle Zeit · @Description</p>
+<details class="chart-data"><summary>Beispielwerte als Tabelle</summary><table><caption>@Title (@Unit)</caption><thead><tr><th scope="col">Virtuelle Zeit</th><th scope="col">@(IsColdStore ? "Ist" : "Wirkleistung")</th>@if (IsColdStore) { <th scope="col">Soll</th> }</tr></thead><tbody>
+@for (var i = 0; i < Values.Length; i++) { <tr><th scope="row">@($"{8 + i:00}:00")</th><td>@Values[i].ToString("0.0", German)</td>@if (IsColdStore) { <td>−18,0</td> }</tr> }
+</tbody></table></details>
+</section>
+@code {
+[Parameter] public string ModuleId { get; set; } = "PV-01";
+private static readonly System.Globalization.CultureInfo German = System.Globalization.CultureInfo.GetCultureInfo("de-DE");
+private bool IsBattery => ModuleId == "BAT-01";
+private bool IsColdStore => ModuleId == "KH-01";
+private string Title => IsBattery ? "Lade- und Entladeleistung" : IsColdStore ? "Ist- und Solltemperatur" : "PV-Leistungsverlauf";
+private string Unit => IsColdStore ? "°C" : "kW";
+private string Description => IsBattery ? "Positiv: Laden · Negativ: Entladen." : IsColdStore ? "Grün durchgezogen: Ist · Orange gestrichelt: Soll." : "Negative Wirkleistung bedeutet Einspeisung.";
+private double[] Values => IsBattery ? [-3, -1, 0, 2.5, 4.2] : IsColdStore ? [-17.4, -17.8, -18.3, -18.1, -18.2] : ModuleId == "PV-02" ? [-1, -3, -5.2, -7.4, -8.1] : [-2, -5.8, -8.4, -10.2, -12.4];
+private double Top => IsBattery ? 6 : IsColdStore ? -17 : 0;
+private double Bottom => IsBattery ? -6 : IsColdStore ? -19 : -15;
+private IEnumerable<string> AxisLabels => Enumerable.Range(0, 4).Select(i => $"{(Top + (Bottom - Top) * i / 3).ToString("0.#", German)} {Unit}");
+private string Points(double[] values) => string.Join(" ", values.Select((value, i) => FormattableString.Invariant($"{i * 150},{(value - Top) / (Bottom - Top) * 180}")));
+}

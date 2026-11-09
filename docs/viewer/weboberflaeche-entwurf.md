@@ -1,5 +1,11 @@
 # Lokale Weboberfläche – Entwurf
 
+**Umsetzungsstand 2026-11-09:** Das [erste Grundgerüst](../../src/EnergyTwin.Web/README.md) ist als
+eigenständiges Blazor-Projekt angelegt: Navigation, Modulansichten und markierte Beispieldaten.
+Live-Anbindung, Befehlsverarbeitung, Instanzpersistenz und Prozessverwaltung bleiben offen.
+Der folgende bestätigte Plan beschreibt weiterhin das Gesamtziel; die historischen Hinweise zum
+visuellen Entwurf sind kein Funktionsnachweis dieser Implementierung.
+
 **Stand:** 2026-11-09. **Status:** Produktentscheidungen im Gespräch bestätigt; technische Umsetzung und Detailansichten noch in Planung. Kein Implementierungs- oder Funktionsnachweis. Die bisherige MQTT-Explorer-Einrichtung bleibt ein separater, bestehender Viewer.
 
 ## Bestätigte Architektur und Bedienung

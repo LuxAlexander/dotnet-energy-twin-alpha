@@ -1,0 +1,111 @@
+@using System.Globalization
+@using EnergyTwin.Web.Live
+<section class="chart-section">
+<div class="section-heading"><h2>@Title</h2><span class="muted small">@BadgeInfo</span></div>
+@if (Series.Any(series => series.Points.Count >= 2))
+{
+    <div class="chart-axis">
+        @for (var i = 0; i < 4; i++)
+        {
+            var label = AxisTop + (AxisBottom - AxisTop) * i / 3;
+            <span>@($"{label:0.#}")</span>
+        }
+    </div>
+    <svg class="chart" viewBox="0 0 600 180" preserveAspectRatio="none" role="img"
+         aria-label="@(VerlaufBeschreibung())">
+        <path class="chart-grid" d="M0 1 H600 M0 60 H600 M0 120 H600 M0 179 H600" />
+        @foreach (var series in Series.Where(s => s.Points.Count >= 2))
+        {
+            <polyline class="@series.Class" points="@Points(series.Points)" />
+        }
+    </svg>
+    <div class="chart-times"><span>@StartLabel</span><span>@EndLabel</span></div>
+    <p class="muted small">Virtuelle Zeit · @Description</p>
+    <details class="chart-data"><summary>Werte als Tabelle</summary>
+        <table><caption>@Title (@Unit)</caption>
+            <thead><tr><th scope="col">Virtuelle Zeit</th>@foreach (var series in Series) { <th scope="col">@series.Label</th> }</tr></thead>
+            <tbody>
+                @foreach (var row in LongestSeriesRows())
+                {
+                    <tr><th scope="row">@row.Time</th>
+                        @foreach (var series in Series)
+                        {
+                            <td>@(TableValue(series, row.Index))</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </details>
+}
+else
+{
+    <div class="empty-state"><h2>Noch keine Verlaufspunkte</h2><p>Der Verlauf füllt sich, sobald Nachrichten mit numerischen Messwerten empfangen werden.</p></div>
+}
+</section>
+@code {
+    private sealed record ChartSeries(string Label, string Class, IReadOnlyList<TrendPoint> Points, bool IsTarget);
+
+    [Parameter, EditorRequired] public string Title { get; set; } = "";
+    [Parameter, EditorRequired] public string Unit { get; set; } = "";
+    [Parameter, EditorRequired] public string Description { get; set; } = "";
+    [Parameter, EditorRequired] public string RunId { get; set; } = "";
+    // Verlaufsreihen mit Messwert-Schlüssel, Beschriftung und Farbklassen; Reihen stammen aus demselben Topic.
+    [Parameter, EditorRequired] public IReadOnlyList<(string Key, string Label, string Class)> SeriesKeys { get; set; } = [];
+    [Parameter, EditorRequired] public Func<string, IReadOnlyList<TrendPoint>> SeriesOf { get; set; } = _ => [];
+
+    private IReadOnlyList<ChartSeries>? _series;
+
+    private IReadOnlyList<ChartSeries> Series =>
+        _series ??= SeriesKeys.Select(series => new ChartSeries(series.Label, series.Class, SeriesOf(series.Key), series.Class == "chart-target")).ToArray();
+
+    private string BadgeInfo => string.IsNullOrEmpty(RunId) ? "Live" : $"Live · Lauf {RunId}";
+    private string StartLabel => TimeLabel(FirstPoint(Series, first: true));
+    private string EndLabel => TimeLabel(FirstPoint(Series, first: false));
+
+    private double AxisTop;
+    private double AxisBottom;
+
+    private string VerlaufBeschreibung() => $"Verlauf {Title}. Zahlen in der Wertetabelle.";
+
+    protected override void OnParametersSet()
+    {
+        _series = null;
+        var all = Series.SelectMany(series => series.Points).Select(point => point.Value).ToList();
+        if (all.Count == 0) { AxisTop = 1; AxisBottom = 0; return; }
+        var average = all.Average();
+        var top = Math.Max(all.Max(), average + 1);
+        var bottom = Math.Min(all.Min(), average - 1);
+        if (top == bottom) { top += 1; bottom -= 1; }
+        AxisTop = top;
+        AxisBottom = bottom;
+    }
+
+    private static long FirstPoint(IReadOnlyList<ChartSeries> series, bool first) =>
+        series
+            .Where(s => s.Points.Count >= 2)
+            .Select(s => first ? s.Points[0].SimTimeEpoch : s.Points[^1].SimTimeEpoch)
+            .DefaultIfEmpty(long.MinValue)
+            .Min();
+
+    private static string TimeLabel(long epoch) => epoch == long.MinValue ? "—" :
+        DateTimeOffset.FromUnixTimeSeconds(epoch).ToString("HH:mm:ss", CultureInfo.GetCultureInfo("de-DE"));
+
+    private (string Time, int Index)[] LongestSeriesRows()
+    {
+        var longest = Series.Select(series => series.Points).OrderByDescending(points => points.Count).FirstOrDefault();
+        if (longest is null) return [];
+        return longest.Select((point, index) => (Short(point.SimTime, point.SimTimeEpoch), index)).ToArray();
+    }
+
+    private static string Short(string simTime, long epoch) => epoch == 0
+        ? simTime
+        : DateTimeOffset.FromUnixTimeSeconds(epoch).ToString("HH:mm:ss", CultureInfo.GetCultureInfo("de-DE"));
+
+    private string TableValue(ChartSeries series, int index) => series.Points.Count > index
+        ? series.Points[index].Value.ToString("0.#", CultureInfo.GetCultureInfo("de-DE")) : "—";
+
+    private string Points(IReadOnlyList<TrendPoint> points) =>
+        string.Join(" ", points.Select((point, index) => FormattableString.Invariant(
+            $"{(double)index / Math.Max(points.Count - 1, 1) * 600:0.##},{(point.Value - AxisTop) / (AxisBottom - AxisTop) * 180:0.##}")));
+}

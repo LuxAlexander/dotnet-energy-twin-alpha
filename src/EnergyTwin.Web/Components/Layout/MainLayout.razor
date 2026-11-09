@@ -1,0 +1,109 @@
+@inherits LayoutComponentBase
+@inject InstanceStore InstanceStore
+@inject ProcessManager ProcessManager
+
+<a class="skip-link" href="#main-content">Zum Inhalt</a>
+<div class="app-shell">
+    <aside class="sidebar" aria-label="Module und Geräte">
+        <a class="brand" href="/">EnergyTwin<span>Lokale Oberfläche</span></a>
+        <NavLink href="/" Match="NavLinkMatch.All">Live-Anlage</NavLink>
+        <NavLink href="/vorschau">Beispielansichten</NavLink>
+        @foreach (var group in InstanceStore.Instances.GroupBy(instance => instance.Group))
+        {
+            <details open>
+                <summary>@group.Key <span>@group.Count()</span></summary>
+                @foreach (var instance in group)
+                {
+                    <NavLink href="@($"module/{instance.Id}")">
+                        @instance.Name <small>@instance.Location</small>
+                    </NavLink>
+                }
+            </details>
+        }
+        <a class="instance-add" href="/instanz/neu">+ Instanz hinzufügen</a>
+        <p class="muted small">Aktionen betreffen lokal verwaltete Prozesse; extern gestartete Module werden nicht beendet.</p>
+    </aside>
+    <div class="workspace">
+        <header class="topbar">
+            <div><span class="eyebrow">Lokale Anlage</span><div>Virtuelle Zeit: noch nicht angebunden</div></div>
+            <div class="actions">
+                <button disabled title="Master-Fortsetzen folgt mit der Master-Anbindung">Fortsetzen</button>
+                <button @onclick="StartPlant" disabled="@_busy">@( _busy ? "Start läuft…" : "Anlage starten")</button>
+                <button @onclick="RequestCloseAll" disabled="@_busy">Alles geordnet schließen</button>
+            </div>
+        </header>
+        @if (_confirmClose)
+        {
+            <div class="preview-notice" role="status">
+                <span>Geordnet schließen? Verwaltete Module werden gestoppt; Zustandsverlust bleibt möglich.</span>
+                <button @onclick="CloseAll" disabled="@_busy">Ja, geordnet schließen</button>
+                <button @onclick="() => { _confirmClose = false; }">Abbrechen</button>
+            </div>
+        }
+        @if (_results.Count > 0)
+        {
+            <div class="preview-notice" role="status">
+                <span>@string.Join(" · ", _results.Select(result => result.ToString()))</span>
+            </div>
+        }
+        <div class="preview-notice" role="status">
+            <span>@(_lastNotice ?? "Anlage starten: Broker → Gateway → Wetter → Geräte → Master (pausiert). Ein- und Ausschalten in den Instanz-Einstellungen.")</span>
+        </div>
+        <main id="main-content">@Body</main>
+        <footer>RabbitMQ-Status auf der Live-Seite · Master bleibt beim Start pausiert <span>Befehlsvertrag für fachliche Steuerung folgt</span></footer>
+    </div>
+</div>
+@code {
+    private IReadOnlyList<StartStepResult> _results = Array.Empty<StartStepResult>();
+    private string? _lastNotice;
+    private bool _confirmClose;
+    private bool _busy;
+
+    private async Task StartPlant()
+    {
+        if (_busy) return;
+        _busy = true;
+        try
+        {
+            var configs = InstanceStore.StartupOrder();
+            var results = new List<StartStepResult>();
+            var broker = configs.FirstOrDefault(instance => instance.Kind == ModuleKind.Broker);
+            if (broker is not null) results.Add(await ProcessManager.StartBrokerAsync());
+            var devices = configs.Where(instance => instance.ModbusPort is { }).ToList();
+            foreach (var config in configs)
+            {
+                if (config.Kind is ModuleKind.Broker) continue;
+                results.Add(await ProcessManager.StartAsync(config, ProcessManager.CommandFor(config, devices)));
+            }
+            _results = results;
+            _lastNotice = "Anlage starten abgeschlossen; Master bleibt pausiert.";
+        }
+        finally
+        {
+            _confirmClose = false;
+            _busy = false;
+            StateHasChanged();
+        }
+    }
+
+    private void RequestCloseAll() => _confirmClose = true;
+
+    private async Task CloseAll()
+    {
+        if (_busy) return;
+        _busy = true;
+        try
+        {
+            _results = await ProcessManager.StopAllAsync(InstanceStore.Instances);
+            _lastNotice = _results.Count == 0
+                ? "Keine verwalteten Prozesse beendet; Broker blieb nicht berührt."
+                : "Geordnetes Schließen abgeschlossen; Broker blieb unberührt.";
+        }
+        finally
+        {
+            _confirmClose = false;
+            _busy = false;
+            StateHasChanged();
+        }
+    }
+}

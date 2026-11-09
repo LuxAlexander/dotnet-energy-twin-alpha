@@ -443,3 +443,5 @@ docs/glossary.md
 
 # Portabler MQTT-Viewer und lokale Profile
 /tools/local/mqtt-explorer/
+
+src/EnergyTwin.Web/instances*.local.json

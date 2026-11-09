@@ -1,0 +1,24 @@
+@page "/vorschau"
+@inject PreviewCatalog Catalog
+<PageTitle>Anlagenübersicht · EnergyTwin</PageTitle>
+<div class="page-heading"><span class="eyebrow">Ein System · unabhängige Module</span><h1>Anlagenübersicht</h1><p class="muted">Alle Werte sind Beispiele. Es besteht keine Verbindung zu den Modulen.</p></div>
+<div class="overview-summary"><strong>@Catalog.Modules.Count Beispielmodule</strong><span>Prozess: unbekannt</span><span>Verbindung: nicht angebunden</span><span>Simulation: unbekannt</span></div>
+<div class="catalog-filters">
+<label for="search">Instanz suchen<input id="search" type="search" placeholder="Kennung, Name oder Standort" @bind="_search" @bind:event="oninput" /></label>
+<label for="group">Modulgruppe<select id="group" @bind="_group"><option value="">Alle Gruppen</option>@foreach (var group in Catalog.Modules.Select(m => m.Group).Distinct()) { <option>@group</option> }</select></label>
+<button @onclick="ResetFilters">Filter zurücksetzen</button></div>
+<p class="muted result-count" role="status">@FilteredModules.Count() von @Catalog.Modules.Count Modulen</p>
+<section class="module-grid" aria-label="Beispielmodule">
+@foreach (var module in FilteredModules)
+{
+<a class="module-card" href="@($"module/{module.Id}")"><span class="eyebrow">@module.Group</span><h2>@module.Name</h2><p>@module.Location</p><div class="card-metric"><span class="muted small">@module.Metrics[0].Label · Beispiel</span><strong class="@module.Metrics[0].Tone">@module.Metrics[0].Value <small>@module.Metrics[0].Unit</small></strong></div><span class="muted small">Ansicht öffnen →</span></a>
+}
+</section>
+@if (!FilteredModules.Any()) { <div class="empty-state"><h2>Keine passenden Module</h2><p>Ändere den Suchbegriff oder setze die Filter zurück.</p></div> }
+@code {
+private string _search = string.Empty;
+private string _group = string.Empty;
+private IEnumerable<ModulePreview> FilteredModules => Catalog.Modules.Where(m => (_group.Length == 0 || m.Group == _group) && $"{m.Id} {m.Name} {m.Location}".Contains(_search.Trim(), StringComparison.OrdinalIgnoreCase));
+private void ResetFilters() { _search = string.Empty; _group = string.Empty; }
+}
+
