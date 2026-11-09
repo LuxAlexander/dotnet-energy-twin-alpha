@@ -1,4 +1,4 @@
 interface:
   display_name: "Let's Document"
-  short_description: "README-L¸cken schlieﬂen und Inhalte sauber archivieren"
-  default_prompt: "Nutze $lets-document, um die angegebene README anhand vorhandener Belege zu erg‰nzen, zu verdichten und alte Inhalte nachvollziehbar zu archivieren."
+  short_description: "READMEs knapp erg√§nzen und offene Fragen kl√§ren"
+  default_prompt: "Nutze $lets-document, um die angegebene README anhand belegter Quellen knapp zu aktualisieren. Frage bei offenen Punkten nach; archiviere nur nach ausdr√ºcklicher Best√§tigung."
