@@ -38,6 +38,7 @@ Leere Zuständigkeitsfelder bleiben unzugeteilt.
 | Eigener Skill `readTask` | Susanne Lastowicka | [`skills/readTask/README.md`](skills/readTask/README.md) |
 | Eigener Skill „Let's Document“ | Alexander Lux | [`skills/lets-document/README.md`](skills/lets-document/README.md), [Anwendungsnachweis](docs/nachweise/2026-11-08-lets-document/README.md) |
 | Eigener Skill `probelauf` | Dominik Zach | [`skills/probelauf/README.md`](skills/probelauf/README.md), [Anwendungsnachweis](docs/nachweise/2026-11-08-probelauf-skill/README.md) |
+| Eigener Skill `doku-sync` | Dominik Zach | [`skills/doku-sync/README.md`](skills/doku-sync/README.md) |
 
 ## LB03 starten
 

@@ -12,9 +12,9 @@ description: Führt einen reproduzierbaren Funktionsnachweis (Probelauf, Demo) d
 `@probelauf <Thema>` – z. B. `@probelauf LB03 Gateway`, `@probelauf LB02 Demo komplett`, `@probelauf nur Ladesäule`.
 Der Text dahinter ist das Thema; das Skill-Werkzeug selbst nimmt keine Parameter. Ohne Thema: **Umfang erfragen**, nicht raten.
 
-Der Skill wird über seine ID `probelauf` geladen (Ordner `.opencode/skills/probelauf`, die ID kommt aus dem Ordnernamen).
-Ein Slash-Command `/probelauf` gibt es bewusst nicht – `@probelauf` genügt, und wenn der Auftrag passt, lädt das Modell
-den Skill auch ohne Mention selbst.
+Der Skill wird über seine ID `probelauf` geladen (Ordnername; versioniert in `skills/probelauf/`, lokal aktiv
+unter `.opencode/skills/probelauf/`). Ein Slash-Command `/probelauf` gibt es bewusst nicht – `@probelauf` genügt,
+und wenn der Auftrag passt, lädt das Modell den Skill auch ohne Mention selbst.
 
 | Umfang | Beteiligte Programme | Belegt |
 |---|---|---|
@@ -52,7 +52,7 @@ Vor dem Start drei Zeilen notieren:
 
 ```powershell
 dotnet build EnergyTwin.sln                     # 0 Fehler, 0 Warnungen
-powershell -File .opencode/skills/probelauf/scripts/pruefe-ports.ps1
+powershell -File skills/probelauf/scripts/pruefe-ports.ps1
 docker compose -f docker/docker-compose.yml ps  # nur Umfang C
 ```
 

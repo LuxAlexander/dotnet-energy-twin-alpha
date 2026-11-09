@@ -57,9 +57,9 @@ New-Item -ItemType Directory -Force .opencode/skills
 Copy-Item -Recurse skills/probelauf .opencode/skills/probelauf
 ```
 
-Bei späteren Änderungen die lokale Kopie gezielt abgleichen. Der Skill-Einstieg und das Portskript enthalten noch
-Aufrufe über `.opencode/skills/probelauf/`; diese setzen die lokale Installation voraus. Das Portskript lässt sich
-aus der versionierten Ablage direkt mit `powershell -File skills/probelauf/scripts/pruefe-ports.ps1` aufrufen.
+Bei späteren Änderungen die lokale Kopie gezielt abgleichen. Der Skill-Einstieg und das Portskript nennen den
+versionierten Pfad `skills/probelauf/…` und laufen aus dem Repository-Root; in einer lokalen Kopie funktioniert
+derselbe Aufruf mit `.opencode/skills/probelauf/…`.
 
 Aufruf im Prompt:
 

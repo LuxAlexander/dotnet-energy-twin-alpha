@@ -1,5 +1,5 @@
 # pruefe-ports.ps1 - read-only Portcheck fuer EnergyTwin-Probelaeufe
-# Aufruf: powershell -File .opencode/skills/probelauf/scripts/pruefe-ports.ps1
+# Aufruf: powershell -File skills/probelauf/scripts/pruefe-ports.ps1
 # Aendert nichts und beendet keine Prozesse.
 [CmdletBinding()]
 param(
