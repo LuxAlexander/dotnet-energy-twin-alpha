@@ -1,7 +1,11 @@
 # MQTT Explorer – Viewer für EnergyTwin
 
-**Verantwortlich:** Alexander Lux · **Stand:** 2026-11-08  
-**Verwendete Version:** MQTT Explorer **0.3.5**, portable Windows-Ausgabe.
+**Geplante Erweiterung:** Die [lokale Weboberfläche](weboberflaeche-entwurf.md) ist separat geplant:
+gerätespezifische Ansichten, Bedienung über RabbitMQ und lokale Instanzverwaltung. Sie ist noch nicht umgesetzt;
+die folgende Anleitung beschreibt weiterhin MQTT Explorer.
+
+**Verantwortlich:** Alexander Lux · **Stand:** 2026-11-09  
+**Im bisherigen Probelauf verwendete Version:** MQTT Explorer **0.3.5**, portable Windows-Ausgabe.
 
 Der Viewer empfängt die Daten vom lokalen RabbitMQ-Broker und zeigt Topics, JSON-Nachrichten und Live-Verläufe.
 Er greift nicht auf Modbus zu und steuert die Geräte nicht. Wetter bleibt für die Geräte über HTTP angebunden.
@@ -10,27 +14,56 @@ Zeitreihenspeicherung und eine eigene Diagrammachse für virtuelle Simulationsze
 
 ## 1. Portable Ausgabe bereitstellen
 
-Die [offizielle stabile Veröffentlichung v0.3.5](https://github.com/thomasnordquist/MQTT-Explorer/releases/tag/v0.3.5)
-enthält `MQTT-Explorer-0.3.5.exe` und einen separaten Setup-Installer. Hier wird die Datei **ohne „Setup“** verwendet.
-Die Version stammt aus 2019; die inzwischen angebotene 0.4.0-Beta wurde in diesem Aufbau nicht verwendet.
+Die [offizielle Release-Liste](https://github.com/thomasnordquist/MQTT-Explorer/releases) bietet aktuell
+**0.4.0-beta.6** als neueste Beta an (Quellenabgleich 2026-11-09). Für Windows die EXE **ohne „Setup“** wählen.
+Die bisherige 0.3.5-Datei ist ebenfalls weiterhin im offiziellen Release gelistet; ein ungültiger Dateiname
+ist daher keine belegte Ursache des gemeldeten Downloadproblems.
 
 Aus dem Repository-Root in PowerShell:
 
 ```powershell
-New-Item -ItemType Directory -Force tools/local/mqtt-explorer
-Invoke-WebRequest -Uri https://github.com/thomasnordquist/MQTT-Explorer/releases/download/v0.3.5/MQTT-Explorer-0.3.5.exe -OutFile tools/local/mqtt-explorer/MQTT-Explorer-0.3.5.exe
+$ErrorActionPreference = 'Stop'
+# TLS 1.2 auch unter Windows PowerShell 5.1 zulassen.
+[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
+New-Item -ItemType Directory -Force tools/local/mqtt-explorer | Out-Null
+$url = 'https://github.com/thomasnordquist/MQTT-Explorer/releases/download/v0.4.0-beta.6/MQTT-Explorer-0.4.0-beta.6.exe'
+$file = Join-Path (Get-Location) 'tools/local/mqtt-explorer/MQTT-Explorer-0.4.0-beta.6.exe'
+Invoke-WebRequest -UseBasicParsing -Uri $url -OutFile "$file.download" -ErrorAction Stop
+Move-Item -LiteralPath "$file.download" -Destination $file -Force
+Get-Item -LiteralPath $file | Select-Object FullName, Length
 ```
 
-Danach die Datei im Explorer öffnen oder starten mit:
+Die endgültige EXE wird erst nach erfolgreichem Download ersetzt. Eine bei Abbruch verbleibende
+`.download`-Datei nicht starten. `-UseBasicParsing` vermeidet unter Windows PowerShell 5.1 die
+Abhängigkeit von der alten Internet-Explorer-Seitenverarbeitung. Der Download ist bewusst auf diese Beta festgelegt.
+
+**Ersatzweg und Fehlerdiagnose:**
+
+- Im Browser die [Beta-Veröffentlichung](https://github.com/thomasnordquist/MQTT-Explorer/releases/tag/v0.4.0-beta.6)
+  öffnen und unter **Assets** `MQTT-Explorer-0.4.0-beta.6.exe` herunterladen. Die Datei in
+  `tools/local/mqtt-explorer/` ablegen; nicht „Source code“ oder den Setup-Installer wählen.
+- „Host unbekannt“: Netzwerk, DNS und gegebenenfalls Proxy prüfen. Ein Versionswechsel behebt diesen Fehler nicht.
+  Auch GitHubs Weiterleitungen zu den Download-Hosts müssen erreichbar sein.
+- TLS-/Zertifikatsfehler: Systemzeit und Proxy-/Zertifikatskonfiguration prüfen, keine Zertifikatsprüfung abschalten.
+- HTTP 404: Tag und Dateinamen mit den Assets vergleichen. HTTP 403: Netzwerk-/Proxy-Meldung prüfen.
+- „Zugriff verweigert“: Schreibrechte prüfen; vor dem Ersetzen derselben EXE einen laufenden Viewer selbst schließen.
+
+Vor dem ersten Beta-Start den Viewer schließen und das vorhandene Profilverzeichnis
+`%APPDATA%\MQTT-Explorer` außerhalb des Repositorys sichern. Die
+[0.4.0-Release-Hinweise](https://github.com/thomasnordquist/MQTT-Explorer/releases/tag/0.0.0-0.4.0-beta1)
+weisen auf ein neues Konfigurationsformat hin; ein Downgrade mit dem migrierten Profil wird nicht unterstützt.
+Die Sicherung enthält gegebenenfalls das Broker-Passwort.
+
+Danach separat starten:
 
 ```powershell
-& .\tools\local\mqtt-explorer\MQTT-Explorer-0.3.5.exe
+& .\tools\local\mqtt-explorer\MQTT-Explorer-0.4.0-beta.6.exe
 ```
 
-`tools/local/mqtt-explorer/` ist ignoriert; die Programmdatei gehört nicht ins Repository. Das heruntergeladene
-Original ist nicht Authenticode-signiert; es wurde aus dem oben verlinkten Projekt-Release bezogen. Der lokal
-ermittelte SHA256 steht im [textuellen Nachweis](../nachweise/2026-11-08-viewer/README.md).
-Eine Windows-Sicherheitsabfrage gegebenenfalls selbst beurteilen; die Anleitung setzt keine Umgehung voraus.
+`tools/local/mqtt-explorer/` ist ignoriert. Signatur- und SHA256-Angaben im
+[bisherigen Nachweis](../nachweise/2026-11-08-viewer/README.md) gelten ausschließlich für **0.3.5**.
+Eine Windows-Sicherheitsabfrage selbst beurteilen. Die Beta wurde hier nicht gestartet oder mit dem Broker
+geprüft; die folgenden Bedien- und Profilangaben beziehen sich weiterhin auf den Probelauf mit 0.3.5.
 
 „Portable“ betrifft die Programmdatei. **Profile und Diagrammauswahl** speichert diese Version trotzdem lokal in
 `%APPDATA%\MQTT-Explorer\settings.json`. Das Profil enthält das gespeicherte Passwort; diese Datei nicht versionieren
