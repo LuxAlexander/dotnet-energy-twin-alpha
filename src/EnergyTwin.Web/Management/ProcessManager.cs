@@ -99,6 +99,20 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger)
             };
             var process = Process.Start(info);
             if (process is null) return new StartStepResult(config.Id, false, "Start fehlgeschlagen.");
+
+            // Kurz warten und prüfen, ob der Prozess sofort wieder abstürzt (z. B. wegen
+            // Port-Konflikt, fehlender Build-Ausgabe oder Initialisierungsfehler).
+            await Task.Delay(400);
+            if (process.HasExited)
+            {
+                lock (_gate) _processes.Remove(config.Id);
+                var stderr = ReadStderr(process);
+                return new StartStepResult(config.Id, false,
+                    string.IsNullOrWhiteSpace(stderr)
+                        ? "Prozess ist unmittelbar nach dem Start beendet – Protokoll unter %TEMP%\\energytwin-web prüfen."
+                        : $"Prozess beendet direkt nach dem Start: {stderr.Trim()}");
+            }
+
             lock (_gate) _processes[config.Id] = process;
             _ = Redirect(process.StandardOutput, logPath, append: false);
             _ = Redirect(process.StandardError, logPath, append: true);
@@ -361,9 +375,9 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger)
     public static string CommandFor(InstanceConfig config, IReadOnlyList<InstanceConfig> deviceConfigs) => config.Kind switch
     {
         ModuleKind.Pv => $"run --no-build --project src/Devices/PvSimulator -- --id {config.Id} --modbus-port {config.ModbusPort} --location {config.Location ?? "salzburg"}",
-        ModuleKind.Battery => $"run --no-build --project src/Devices/BatterySimulator -- --id {config.Id} --modbus-port {config.ModbusPort}",
-        ModuleKind.Charger => $"run --no-build --project src/Devices/DualPortCharger -- --id {config.Id} --modbus-port {config.ModbusPort}",
-        ModuleKind.ColdStore => $"run --no-build --project src/Devices/KuehlhausSimulator -- --id {config.Id} --modbus-port {config.ModbusPort}",
+        ModuleKind.Battery => $"run --no-build --project src/Devices/BatterySimulator -- --id {config.Id} --modbus-port {config.ModbusPort} --location {config.Location ?? "salzburg"}",
+        ModuleKind.Charger => $"run --no-build --project src/Devices/DualPortCharger -- --id {config.Id} --modbus-port {config.ModbusPort} --location {config.Location ?? "salzburg"}",
+        ModuleKind.ColdStore => $"run --no-build --project src/Devices/KuehlhausSimulator -- --id {config.Id} --modbus-port {config.ModbusPort} --location {config.Location ?? "salzburg"}",
         ModuleKind.Weather when config.HttpPort is { } port => $"run --no-build --project src/WeatherSimulator -- --port {port} --mqtt",
         ModuleKind.Master when config.Speed is { } speed => $"run --no-build --project src/SimulationMaster -- --speed {speed} --mqtt",
         ModuleKind.Gateway => $"run --no-build --project src/ModbusRabbitGateway -- --interval 1 {string.Join(" ", deviceConfigs.Select(device => $"--device {device.Id}=127.0.0.1:{device.ModbusPort}"))}",
@@ -383,5 +397,18 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger)
             }
         }
         catch (IOException) { }
+    }
+
+    /// <summary>Liest die stderr-Ausgabe eines bereits beendeten Prozesses, um den Absturzgrund zu ermitteln.</summary>
+    private static string ReadStderr(Process process)
+    {
+        try
+        {
+            return process.StandardError.ReadToEnd();
+        }
+        catch (Exception)
+        {
+            return string.Empty;
+        }
     }
 }

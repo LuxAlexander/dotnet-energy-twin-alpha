@@ -133,7 +133,31 @@
                 if (result is not null) results.Add(result);
             }
             _results = results;
-            _lastNotice = "Alles starten abgeschlossen; Time Master gestartet (pausiert), Geräte synchronisieren die virtuelle Zeit über den Master. Mit Fortsetzen die Zeit starten.";
+
+            // Nach dem Start warten, bis der Time Master über MQTT erreichbar ist,
+            // und ihn automatisch fortsetzen, damit die virtuelle Zeit sofort läuft.
+            var masterReady = false;
+            for (int i = 0; i < 20; i++) // bis zu 10 Sekunden
+            {
+                await Task.Delay(500);
+                if (MasterControl.Snapshot().Available)
+                {
+                    masterReady = true;
+                    break;
+                }
+            }
+
+            if (masterReady)
+            {
+                var resumeNotice = await MasterControl.SendAsync(true, _stop.Token);
+                _lastNotice = resumeNotice.StartsWith("Master bestätigt")
+                    ? "Alles starten abgeschlossen; Time Master gestartet und fortgesetzt. Die virtuelle Zeit läuft."
+                    : "Alles starten abgeschlossen; Time Master gestartet. Fortsetzen wurde gesendet: " + resumeNotice;
+            }
+            else
+            {
+                _lastNotice = "Alles starten abgeschlossen; Time Master gestartet (pausiert). Der Master ist noch nicht über MQTT erreichbar - bitte spaeter Fortsetzen klicken.";
+            }
         }
         finally
         {

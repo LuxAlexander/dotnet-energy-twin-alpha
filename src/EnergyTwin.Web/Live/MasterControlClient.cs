@@ -21,8 +21,8 @@ public sealed class MasterControlClient
     }
 
     private bool IsAvailable() => _client?.IsConnected == true && _status is not null
-        && DateTimeOffset.UtcNow - _receivedAt < TimeSpan.FromSeconds(4)
-        && DateTimeOffset.UtcNow - _status.SentAt < TimeSpan.FromSeconds(4);
+        && DateTimeOffset.UtcNow - _receivedAt < TimeSpan.FromSeconds(30)
+        && DateTimeOffset.UtcNow - _status.SentAt < TimeSpan.FromSeconds(30);
 
     public void SetConnection(IMqttClient? client)
     {
@@ -30,7 +30,7 @@ public sealed class MasterControlClient
         {
             _client = client;
             _receivedAt = DateTimeOffset.MinValue;
-            if (client is null) _reply?.TrySetException(new IOException("Verbindung verloren; Ergebnis unklar."));
+            if (client is null) _reply?.TrySetException(new IOException("MQTT-Verbindung unterbrochen; Ergebnis unklar."));
         }
     }
 
@@ -50,8 +50,8 @@ public sealed class MasterControlClient
                         || status.Current.MasterSession != status.Latest.MasterSession
                         || !Enum.IsDefined(status.Current.Mode) || !Enum.IsDefined(status.Latest.Mode)
                         || !double.IsFinite(status.Current.Speed) || status.Current.Speed < 1 || status.Current.Speed > 100000
-                        || status.SentAt > DateTimeOffset.UtcNow.AddSeconds(1)
-                        || DateTimeOffset.UtcNow - status.SentAt > TimeSpan.FromSeconds(4)) return;
+                    || status.SentAt > DateTimeOffset.UtcNow.AddSeconds(1)
+                    || DateTimeOffset.UtcNow - status.SentAt > TimeSpan.FromSeconds(30)) return;
                     if (_status?.Latest.MasterSession == status.Latest.MasterSession
                         && (_status.SentAt > status.SentAt || _status.Latest.Sequence > status.Latest.Sequence)) return;
                     _status = status;
@@ -86,7 +86,7 @@ public sealed class MasterControlClient
         TaskCompletionSource<MasterCommandResult> reply;
         lock (_sync)
         {
-            if (!IsAvailable()) return "Kein aktuell bestätigter Master erreichbar.";
+            if (!IsAvailable()) return "Der Master wird noch gestartet. Bitte warten Sie und versuchen Sie es erneut.";
             if (_pending is not null) return "Ein Master-Befehl wartet bereits auf Rückmeldung.";
             client = _client!;
             expected ??= _status!.Latest;
@@ -110,7 +110,7 @@ public sealed class MasterControlClient
         }
         catch (Exception)
         {
-            return "Keine eindeutige Master-Bestätigung; Ergebnis unklar. Aktuellen Status prüfen. Keine automatische Wiederholung.";
+            return "Der Master antwortet noch nicht. Bitte warten Sie einen Moment und versuchen Sie es erneut.";
         }
         finally
         {

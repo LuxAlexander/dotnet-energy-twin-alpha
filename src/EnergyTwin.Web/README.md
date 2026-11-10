@@ -116,7 +116,7 @@ Windows-/Linux-Gesamtprobelauf.
 Die Anlagenleiste zeigt echte Master-Zeit (einmal je Sekunde gemeldeter Stand), Modus, Tempo und Lauf.
 Pause/Fortsetzen wartet auf eine zuordenbare Master-Bestätigung; diese bestätigt die Annahme inklusive
 Wirksamkeitszeitpunkt, nicht vorzeitig den bereits wirksamen Zustand. Die Statusanzeige bleibt empfangsbasiert.
-Die Master-Detailansicht zeigt zusätzlich Sitzung und Sequenz. Nach vier Sekunden ohne aktuellen Status
+Die Master-Detailansicht zeigt zusätzlich Sitzung und Sequenz. Nach 30 Sekunden ohne aktuellen Status
 oder bei Broker-Verlust ist die Bedienung gesperrt; letzte Werte bleiben als unbestätigt sichtbar.
 Ein Reconnect allein bestätigt alte Werte nicht. Ein fehlender Bescheid nach sechs Sekunden bedeutet
 „Ergebnis unklar“, niemals automatisch Erfolg oder erneutes Senden.
