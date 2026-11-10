@@ -115,16 +115,16 @@ public sealed class InstanceStore
         }
     }
 
-    /// <summary>Startreihenfolge der Anlage: Gateway → Wetter → Geräte → Master (pausiert).</summary>
+    /// <summary>Startreihenfolge der Anlage: Time Master zuerst (Zeitquelle für alle Geräte), dann Gateway → Wetter → Geräte. Master startet pausiert.</summary>
     public IReadOnlyList<InstanceConfig> StartupOrder()
     {
         lock (_gate) return _instances
             .OrderBy(instance => instance.Kind switch
             {
-                ModuleKind.Gateway => 0,
-                ModuleKind.Weather => 1,
-                ModuleKind.Pv or ModuleKind.Battery or ModuleKind.Charger or ModuleKind.ColdStore => 2,
-                ModuleKind.Master => 3,
+                ModuleKind.Master => 0,
+                ModuleKind.Gateway => 1,
+                ModuleKind.Weather => 2,
+                ModuleKind.Pv or ModuleKind.Battery or ModuleKind.Charger or ModuleKind.ColdStore => 3,
                 _ => 4
             })
             .ToArray();

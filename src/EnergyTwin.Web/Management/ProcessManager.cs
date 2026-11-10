@@ -46,6 +46,28 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger)
         return PortProbe.IsFree(port.Value) ? InstanceRunState.NotTracked : InstanceRunState.ExternallyReachable;
     }
 
+    public bool IsRunning(InstanceConfig config) =>
+        State(config) == InstanceRunState.ManagedRunning || FindOurselves(config, ListenPort(config)) is not null;
+
+    /// <summary>
+    /// Startet das Gateway mit der aktuellen Geräteliste neu, damit neue oder entfernte Anlagen ohne
+    /// manuellen Neustart in den Live-Daten erscheinen. Ist das Gateway gestoppt, wird es nur auf
+    /// ausdrücklichen Wunsch gestartet; fremde Prozesse bleiben geschützt.
+    /// </summary>
+    public async Task<StartStepResult?> SyncGatewayAsync(IReadOnlyList<InstanceConfig> configs, bool startIfStopped)
+    {
+        var gateway = configs.FirstOrDefault(instance => instance.Kind == ModuleKind.Gateway);
+        if (gateway is null) return null;
+        var running = IsRunning(gateway);
+        if (!running && !startIfStopped) return null;
+        if (running)
+        {
+            var stop = await StopAsync(gateway);
+            if (stop is not null && !stop.Started) return stop;
+        }
+        return await StartAsync(gateway, CommandFor(gateway, configs.Where(instance => instance.ModbusPort is { }).ToList()));
+    }
+
     /// <summary>Startet dotnet ohne Fenster; schlägt fehl, wenn bereits verwaltet gelaufen oder der Port belegt ist.</summary>
     public async Task<StartStepResult> StartAsync(InstanceConfig config, string arguments)
     {
@@ -80,8 +102,8 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger)
             lock (_gate) _processes[config.Id] = process;
             _ = Redirect(process.StandardOutput, logPath, append: false);
             _ = Redirect(process.StandardError, logPath, append: true);
-            logger.LogInformation("Instanz {Id} gestartet (PID {Pid})", config.Id, process.Id);
-            return new StartStepResult(config.Id, true, $"Gestartet, Protokoll: {logPath}");
+            logger.LogInformation("Instanz {Id} gestartet (PID {Pid}), Protokoll {Log}", config.Id, process.Id, logPath);
+            return new StartStepResult(config.Id, true, "Gestartet.");
         }
         finally { _actions.Release(); }
     }
@@ -338,12 +360,12 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger)
     /// <summary>dotnet-Kommandozeile je Instanz; Master startet standardmäßig pausiert.</summary>
     public static string CommandFor(InstanceConfig config, IReadOnlyList<InstanceConfig> deviceConfigs) => config.Kind switch
     {
-        ModuleKind.Pv => $"run --no-build --project src/Devices/PvSimulator -- --id {config.Id} --modbus-port {config.ModbusPort}",
+        ModuleKind.Pv => $"run --no-build --project src/Devices/PvSimulator -- --id {config.Id} --modbus-port {config.ModbusPort} --location {config.Location ?? "salzburg"}",
         ModuleKind.Battery => $"run --no-build --project src/Devices/BatterySimulator -- --id {config.Id} --modbus-port {config.ModbusPort}",
         ModuleKind.Charger => $"run --no-build --project src/Devices/DualPortCharger -- --id {config.Id} --modbus-port {config.ModbusPort}",
         ModuleKind.ColdStore => $"run --no-build --project src/Devices/KuehlhausSimulator -- --id {config.Id} --modbus-port {config.ModbusPort}",
         ModuleKind.Weather when config.HttpPort is { } port => $"run --no-build --project src/WeatherSimulator -- --port {port} --mqtt",
-        ModuleKind.Master when config.Speed is { } speed => $"run --no-build --project src/SimulationMaster -- --speed {speed}",
+        ModuleKind.Master when config.Speed is { } speed => $"run --no-build --project src/SimulationMaster -- --speed {speed} --mqtt",
         ModuleKind.Gateway => $"run --no-build --project src/ModbusRabbitGateway -- --interval 1 {string.Join(" ", deviceConfigs.Select(device => $"--device {device.Id}=127.0.0.1:{device.ModbusPort}"))}",
         _ => throw new InvalidOperationException($"Kein Startkommando für {config.Kind}.")
     };

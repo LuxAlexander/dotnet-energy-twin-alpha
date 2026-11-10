@@ -24,9 +24,11 @@ Nur `TimeSyncIntegrationTests` laufen mit der realen Uhr über TCP (ca. 4 s) und
 | `SyncedClockTests` | Unterschiedliche Laufzeiten ⇒ gleiche Zeit bei allen Geräten · Pause und Neustart wirken gleichzeitig · verspätete Nachricht wird übernommen und gemeldet · alte/doppelte Zustände ignoriert · neues Gerät während einer angekündigten Änderung · neu gestarteter Master ersetzt den Verlauf · Master verloren ⇒ Zeit steht, danach wieder synchron · Uhrenabgleich korrigiert 5 s Uhrenunterschied · bei asymmetrischer Laufzeit bleibt der Fehler innerhalb `SimUncertainty` |
 | `SyncProtocolTests` | Alle Nachrichtenarten überstehen Hin- und Rückweg · JSON ist lesbar (`type`, Enum als Text) · ungültige Nachrichten (kein JSON, unbekannter Typ, fehlende Felder, Tempo 0, unbekannter Modus) werden abgelehnt |
 | `TimeSyncIntegrationTests` | Echtes TCP auf localhost, reale Uhr, Tempo 600: zwei Simulatoren folgen Start, Tempowechsel, Pause (exakt gleich) und Neustart innerhalb der Toleranz (10 ms · Tempo) · Master listet Simulatoren mit gemessener Abweichung · Simulator vor dem Master gestartet verbindet sich später · Master beendet ⇒ Meldung und Gerätezeit steht · falsche Protokollversion wird mit `bye` abgelehnt · ungültige Nachricht trennt nur diese Verbindung |
+| `MasterControlTests` | Befehlsweg `TryApplyControl`: Pause/Fortsetzen � Tempowechsel bei pausierter Simulation bleibt pausiert � Neustart startet neuen Lauf sofort � veraltete Sequenz und falsche Sitzung abgelehnt � unbekannte Aktion, ung�ltiges Tempo und unpassende Parameter abgelehnt, Zustand unver�ndert |
 | `ClockOffsetEstimatorTests` | Ohne Messung Offset 0 · kleinste RTT gewinnt · alte Messungen fallen aus dem Fenster · unmögliche Messung abgelehnt |
 
 Ergebnis am 2026-10-25: 54 von 54 bestanden, 5 Wiederholungen ohne Ausfall.
+Ergebnis am 2026-11-10: 65 von 65 bestanden (inklusive 11 neuer `MasterControlTests`, Integrationstests mit realer Uhr).
 
 ## Bekannte Probleme
 - Die Integrationstests brauchen freie Ports auf localhost (werden vom Betriebssystem vergeben).

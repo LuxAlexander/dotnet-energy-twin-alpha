@@ -1,6 +1,6 @@
 # EnergyTwin.Web – lokale Bedienoberfläche
 
-**Stand:** 2026-11-09. Blazor Interactive Server mit lesender MQTT-Live-Anbindung.
+**Stand:** 2026-11-10. Blazor Interactive Server mit MQTT-Live-Anbindung und bestätigter Master-Bedienung.
 
 ## Start
 
@@ -29,9 +29,11 @@ Zugangsdaten kommen aus `ENERGYTWIN_MQTT_USER` und `ENERGYTWIN_MQTT_PASSWORD`, e
 `docker/.env` im gefundenen Repository-Root. Bei veröffentlichten Dateien außerhalb des Repositories
 den Dateipfad ausdrücklich setzen oder Umgebungsvariablen verwenden. Keine Passwörter in appsettings.
 
-MQTTnet empfängt `energytwin/#` mit QoS 1; die fünf Wettertopics und Wetterstatus zusätzlich exakt,
-damit RabbitMQ gespeicherte Nachrichten liefert. Geräte-/Gateway-Status kann beim Einstieg bis zur
-nächsten Wiederholung (standardmäßig 30 Sekunden) fehlen. MQTT-Empfang und letzte Nachrichten liegen
+MQTTnet empfängt `energytwin/#` mit QoS 1; die fünf Wettertopics, der Wetterstatus sowie
+`energytwin/gateway/<ID>/status` und je Gerät `energytwin/devices/<ID>/status` zusätzlich exakt,
+damit RabbitMQ gespeicherte Nachrichten sofort liefert. Ohne diese exakten Abos erscheint ein
+retained Gateway-Status bei einem Wildcard-Abo erst mit der nächsten Wiederholung (standardmäßig
+30 Sekunden). MQTT-Empfang und letzte Nachrichten liegen
 browserunabhängig im Singleton; Neuladen verliert sie nicht. Ein Webdienst-Neustart leert sie.
 Maximal 512 Topics und 256 KiB Text pro Nachricht werden angenommen, keine dauerhafte Speicherung.
 Ungültige JSON-/Schema-Nachrichten werden gezählt und verworfen, leere Nachrichten löschen das Topic.
@@ -42,7 +44,7 @@ Gerätemesswerte werden nach 15 realen Sekunden, Status nach 45 Sekunden als ver
 Bei abweichenden Publisher-Intervallen können diese konservativen Grenzen zu Warnungen führen.
 Qualität und Offline-/Dekodierstatus bleiben sichtbar. Wetterwerte werden mit Source-/Master-Sitzung
 und Lauf des Dienststatus abgeglichen. Gespeicherte Pausenstände sind keine Prozess-Lebendbestätigung.
-Keine Befehle werden gesendet oder für später gepuffert.
+Gerätebefehle bleiben deaktiviert. Master-Befehle werden wie unten beschrieben gesendet; keine Anwendung puffert sie für spätere Neuversuche.
 
 ## Live-Verläufe und gerätespezifische Live-Ansichten
 
@@ -71,19 +73,23 @@ Instanzen sind in `instances.local.json` im Projektordner lokal gespeichert (nic
 `Instances:File`). Über `/instanz/neu` Geräteinstanzen (PV, Batterie, Ladesäule, Kühlhaus) anlegen;
 Kennung und Modbus-Port werden vorgeschlagen, Kennungs- und Portkonflikte werden abgelehnt, speichern
 allein startet keinen Prozess. Im Reiter „Einstellungen" einer Instanz: Starten, Beenden und Löschen
-(allein für Geräteinstanzen). „Anlage starten" startet Broker (docker compose), Gateway, Wetterdienst,
-Geräte und Master in dieser Reihenfolge; belegte Ports verhindern Doppelstarts, Fehler erscheinen pro
-Modul; der Master startet pausiert. „Alles geordnet schließen" stoppt nach Bestätigung Master → Geräte
+(allein für Geräteinstanzen). „Alles starten" startet Broker (docker compose), den Time Master
+(pausiert), dann Gateway, Wetterdienst und Geräte in dieser Reihenfolge; belegt ein Port oder läuft
+unser Master bereits extern, wird das Modul übersprungen (Meldung pro Modul). „Alles starten" ist deaktiviert, sobald alle Module laufen; „Alles geordnet schließen" stoppt nach Bestätigung Master → Geräte
 → Wetter → Gateway; der Broker bleibt unberührt.
 
 Grenzen: Nach einem Webdienst-Neustart laufen Prozesse weiter und werden an Port und Kommandozeile
 wiedererkannt; sie können dann über „Einstellungen → Beenden" bzw. „Alles geordnet schließen"
 geordnet beendet werden. Programme fremder Anbieter auf belegten Ports werden geschützt und nicht
-berührt. „Anlage starten" startet keine Module doppelt: belegt ein Port oder läuft unser Gateway/Master
-bereits extern, wird das Modul übersprungen (Meldung pro Modul). Sichere Wiedererkennung nach
-Neustart bleibt auf Port+Kommandozeile beschränkt. Master-Fortsetzen und fachliche Befehle folgen mit
-den jeweiligen Anbindungen; „Fortsetzen" bleibt daher deaktiviert. Prozessprotokolle liegen unter
-`%TEMP%\energytwin-web\<Kennung>.log`.
+berührt. „Alles starten" startet keine Module doppelt: belegt ein Port oder läuft unser Master
+bereits extern, wird das Modul übersprungen (Meldung pro Modul). Ein laufendes Gateway wird dagegen
+mit der aktuellen Geräteliste neu gestartet, damit neue Anlagen Live-Daten liefern. Sichere Wiedererkennung nach
+Neustart bleibt auf Port+Kommandozeile beschränkt. Der verwaltete Master startet mit `--mqtt`; Pause/Fortsetzen ist bei frischem Master-Status verfügbar.
+Gerätebefehle bleiben offen. Tempoänderung und neuer Lauf stehen auf der Masterseite bereit. Prozessprotokolle liegen unter
+`%TEMP%\energytwin-web\<Kennung>.log`. Der Broker hat keine Start-/Stopp-Knöpfe in der Weboberfläche;
+er wird über Docker verwaltet und dort als „Verwaltung: Docker" statt mit einem Prozessstatus angezeigt. Beim Starten, Beenden oder Löschen einer Geräteinstanz wird ein
+laufendes Gateway mit der aktuellen Geräteliste neu gestartet, damit neue Anlagen ohne manuellen Neustart
+Live-Daten liefern.
 
 ## Aufbau und Prüfung
 
@@ -95,8 +101,39 @@ den jeweiligen Anbindungen; „Fortsetzen" bleibt daher deaktiviert. Prozessprot
 `Management/ProcessManager.cs`: Start/Stop verwalteter Prozesse, Broker-Start über docker compose,
 Wiedererkennung extern gestarteter Prozesse über Port und Kommandozeile sowie Doppelstart-Schutz;
 `Components/Pages/AddInstance.razor`: Anlegen von Geräteinstanzen;
-`Components/Pages/Module.razor`: Live-Beispiel-Wechsel je Kennung und Instanzaktionen im Einstellungen-Reiter.
+`Components/Pages/Module.razor`: Live-Beispiel-Wechsel je Kennung und Instanzaktionen im Einstellungen-Reiter;
+`Components/Shared/MasterControls.razor`: Tempo, neuer Lauf und Jahreszeiten-Vorlagen der Masterseite;
+`Live/MasterControlClient.cs`: gemeinsamer Master-Zustand und bestätigte Aufträge zwischen Browsern;
 `Presentation`, `PreviewCatalog` und `PreviewChart`: Beispielansichten.
 
-Tatsächlich ausgeführte Prüfungen stehen im [Journal](../../docs/development-journal/alexander-lux.md).
-Ein Build ersetzt weder Broker-Ausfalltests noch einen Windows-/Linux-Gesamtprobelauf.
+Befehlsweg und Duplikatschutz prüfen `tests/SimCore.Tests` (`MasterControlTests`) und
+`tests/SimulationMaster.Tests` (`MasterMqttServiceTests`) ohne Broker. Tatsächlich ausgeführte Prüfungen stehen im
+[Journal](../../docs/development-journal/alexander-lux.md). Ein Build ersetzt weder Broker-Ausfalltests noch einen
+Windows-/Linux-Gesamtprobelauf.
+
+## Master-Steuerung über MQTT
+
+Die Anlagenleiste zeigt echte Master-Zeit (einmal je Sekunde gemeldeter Stand), Modus, Tempo und Lauf.
+Pause/Fortsetzen wartet auf eine zuordenbare Master-Bestätigung; diese bestätigt die Annahme inklusive
+Wirksamkeitszeitpunkt, nicht vorzeitig den bereits wirksamen Zustand. Die Statusanzeige bleibt empfangsbasiert.
+Die Master-Detailansicht zeigt zusätzlich Sitzung und Sequenz. Nach vier Sekunden ohne aktuellen Status
+oder bei Broker-Verlust ist die Bedienung gesperrt; letzte Werte bleiben als unbestätigt sichtbar.
+Ein Reconnect allein bestätigt alte Werte nicht. Ein fehlender Bescheid nach sechs Sekunden bedeutet
+„Ergebnis unklar“, niemals automatisch Erfolg oder erneutes Senden.
+Die Fortsetzen- bzw. Pause-Schaltfläche ist nur aktiv, wenn der Master im Gegenteilzustand ist (Pause nur beim Laufen, Fortsetzen nur im Pausenmodus); bei nicht verfügbarem Master-Status sind beide gesperrt.
+
+Die Masterseite bietet Tempo (1–100.000, „Übernehmen“) auch im laufenden Betrieb; eine pausierte Simulation
+bleibt pausiert. „Neuer Lauf“ übernimmt Datum und Uhrzeit erst nach ausdrücklicher Bestätigung und startet sofort.
+Gerätezustände bleiben erhalten; die Bestätigung weist darauf hin. Vorlagen setzen den 15.01./15.04./15.07./15.10.
+um 06:00 Uhr im aktuellen Simulationsjahr und befüllen nur die Eingabe. Jeder Auftrag besitzt eine UUID und fünf
+Sekunden Gültigkeit; der Master prüft Sitzung und Sequenz atomar gegen die Konsole und liefert für doppelte
+Aufträge das gespeicherte Ergebnis zurück, sodass ein doppelt zugestellter Neustart keinen zweiten Lauf auslöst.
+
+Extern gestartete Master benötigen `--mqtt`; ältere laufende Prozesse werden nicht automatisch ersetzt.
+Für einen abweichenden Broker den Master mit `--mqtt-host`, `--mqtt-port` und gegebenenfalls `--mqtt-env`
+passend zur Web-Konfiguration starten. Der Anlagenstarter verwendet weiterhin die lokalen Broker-Standardwerte.
+`Live/MasterControlClient.cs` teilt Zustand und einen ausstehenden Auftrag zwischen Browsern; der vorhandene
+`MqttReceiver` transportiert Status, Befehle und Antworten. Master-Topics werden separat verarbeitet und
+zählen nicht als Geräte-/Wettertopics des LiveStore. Keine zusätzliche direkte Verbindung zum Master.
+
+Vertrag und Grenzen: [Master-MQTT-Vertrag](../../docs/Master-MQTT-Vertrag.md).

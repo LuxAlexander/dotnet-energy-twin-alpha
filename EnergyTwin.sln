@@ -55,6 +55,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModbusRabbitGateway.Tests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnergyTwin.Web", "src\EnergyTwin.Web\EnergyTwin.Web.csproj", "{9EA4C810-A30D-45B1-999E-2B5C770BAB95}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulationMaster.Tests", "tests\SimulationMaster.Tests\SimulationMaster.Tests.csproj", "{9ED47376-C96D-4EBF-905C-404AD21BED9C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -341,6 +343,18 @@ Global
 		{9EA4C810-A30D-45B1-999E-2B5C770BAB95}.Release|x64.Build.0 = Release|Any CPU
 		{9EA4C810-A30D-45B1-999E-2B5C770BAB95}.Release|x86.ActiveCfg = Release|Any CPU
 		{9EA4C810-A30D-45B1-999E-2B5C770BAB95}.Release|x86.Build.0 = Release|Any CPU
+		{9ED47376-C96D-4EBF-905C-404AD21BED9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9ED47376-C96D-4EBF-905C-404AD21BED9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9ED47376-C96D-4EBF-905C-404AD21BED9C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9ED47376-C96D-4EBF-905C-404AD21BED9C}.Debug|x64.Build.0 = Debug|Any CPU
+		{9ED47376-C96D-4EBF-905C-404AD21BED9C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9ED47376-C96D-4EBF-905C-404AD21BED9C}.Debug|x86.Build.0 = Debug|Any CPU
+		{9ED47376-C96D-4EBF-905C-404AD21BED9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9ED47376-C96D-4EBF-905C-404AD21BED9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9ED47376-C96D-4EBF-905C-404AD21BED9C}.Release|x64.ActiveCfg = Release|Any CPU
+		{9ED47376-C96D-4EBF-905C-404AD21BED9C}.Release|x64.Build.0 = Release|Any CPU
+		{9ED47376-C96D-4EBF-905C-404AD21BED9C}.Release|x86.ActiveCfg = Release|Any CPU
+		{9ED47376-C96D-4EBF-905C-404AD21BED9C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -370,5 +384,6 @@ Global
 		{55EC8188-A427-47CD-8025-2A52FB4FDC13} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{BA47AE3A-9A59-469B-B4DA-0029F65BF32B} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{9EA4C810-A30D-45B1-999E-2B5C770BAB95} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{9ED47376-C96D-4EBF-905C-404AD21BED9C} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 	EndGlobalSection
 EndGlobal

@@ -1,10 +1,11 @@
+using EnergyTwin.Web.Management;
 using MQTTnet;
 using MQTTnet.Protocol;
 using Shared.Config;
 
 namespace EnergyTwin.Web.Live;
 
-public sealed class MqttReceiver(LiveStore store, IConfiguration configuration, IHostEnvironment environment) : BackgroundService
+public sealed class MqttReceiver(LiveStore store, MasterControlClient master, InstanceStore instances, IConfiguration configuration, IHostEnvironment environment) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -14,11 +15,14 @@ public sealed class MqttReceiver(LiveStore store, IConfiguration configuration, 
             using var client = new MqttClientFactory().CreateMqttClient();
             client.ApplicationMessageReceivedAsync += args =>
             {
-                store.Receive(args.ApplicationMessage.Topic, args.ApplicationMessage.ConvertPayloadToString());
+                if (args.ApplicationMessage.Topic.StartsWith("energytwin/master/", StringComparison.Ordinal))
+                    master.Receive(args.ApplicationMessage);
+                else store.Receive(args.ApplicationMessage.Topic, args.ApplicationMessage.ConvertPayloadToString());
                 return Task.CompletedTask;
             };
             client.DisconnectedAsync += args =>
             {
+                master.SetConnection(null);
                 store.SetConnection(false, "Broker getrennt – letzte Werte nicht aktuell bestätigt");
                 return Task.CompletedTask;
             };
@@ -47,14 +51,23 @@ public sealed class MqttReceiver(LiveStore store, IConfiguration configuration, 
                 foreach (var location in new[] { "salzburg", "wien", "innsbruck", "tamanrasset", "neumayer" })
                     subscriptions.WithTopicFilter(f => f.WithTopic($"energytwin/weather/{location}/measurements").WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce));
                 subscriptions.WithTopicFilter(f => f.WithTopic("energytwin/weather/status").WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce));
+                // RabbitMQ liefert gespeicherte (retained) Nachrichten nicht an energytwin/#; exakte
+                // Status-Topics holen den aktuellen Stand sofort nach einem Webdienst-Neustart.
+                subscriptions.WithTopicFilter(f => f.WithTopic($"energytwin/gateway/{configuration["Mqtt:GatewayId"] ?? "GW-01"}/status")
+                    .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce));
+                foreach (var instance in instances.Instances.Where(instance => instance.ModbusPort is { }))
+                    subscriptions.WithTopicFilter(f => f.WithTopic($"energytwin/devices/{instance.Id}/status")
+                        .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce));
                 var subscribed = await client.SubscribeAsync(subscriptions.Build(), timeout.Token);
                 if (subscribed.Items.Any(item => (int)item.ResultCode >= 128)) throw new InvalidOperationException();
+                master.SetConnection(client);
                 delay = 1;
                 while (client.IsConnected) await Task.Delay(500, stoppingToken);
             }
             catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested) { break; }
             catch (Exception)
             {
+                master.SetConnection(null);
                 // Keine Exceptiontexte aus Transport oder Konfiguration in die Oberfläche übernehmen.
                 store.SetConnection(false, "Verbindung fehlgeschlagen – Broker, Port und Zugangsdaten prüfen. Automatischer Neuversuch.");
             }
@@ -62,6 +75,7 @@ public sealed class MqttReceiver(LiveStore store, IConfiguration configuration, 
             catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested) { break; }
             delay = Math.Min(delay * 2, 30);
         }
+        master.SetConnection(null);
         store.SetConnection(false, "Empfang beendet");
     }
 }

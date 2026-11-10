@@ -54,7 +54,7 @@ Bei umgeleiteter Ausgabe: alle 5 s eine Statuszeile plus Meldungen.
 
 ## Schnittstellen
 - **Angeboten:** Zeitserver nach dem Protokoll in `src/SimCore.TimeSync/README.md` (TCP, JSON-Zeilen, Port 5100).
-- **Benötigt:** keine.
+- **Benötigt:** ohne `--mqtt` keine; mit `--mqtt` ein erreichbarer MQTT-Broker.
 
 ## Tests
 Die Zeitlogik und der Server sind in `tests/SimCore.Tests` getestet (`MasterClockTests`, `TimeSyncIntegrationTests`).
@@ -65,3 +65,17 @@ Heartbeat jede Sekunde, Abmeldung mit `bye` wird angezeigt.
 - Die interaktive Anzeige ist noch nicht in einem echten Terminalfenster getestet (nur umgeleitete Ausgabe).
 - Strg+C wurde noch nicht manuell geprüft (Beenden über den Abbruch-Token ist durch die Tests abgedeckt).
 - Δ enthält die einfache Laufzeit des Pings · Tempo (auf localhost < 1 ms real); die echte Abweichung ist eher kleiner.
+
+## Optionale Web-Bedienung über MQTT
+
+`--mqtt` aktiviert Status sowie bestätigtes Pause/Fortsetzen, Tempo und neue Läufe über denselben `MasterClock` wie die Konsole.
+`--mqtt-host` (127.0.0.1), `--mqtt-port` (1883) und `--mqtt-env` konfigurieren den Broker; Zugangsdaten
+kommen aus `ENERGYTWIN_MQTT_USER`/`ENERGYTWIN_MQTT_PASSWORD`, ersatzweise `docker/.env` im Repository.
+Ohne `--mqtt` bleibt der bisherige Konsolen-/TCP-Betrieb erhalten. Der Web-Anlagenstarter setzt `--mqtt`.
+Broker-Ausfälle unterbrechen den Zeitserver nicht; Neuversuche folgen mit 1–30 Sekunden Abstand.
+Status wird jede reale Sekunde ungespeichert publiziert. Befehle tragen UUID, Sitzung, erwartete Sequenz,
+Ablaufzeit und je nach Aktion Tempo oder Startzeit; der Master prüft sie atomar gegen die Konsole. Doppelte
+Befehle erhalten innerhalb ihrer Gültigkeit dasselbe Ergebnis; ein doppelt zugestellter Neustart löst keinen
+zweiten Lauf aus.
+
+Vertrag, Ablehnungen und Rückmeldungen: [Master-MQTT-Vertrag](../../docs/Master-MQTT-Vertrag.md).

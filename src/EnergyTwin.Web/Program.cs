@@ -22,6 +22,7 @@ var instancePath = Path.Combine(builder.Environment.ContentRootPath,
     builder.Configuration["Instances:File"] ?? "instances.local.json");
 builder.Services.AddSingleton(new EnergyTwin.Web.Management.InstanceStore(instancePath, port));
 builder.Services.AddSingleton<EnergyTwin.Web.Management.ProcessManager>();
+builder.Services.AddSingleton<EnergyTwin.Web.Live.MasterControlClient>();
 builder.Services.AddHostedService<EnergyTwin.Web.Live.MqttReceiver>();
 builder.Services.AddSingleton<PreviewCatalog>();
 

@@ -57,9 +57,13 @@ public static class Program
             console.AddMessage("Simulation pausiert – Start mit Leertaste");
 
         var serverTask = server.RunAsync(stop.Token);
+        var mqttTask = options.MqttEnabled
+            ? new MasterMqttService(clock, options, console.AddMessage).RunAsync(stop.Token)
+            : Task.CompletedTask;
         await console.RunAsync(stop.Cancel, stop.Token);
         await stop.CancelAsync();
         await serverTask;
+        await mqttTask;
 
         await console.ShutdownAsync();
         Console.WriteLine();

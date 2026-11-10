@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <ItemGroup>
+    <ProjectReference Include="../SimCore.Contracts/SimCore.Contracts.csproj" />
     <PackageReference Include="MQTTnet" />
     <ProjectReference Include="../Shared.Config/Shared.Config.csproj" />
   </ItemGroup>

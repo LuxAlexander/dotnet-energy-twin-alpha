@@ -21,6 +21,11 @@ public sealed record MasterOptions
     /// <summary>Zulässige Abweichung in realer Zeit; in Sim-Zeit = Toleranz · Tempo.</summary>
     public TimeSpan Tolerance { get; init; } = TimeSpan.FromMilliseconds(10);
 
+    public bool MqttEnabled { get; init; }
+    public string MqttHost { get; init; } = "127.0.0.1";
+    public int MqttPort { get; init; } = 1883;
+    public string? MqttEnvFile { get; init; }
+
     public bool AutoStart { get; init; }
 
     public const string Usage = """
@@ -36,6 +41,10 @@ public sealed record MasterOptions
           --heartbeat <ms>     Heartbeat-Intervall in ms, 100–10000 (Standard 1000)
           --tolerance <ms>     Zulässige Abweichung in realen ms, Sim-Toleranz = Wert · Tempo (Standard 10)
           --autostart          Simulation sofort starten (sonst pausiert bis Leertaste)
+          --mqtt              MQTT-Status und Pause/Fortsetzen aktivieren
+          --mqtt-host <host>  Broker (Standard 127.0.0.1)
+          --mqtt-port <n>     Broker-Port (Standard 1883)
+          --mqtt-env <pfad>   Zugangsdaten-Datei (Standard docker/.env)
           --help               Diese Hilfe
         """;
 
@@ -55,6 +64,10 @@ public sealed record MasterOptions
                 "--lead" => options with { LeadTime = TimeSpan.FromMilliseconds(ParseNumber(name, Value(args, ref i), 10, 5000)) },
                 "--heartbeat" => options with { HeartbeatInterval = TimeSpan.FromMilliseconds(ParseNumber(name, Value(args, ref i), 100, 10_000)) },
                 "--tolerance" => options with { Tolerance = TimeSpan.FromMilliseconds(ParseNumber(name, Value(args, ref i), 0.1, 10_000)) },
+                "--mqtt" => options with { MqttEnabled = true },
+                "--mqtt-host" => options with { MqttHost = Value(args, ref i) },
+                "--mqtt-port" => options with { MqttPort = (int)ParseNumber(name, Value(args, ref i), 1, 65535) },
+                "--mqtt-env" => options with { MqttEnvFile = Value(args, ref i) },
                 "--autostart" => options with { AutoStart = true },
                 _ => throw new ArgumentException($"Unbekannte Option: {args[i]}")
             };

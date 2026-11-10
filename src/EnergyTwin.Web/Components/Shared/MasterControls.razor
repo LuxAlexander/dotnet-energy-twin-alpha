@@ -1,0 +1,128 @@
+@using System.Globalization
+@using SimCore.Contracts
+@inject MasterControlClient Control
+@implements IAsyncDisposable
+
+<section class="detail-panel">
+    <h2>Anlagenweite Steuerung</h2>
+    <p>Pause und Fortsetzen stehen oben in der Anlagenleiste bereit.</p>
+    <div class="actions">
+        <button @onclick="OpenSpeed" disabled="@(!Available || _busy)">Tempo ändern</button>
+        <button @onclick="OpenRestart" disabled="@(!Available || _busy)">Neuer Lauf</button>
+    </div>
+    @if (_editing == "speed")
+    {
+        <div class="control-panel">
+            <label for="master-speed">Tempo (virtuelle Sekunden je realer Sekunde)
+                <input id="master-speed" type="text" inputmode="decimal" @bind="_speedText" disabled="@_busy" />
+            </label>
+            <p>Erlaubt: 1 bis 100.000. Eine pausierte Simulation bleibt pausiert.</p>
+            <button @onclick="ApplySpeedAsync" disabled="@(!Available || _busy)">Übernehmen</button>
+            <button @onclick="Cancel" disabled="@_busy">Abbrechen</button>
+        </div>
+    }
+    @if (_editing == "restart")
+    {
+        <div class="control-panel">
+            <label for="master-start">Neue virtuelle Startzeit
+                <input id="master-start" type="datetime-local" step="60" @bind="_startTime" disabled="@(_busy || _confirmRestart)" />
+            </label>
+            <div class="actions" aria-label="Jahreszeiten-Vorlagen">
+                <button @onclick="() => SetSeason(4)" disabled="@(_busy || _confirmRestart)">Frühling</button>
+                <button @onclick="() => SetSeason(7)" disabled="@(_busy || _confirmRestart)">Sommer</button>
+                <button @onclick="() => SetSeason(10)" disabled="@(_busy || _confirmRestart)">Herbst</button>
+                <button @onclick="() => SetSeason(1)" disabled="@(_busy || _confirmRestart)">Winter</button>
+            </div>
+            <p>Vorlagen: jeweils der 15. um 06:00 Uhr im Simulationsjahr @_year.</p>
+            @if (!_confirmRestart)
+            {
+                <button @onclick="ConfirmRestart" disabled="@(!Available || _busy)">Neuen Lauf vorbereiten</button>
+                <button @onclick="Cancel" disabled="@_busy">Abbrechen</button>
+            }
+            else
+            {
+                <div role="alertdialog" aria-labelledby="restart-title" aria-describedby="restart-description" class="preview-notice">
+                    <h3 id="restart-title">Neuen Lauf sofort starten?</h3>
+                    <p id="restart-description">Startzeit: @_startTime.ToString("dd.MM.yyyy HH:mm").
+                        Neue Simulationszeit, Gerätezustände bleiben erhalten: Batterieladung, Fahrzeuge und Kühlhaustemperatur werden nicht zurückgesetzt.
+                        Energiezähler bleiben erhalten; die PV-Tagesenergie wird bei Datumswechsel zurückgesetzt. Übersprungene Zeit wird nicht nachsimuliert.</p>
+                    <button @onclick="RestartAsync" disabled="@(!Available || _busy)">Ja, neuen Lauf jetzt starten</button>
+                    <button @onclick="() => _confirmRestart = false" disabled="@_busy">Zurück</button>
+                </div>
+            }
+        </div>
+    }
+    @if (!Available) { <p class="muted">Bedienung gesperrt: kein aktuell bestätigter Master-Status.</p> }
+    @if (_busy) { <p role="status">Warte auf Master-Bestätigung…</p> }
+    @if (_notice is not null) { <p role="status">@_notice</p> }
+</section>
+
+@code {
+    private readonly CancellationTokenSource _stop = new();
+    private Task? _refresh;
+    private string? _editing;
+    private string? _notice;
+    private string _speedText = "60";
+    private DateTime _startTime;
+    private int _year;
+    private TimeState? _expected;
+    private bool _confirmRestart;
+    private bool _busy;
+    private bool Available => Control.Snapshot().Available;
+
+    protected override void OnInitialized() => _refresh = RefreshAsync();
+    private async Task RefreshAsync()
+    {
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
+        try { while (await timer.WaitForNextTickAsync(_stop.Token)) await InvokeAsync(StateHasChanged); }
+        catch (OperationCanceledException) when (_stop.IsCancellationRequested) { }
+    }
+
+    private void OpenSpeed() => Open("speed");
+    private void OpenRestart() => Open("restart");
+    private void Open(string action)
+    {
+        var snapshot = Control.Snapshot();
+        if (_busy || !snapshot.Available || snapshot.Status is not { } status) return;
+        _expected = status.Latest;
+        _year = status.SimTime.Year;
+        _startTime = new DateTime(_year, status.SimTime.Month, status.SimTime.Day, status.SimTime.Hour, status.SimTime.Minute, 0);
+        _speedText = status.Latest.Speed.ToString(CultureInfo.InvariantCulture);
+        _editing = action;
+        _confirmRestart = false;
+        _notice = null;
+    }
+
+    private void SetSeason(int month) => _startTime = new DateTime(_year, month, 15, 6, 0, 0);
+    private void Cancel() { _editing = null; _confirmRestart = false; }
+    private void ConfirmRestart()
+    {
+        if (_startTime == default) { _notice = "Bitte eine gültige Startzeit eingeben."; return; }
+        _confirmRestart = true;
+    }
+    private async Task ApplySpeedAsync()
+    {
+        if (!double.TryParse(_speedText.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out var speed)
+            || !double.IsFinite(speed) || speed < 1 || speed > 100000)
+        {
+            _notice = "Bitte ein Tempo zwischen 1 und 100.000 eingeben (Dezimalstelle mit Punkt oder Komma).";
+            return;
+        }
+        await SendAsync(() => Control.SetSpeedAsync(speed, _expected!, _stop.Token));
+    }
+    private Task RestartAsync() => _confirmRestart
+        ? SendAsync(() => Control.RestartAsync(_startTime, _expected!, _stop.Token)) : Task.CompletedTask;
+    private async Task SendAsync(Func<Task<string>> send)
+    {
+        if (_busy || !Available || _expected is null) return;
+        _busy = true;
+        try { _notice = await send(); }
+        finally { _busy = false; Cancel(); }
+    }
+    public async ValueTask DisposeAsync()
+    {
+        await _stop.CancelAsync();
+        if (_refresh is not null) await _refresh;
+        _stop.Dispose();
+    }
+}

@@ -1,4 +1,8 @@
 @inherits LayoutComponentBase
+@implements IAsyncDisposable
+@inject EnergyTwin.Web.Live.MasterControlClient MasterControl
+@using SimCore.Contracts
+@using EnergyTwin.Web.Management
 @inject InstanceStore InstanceStore
 @inject ProcessManager ProcessManager
 
@@ -25,18 +29,19 @@
     </aside>
     <div class="workspace">
         <header class="topbar">
-            <div><span class="eyebrow">Lokale Anlage</span><div>Virtuelle Zeit: noch nicht angebunden</div></div>
+            <div><span class="eyebrow">Lokale Anlage</span><div>@MasterText</div></div>
             <div class="actions">
-                <button disabled title="Master-Fortsetzen folgt mit der Master-Anbindung">Fortsetzen</button>
-                <button @onclick="StartPlant" disabled="@_busy">@( _busy ? "Start läuft…" : "Anlage starten")</button>
-                <button @onclick="RequestCloseAll" disabled="@_busy">Alles geordnet schließen</button>
+                <button @onclick="ResumeMasterAsync" disabled="@(_busy || _commandBusy || !_masterAvailable || _masterStatus?.Current.Mode == SimMode.Running)">Fortsetzen</button>
+                <button @onclick="PauseMasterAsync" disabled="@(_busy || _commandBusy || !_masterAvailable || _masterStatus?.Current.Mode == SimMode.Paused)">Pause</button>
+                <button @onclick="StartPlant" disabled="@(_busy || _commandBusy || AllRunning)">@(_busy ? "Start läuft…" : "Alles starten")</button>
+                <button @onclick="RequestCloseAll" disabled="@(_busy || _commandBusy)">Alles geordnet schließen</button>
             </div>
         </header>
         @if (_confirmClose)
         {
             <div class="preview-notice" role="status">
                 <span>Geordnet schließen? Verwaltete Module werden gestoppt; Zustandsverlust bleibt möglich.</span>
-                <button @onclick="CloseAll" disabled="@_busy">Ja, geordnet schließen</button>
+                <button @onclick="CloseAll" disabled="@(_busy || _commandBusy)">Ja, geordnet schließen</button>
                 <button @onclick="() => { _confirmClose = false; }">Abbrechen</button>
             </div>
         }
@@ -47,21 +52,70 @@
             </div>
         }
         <div class="preview-notice" role="status">
-            <span>@(_lastNotice ?? "Anlage starten: Broker → Gateway → Wetter → Geräte → Master (pausiert). Ein- und Ausschalten in den Instanz-Einstellungen.")</span>
+            <span>@(_lastNotice ?? "Alles starten: Time Master (pausiert) → Gateway → Wetter → Geräte. Danach Fortsetzen klicken, damit die Zeit läuft. Ein- und Ausschalten in den Instanz-Einstellungen.")</span>
         </div>
         <main id="main-content">@Body</main>
-        <footer>RabbitMQ-Status auf der Live-Seite · Master bleibt beim Start pausiert <span>Befehlsvertrag für fachliche Steuerung folgt</span></footer>
+        <footer>RabbitMQ-Status auf der Live-Seite · Master bleibt beim Start pausiert <span>Master-Bedienung mit Rückmeldung · Gerätebefehle folgen</span></footer>
     </div>
 </div>
 @code {
+    private readonly CancellationTokenSource _stop = new();
+    private Task? _refreshTask;
+    private MasterStatus? _masterStatus;
+    private bool _masterAvailable;
+    private bool _commandBusy;
+    private string MasterText => _masterStatus is null ? "Master: noch kein Status empfangen"
+        : $"Virtuelle Zeit: {_masterStatus.SimTime:dd.MM.yyyy HH:mm:ss} · {(_masterStatus.Current.Mode == SimMode.Paused ? "Pausiert" : "Läuft")} · Tempo {_masterStatus.Current.Speed:g} · Lauf {_masterStatus.Current.RunId}"
+          + (_masterAvailable ? (_masterStatus.Current.Sequence != _masterStatus.Latest.Sequence ? " · Zustandswechsel angekündigt" : "") : " · nicht aktuell bestätigt");
+
+    protected override void OnInitialized() => _refreshTask = RefreshMasterAsync();
+
+    private async Task RefreshMasterAsync()
+    {
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
+        try
+        {
+            do
+            {
+                await InvokeAsync(() =>
+                {
+                    (_masterStatus, _masterAvailable) = MasterControl.Snapshot();
+                    StateHasChanged();
+                });
+            } while (await timer.WaitForNextTickAsync(_stop.Token));
+        }
+        catch (OperationCanceledException) when (_stop.IsCancellationRequested) { }
+    }
+
+    private Task ResumeMasterAsync() => SendMasterAsync(true);
+    private Task PauseMasterAsync() => SendMasterAsync(false);
+    private async Task SendMasterAsync(bool running)
+    {
+        if (_commandBusy || _busy) return;
+        _commandBusy = true;
+        try { _lastNotice = await MasterControl.SendAsync(running, _stop.Token); }
+        finally { _commandBusy = false; }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await _stop.CancelAsync();
+        if (_refreshTask is not null) await _refreshTask;
+        _stop.Dispose();
+    }
+
     private IReadOnlyList<StartStepResult> _results = Array.Empty<StartStepResult>();
     private string? _lastNotice;
     private bool _confirmClose;
     private bool _busy;
 
+    private bool AllRunning => InstanceStore.Instances.All(instance =>
+        instance.Kind is ModuleKind.Broker ||
+        ProcessManager.State(instance) is InstanceRunState.ManagedRunning or InstanceRunState.ExternallyReachable);
+
     private async Task StartPlant()
     {
-        if (_busy) return;
+        if (_busy || _commandBusy) return;
         _busy = true;
         try
         {
@@ -73,10 +127,13 @@
             foreach (var config in configs)
             {
                 if (config.Kind is ModuleKind.Broker) continue;
-                results.Add(await ProcessManager.StartAsync(config, ProcessManager.CommandFor(config, devices)));
+                var result = config.Kind is ModuleKind.Gateway
+                    ? await ProcessManager.SyncGatewayAsync(configs, startIfStopped: true)
+                    : await ProcessManager.StartAsync(config, ProcessManager.CommandFor(config, devices));
+                if (result is not null) results.Add(result);
             }
             _results = results;
-            _lastNotice = "Anlage starten abgeschlossen; Master bleibt pausiert.";
+            _lastNotice = "Alles starten abgeschlossen; Time Master gestartet (pausiert), Geräte synchronisieren die virtuelle Zeit über den Master. Mit Fortsetzen die Zeit starten.";
         }
         finally
         {
@@ -90,7 +147,7 @@
 
     private async Task CloseAll()
     {
-        if (_busy) return;
+        if (_busy || _commandBusy) return;
         _busy = true;
         try
         {

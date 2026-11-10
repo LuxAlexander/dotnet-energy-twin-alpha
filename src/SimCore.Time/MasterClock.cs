@@ -141,6 +141,25 @@ public sealed class MasterClock : ISimClock
         return next;
     }
 
+    /// <summary>Prüft und ändert atomar gegen den zuletzt angekündigten Zustand, auch bei Konsolenzugriffen.</summary>
+    public bool TryApplyControl(MasterCommand command, out TimeState state)
+    {
+        lock (_lock)
+        {
+            state = _line.Latest!;
+            if (state.MasterSession != command.MasterSession || state.Sequence != command.ExpectedSequence) return false;
+            state = command.Action switch
+            {
+                "pause" when command.Speed is null && command.StartTime is null => Pause(),
+                "resume" when command.Speed is null && command.StartTime is null => Resume(),
+                "speed" when command.Speed is { } speed && command.StartTime is null => SetSpeed(speed),
+                "restart" when command.StartTime is { } start && command.Speed is null => Restart(start),
+                _ => throw new ArgumentException("Aktion oder Parameter ungültig.")
+            };
+            return true;
+        }
+    }
+
     private static void ValidateSpeed(double speed)
     {
         if (!double.IsFinite(speed) || speed < MinSpeed || speed > MaxSpeed)

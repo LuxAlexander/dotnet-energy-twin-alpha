@@ -2,6 +2,7 @@
 @inject PreviewCatalog Catalog
 @inject InstanceStore InstanceStore
 @inject ProcessManager Processes
+@inject EnergyTwin.Web.Live.MasterControlClient MasterControl
 @inject LiveStore Store
 @inject LiveTrends Trends
 @inject NavigationManager Navigation
@@ -129,7 +130,16 @@ else
                 <div class="control-panel"><div><h2>Wetter gezielt ändern</h2><p class="muted">Standortbezogene Übersteuerung folgt mit dem Befehlsvertrag.</p></div><button disabled>Manuell einstellen</button><button disabled>Automatik</button></div>
                 break;
             case ModuleKind.Master:
-                <div class="control-panel"><h2>Anlagenweite Steuerung</h2><button disabled>Pause / Fortsetzen</button><button disabled>Tempo ändern</button><button disabled>Neuer Lauf</button></div>
+                <MasterControls />
+                @if (MasterControl.Snapshot().Status is { } master)
+                {
+                    <section class="detail-panel"><h2>Master-Status</h2>
+                        <p>Virtuelle Zeit: @master.SimTime.ToString("dd.MM.yyyy HH:mm:ss") · Tempo @master.Current.Speed · Lauf @master.Current.RunId</p>
+                        <p>@(MasterControl.Snapshot().Available ? "Aktuell bestätigt" : "Nicht aktuell bestätigt") · Sequenz @master.Latest.Sequence</p>
+                        <p class="muted small">Master-Sitzung: @master.Latest.MasterSession</p>
+                    </section>
+                }
+                else { <p class="muted">Noch kein Master-Status empfangen. Master mit --mqtt starten.</p> }
                 <div class="empty-state"><h2>Synchronisation</h2><p>Noch keine echten Gerätemeldungen angebunden.</p></div>
                 break;
             case ModuleKind.Broker:
@@ -162,15 +172,25 @@ else
                 @if (_config.Speed is { } speed) { <dt>Tempo</dt><dd>@speed ×</dd> }
                 <dt>Speicher</dt><dd>@InstanceStore.FilePath</dd></dl>
             <div class="control-panel">
-                <span>Prozess: @RunStateText</span>
-                <button @onclick="StartInstance" disabled="@(_runState is InstanceRunState.ManagedRunning or InstanceRunState.ExternallyReachable || _busy)">Starten</button>
-                <button @onclick="StopInstance" disabled="@_busy">Beenden</button>
+                <span>@(_config.Kind is ModuleKind.Broker ? "Verwaltung: Docker" : $"Prozess: {RunStateText}")</span>
+                @if (_config.Kind is ModuleKind.Broker)
+                {
+                    <span class="muted small">Broker wird über Docker verwaltet.</span>
+                }
+                else
+                {
+                    <button @onclick="StartInstance" disabled="@(_runState is InstanceRunState.ManagedRunning or InstanceRunState.ExternallyReachable || _busy)">Starten</button>
+                    <button @onclick="StopInstance" disabled="@_busy">Beenden</button>
+                }
                 @if (_config.Kind is ModuleKind.Pv or ModuleKind.Battery or ModuleKind.Charger or ModuleKind.ColdStore)
                 {
                     <button @onclick="DeleteInstance" disabled="@(_busy)">Löschen</button>
                 }
             </div>
-            <p class="muted small">@(_result ?? (_busy ? "Aktion läuft…" : "Start und Stopp betreffen unsere Simulatoren: auch nach einem Webdienst-Neustart werden sie an Port und Kommandozeile erkannt und beendet; Programm fremder Anbieter wird geschützt. Bearbeitung der Konfiguration folgt."))</p>
+            @if (_config.Kind is not ModuleKind.Broker)
+            {
+                <p class="muted small">@(_result ?? (_busy ? "Aktion läuft…" : "Start und Stopp betreffen unsere Simulatoren: auch nach einem Webdienst-Neustart werden sie an Port und Kommandozeile erkannt und beendet; Programm fremder Anbieter wird geschützt. Bearbeitung der Konfiguration folgt."))</p>
+            }
         }
     }
     else if (_view == ModuleView.Diagnostics)
@@ -232,6 +252,11 @@ else
         {
             var result = await Processes.StartAsync(_config, ProcessManager.CommandFor(_config, InstanceStore.Instances.Where(instance => instance.ModbusPort is { }).ToList()));
             _result = result.Detail;
+            if (result.Started && _config.Kind is (ModuleKind.Pv or ModuleKind.Battery or ModuleKind.Charger or ModuleKind.ColdStore))
+            {
+                var gateway = await Processes.SyncGatewayAsync(InstanceStore.Instances, startIfStopped: false);
+                if (gateway is { Started: false }) _result += $" Gateway: {gateway.Detail}";
+            }
             Refresh();
         }
         finally { _busy = false; StateHasChanged(); }
@@ -245,15 +270,21 @@ else
         {
             var result = await Processes.StopAsync(_config);
             _result = result?.Detail ?? "Nichts beendet.";
+            if (_config.Kind is (ModuleKind.Pv or ModuleKind.Battery or ModuleKind.Charger or ModuleKind.ColdStore))
+            {
+                var gateway = await Processes.SyncGatewayAsync(InstanceStore.Instances, startIfStopped: false);
+                if (gateway is { Started: false }) _result += $" Gateway: {gateway.Detail}";
+            }
             Refresh();
         }
         finally { _busy = false; StateHasChanged(); }
     }
 
-    private void DeleteInstance()
+    private async Task DeleteInstance()
     {
         if (_config is null) return;
         InstanceStore.Remove(_config.Id);
+        await Processes.SyncGatewayAsync(InstanceStore.Instances, startIfStopped: false);
         Navigation.NavigateTo("/");
     }
 
@@ -338,6 +369,8 @@ else
     private string SimulationText => _module?.Kind switch
     {
         ModuleKind.Pv or ModuleKind.Battery or ModuleKind.Charger or ModuleKind.ColdStore => _live is null ? "unbekannt" : $"{_live.Quality} · {_live.QualityReason}",
+        ModuleKind.Master => MasterControl.Snapshot() is { Available: true, Status: { } status }
+            ? (status.Current.Mode == SimCore.Contracts.SimMode.Paused ? "pausiert" : "läuft") : "nicht aktuell bestätigt",
         ModuleKind.Weather => _weatherLive?.RunId is { Length: > 0 } run ? $"Lauf {run}" : "unbekannt",
         _ => "unbekannt"
     };

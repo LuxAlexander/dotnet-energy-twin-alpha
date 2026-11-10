@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="SimulationMaster.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MQTTnet" />
     <ProjectReference Include="../SimCore.Contracts/SimCore.Contracts.csproj" />
     <ProjectReference Include="../SimCore.Time/SimCore.Time.csproj" />
     <ProjectReference Include="../SimCore.TimeSync/SimCore.TimeSync.csproj" />
