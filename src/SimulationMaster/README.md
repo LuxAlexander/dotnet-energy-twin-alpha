@@ -71,7 +71,8 @@ Heartbeat jede Sekunde, Abmeldung mit `bye` wird angezeigt.
 `--mqtt` aktiviert Status sowie bestätigtes Pause/Fortsetzen, Tempo und neue Läufe über denselben `MasterClock` wie die Konsole.
 `--mqtt-host` (127.0.0.1), `--mqtt-port` (1883) und `--mqtt-env` konfigurieren den Broker; Zugangsdaten
 kommen aus `ENERGYTWIN_MQTT_USER`/`ENERGYTWIN_MQTT_PASSWORD`, ersatzweise `docker/.env` im Repository.
-Ohne `--mqtt` bleibt der bisherige Konsolen-/TCP-Betrieb erhalten. Der Web-Anlagenstarter setzt `--mqtt`.
+Ohne `--mqtt` bleibt der bisherige Konsolen-/TCP-Betrieb erhalten. Der Web-Anlagenstarter und
+`start-all.ps1` setzen `--mqtt`. Bei einem späteren Brokerstart verbindet sich der Master automatisch.
 Broker-Ausfälle unterbrechen den Zeitserver nicht; Neuversuche folgen mit 1–30 Sekunden Abstand.
 Status wird jede reale Sekunde ungespeichert publiziert. Befehle tragen UUID, Sitzung, erwartete Sequenz,
 Ablaufzeit und je nach Aktion Tempo oder Startzeit; der Master prüft sie atomar gegen die Konsole. Doppelte

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Json;
 using MQTTnet;
 using MQTTnet.Protocol;
@@ -8,10 +9,12 @@ namespace EnergyTwin.Web.Live;
 /// <summary>Browserübergreifender Master-Zustand und genau ein ausstehender Bedienauftrag.</summary>
 public sealed class MasterControlClient
 {
+    public static readonly TimeSpan StatusTimeout = TimeSpan.FromSeconds(10);
     private readonly object _sync = new();
     private IMqttClient? _client;
+    private bool _subscribed;
     private MasterStatus? _status;
-    private DateTimeOffset _receivedAt;
+    private long? _receivedAt;
     private MasterCommand? _pending;
     private TaskCompletionSource<MasterCommandResult>? _reply;
 
@@ -20,21 +23,35 @@ public sealed class MasterControlClient
         lock (_sync) return (_status, IsAvailable());
     }
 
-    private bool IsAvailable() => _client?.IsConnected == true && _status is not null
-        && DateTimeOffset.UtcNow - _receivedAt < TimeSpan.FromSeconds(30)
-        && DateTimeOffset.UtcNow - _status.SentAt < TimeSpan.FromSeconds(30);
+    public bool Available
+    {
+        get { lock (_sync) return IsAvailable(); }
+    }
+
+    private bool IsAvailable() => _subscribed && _client?.IsConnected == true && HasFreshReceipt();
+
+    private bool HasFreshReceipt() => _receivedAt is { } receivedAt && Stopwatch.GetElapsedTime(receivedAt) < StatusTimeout;
 
     public void SetConnection(IMqttClient? client)
     {
         lock (_sync)
         {
             _client = client;
-            _receivedAt = DateTimeOffset.MinValue;
-            if (client is null) _reply?.TrySetException(new IOException("MQTT-Verbindung unterbrochen; Ergebnis unklar."));
+            _subscribed = false;
+            _receivedAt = null;
+            if (client is null)
+            {
+                _reply?.TrySetException(new IOException("MQTT-Verbindung unterbrochen; Ergebnis unklar."));
+            }
         }
     }
 
-    public void Receive(MqttApplicationMessage message)
+    public void ConfirmSubscriptions()
+    {
+        lock (_sync) _subscribed = true;
+    }
+
+    public void Receive(IMqttClient client, MqttApplicationMessage message)
     {
         if (message.Retain) return;
         var payload = message.ConvertPayloadToString();
@@ -43,19 +60,23 @@ public sealed class MasterControlClient
         {
             lock (_sync)
             {
+                if (_client != client) return;
                 if (message.Topic == MasterControl.StatusTopic)
                 {
                     var status = JsonSerializer.Deserialize<MasterStatus>(payload, MasterControl.Json);
+                    var now = DateTimeOffset.UtcNow;
                     if (status?.Current is null || status.Latest is null || status.Latest.MasterSession == Guid.Empty
                         || status.Current.MasterSession != status.Latest.MasterSession
                         || !Enum.IsDefined(status.Current.Mode) || !Enum.IsDefined(status.Latest.Mode)
                         || !double.IsFinite(status.Current.Speed) || status.Current.Speed < 1 || status.Current.Speed > 100000
-                    || status.SentAt > DateTimeOffset.UtcNow.AddSeconds(1)
-                    || DateTimeOffset.UtcNow - status.SentAt > TimeSpan.FromSeconds(30)) return;
-                    if (_status?.Latest.MasterSession == status.Latest.MasterSession
-                        && (_status.SentAt > status.SentAt || _status.Latest.Sequence > status.Latest.Sequence)) return;
+                        || status.SentAt > now.AddSeconds(1) || now - status.SentAt >= StatusTimeout) return;
+                    if (_receivedAt is not null && _status?.Latest.MasterSession == status.Latest.MasterSession
+                        && (_status.Latest.Sequence > status.Latest.Sequence
+                            || (_status.Latest.Sequence == status.Latest.Sequence &&
+                                (_status.SentAt == status.SentAt || (_status.SentAt > status.SentAt && HasFreshReceipt())))))
+                        return;
                     _status = status;
-                    _receivedAt = DateTimeOffset.UtcNow;
+                    _receivedAt = Stopwatch.GetTimestamp();
                 }
                 else if (message.Topic == MasterControl.ResultTopic)
                 {

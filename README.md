@@ -43,8 +43,9 @@ Leere Zuständigkeitsfelder bleiben unzugeteilt.
 ## LB03 starten
 
 Zusätzliche lokale Weboberfläche: [EnergyTwin.Web](src/EnergyTwin.Web/README.md).
-Das erste Blazor-Grundgerüst zeigt ausschließlich gekennzeichnete Beispieldaten und Modulansichten;
-RabbitMQ-Bedienung und Prozessverwaltung sind noch nicht angebunden.
+Auf der Startseite sind die Instanzen nach Modulgruppe angeordnet und lassen sich einzeln starten.
+Statusampeln und farbige Kurzwerte zeigen den aktuellen Stand. „Short Info“ bietet dieselben
+Kurzwerte in einer filterbaren Kartenübersicht. Die Anlagenleiste steuert einen per MQTT bestätigten Master.
 
 Einrichtung und vollständige Startfolge: [`docker/README.md`](docker/README.md).
 Nach einmaliger Einrichtung von `docker/.env`, aus dem Repository-Root:
@@ -116,7 +117,8 @@ Alle Befehle aus dem Repository-Hauptordner (`dotnet-energy-twin-alpha/`). Jedes
 ```
 
 Das Skript baut zuerst, wartet auf Wetter (8080) und Master (5100) und startet dann die Geräte. Ohne
-`-Autostart` startet der Master pausiert; die Leertaste im Master-Fenster setzt die Zeit in Gang. Ist ein Port
+`-Autostart` startet der Master pausiert; die Leertaste im Master-Fenster setzt die Zeit in Gang. Das Skript
+aktiviert Master-MQTT für die Weboberfläche, sobald der lokale Broker erreichbar ist. Ist ein Port
 bereits belegt, wird das zugehörige Programm nicht doppelt gestartet. Wenn die Ausführung von Skripten gesperrt ist:
 
 ```powershell

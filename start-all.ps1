@@ -99,7 +99,7 @@ try {
     if ($WeatherMqtt) { $weatherArguments += @('--', '--mqtt') }
     Start-TwinService -Title 'Wetter' -Port 8080 -Arguments $weatherArguments
 
-    $masterArguments = @('run', '--no-build', '--project', 'src/SimulationMaster', '--', '--speed', "$Speed")
+    $masterArguments = @('run', '--no-build', '--project', 'src/SimulationMaster', '--', '--speed', "$Speed", '--mqtt')
     if ($Autostart) { $masterArguments += '--autostart' }
     Start-TwinService -Title 'Simulations-Master' -Port 5100 -Arguments $masterArguments
 

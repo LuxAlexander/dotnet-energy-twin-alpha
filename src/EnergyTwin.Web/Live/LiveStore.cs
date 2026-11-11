@@ -3,6 +3,7 @@ using System.Text.Json;
 namespace EnergyTwin.Web.Live;
 
 public sealed record LiveMessage(string Topic, JsonElement Data, DateTimeOffset ReceivedAt, long Generation);
+public sealed record LiveSnapshot(bool Connected, string Connection, long Generation, int Rejected, LiveMessage[] Messages);
 
 /// <summary>Begrenzter, browserunabhängiger Speicher der letzten Nachrichten.</summary>
 public sealed class LiveStore
@@ -17,9 +18,9 @@ public sealed class LiveStore
     /// <summary>Callback für gültige, angenommene Nachrichten; außerhalb des Sperre aufrufen.</summary>
     public Action<string, JsonElement>? OnValidMessage { get; set; }
 
-    public (bool Connected, string Connection, long Generation, int Rejected, LiveMessage[] Messages) Snapshot()
+    public LiveSnapshot Snapshot()
     {
-        lock (_gate) return (_connected, _connection, _generation, _rejected, _messages.Values.OrderBy(m => m.Topic).ToArray());
+        lock (_gate) return new(_connected, _connection, _generation, _rejected, _messages.Values.OrderBy(m => m.Topic).ToArray());
     }
 
     public void SetConnection(bool connected, string description)

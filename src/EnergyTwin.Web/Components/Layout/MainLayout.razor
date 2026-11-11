@@ -3,59 +3,101 @@
 @inject EnergyTwin.Web.Live.MasterControlClient MasterControl
 @using SimCore.Contracts
 @using EnergyTwin.Web.Management
+@using Microsoft.JSInterop
 @inject InstanceStore InstanceStore
 @inject ProcessManager ProcessManager
+@inject IJSRuntime JS
 
 <a class="skip-link" href="#main-content">Zum Inhalt</a>
 <div class="app-shell">
     <aside class="sidebar" aria-label="Module und Geräte">
-        <a class="brand" href="/">EnergyTwin<span>Lokale Oberfläche</span></a>
-        <NavLink href="/" Match="NavLinkMatch.All">Live-Anlage</NavLink>
-        <NavLink href="/vorschau">Beispielansichten</NavLink>
-        @foreach (var group in InstanceStore.Instances.GroupBy(instance => instance.Group))
-        {
-            <details open>
-                <summary>@group.Key <span>@group.Count()</span></summary>
-                @foreach (var instance in group)
-                {
-                    <NavLink href="@($"module/{instance.Id}")">
-                        @instance.Name <small>@instance.Location</small>
-                    </NavLink>
-                }
-            </details>
-        }
-        <a class="instance-add" href="/instanz/neu">+ Instanz hinzufügen</a>
-        <p class="muted small">Aktionen betreffen lokal verwaltete Prozesse; extern gestartete Module werden nicht beendet.</p>
+        <a class="brand" href="/">EnergyTwin</a>
+        <nav class="main-nav" aria-label="Hauptnavigation">
+            <NavLink href="/" Match="NavLinkMatch.All">Live-Anlage</NavLink>
+            <NavLink href="/short-info">Short Info</NavLink>
+        </nav>
+        <details class="module-nav">
+            <summary>Module und Geräte</summary>
+            @foreach (var group in InstanceStore.Instances.GroupBy(instance => instance.Group))
+            {
+                <div class="nav-group">
+                    <p>@group.Key</p>
+                    @foreach (var instance in group)
+                    {
+                        <NavLink href="@($"module/{instance.Id}")">
+                            @instance.Name <small>@instance.Location</small>
+                        </NavLink>
+                    }
+                </div>
+            }
+            <a href="/instanz/neu">Instanz hinzufügen</a>
+        </details>
+        <label class="theme-select">
+            Darstellung
+            <select @bind="_theme" @bind:after="ApplyThemeAsync">
+                <option value="system">System</option>
+                <option value="light">Hell</option>
+                <option value="dark">Dunkel</option>
+            </select>
+        </label>
     </aside>
     <div class="workspace">
         <header class="topbar">
-            <div><span class="eyebrow">Lokale Anlage</span><div>@MasterText</div></div>
+            <div class="plant-time">
+                <span class="eyebrow">Virtuelle Zeit</span>
+                @if (_masterStatus is { } status)
+                {
+                    <div class="plant-clock">
+                        <strong>@status.SimTime.ToString("HH:mm:ss")</strong>
+                        <span>@status.SimTime.ToString("dd.MM.yyyy")</span>
+                    </div>
+                }
+                <span class="plant-mode @(MasterTone)">@MasterModeText</span>
+            </div>
             <div class="actions">
-                <button @onclick="ResumeMasterAsync" disabled="@(_busy || _commandBusy || !_masterAvailable || _masterStatus?.Current.Mode == SimMode.Running)">Fortsetzen</button>
-                <button @onclick="PauseMasterAsync" disabled="@(_busy || _commandBusy || !_masterAvailable || _masterStatus?.Current.Mode == SimMode.Paused)">Pause</button>
-                <button @onclick="StartPlant" disabled="@(_busy || _commandBusy || AllRunning)">@(_busy ? "Start läuft…" : "Alles starten")</button>
-                <button @onclick="RequestCloseAll" disabled="@(_busy || _commandBusy)">Alles geordnet schließen</button>
+                @{ var resume = !MasterRunning; }
+                <button @onclick="() => SendMasterAsync(resume)" disabled="@(_busy || _commandBusy || !_masterAvailable || MasterChanging)">
+                    @(_commandBusy ? "Warte auf Master…" : MasterRunning ? "Pausieren" : "Fortsetzen")
+                </button>
+                <button class="button-primary" @onclick="StartPlant" disabled="@(_busy || _commandBusy || AllRunning)">
+                    @(_busy && !_confirmClose ? "Start läuft…" : "Alles starten")
+                </button>
+                <button class="button-danger" @onclick="RequestCloseAll" disabled="@(_busy || _commandBusy || _confirmClose)">Alles beenden</button>
             </div>
         </header>
         @if (_confirmClose)
         {
-            <div class="preview-notice" role="status">
-                <span>Geordnet schließen? Verwaltete Module werden gestoppt; Zustandsverlust bleibt möglich.</span>
-                <button @onclick="CloseAll" disabled="@(_busy || _commandBusy)">Ja, geordnet schließen</button>
-                <button @onclick="() => { _confirmClose = false; }">Abbrechen</button>
+            <div class="action-panel" role="group" aria-labelledby="close-plant-heading">
+                <h2 id="close-plant-heading">Alle Anlagenmodule beenden?</h2>
+                <p>Die Simulation stoppt und Gerätezustände können verloren gehen. RabbitMQ läuft weiter.</p>
+                <div class="actions">
+                    <button @onclick="() => _confirmClose = false" disabled="@_busy">Abbrechen</button>
+                    <button class="button-danger" @onclick="CloseAll" disabled="@(_busy || _commandBusy)">@(_busy ? "Wird beendet…" : "Beenden bestätigen")</button>
+                </div>
             </div>
         }
-        @if (_results.Count > 0)
+        @if (_lastNotice is not null || _results.Count > 0)
         {
-            <div class="preview-notice" role="status">
-                <span>@string.Join(" · ", _results.Select(result => result.ToString()))</span>
+            <div class="action-panel action-result">
+                <div class="section-heading">
+                    <p role="status">@(_lastNotice ?? "Rückmeldungen der Anlage")</p>
+                    <button @onclick="DismissResult" aria-label="Rückmeldung ausblenden">Ausblenden</button>
+                </div>
+                @if (_results.Count > 0)
+                {
+                    <details>
+                        <summary>Details zu @_results.Count Modulen</summary>
+                        <ul>
+                            @foreach (var result in _results)
+                            {
+                                <li>@result</li>
+                            }
+                        </ul>
+                    </details>
+                }
             </div>
         }
-        <div class="preview-notice" role="status">
-            <span>@(_lastNotice ?? "Alles starten: Time Master (pausiert) → Gateway → Wetter → Geräte. Danach Fortsetzen klicken, damit die Zeit läuft. Ein- und Ausschalten in den Instanz-Einstellungen.")</span>
-        </div>
         <main id="main-content">@Body</main>
-        <footer>RabbitMQ-Status auf der Live-Seite · Master bleibt beim Start pausiert <span>Master-Bedienung mit Rückmeldung · Gerätebefehle folgen</span></footer>
     </div>
 </div>
 @code {
@@ -64,9 +106,29 @@
     private MasterStatus? _masterStatus;
     private bool _masterAvailable;
     private bool _commandBusy;
-    private string MasterText => _masterStatus is null ? "Master: noch kein Status empfangen"
-        : $"Virtuelle Zeit: {_masterStatus.SimTime:dd.MM.yyyy HH:mm:ss} · {(_masterStatus.Current.Mode == SimMode.Paused ? "Pausiert" : "Läuft")} · Tempo {_masterStatus.Current.Speed:g} · Lauf {_masterStatus.Current.RunId}"
-          + (_masterAvailable ? (_masterStatus.Current.Sequence != _masterStatus.Latest.Sequence ? " · Zustandswechsel angekündigt" : "") : " · nicht aktuell bestätigt");
+    private string _theme = "system";
+    private bool MasterRunning => _masterStatus?.Current.Mode == SimMode.Running;
+    private bool MasterChanging => _masterStatus is { } status && status.Current.Sequence != status.Latest.Sequence;
+    private string MasterTone => !_masterAvailable ? "red" : MasterRunning ? "green" : "gold";
+    private string MasterModeText => _masterStatus is not { } status ? "Master-Status ausstehend"
+        : !_masterAvailable ? "Letzter Stand · warte auf Master"
+        : $"{(MasterRunning ? "Läuft" : "Pausiert")} · {status.Current.Speed:g}× · Lauf {status.Current.RunId}"
+            + (status.Current.Sequence != status.Latest.Sequence ? " · Wechsel angekündigt" : "");
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+        _theme = await JS.InvokeAsync<string>("energyTwinTheme.get");
+        StateHasChanged();
+    }
+
+    private async Task ApplyThemeAsync() => await JS.InvokeVoidAsync("energyTwinTheme.set", _theme);
+
+    private void DismissResult()
+    {
+        _lastNotice = null;
+        _results = [];
+    }
 
     protected override void OnInitialized() => _refreshTask = RefreshMasterAsync();
 
@@ -87,8 +149,6 @@
         catch (OperationCanceledException) when (_stop.IsCancellationRequested) { }
     }
 
-    private Task ResumeMasterAsync() => SendMasterAsync(true);
-    private Task PauseMasterAsync() => SendMasterAsync(false);
     private async Task SendMasterAsync(bool running)
     {
         if (_commandBusy || _busy) return;
@@ -123,13 +183,12 @@
             var results = new List<StartStepResult>();
             var broker = configs.FirstOrDefault(instance => instance.Kind == ModuleKind.Broker);
             if (broker is not null) results.Add(await ProcessManager.StartBrokerAsync());
-            var devices = configs.Where(instance => instance.ModbusPort is { }).ToList();
             foreach (var config in configs)
             {
                 if (config.Kind is ModuleKind.Broker) continue;
                 var result = config.Kind is ModuleKind.Gateway
                     ? await ProcessManager.SyncGatewayAsync(configs, startIfStopped: true)
-                    : await ProcessManager.StartAsync(config, ProcessManager.CommandFor(config, devices));
+                    : await ProcessManager.StartAsync(config, configs);
                 if (result is not null) results.Add(result);
             }
             _results = results;
@@ -139,7 +198,7 @@
             var masterReady = false;
             for (int i = 0; i < 20; i++) // bis zu 10 Sekunden
             {
-                await Task.Delay(500);
+                await Task.Delay(500, _stop.Token);
                 if (MasterControl.Snapshot().Available)
                 {
                     masterReady = true;
@@ -149,16 +208,16 @@
 
             if (masterReady)
             {
-                var resumeNotice = await MasterControl.SendAsync(true, _stop.Token);
-                _lastNotice = resumeNotice.StartsWith("Master bestätigt")
-                    ? "Alles starten abgeschlossen; Time Master gestartet und fortgesetzt. Die virtuelle Zeit läuft."
-                    : "Alles starten abgeschlossen; Time Master gestartet. Fortsetzen wurde gesendet: " + resumeNotice;
+                _lastNotice = MasterControl.Snapshot().Status?.Latest.Mode == SimMode.Running
+                    ? "Der Master ist verbunden und die Simulation läuft."
+                    : await MasterControl.SendAsync(true, _stop.Token);
             }
             else
             {
-                _lastNotice = "Alles starten abgeschlossen; Time Master gestartet (pausiert). Der Master ist noch nicht über MQTT erreichbar - bitte spaeter Fortsetzen klicken.";
+                _lastNotice = "Startrunde abgeschlossen. Die Web-App wartet weiter auf den Master-Status. Sobald die Steuerung bereit ist, kannst du die Simulation fortsetzen.";
             }
         }
+        catch (OperationCanceledException) when (_stop.IsCancellationRequested) { }
         finally
         {
             _confirmClose = false;

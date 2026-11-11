@@ -1,24 +1,110 @@
+@page "/short-info"
 @page "/vorschau"
-@inject PreviewCatalog Catalog
-<PageTitle>Anlagenübersicht · EnergyTwin</PageTitle>
-<div class="page-heading"><span class="eyebrow">Ein System · unabhängige Module</span><h1>Anlagenübersicht</h1><p class="muted">Alle Werte sind Beispiele. Es besteht keine Verbindung zu den Modulen.</p></div>
-<div class="overview-summary"><strong>@Catalog.Modules.Count Beispielmodule</strong><span>Prozess: unbekannt</span><span>Verbindung: nicht angebunden</span><span>Simulation: unbekannt</span></div>
-<div class="catalog-filters">
-<label for="search">Instanz suchen<input id="search" type="search" placeholder="Kennung, Name oder Standort" @bind="_search" @bind:event="oninput" /></label>
-<label for="group">Modulgruppe<select id="group" @bind="_group"><option value="">Alle Gruppen</option>@foreach (var group in Catalog.Modules.Select(m => m.Group).Distinct()) { <option>@group</option> }</select></label>
-<button @onclick="ResetFilters">Filter zurücksetzen</button></div>
-<p class="muted result-count" role="status">@FilteredModules.Count() von @Catalog.Modules.Count Modulen</p>
-<section class="module-grid" aria-label="Beispielmodule">
-@foreach (var module in FilteredModules)
-{
-<a class="module-card" href="@($"module/{module.Id}")"><span class="eyebrow">@module.Group</span><h2>@module.Name</h2><p>@module.Location</p><div class="card-metric"><span class="muted small">@module.Metrics[0].Label · Beispiel</span><strong class="@module.Metrics[0].Tone">@module.Metrics[0].Value <small>@module.Metrics[0].Unit</small></strong></div><span class="muted small">Ansicht öffnen →</span></a>
+@implements IAsyncDisposable
+@inject InstanceStore Instances
+@inject LiveStore Store
+@inject MasterControlClient Master
+@inject IConfiguration Configuration
+
+<PageTitle>Short Info · EnergyTwin</PageTitle>
+<div class="page-heading"><h1>Short Info</h1></div>
+
+@{
+    var instances = Instances.Instances;
+    var filtered = instances.Where(Matches).ToArray();
+    var metrics = new OverviewMetrics(_snapshot, Master.Snapshot(), Configuration["Mqtt:GatewayId"] ?? "GW-01");
 }
+<div class="overview-summary">
+    <strong>@instances.Count Instanzen</strong>
+    <span class="@(_snapshot.Connected ? "green" : "red")">@_snapshot.Connection</span>
+</div>
+<div class="catalog-filters">
+    <label for="search">Instanz suchen
+        <input id="search" type="search" placeholder="Kennung, Name oder Standort" @bind="_search" @bind:event="oninput" />
+    </label>
+    <label for="group">Modulgruppe
+        <select id="group" @bind="_group">
+            <option value="">Alle Gruppen</option>
+            @foreach (var group in instances.Select(instance => instance.Group).Distinct())
+            {
+                <option>@group</option>
+            }
+        </select>
+    </label>
+    <button @onclick="ResetFilters">Filter zurücksetzen</button>
+</div>
+<p class="muted result-count" role="status">@filtered.Length von @instances.Count Instanzen</p>
+<section class="module-grid" aria-label="Kurzinfos der Instanzen">
+    @foreach (var instance in filtered)
+    {
+        var metric = metrics.For(instance);
+        <a class="module-card" href="@($"module/{instance.Id}")" @key="instance.Id">
+            <span class="eyebrow">@instance.Group</span>
+            <h2>@instance.Name</h2>
+            <p>@instance.Location</p>
+            <div class="card-metric">
+                @if (metric is not null)
+                {
+                    <span class="muted small">@metric.Label</span>
+                    <strong class="@metric.Tone">@metric.Value <small>@metric.Unit</small></strong>
+                    @if (instance.Kind is ModuleKind.Master or ModuleKind.Weather && !string.IsNullOrEmpty(metric.Description))
+                    {
+                        <span class="muted small">@metric.Description</span>
+                    }
+                }
+                else
+                {
+                    <span class="muted small">Keine aktuellen Live-Daten</span>
+                }
+            </div>
+            <span class="muted small">Details öffnen →</span>
+        </a>
+    }
 </section>
-@if (!FilteredModules.Any()) { <div class="empty-state"><h2>Keine passenden Module</h2><p>Ändere den Suchbegriff oder setze die Filter zurück.</p></div> }
-@code {
-private string _search = string.Empty;
-private string _group = string.Empty;
-private IEnumerable<ModulePreview> FilteredModules => Catalog.Modules.Where(m => (_group.Length == 0 || m.Group == _group) && $"{m.Id} {m.Name} {m.Location}".Contains(_search.Trim(), StringComparison.OrdinalIgnoreCase));
-private void ResetFilters() { _search = string.Empty; _group = string.Empty; }
+@if (filtered.Length == 0)
+{
+    <div class="empty-state"><h2>Keine passenden Instanzen</h2><p>Ändere den Suchbegriff oder setze die Filter zurück.</p></div>
 }
 
+@code {
+    private readonly CancellationTokenSource _stop = new();
+    private LiveSnapshot _snapshot = null!;
+    private Task? _refreshTask;
+    private string _search = string.Empty;
+    private string _group = string.Empty;
+
+    protected override void OnInitialized() => _snapshot = Store.Snapshot();
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender) _refreshTask = RefreshAsync();
+    }
+
+    private async Task RefreshAsync()
+    {
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
+        try
+        {
+            while (await timer.WaitForNextTickAsync(_stop.Token))
+                await InvokeAsync(() => { _snapshot = Store.Snapshot(); StateHasChanged(); });
+        }
+        catch (OperationCanceledException) when (_stop.IsCancellationRequested) { }
+    }
+
+    private bool Matches(InstanceConfig instance) =>
+        (_group.Length == 0 || instance.Group == _group) &&
+        $"{instance.Id} {instance.Name} {instance.Location}".Contains(_search.Trim(), StringComparison.OrdinalIgnoreCase);
+
+    private void ResetFilters()
+    {
+        _search = string.Empty;
+        _group = string.Empty;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await _stop.CancelAsync();
+        if (_refreshTask is not null) await _refreshTask;
+        _stop.Dispose();
+    }
+}

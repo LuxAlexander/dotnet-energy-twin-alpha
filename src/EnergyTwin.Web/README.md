@@ -1,6 +1,6 @@
 # EnergyTwin.Web – lokale Bedienoberfläche
 
-**Stand:** 2026-11-10. Blazor Interactive Server mit MQTT-Live-Anbindung und bestätigter Master-Bedienung.
+**Stand:** 2026-11-11. Blazor Interactive Server mit Instanzstart, MQTT-Live-Daten und bestätigter Master-Bedienung.
 
 ## Start
 
@@ -14,10 +14,14 @@ dotnet run --project src/EnergyTwin.Web
 kein automatischer Browser-, Broker- oder Simulatorstart. Port über `--Web:Port=5181`
 oder `Web__Port` (1024–65535). Alle Browserdateien werden lokal ausgeliefert.
 
+Unter „Darstellung“ lassen sich System, Hell und Dunkel wählen. Die Auswahl wird im jeweiligen
+Browser gespeichert. Die Modulnavigation kann bei Bedarf aufgeklappt werden.
+
 ## Live-Empfang
 
-Die Startseite `/` zeigt Geräte-, Gateway- und Wetternachrichten aus RabbitMQ.
-Gateway und Wetterdienst müssen separat gestartet sein; Wetter benötigt seine MQTT-Option.
+Unter den Instanzen zeigt „MQTT-Diagnose“ den Verbindungszustand. „Nachrichten anzeigen“ öffnet
+die Geräte-, Gateway- und Wetternachrichten aus RabbitMQ samt Suche.
+Für Gerätedaten das Gateway starten, für Wetterdaten den Wetterdienst. Der Start über die Web-App aktiviert Wetter-MQTT.
 Die Anzeige enthält Messwerte mit Einheit, virtuelle Zeit, Lauf, Sequenz, Qualität,
 reale Empfangszeit sowie die empfangene JSON-Nachricht zur Diagnose.
 Neue Gerätekennungen erscheinen automatisch. Topics sind durchsuchbar.
@@ -30,7 +34,8 @@ Zugangsdaten kommen aus `ENERGYTWIN_MQTT_USER` und `ENERGYTWIN_MQTT_PASSWORD`, e
 den Dateipfad ausdrücklich setzen oder Umgebungsvariablen verwenden. Keine Passwörter in appsettings.
 
 MQTTnet empfängt `energytwin/#` mit QoS 1; die fünf Wettertopics, der Wetterstatus sowie
-`energytwin/gateway/<ID>/status` und je Gerät `energytwin/devices/<ID>/status` zusätzlich exakt,
+`energytwin/gateway/<ID>/status`, Master-Status und -Antworten sowie je Gerät
+`energytwin/devices/<ID>/status` zusätzlich exakt,
 damit RabbitMQ gespeicherte Nachrichten sofort liefert. Ohne diese exakten Abos erscheint ein
 retained Gateway-Status bei einem Wildcard-Abo erst mit der nächsten Wiederholung (standardmäßig
 30 Sekunden). MQTT-Empfang und letzte Nachrichten liegen
@@ -60,11 +65,13 @@ X-Achse ist die virtuelle Simulationszeit; ein Wechsel der Laufkennung beginnt e
 numerischen Wert werden nicht übernommen; Metadaten (Sequenz, Qualität) bleiben der Nachricht entnommen.
 Fehlende Seitenzahlen ersetzt der Ringpuffer durch den letzten Stand; Charts zeigen neue Läufe als Trennung der Kurven.
 
-## Beispielansichten und offene Arbeit
+## Short Info und Moduldetails
 
-`/vorschau` enthält die filterbare Beispielübersicht. `/module/{Id}` wechselt zwischen Live-Daten (wenn vorhanden)
-und gekennzeichneten Beispielansichten für PV, Batterie und Kühlhaus; Ladesäulen-Anschlüsse, Wetter und Infrastruktur
-haben eigene Darstellungen. Die Navigation kennzeichnet die Trennung zur Live-Startseite.
+`/short-info` zeigt die konfigurierten Instanzen als filterbare Karten mit jeweils einem aktuellen Kurzinfo-Wert.
+Bei fehlenden, veralteten oder ungültigen Messdaten zeigt die Karte „Keine aktuellen Live-Daten“. Der bisherige
+Pfad `/vorschau` öffnet dieselbe Seite. `/module/{Id}` wechselt zwischen Live-Daten (wenn vorhanden)
+und gekennzeichneten Beispielansichten für PV, Batterie und Kühlhaus. Ladesäulen-Anschlüsse, Wetter und Infrastruktur
+haben eigene Darstellungen.
 Der PreviewCatalog ist kein Laufzeitspeicher und dient als Beispielfallback.
 
 ## Instanzverwaltung und Prozessverwaltung
@@ -72,9 +79,19 @@ Der PreviewCatalog ist kein Laufzeitspeicher und dient als Beispielfallback.
 Instanzen sind in `instances.local.json` im Projektordner lokal gespeichert (nicht versioniert; Pfad über
 `Instances:File`). Über `/instanz/neu` Geräteinstanzen (PV, Batterie, Ladesäule, Kühlhaus) anlegen;
 Kennung und Modbus-Port werden vorgeschlagen, Kennungs- und Portkonflikte werden abgelehnt, speichern
-allein startet keinen Prozess. Im Reiter „Einstellungen" einer Instanz: Starten, Beenden und Löschen
+allein startet keinen Prozess. Die Startseite gruppiert Instanzen nach Modulgruppe. Jede Instanz hat eine rote
+oder grüne Ampel mit Textstatus und einen eigenen Startknopf. Bei aktuellen Live-Daten steht ein farblich
+hervorgehobener Kurzinfo-Wert in der Zeile. Grün bei der Ampel steht für einen laufenden verwalteten Prozess, eine per
+MQTT gemeldete Gateway-Verbindung, verbundenes RabbitMQ oder einen steuerbereiten Master. Bei
+einem belegten Geräteport bleibt der Start gesperrt. Beim Master wechselt die Ampel erst nach
+einer aktuellen MQTT-Statusmeldung auf Grün. Bei getrenntem oder verspätet gestartetem Broker
+verbinden sich Web-App und Master automatisch erneut.
+
+Im Reiter „Einstellungen" einer Instanz: Starten, Beenden und Löschen
 (allein für Geräteinstanzen). „Alles starten" startet Broker (docker compose), den Time Master
-(pausiert), dann Gateway, Wetterdienst und Geräte in dieser Reihenfolge; belegt ein Port oder läuft
+(zunächst pausiert), dann Gateway, Wetterdienst und Geräte in dieser Reihenfolge. Sobald die Steuerung
+bereit ist, sendet „Alles starten" innerhalb der Wartezeit den Fortsetzen-Befehl. Läuft die Wartezeit
+ab, kann der Master nach dem Verbindungsaufbau manuell fortgesetzt werden. Ist ein Port belegt oder läuft
 unser Master bereits extern, wird das Modul übersprungen (Meldung pro Modul). „Alles starten" ist deaktiviert, sobald alle Module laufen; „Alles geordnet schließen" stoppt nach Bestätigung Master → Geräte
 → Wetter → Gateway; der Broker bleibt unberührt.
 
@@ -86,8 +103,8 @@ bereits extern, wird das Modul übersprungen (Meldung pro Modul). Ein laufendes 
 mit der aktuellen Geräteliste neu gestartet, damit neue Anlagen Live-Daten liefern. Sichere Wiedererkennung nach
 Neustart bleibt auf Port+Kommandozeile beschränkt. Der verwaltete Master startet mit `--mqtt`; Pause/Fortsetzen ist bei frischem Master-Status verfügbar.
 Gerätebefehle bleiben offen. Tempoänderung und neuer Lauf stehen auf der Masterseite bereit. Prozessprotokolle liegen unter
-`%TEMP%\energytwin-web\<Kennung>.log`. Der Broker hat keine Start-/Stopp-Knöpfe in der Weboberfläche;
-er wird über Docker verwaltet und dort als „Verwaltung: Docker" statt mit einem Prozessstatus angezeigt. Beim Starten, Beenden oder Löschen einer Geräteinstanz wird ein
+`%TEMP%\energytwin-web\<Kennung>.log`. Der Startknopf für RabbitMQ auf der Startseite verwendet Docker Compose.
+Beim Starten, Beenden oder Löschen einer Geräteinstanz wird ein
 laufendes Gateway mit der aktuellen Geräteliste neu gestartet, damit neue Anlagen ohne manuellen Neustart
 Live-Daten liefern.
 
@@ -95,7 +112,8 @@ Live-Daten liefern.
 
 `Live/LiveStore.cs`: threadsicherer letzter Empfangsstand; `Live/MqttReceiver.cs`: Hintergrundempfang;
 `Live/LiveTrends.cs`: begrenzter Verlaufsspeicher je Messwert-Schlüssel; `Live/LiveView.cs`: Aufbereitung je Modulart;
-`Components/Pages/Live.razor`: Anzeige, Gültigkeit und Aktualisierung einmal je Sekunde;
+`Components/Pages/Live.razor`: Instanzstart, Statusampeln und MQTT-Nachrichten mit Aktualisierung einmal je Sekunde;
+`Components/Pages/Home.razor`: filterbare Kurzinfos mit Live-Kennzahlen aus `Live/OverviewMetrics.cs`;
 `Components/Shared/LiveChart.razor`: Verlaufsanzeige mit virtueller Zeit und Wertetabelle;
 `Management/InstanceStore.cs`: persistierte Instanzkonfiguration mit Konfliktprüfung;
 `Management/ProcessManager.cs`: Start/Stop verwalteter Prozesse, Broker-Start über docker compose,
@@ -116,11 +134,14 @@ Windows-/Linux-Gesamtprobelauf.
 Die Anlagenleiste zeigt echte Master-Zeit (einmal je Sekunde gemeldeter Stand), Modus, Tempo und Lauf.
 Pause/Fortsetzen wartet auf eine zuordenbare Master-Bestätigung; diese bestätigt die Annahme inklusive
 Wirksamkeitszeitpunkt, nicht vorzeitig den bereits wirksamen Zustand. Die Statusanzeige bleibt empfangsbasiert.
-Die Master-Detailansicht zeigt zusätzlich Sitzung und Sequenz. Nach 30 Sekunden ohne aktuellen Status
-oder bei Broker-Verlust ist die Bedienung gesperrt; letzte Werte bleiben als unbestätigt sichtbar.
+Die Master-Detailansicht zeigt zusätzlich Sitzung und Sequenz. Nach zehn Sekunden ohne gültige Statusmeldung
+oder bei Broker-Verlust ist die Bedienung gesperrt. Die Uhr zeigt den letzten Stand mit einem Wartehinweis.
+Bleiben Master-Meldungen bei offener Broker-Verbindung aus, baut die Web-App den Empfang neu auf.
+Bis zur ersten gültigen Meldung erneuert sie die Master-Abos regelmäßig.
 Ein Reconnect allein bestätigt alte Werte nicht. Ein fehlender Bescheid nach sechs Sekunden bedeutet
 „Ergebnis unklar“, niemals automatisch Erfolg oder erneutes Senden.
-Die Fortsetzen- bzw. Pause-Schaltfläche ist nur aktiv, wenn der Master im Gegenteilzustand ist (Pause nur beim Laufen, Fortsetzen nur im Pausenmodus); bei nicht verfügbarem Master-Status sind beide gesperrt.
+Die Schaltfläche in der Anlagenleiste wechselt zwischen „Pausieren“ und „Fortsetzen“ je nach aktuellem
+Master-Modus. Ohne bestätigten Status oder während eines angekündigten Wechsels ist sie gesperrt.
 
 Die Masterseite bietet Tempo (1–100.000, „Übernehmen“) auch im laufenden Betrieb; eine pausierte Simulation
 bleibt pausiert. „Neuer Lauf“ übernimmt Datum und Uhrzeit erst nach ausdrücklicher Bestätigung und startet sofort.
@@ -129,9 +150,10 @@ um 06:00 Uhr im aktuellen Simulationsjahr und befüllen nur die Eingabe. Jeder A
 Sekunden Gültigkeit; der Master prüft Sitzung und Sequenz atomar gegen die Konsole und liefert für doppelte
 Aufträge das gespeicherte Ergebnis zurück, sodass ein doppelt zugestellter Neustart keinen zweiten Lauf auslöst.
 
-Extern gestartete Master benötigen `--mqtt`; ältere laufende Prozesse werden nicht automatisch ersetzt.
+Der Start über die Web-App oder `start-all.ps1` aktiviert `--mqtt`; beim manuellen Start die Option ergänzen.
 Für einen abweichenden Broker den Master mit `--mqtt-host`, `--mqtt-port` und gegebenenfalls `--mqtt-env`
-passend zur Web-Konfiguration starten. Der Anlagenstarter verwendet weiterhin die lokalen Broker-Standardwerte.
+passend zur Web-Konfiguration starten. Der von der Web-App gestartete Master übernimmt `Mqtt:Host`,
+`Mqtt:Port` und `Mqtt:EnvFile` aus ihrer Konfiguration.
 `Live/MasterControlClient.cs` teilt Zustand und einen ausstehenden Auftrag zwischen Browsern; der vorhandene
 `MqttReceiver` transportiert Status, Befehle und Antworten. Master-Topics werden separat verarbeitet und
 zählen nicht als Geräte-/Wettertopics des LiveStore. Keine zusätzliche direkte Verbindung zum Master.

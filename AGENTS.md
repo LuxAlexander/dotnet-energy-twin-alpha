@@ -16,7 +16,7 @@ Die zentrale [README](README.md) enthält Architektur, Startreihenfolge und Zust
 | Modbus | Registerpläne, Geräte-Server und Diagnose-Client umgesetzt | [Verträge](src/Modbus.Contracts/README.md), [Diagnose](src/ModbusDiagnosticClient/README.md) |
 | MQTT | Gateway und RabbitMQ-Broker eingerichtet | [Gateway](src/ModbusRabbitGateway/README.md), [Broker](docker/README.md) |
 | Viewer | MQTT Explorer eingerichtet und mit Geräte- und Wetterdaten geprüft | [Anleitung](docs/viewer/README.md) |
-| Weboberfläche | Blazor mit lesender MQTT-Live-Seite und separaten Beispielansichten; keine Prozessverwaltung | [Weboberfläche](src/EnergyTwin.Web/README.md) |
+| Weboberfläche | Blazor mit gruppiertem Instanzstart und Statusampeln auf der Startseite, Live-Karten unter „Short Info“ und Master-Steuerung | [Weboberfläche](src/EnergyTwin.Web/README.md) |
 
 ## Arbeitsregeln für Agenten
 
@@ -37,7 +37,7 @@ EnergyTwin.sln            gemeinsame Solution
 README.md                 Architektur, Start, Zuständigkeiten
 start-all.ps1             lokaler Start der Programme
 src/
-  EnergyTwin.Web/         lokale Blazor-Oberfläche (MQTT-Live-Empfang und Beispielansichten)
+  EnergyTwin.Web/         lokale Blazor-Oberfläche (Instanzstart, MQTT und Master-Steuerung)
   SimCore.Contracts/      Zeit- und Wetterverträge
   SimCore.Time/           virtuelle Zeit und Uhrenabgleich
   SimCore.TimeSync/       TCP-Zeitverteilung

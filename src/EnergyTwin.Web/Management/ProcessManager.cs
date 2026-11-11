@@ -18,7 +18,7 @@ public sealed record StartStepResult(string Id, bool Started, string Detail)
 /// und können trotzdem geordnet beendet werden. Programme fremder Anbieter auf belegten Ports bleiben
 /// unberührt.
 /// </summary>
-public sealed class ProcessManager(ILogger<ProcessManager> logger)
+public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguration configuration)
 {
     private static string? _repoRootCache;
     private readonly string _repoRoot = FindRoot();
@@ -49,6 +49,19 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger)
     public bool IsRunning(InstanceConfig config) =>
         State(config) == InstanceRunState.ManagedRunning || FindOurselves(config, ListenPort(config)) is not null;
 
+    public async Task<string> StartInstanceAsync(InstanceConfig config, IReadOnlyList<InstanceConfig> configs)
+    {
+        if (config.Kind == ModuleKind.Broker) return (await StartBrokerAsync()).Detail;
+
+        var result = await StartAsync(config, configs);
+        if (result.Started && config.ModbusPort is not null)
+        {
+            var gateway = await SyncGatewayAsync(configs, startIfStopped: false);
+            if (gateway is { Started: false }) return $"{result.Detail} Gateway: {gateway.Detail}";
+        }
+        return result.Detail;
+    }
+
     /// <summary>
     /// Startet das Gateway mit der aktuellen Geräteliste neu, damit neue oder entfernte Anlagen ohne
     /// manuellen Neustart in den Live-Daten erscheinen. Ist das Gateway gestoppt, wird es nur auf
@@ -65,40 +78,53 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger)
             var stop = await StopAsync(gateway);
             if (stop is not null && !stop.Started) return stop;
         }
-        return await StartAsync(gateway, CommandFor(gateway, configs.Where(instance => instance.ModbusPort is { }).ToList()));
+        return await StartAsync(gateway, configs);
     }
 
     /// <summary>Startet dotnet ohne Fenster; schlägt fehl, wenn bereits verwaltet gelaufen oder der Port belegt ist.</summary>
-    public async Task<StartStepResult> StartAsync(InstanceConfig config, string arguments)
+    public async Task<StartStepResult> StartAsync(InstanceConfig config, IReadOnlyList<InstanceConfig> configs)
     {
-        if (_processes.TryGetValue(config.Id, out var existing))
-        {
-            if (!existing.HasExited) return new StartStepResult(config.Id, false, "Wird bereits verwaltet.");
-            _processes.Remove(config.Id);
-        }
-        var port = ListenPort(config);
-        if (port is not null && !PortProbe.IsFree(port.Value))
-            return new StartStepResult(config.Id, false, $"Port {port} ist belegt — Modul läuft vermutlich extern, kein Doppelstart.");
-        if (port is null && FindOurselves(config, null) is { })
-            return new StartStepResult(config.Id, false, $"Läuft bereits extern — kein Doppelstart.");
-
         await _actions.WaitAsync();
         try
         {
+            var state = State(config);
+            if (state == InstanceRunState.ManagedRunning)
+                return new StartStepResult(config.Id, false, "Läuft bereits.");
+            var port = ListenPort(config);
+            if (state == InstanceRunState.ExternallyReachable)
+                return new StartStepResult(config.Id, false, $"Port {port} ist bereits belegt.");
+            if (port is null && FindOurselves(config, null) is not null)
+                return new StartStepResult(config.Id, false, "Läuft bereits extern.");
+
             var logPath = Path.Combine(Path.GetTempPath(), "energytwin-web", $"{config.Id}.log");
             Directory.CreateDirectory(Path.GetDirectoryName(logPath)!);
             var info = new ProcessStartInfo
             {
                 FileName = "dotnet",
-                Arguments = arguments,
                 WorkingDirectory = _repoRoot,
                 UseShellExecute = false,
                 CreateNoWindow = true,
+                RedirectStandardInput = config.Kind == ModuleKind.Master,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
             };
+            foreach (var argument in CommandFor(config, configs))
+                info.ArgumentList.Add(argument);
+            if (config.Kind == ModuleKind.Master)
+            {
+                info.ArgumentList.Add("--mqtt-host");
+                info.ArgumentList.Add(configuration["Mqtt:Host"] ?? "127.0.0.1");
+                info.ArgumentList.Add("--mqtt-port");
+                info.ArgumentList.Add(configuration.GetValue("Mqtt:Port", 1883).ToString(System.Globalization.CultureInfo.InvariantCulture));
+                if (!string.IsNullOrWhiteSpace(configuration["Mqtt:EnvFile"]))
+                {
+                    info.ArgumentList.Add("--mqtt-env");
+                    info.ArgumentList.Add(Path.GetFullPath(configuration["Mqtt:EnvFile"]!));
+                }
+            }
             var process = Process.Start(info);
             if (process is null) return new StartStepResult(config.Id, false, "Start fehlgeschlagen.");
+            if (info.RedirectStandardInput) process.StandardInput.Close();
 
             // Kurz warten und prüfen, ob der Prozess sofort wieder abstürzt (z. B. wegen
             // Port-Konflikt, fehlender Build-Ausgabe oder Initialisierungsfehler).
@@ -118,6 +144,11 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger)
             _ = Redirect(process.StandardError, logPath, append: true);
             logger.LogInformation("Instanz {Id} gestartet (PID {Pid}), Protokoll {Log}", config.Id, process.Id, logPath);
             return new StartStepResult(config.Id, true, "Gestartet.");
+        }
+        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or System.ComponentModel.Win32Exception)
+        {
+            logger.LogWarning(exception, "Instanz {Id} konnte nicht gestartet werden", config.Id);
+            return new StartStepResult(config.Id, false, "Start fehlgeschlagen. Details stehen im Webdienst-Protokoll.");
         }
         finally { _actions.Release(); }
     }
@@ -317,9 +348,12 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger)
             };
             using var process = Process.Start(psi);
             if (process is null) return new StartStepResult("broker", false, "docker compose konnte nicht gestartet werden.");
-            output = process.StandardOutput.ReadToEnd().Trim();
-            output += "\n" + process.StandardError.ReadToEnd().Trim();
-            await process.WaitForExitAsync(new CancellationTokenSource(TimeSpan.FromSeconds(120)).Token);
+            using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(120));
+            var stdout = process.StandardOutput.ReadToEndAsync(timeout.Token);
+            var stderr = process.StandardError.ReadToEndAsync(timeout.Token);
+            var streams = await Task.WhenAll(stdout, stderr);
+            output = string.Join("\n", streams.Select(stream => stream.Trim()));
+            await process.WaitForExitAsync(timeout.Token);
             exitCode = process.ExitCode;
         }
         catch (System.ComponentModel.Win32Exception exception)
@@ -372,17 +406,26 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger)
     };
 
     /// <summary>dotnet-Kommandozeile je Instanz; Master startet standardmäßig pausiert.</summary>
-    public static string CommandFor(InstanceConfig config, IReadOnlyList<InstanceConfig> deviceConfigs) => config.Kind switch
+    private static string[] CommandFor(InstanceConfig config, IReadOnlyList<InstanceConfig> configs)
     {
-        ModuleKind.Pv => $"run --no-build --project src/Devices/PvSimulator -- --id {config.Id} --modbus-port {config.ModbusPort} --location {config.Location ?? "salzburg"}",
-        ModuleKind.Battery => $"run --no-build --project src/Devices/BatterySimulator -- --id {config.Id} --modbus-port {config.ModbusPort} --location {config.Location ?? "salzburg"}",
-        ModuleKind.Charger => $"run --no-build --project src/Devices/DualPortCharger -- --id {config.Id} --modbus-port {config.ModbusPort} --location {config.Location ?? "salzburg"}",
-        ModuleKind.ColdStore => $"run --no-build --project src/Devices/KuehlhausSimulator -- --id {config.Id} --modbus-port {config.ModbusPort} --location {config.Location ?? "salzburg"}",
-        ModuleKind.Weather when config.HttpPort is { } port => $"run --no-build --project src/WeatherSimulator -- --port {port} --mqtt",
-        ModuleKind.Master when config.Speed is { } speed => $"run --no-build --project src/SimulationMaster -- --speed {speed} --mqtt",
-        ModuleKind.Gateway => $"run --no-build --project src/ModbusRabbitGateway -- --interval 1 {string.Join(" ", deviceConfigs.Select(device => $"--device {device.Id}=127.0.0.1:{device.ModbusPort}"))}",
-        _ => throw new InvalidOperationException($"Kein Startkommando für {config.Kind}.")
-    };
+        var (project, options) = config.Kind switch
+        {
+            ModuleKind.Pv => ("Devices/PvSimulator", DeviceOptions(config)),
+            ModuleKind.Battery => ("Devices/BatterySimulator", DeviceOptions(config)),
+            ModuleKind.Charger => ("Devices/DualPortCharger", DeviceOptions(config)),
+            ModuleKind.ColdStore => ("Devices/KuehlhausSimulator", DeviceOptions(config)),
+            ModuleKind.Weather => ("WeatherSimulator", new[] { "--port", $"{config.HttpPort}", "--mqtt" }),
+            ModuleKind.Master => ("SimulationMaster", new[] { "--speed", $"{config.Speed}", "--mqtt" }),
+            ModuleKind.Gateway => ("ModbusRabbitGateway", new[] { "--interval", "1" }.Concat(configs
+                .Where(device => device.ModbusPort is not null)
+                .SelectMany(device => new[] { "--device", $"{device.Id}=127.0.0.1:{device.ModbusPort}" }))),
+            _ => throw new InvalidOperationException($"Kein Startkommando für {config.Kind}.")
+        };
+        return ["run", "--no-build", "--project", $"src/{project}", "--", .. options];
+    }
+
+    private static string[] DeviceOptions(InstanceConfig config) =>
+        ["--id", config.Id, "--modbus-port", $"{config.ModbusPort}", "--location", config.Location ?? "salzburg"];
 
     private static async Task Redirect(StreamReader reader, string path, bool append)
     {

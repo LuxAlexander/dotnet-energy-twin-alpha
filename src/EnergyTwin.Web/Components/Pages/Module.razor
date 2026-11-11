@@ -225,7 +225,7 @@ else
     private ModulePreview? _module;
     private InstanceConfig? _config;
     private ModuleView _view;
-    private (bool Connected, string Connection, long Generation, int Rejected, LiveMessage[] Messages) _snapshot;
+    private LiveSnapshot _snapshot = null!;
     private DeviceLive? _live;
     private IReadOnlyList<WeatherLive> _weatherAll = Array.Empty<WeatherLive>();
     private WeatherLive? _weatherLive;
@@ -250,13 +250,7 @@ else
         _busy = true;
         try
         {
-            var result = await Processes.StartAsync(_config, ProcessManager.CommandFor(_config, InstanceStore.Instances.Where(instance => instance.ModbusPort is { }).ToList()));
-            _result = result.Detail;
-            if (result.Started && _config.Kind is (ModuleKind.Pv or ModuleKind.Battery or ModuleKind.Charger or ModuleKind.ColdStore))
-            {
-                var gateway = await Processes.SyncGatewayAsync(InstanceStore.Instances, startIfStopped: false);
-                if (gateway is { Started: false }) _result += $" Gateway: {gateway.Detail}";
-            }
+            _result = await Processes.StartInstanceAsync(_config, InstanceStore.Instances);
             Refresh();
         }
         finally { _busy = false; StateHasChanged(); }
