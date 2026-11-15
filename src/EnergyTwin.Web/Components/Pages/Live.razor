@@ -18,7 +18,7 @@
         <div class="@(_snapshot.Issues.Length > 0 ? "has-issues" : null)">
             <dt>Fehlermeldungen</dt><dd>@_snapshot.Issues.Length</dd>
         </div>
-        <div><dt>MQTT</dt><dd class="connection-value">@(_snapshot.MqttConnected ? "Verbunden" : "Getrennt")</dd></div>
+        <div><dt>MQTT</dt><dd class="connection-value">@(_snapshot.Mqtt.Connected ? "Verbunden" : "Getrennt")</dd></div>
     </dl>
 </header>
 
@@ -64,6 +64,7 @@
     private Task? _refresh;
     private PlantSnapshot _snapshot = null!;
     private string? _starting;
+    private string? _expandedId;
     private bool _faultsOnly;
     private int DeviceCount => _snapshot.Instances.Count(item => DeviceSessions.Supports(item.Config.Kind));
     private int RunningCount => _snapshot.Instances.Count(item => DeviceSessions.Supports(item.Config.Kind) && item.Running);
@@ -72,7 +73,7 @@
         .OrderByDescending(item => item.Issues.Length > 0).ThenByDescending(item => item.Running).ThenBy(item => item.Config.Kind);
 
     private RenderFragment Card(PlantInstance item) => @<article @key="item.Config.Id"
-        class="plant-card @(item.Issues.Length > 0 ? "plant-card-fault" : null)">
+        class="plant-card @(item.Issues.Length > 0 ? "plant-card-fault" : null) @(_expandedId == item.Config.Id ? "plant-card-expanded" : null)">
         <div class="plant-card-top">
             <span>@item.Config.Group</span>
             <span class="plant-status @(item.Issues.Length > 0 ? "status-fault" : item.Running ? "status-running" : "")">
@@ -95,18 +96,45 @@
         {
             <a class="card-issue" href="@($"/fehlerdiagnose#fehler-{Uri.EscapeDataString(issue.Key)}")">@issue.Title</a>
         }
-        @if (!item.Running && item.ProcessState == InstanceRunState.NotTracked || _starting == item.Config.Id)
+        @if (DeviceSessions.Supports(item.Config.Kind) || ShowStart(item))
         {
             <div class="plant-card-actions">
-                <button disabled="@(_starting is not null)" aria-label="@($"{item.Config.Name} starten")"
-                        @onclick="() => StartAsync(item.Config)">Starten</button>
+                @if (ShowStart(item))
+                {
+                    <button disabled="@(_starting is not null)" aria-label="@($"{item.Config.Name} starten")"
+                            @onclick="() => StartAsync(item.Config)">Starten</button>
+                }
+                @if (DeviceSessions.Supports(item.Config.Kind))
+                {
+                    <button aria-expanded="@(_expandedId == item.Config.Id ? "true" : "false")"
+                            aria-label="@($"{item.Config.Name}: Messwerte {(_expandedId == item.Config.Id ? "ausblenden" : "anzeigen")}")"
+                            @onclick="() => _expandedId = _expandedId == item.Config.Id ? null : item.Config.Id">
+                        @(_expandedId == item.Config.Id ? "Messwerte ausblenden" : "Messwerte anzeigen")
+                    </button>
+                }
             </div>
         }
         @if (_results.TryGetValue(item.Config.Id, out var notice))
         {
             <p class="plant-notice" role="status">@notice</p>
         }
+        @if (_expandedId == item.Config.Id)
+        {
+            var topic = LiveStore.DeviceMeasurementsTopic(item.Config.Id);
+            var message = _snapshot.Mqtt.Messages.FirstOrDefault(message => message.Topic == topic);
+            @if (message is null)
+            {
+                <p class="muted plant-no-measurements">Für diese Instanz wurden noch keine MQTT-Messwerte empfangen.</p>
+            }
+            else
+            {
+                <MqttMessageDetails @key="topic" Message="message" Snapshot="_snapshot.Mqtt" InitiallyOpen="true" />
+            }
+        }
     </article>;
+
+    private bool ShowStart(PlantInstance item) =>
+        (!item.Running && item.ProcessState == InstanceRunState.NotTracked) || _starting == item.Config.Id;
 
     protected override void OnInitialized() => _snapshot = Plant.Read();
     protected override Task OnAfterRenderAsync(bool firstRender)

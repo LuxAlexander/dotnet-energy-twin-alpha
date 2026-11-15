@@ -70,5 +70,7 @@ public sealed class LiveStore
     }
 
     public static string Text(JsonElement data, string key) => data.TryGetProperty(key, out var value) ? value.ToString() : "—";
+
+    public static string DeviceMeasurementsTopic(string deviceId) => $"energytwin/devices/{deviceId}/measurements";
 }
 

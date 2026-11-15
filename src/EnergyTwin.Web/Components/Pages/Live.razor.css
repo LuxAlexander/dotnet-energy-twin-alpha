@@ -62,7 +62,9 @@
 .plant-metric strong { font-size: 1.38rem; letter-spacing: -.025em; line-height: 1.18; }
 .plant-metric small { font-size: .72em; font-weight: 500; }
 .card-issue { color: var(--danger); font-size: .86rem; overflow-wrap: anywhere; }
-.plant-card-actions { margin-top: auto; }
+.plant-card-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
+.plant-card-expanded { grid-column: 1 / -1; }
+.plant-no-measurements { margin: 8px 0 0; }
 .plant-card-actions button { min-height: 35px; }
 @media (max-width: 440px) {
     .plant-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }

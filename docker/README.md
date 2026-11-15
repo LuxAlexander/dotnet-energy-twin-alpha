@@ -2,9 +2,10 @@
 
 **Verantwortlich:** Alexander Lux · **Stand:** 2026-11-08
 
-Lokaler Nachrichtenbroker für das Modbus–RabbitMQ-Gateway und den optionalen Wetter-Publisher. Docker Desktop muss mit Linux-Containern laufen;
-die eigenen .NET-Programme laufen auf dem Host. Beim ersten Start wird das Image aus dem Internet geladen,
-der Simulationsbetrieb selbst benötigt kein Internet.
+Lokaler Nachrichtenbroker für das Modbus–RabbitMQ-Gateway und den optionalen Wetter-Publisher. Docker Desktop muss mit Linux-Containern laufen.
+Die .NET-Programme laufen beim bisherigen Sammelstart auf dem Host. Für den PV-Simulator gibt es zusätzlich einen
+[Containerstart](#pv-simulator-im-container-lb04). Für die erstmalige Bereitstellung der Images ist Internetzugang
+erforderlich, der Simulationsbetrieb selbst benötigt kein Internet.
 
 ## Einrichtung und Start
 
@@ -52,6 +53,61 @@ liefert bei dem hier geprüften RabbitMQ 4.4.0 keine gespeicherten Retain-Werte;
 docker compose --env-file docker/.env -f docker/docker-compose.yml exec rabbitmq rabbitmq-diagnostics listeners
 docker compose --env-file docker/.env -f docker/docker-compose.yml logs --tail 60 rabbitmq
 ```
+
+## PV-Simulator im Container
+
+Alexander Lux verantwortet den PV-Simulator und seine [Container-Konfiguration](PvSimulator.Dockerfile).
+Aus dem Repository-Root mit laufendem Docker Desktop (Linux-Container) das Image bauen:
+
+```powershell
+docker build --file docker/PvSimulator.Dockerfile --tag energytwin/pv:lb04 .
+```
+
+Für den gemeinsamen Lauf Master und Wetterdienst auf Windows starten. m Beispiel nutzt PV die Standardports
+5100 und 8080 über `host.docker.internal`. Der Diagnose-Client oder das Gateway erreicht die PV auf Windows
+unter `127.0.0.1:1502` mit Unit-ID 1. Die PV-Instanz dieses Beispiels muss die einzige mit der ID `PV-01` sein,
+und der Windows-Port 1502 muss frei sein. Die CSV-Dateien landen im Windows-Ordner `docs/data`.
+I
+```powershell
+$csv = (New-Item -ItemType Directory -Force docs/data).FullName
+docker run --detach --pull never --name energytwin-pv-01 --publish 127.0.0.1:1502:1502 --mount "type=bind,source=$csv,target=/data" energytwin/pv:lb04 --id PV-01 --master host.docker.internal:5100 --weather http://host.docker.internal:8080 --location salzburg --modbus-bind 0.0.0.0 --output /data
+docker ps --filter name=energytwin-pv-01
+docker logs --tail 30 energytwin-pv-01
+dotnet run --project src/ModbusDiagnosticClient -- --port 1502 --once
+```
+
+Zum manuellen Eingriff kann der [Diagnose-Client](../src/ModbusDiagnosticClient/README.md) etwa die
+Leistungsbegrenzung setzen. `docker stop` löst den geordneten Stopp aus, inklusive Abmeldung vom Master
+und Abschluss der CSV-Datei. Für einen erneuten Start mit geänderten Argumenten den gestoppten Container
+entfernen und mit den neuen Argumenten erstellen.
+
+```powershell
+docker stop --timeout 12 energytwin-pv-01
+docker rm energytwin-pv-01
+```
+
+Beim Start aus dem Container gelten die [PV-Startoptionen](../src/Devices/PvSimulator/README.md).
+Der eigenständige Konsolenstart steht weiter zur Verfügung. Die bestehende Compose-Datei verwaltet RabbitMQ.
+
+### Verwaltung durch Blazor
+
+Nach dem Image-Build unter „PV-Anlagen“ in der Web-App eine Instanz auswählen oder anlegen und starten.
+Die Web-App legt je PV-ID einen Container an. Sie bindet den eingestellten CSV-Ordner ein, veröffentlicht
+den konfigurierten Modbus-Port ausschließlich auf Windows-Loopback und übersetzt lokale Master- und
+Wetteradressen für Docker Desktop. Externe Adressen und `Wetter aus` bleiben erhalten.
+
+Start, Live-Bedienung, Neustart und Wiederherstellung laufen über die Web-App. Start gilt erst nach
+Bestätigung durch den PV-Steuerzugang. Für die Diagnose in Docker die Container-ID über das PV-Label
+ermitteln und die Logs anzeigen:
+
+```powershell
+docker --context desktop-linux ps -a --filter label=energytwin.web.pv-id=PV-01
+docker --context desktop-linux logs --tail 30 <Container-ID>
+```
+
+Die Container laufen bei einem Neustart der Web-App weiter. Nach einem Stopp durch Docker oder einem
+Windows-Neustart kann die Anlage erneut über Blazor gestartet werden. Der manuelle Start oben dient
+auch der Diagnose außerhalb der Web-App. Für dieselbe Geräte-ID nur einen Startweg gleichzeitig verwenden.
 
 ## Simulatoren und Gateway
 

@@ -21,7 +21,8 @@ Browser gespeichert. Unter „Module und Geräte“ lässt sich jede Kategorie e
 
 Die Startseite zeigt gestartete Feldgeräte, Fehlermeldungen und die MQTT-Verbindung. Geräte mit Fehlern
 stehen oben und lassen sich mit „Mit Fehlern“ filtern. Über die Gerätekarten lassen sich Instanzen öffnen
-und einzeln starten. Die Infrastruktur hat einen eigenen Abschnitt.
+und einzeln starten. „Messwerte anzeigen“ klappt auf der Karte den letzten MQTT-Datensatz mit Registerwerten,
+Empfangszeit, Qualität und JSON auf. Die Infrastruktur hat einen eigenen Abschnitt.
 
 „Fehlerdiagnose“ zeigt erkannte Gerätestörungen, Verbindungsprobleme und fehlgeschlagene Starts mit einem
 Link zur betroffenen Instanz. Gesunde und regulär gestoppte Geräte erscheinen dort nicht. Gespeicherte
@@ -29,7 +30,8 @@ Startfehlermeldungen lassen sich ausblenden und verschwinden nach einem erfolgre
 
 ## Live-Empfang
 
-„MQTT-Nachrichten“ öffnet die Geräte-, Gateway- und Wetternachrichten aus RabbitMQ samt Suche.
+„MQTT-Nachrichten“ öffnet Status- und andere Topics aus RabbitMQ samt Suche. Messwerte zu Feldgeräten
+mit einer Karte in der Anlagenübersicht stehen dort direkt auf der Karte.
 Für Gerätedaten das Gateway starten, für Wetterdaten den Wetterdienst. Der Start über die Web-App aktiviert Wetter-MQTT.
 Die Anzeige enthält Messwerte mit Einheit, virtuelle Zeit, Lauf, Sequenz, Qualität,
 reale Empfangszeit sowie die empfangene JSON-Nachricht zur Diagnose.

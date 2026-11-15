@@ -6,7 +6,7 @@ namespace EnergyTwin.Web.Live;
 public sealed record PlantIssue(string Key, string Title, string Detail, string? Target, string? StartFailureId = null);
 public sealed record PlantInstance(InstanceConfig Config, InstanceRunState ProcessState, string Status, bool Running,
     Metric? Metric, PlantIssue[] Issues);
-public sealed record PlantSnapshot(PlantInstance[] Instances, PlantIssue[] Issues, bool MqttConnected);
+public sealed record PlantSnapshot(PlantInstance[] Instances, PlantIssue[] Issues, LiveSnapshot Mqtt);
 
 /// <summary>Gemeinsame Befunde für Anlagenübersicht und Fehlerdiagnose.</summary>
 public sealed class PlantStatus(InstanceStore instances, ProcessManager processes, DeviceSessions sessions,
@@ -102,7 +102,7 @@ public sealed class PlantStatus(InstanceStore instances, ProcessManager processe
             result.Add(new(instance, state, label, running, metrics.For(instance), faults.ToArray()));
             issues.AddRange(faults);
         }
-        return new(result.ToArray(), issues.ToArray(), mqtt.Connected);
+        return new(result.ToArray(), issues.ToArray(), mqtt);
 
         LiveMessage? Fresh(string topic, int seconds) =>
             topics.TryGetValue(topic, out var message) && now - message.ReceivedAt <= TimeSpan.FromSeconds(seconds) ? message : null;

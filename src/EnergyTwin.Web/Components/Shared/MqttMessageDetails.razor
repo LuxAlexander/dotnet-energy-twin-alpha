@@ -1,0 +1,91 @@
+@using System.Text.Json
+@{
+    var data = Message.Data;
+    var validity = Validity(Message);
+}
+<details class="detail-panel live-topic" open="@InitiallyOpen">
+    <summary>
+        <strong>@Message.Topic</strong>
+        <span class="muted small">Empfang: @Message.ReceivedAt.ToString("HH:mm:ss 'UTC'")</span>
+    </summary>
+    <p class="@(validity == "Empfang aktuell bestätigt" ? "green" : "orange")">@validity</p>
+    @if (data.TryGetProperty("measurements", out var measurements))
+    {
+        <div class="status-row"><span>Virtuelle Zeit: @Field(data, "simTime", "simTimeUtc")</span><span>Lauf: @LiveStore.Text(data, "runId")</span><span>Sequenz: @LiveStore.Text(data, "seq")</span><span>Qualität: @Field(data, "quality", "mode") / @Field(data, "qualityReason", "condition")</span></div>
+        <div class="metrics">
+        @foreach (var value in measurements.EnumerateArray())
+        {
+            var unit = LiveStore.Text(value, "unit");
+            <article class="metric @MeasurementTone(value, unit)">
+                <h2>@Field(value, "name", "key")</h2>
+                <p class="metric-value">@FormatValue(value) <span>@unit</span></p>
+                @if (value.TryGetProperty("address", out var address)) { <p class="muted small">Register @address</p> }
+            </article>
+        }
+        </div>
+    }
+    else
+    {
+        <p>Zustand: @Field(data, "state", "status")</p>
+        @if (data.TryGetProperty("error", out var error)) { <p>@error</p> }
+    }
+    <details class="messages"><summary>Nachricht und Diagnose</summary><pre class="live-json">@JsonSerializer.Serialize(data, JsonOptions)</pre></details>
+</details>
+
+@code {
+    private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
+    [Parameter, EditorRequired] public LiveMessage Message { get; set; } = null!;
+    [Parameter, EditorRequired] public LiveSnapshot Snapshot { get; set; } = null!;
+    [Parameter] public bool InitiallyOpen { get; set; }
+
+    private string Validity(LiveMessage message)
+    {
+        if (!Snapshot.Connected || message.Generation != Snapshot.Generation) return "Letzter Stand – nach Verbindungsunterbrechung nicht bestätigt";
+        var age = DateTimeOffset.UtcNow - message.ReceivedAt;
+        if (message.Topic.StartsWith("energytwin/weather/", StringComparison.Ordinal))
+        {
+            var status = Snapshot.Messages.FirstOrDefault(m => m.Topic == "energytwin/weather/status");
+            if (status is null || status.Generation != Snapshot.Generation) return "Wetterstatus fehlt – Gültigkeit unbestätigt";
+            var state = LiveStore.Text(status.Data, "status");
+            if (state is not ("paused" or "continued")) return $"Wetter nicht aktuell bestätigt: {state}";
+            if (message.Topic.EndsWith("/measurements", StringComparison.Ordinal) && new[] { "sourceSession", "masterSession", "runId" }.Any(key => LiveStore.Text(message.Data, key) == "—" || LiveStore.Text(message.Data, key) != LiveStore.Text(status.Data, key))) return "Wetter gehört nicht zum bestätigten Lauf";
+            // Retained Zustände sind keine Bestätigung, dass der Prozess noch lebt.
+            return state == "paused" ? "Gespeicherter Pausenstand – keine aktuelle Prozessbestätigung" : age > TimeSpan.FromSeconds(15) ? "Wetterstand älter als 15 Sekunden – nicht aktuell bestätigt" : "Wetterstand empfangen – gespeicherte Nachrichten möglich";
+        }
+        if (age > TimeSpan.FromSeconds(message.Topic.EndsWith("/status", StringComparison.Ordinal) ? 45 : 15)) return "Empfang veraltet – letzter Stand, nicht aktuell bestätigt";
+        if (message.Topic.EndsWith("/measurements", StringComparison.Ordinal))
+        {
+            var statusTopic = message.Topic[..^"measurements".Length] + "status";
+            var status = Snapshot.Messages.FirstOrDefault(m => m.Topic == statusTopic);
+            if (status is not null && status.Generation == Snapshot.Generation && LiveStore.Text(status.Data, "state") is "offline" or "decodeError") return "Gerät meldet Ausfall oder Dekodierfehler – letzte Werte";
+            if (LiveStore.Text(message.Data, "quality") != "good") return "Messqualität eingeschränkt – Quelle und Qualitätsgrund prüfen";
+        }
+        return "Empfang aktuell bestätigt";
+    }
+    private static string Field(JsonElement value, string first, string second) => value.TryGetProperty(first, out var field) ? field.ToString() : LiveStore.Text(value, second);
+    private static string MeasurementTone(JsonElement value, string unit)
+    {
+        var name = Field(value, "name", "key");
+        var displayValue = FormatValue(value);
+        if (displayValue == "Ungültig / fehlt") return "";
+        if (name == "Fehlercode") return displayValue == "0" ? "metric-energy" : "metric-fault";
+        if (name == "Betriebszustand")
+            return displayValue switch { "Störung" => "metric-fault", "Betrieb" or "Bereit" => "metric-energy", _ => "" };
+        if (name == "Ein/Aus") return displayValue == "ein" ? "metric-energy" : "";
+        return unit switch
+        {
+            "W" or "kW" or "MW" or "W/m²" => "metric-power",
+            "Wh" or "kWh" or "MWh" => "metric-energy",
+            "°C" => "metric-temperature",
+            "V" or "A" or "Hz" => "metric-electrical",
+            "%" or "x" or "×" => "metric-setting",
+            _ => ""
+        };
+    }
+    private static string FormatValue(JsonElement value)
+    {
+        if (value.TryGetProperty("text", out var text) && text.ValueKind == JsonValueKind.String) return text.GetString() ?? "—";
+        return value.TryGetProperty("value", out var number) && number.ValueKind == JsonValueKind.Number && number.TryGetDouble(out var parsed) && double.IsFinite(parsed)
+            ? parsed.ToString("0.###", System.Globalization.CultureInfo.GetCultureInfo("de-DE")) : "Ungültig / fehlt";
+    }
+}
