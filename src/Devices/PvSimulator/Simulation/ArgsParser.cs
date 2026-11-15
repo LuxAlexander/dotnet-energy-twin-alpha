@@ -74,14 +74,17 @@ public static class ArgsParser
                     config.PeakPowerKw = ParsePositive(NextValue(args, ref i, name), name);
                     break;
                 case "--step":
-                    config.StepMinutes = (int)ParsePositive(NextValue(args, ref i, name), name);
+                    config.StepMinutes = ParseInteger(NextValue(args, ref i, name), name);
                     break;
                 case "--model-step":
                     config.ModelStepMinutes = ParsePositive(NextValue(args, ref i, name), name);
+                    if (config.ModelStepMinutes < 1.0 / TimeSpan.TicksPerMinute
+                        || config.ModelStepMinutes >= TimeSpan.MaxValue.TotalMinutes)
+                        throw new ArgumentException("--model-step liegt außerhalb des darstellbaren Zeitbereichs.");
                     break;
                 case "--refresh":
                     // Untergrenze 50 ms, damit der Diff-Modus die Konsole nicht flackern lässt
-                    config.RefreshMs = Math.Max(50, (int)ParsePositive(NextValue(args, ref i, name), name));
+                    config.RefreshMs = Math.Max(50, ParseInteger(NextValue(args, ref i, name), name));
                     break;
                 case "--output":
                     config.OutputDirectory = NextValue(args, ref i, name);
@@ -122,6 +125,9 @@ public static class ArgsParser
 
         config.TimeSync = timeSync;
         config.Modbus = modbus;
+        try { config.OutputDirectory = Path.GetFullPath(config.OutputDirectory); }
+        catch (Exception ex) when (ex is ArgumentException or NotSupportedException)
+        { throw new ArgumentException("--output ist kein gültiger Ordner.", ex); }
         return config;
     }
 
@@ -149,8 +155,15 @@ public static class ArgsParser
     {
         if (!double.TryParse(value.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out double result))
             throw new ArgumentException($"{name} erwartet eine Zahl, nicht '{value}'.");
-        if (result <= 0 || double.IsInfinity(result))
+        if (result <= 0 || !double.IsFinite(result))
             throw new ArgumentException($"{name} muss größer als 0 sein (angegeben: {value}).");
+        return result;
+    }
+
+    private static int ParseInteger(string value, string name)
+    {
+        if (!int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var result) || result < 1)
+            throw new ArgumentException($"{name} erwartet eine positive ganze Zahl.");
         return result;
     }
 }

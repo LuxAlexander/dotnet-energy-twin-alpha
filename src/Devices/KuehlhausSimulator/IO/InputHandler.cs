@@ -37,12 +37,13 @@ public class InputHandler
     }
 
     /// <summary>Wartet (ohne zu blockieren) auf Q; bei umgeleiteter Eingabe sofort fertig.</summary>
-    public async Task WaitForQuitAsync(CancellationToken cancellationToken)
+    public async Task WaitForQuitAsync(Action processRequests, CancellationToken cancellationToken)
     {
-        while (AsyncConsole.HasKeyboard)
+        while (_engine.IsRunning && AsyncConsole.HasKeyboard)
         {
             if (AsyncConsole.TryReadKey() is { Key: ConsoleKey.Q })
                 return;
+            processRequests();
             await Task.Delay(QuitPollInterval, cancellationToken);
         }
     }

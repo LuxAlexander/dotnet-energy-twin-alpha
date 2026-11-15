@@ -94,6 +94,11 @@ einzeln in der Liste des Masters.
 
 ## Bedienung
 
+In der [Web-App](../../EnergyTwin.Web/README.md#geräte-bearbeiten) zeigt der Reiter „Einstellungen“
+aktive und gespeicherte Startwerte. Die Live-Bedienung bietet Gesamtleistung, Betriebsmodus und Ein/Aus
+sowie Fahrzeugwahl, Laden, Abstecken und simulierte Störungen für beide Ladepunkte. Im Standalone-Modus
+lassen sich auch Pause und Tempo steuern.
+
 Die Tasten wirken sofort, auch während die Simulation läuft:
 
 | Taste | Befehl |

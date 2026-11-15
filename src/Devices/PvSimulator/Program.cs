@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System.Text;
 using EnergySimulator.Output;
 using EnergySimulator.Simulation;
@@ -28,6 +29,14 @@ catch (ArgumentException ex)
 }
 
 using var stop = new CancellationTokenSource();
+// Docker sendet unter Linux SIGTERM für das kontrollierte Beenden.
+using var sigterm = OperatingSystem.IsLinux()
+    ? PosixSignalRegistration.Create(PosixSignal.SIGTERM, context =>
+    {
+        context.Cancel = true;
+        stop.Cancel();
+    })
+    : null;
 Console.CancelKeyPress += (_, e) =>
 {
     e.Cancel = true;                                              // geordnet beenden (Abmeldung beim Master, CSV schließen)

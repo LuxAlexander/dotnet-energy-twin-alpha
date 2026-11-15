@@ -1,0 +1,21 @@
+.device-overview-fieldset {
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.device-overview-actions {
+    margin-block: 12px;
+}
+
+.device-overview-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.device-overview-row input {
+    max-inline-size: 8rem;
+}

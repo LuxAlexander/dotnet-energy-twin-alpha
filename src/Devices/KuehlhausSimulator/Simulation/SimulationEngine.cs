@@ -11,7 +11,7 @@ namespace KuehlhausSimulator.Simulation;
 /// die Anzeige und verarbeitet Tasten – alles ohne blockierendes Warten.
 /// Der Modbus-Server bleibt auch in der Pause und bei verlorenem Master erreichbar.
 /// </summary>
-public sealed class SimulationEngine
+public sealed partial class SimulationEngine
 {
     private static readonly TimeSpan PollInterval = TimeSpan.FromMilliseconds(50);
     private static readonly TimeSpan RenderInterval = TimeSpan.FromMilliseconds(200);
@@ -143,6 +143,8 @@ public sealed class SimulationEngine
         _modbus?.Start();                                     // Port belegt → IOException, bevor etwas angelegt wird
         await using var logger = await CsvLogger.CreateAsync(Config.DeviceId, Config.OutputDirectory, cancellationToken);
         using var stop = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        var control = CreateControl();
+        await using var controlLifetime = await control.StartAsync(Config.DeviceId, ControlKind, stop.Token);
         var syncTask = Time.RunAsync(stop.Token);
 
         Message = Time.IsStandalone
@@ -159,6 +161,8 @@ public sealed class SimulationEngine
             while (IsRunning && !stop.IsCancellationRequested && !IsFinished)
             {
                 bool changed = await _input.HandlePendingKeysAsync(stop.Token);
+                changed |= control.ProcessRequests(() => IsRunning && !stop.IsCancellationRequested);
+                if (!IsRunning) break;
                 changed |= await AdvanceAsync(logger, stop.Token);
 
                 // Modbus läuft auch in der Pause und bei verlorenem Master weiter: Befehle umsetzen, Zustand veröffentlichen
@@ -182,7 +186,7 @@ public sealed class SimulationEngine
             {
                 Message = $"Simulation beendet. CSV: {logger.FilePath} – Q zum Beenden.";
                 await _renderer.DrawAsync(this);
-                await _input.WaitForQuitAsync(stop.Token);
+                await _input.WaitForQuitAsync(() => control.ProcessRequests(() => IsRunning && !stop.IsCancellationRequested), stop.Token);
             }
         }
         catch (OperationCanceledException) when (stop.IsCancellationRequested)

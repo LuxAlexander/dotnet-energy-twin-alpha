@@ -5,7 +5,7 @@ using Devices.Common.Weather;
 namespace Batterie_Sim;
 
 /// <summary>Startparameter des Batteriespeichers: Gerätedaten, Schrittweite, Zeitquelle und Modbus.</summary>
-public sealed class SimulatorOptions
+public sealed record SimulatorOptions
 {
     public const double DefaultStandaloneSpeed = 600;
 

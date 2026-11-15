@@ -1,5 +1,6 @@
 using System.Globalization;
 using Devices.Common;
+using Devices.Common.Control;
 using Devices.Common.Weather;
 using WeatherData = SimCore.Contracts.WeatherData;
 using EnergySimulator.Data;
@@ -14,7 +15,7 @@ namespace EnergySimulator.Simulation;
 /// festen Modellschritte, schreibt CSV und Modbus-Register, zeichnet die Anzeige und verarbeitet Tasten –
 /// ohne blockierendes Warten. Die Modbus-Register bleiben auch in der Pause und bei verlorenem Master aktuell erreichbar.
 /// </summary>
-public sealed class SimulationEngine
+public sealed partial class SimulationEngine
 {
     private const int TickMs = 80;
     private static readonly TimeSpan RedirectedInterval = TimeSpan.FromSeconds(5);
@@ -28,6 +29,7 @@ public sealed class SimulationEngine
     private sealed record Note(string Text, DateTime At);
 
     private readonly SimulationConfig _config;
+    private int _refreshMs;
     private readonly PvSystem _pv;
     private readonly PvFaultModel _faults;
     private readonly Random _random;
@@ -64,6 +66,7 @@ public sealed class SimulationEngine
     public SimulationEngine(SimulationConfig config)
     {
         _config = config;
+        _refreshMs = config.RefreshMs;
         _random = config.Seed is int seed ? new Random(seed) : new Random();
         _faults = new PvFaultModel(_random);
         _pv = new PvSystem(config.PeakPowerKw, _faults);
@@ -90,9 +93,15 @@ public sealed class SimulationEngine
     /// <returns>Pfad der geschriebenen CSV-Datei.</returns>
     public async Task<string> RunAsync(CancellationToken cancellationToken)
     {
+        using var modbus = _modbus;
+        using var weather = _weather;
         _modbus?.Start();                                         // Port belegt → IOException, bevor etwas angelegt wird
         await using var csv = await CsvExporter.CreateAsync(_config.DeviceId, _config.OutputDirectory, cancellationToken);
         using var stop = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        int? containerControlPort = Environment.GetEnvironmentVariable("ENERGYTWIN_PV_CONTAINER_CONTROL") == "1"
+            ? SimulationConfig.ContainerControlPort : null;
+        await using var control = await DeviceControl.StartAsync<PvControlState>(
+            _config.DeviceId, "PV", DispatchAsync, stop.Token, containerControlPort);
         var syncTask = Time.RunAsync(stop.Token);
 
         SetNotification(Time.IsStandalone
@@ -106,6 +115,8 @@ public sealed class SimulationEngine
         {
             while (_running && !stop.IsCancellationRequested)
             {
+                ProcessControlRequests();
+                if (!_running) break;
                 bool keyPressed = HandleKeys();
                 await AdvanceAsync(csv, stop.Token);
 
@@ -119,7 +130,7 @@ public sealed class SimulationEngine
                     if (keyPressed || now >= nextRender)
                     {
                         Draw();
-                        nextRender = now.AddMilliseconds(_config.RefreshMs);
+                        nextRender = now.AddMilliseconds(_refreshMs);
                     }
                 }
                 else if (now >= nextLog)
@@ -137,9 +148,11 @@ public sealed class SimulationEngine
         }
         finally
         {
+            _controlRequests.Writer.TryComplete();
+            while (_controlRequests.Reader.TryRead(out var pending))
+                pending.Completion.TrySetCanceled();
             await stop.CancelAsync();
             _modbus?.Dispose();
-            _weather?.Dispose();
             await syncTask;                                       // meldet sich beim Master ab
             if (SimulationTime is { } last)
                 await csv.WriteRowAsync(last, Mode, RunId, _pv, CancellationToken.None);
@@ -325,12 +338,11 @@ public sealed class SimulationEngine
 
     private void CycleRefresh()
     {
-        int index = Array.IndexOf(RefreshSteps, _config.RefreshMs);
+        int index = Array.IndexOf(RefreshSteps, _refreshMs);
         if (index < 0)
             index = 2;
 
-        _config.RefreshMs = RefreshSteps[(index + 1) % RefreshSteps.Length];
-        SetNotification($"Bild-Aktualisierung → {_config.RefreshMs} ms");
+        SetRefresh(RefreshSteps[(index + 1) % RefreshSteps.Length]);
     }
 
     private void ToggleFault()
@@ -425,7 +437,12 @@ public sealed class SimulationEngine
 
     private void ToggleMode()
     {
-        _mode = _mode == SimulationMode.Auto ? SimulationMode.Manual : SimulationMode.Auto;
+        SetMode(_mode == SimulationMode.Auto ? SimulationMode.Manual : SimulationMode.Auto);
+    }
+
+    private void SetMode(SimulationMode mode)
+    {
+        _mode = mode;
         SetNotification($"Modus → {(_mode == SimulationMode.Auto ? "AUTO" : "MANUELL")}");
     }
 

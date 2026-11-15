@@ -9,7 +9,13 @@ public sealed record InstanceConfig(
     string Id, ModuleKind Kind, string Name, string Group, string Location,
     [property: JsonPropertyName("modbusPort")] int? ModbusPort,
     [property: JsonPropertyName("httpPort")] int? HttpPort,
-    [property: JsonPropertyName("speed")] int? Speed);
+    [property: JsonPropertyName("speed")] int? Speed)
+{
+    public long Revision { get; init; }
+    public Devices.Common.Control.EquipmentStartup? Equipment { get; init; }
+    public Batterie_Sim.SimulatorOptions? Battery { get; init; }
+    public EnergySimulator.Simulation.SimulationConfig? Pv { get; init; }
+}
 
 /// <summary>
 /// Lokal persistierte Instanzverwaltung: Anlegen, Entfernen, Konfliktprüfung je Kennung und Port.
@@ -25,6 +31,7 @@ public sealed class InstanceStore
     private readonly string _path;
     private readonly int _webPort;
     private List<InstanceConfig> _instances;
+    private InstanceConfig[] _discovered = [];
     private string? _lastError;
 
     public InstanceStore(string path, int webPort)
@@ -38,12 +45,51 @@ public sealed class InstanceStore
 
     public IReadOnlyList<InstanceConfig> Instances
     {
-        get { lock (_gate) return _instances.ToArray(); }
+        get { lock (_gate) return _instances.Concat(_discovered.Where(device =>
+            _instances.All(instance => instance.Id != device.Id))).ToArray(); }
     }
 
     public InstanceConfig? Find(string id)
     {
-        lock (_gate) return _instances.FirstOrDefault(instance => instance.Id == id);
+        lock (_gate) return _instances.FirstOrDefault(instance => instance.Id == id)
+            ?? _discovered.FirstOrDefault(instance => instance.Id == id);
+    }
+
+    public void SetDiscovered(IEnumerable<InstanceConfig> devices)
+    {
+        lock (_gate) _discovered = devices.DistinctBy(device => device.Id).ToArray();
+    }
+
+    public string? Save(InstanceConfig candidate, long expectedRevision, out InstanceConfig saved)
+    {
+        lock (_gate)
+        {
+            saved = candidate;
+            var current = _instances.FirstOrDefault(instance => instance.Id == candidate.Id);
+            if ((current?.Revision ?? -1) != expectedRevision)
+                return "Die Konfiguration wurde inzwischen geändert. Dein Entwurf ist erhalten.";
+            if (current is not null && current.Kind != candidate.Kind)
+                return "Die Geräteart einer bestehenden Instanz bleibt fest.";
+            var others = _instances.Concat(_discovered).Where(instance => instance.Id != candidate.Id).ToList();
+            var error = Validate(candidate, others);
+            if (error is not null) return error;
+            var replacement = candidate with { Revision = expectedRevision + 1 };
+            var next = _instances.Select(instance => instance.Id == candidate.Id ? replacement : instance).ToList();
+            if (current is null) next.Add(replacement);
+            try
+            {
+                var temp = _path + ".tmp";
+                File.WriteAllText(temp, JsonSerializer.Serialize(next, new JsonSerializerOptions { WriteIndented = true }));
+                File.Move(temp, _path, overwrite: true);
+                _instances = next;
+                saved = replacement;
+                return null;
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                return $"Speichern fehlgeschlagen: {ex.Message}";
+            }
+        }
     }
 
     public string? LastError
@@ -56,7 +102,7 @@ public sealed class InstanceStore
     {
         lock (_gate)
         {
-            var error = Validate(candidate, _instances);
+            var error = Validate(candidate, _instances.Concat(_discovered).ToList());
             if (error is not null) { _lastError = error; return null; }
             _instances.Add(candidate);
             _lastError = null;
@@ -102,7 +148,7 @@ public sealed class InstanceStore
     {
         lock (_gate)
         {
-            var used = _instances
+            var used = _instances.Concat(_discovered)
                 .Select(instance => instance.ModbusPort ?? int.MaxValue)
                 .Concat([_webPort, MasterPort])
                 .ToHashSet();

@@ -1,0 +1,74 @@
+@page "/fehlerdiagnose"
+@implements IAsyncDisposable
+@inject PlantStatus Plant
+@inject ProcessManager Processes
+
+<PageTitle>Fehlerdiagnose · EnergyTwin</PageTitle>
+<div class="page-heading"><h1>Fehlerdiagnose</h1></div>
+@if (_snapshot.Issues.Length == 0)
+{
+    <section class="empty-state"><h2>Keine Fehler erkannt</h2></section>
+}
+else
+{
+    <div class="fault-list">
+        @foreach (var issue in _snapshot.Issues)
+        {
+            <article @key="issue.Key" id="@($"fehler-{issue.Key}")" class="detail-panel fault-card">
+                <div>
+                    <h2>@issue.Title</h2>
+                    <p>@issue.Detail</p>
+                </div>
+                <div class="fault-actions">
+                    @if (issue.Target is not null)
+                    {
+                        var instance = _snapshot.Instances.FirstOrDefault(item => item.Issues.Contains(issue));
+                        <a class="button-link" href="@issue.Target">@(instance?.Config.Name ?? "Details")</a>
+                    }
+                    @if (issue.StartFailureId is { } id)
+                    {
+                        <button @onclick="() => Dismiss(id)">Meldung ausblenden</button>
+                    }
+                </div>
+            </article>
+        }
+    </div>
+}
+
+@code {
+    private readonly CancellationTokenSource _stop = new();
+    private Task? _refresh;
+    private PlantSnapshot _snapshot = null!;
+
+    protected override void OnInitialized() => _snapshot = Plant.Read();
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender) _refresh = RefreshAsync();
+        return Task.CompletedTask;
+    }
+
+    private async Task RefreshAsync()
+    {
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
+        try
+        {
+            while (await timer.WaitForNextTickAsync(_stop.Token))
+                await InvokeAsync(() => { _snapshot = Plant.Read(); StateHasChanged(); });
+        }
+        catch (OperationCanceledException) when (_stop.IsCancellationRequested) { }
+    }
+
+    private void Dismiss(string id)
+    {
+        Processes.DismissStartFailure(id);
+        _snapshot = Plant.Read();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await _stop.CancelAsync();
+        if (_refresh is not null) await _refresh;
+        _stop.Dispose();
+    }
+}

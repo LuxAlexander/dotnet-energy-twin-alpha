@@ -32,6 +32,7 @@ Leere Zuständigkeitsfelder bleiben unzugeteilt.
 | Messwerte im Vertrag: Kühlhaus | | |
 | SRS `docs/SRS-LB03.md` | | [`docs/SRS-LB03.md`](docs/SRS-LB03.md) (Entwurf mit Gateway-Teil) |
 | RabbitMQ unter Docker (Compose, `.env.example`, Start/Status/Stopp) | Alexander Lux | [`docker/README.md`](docker/README.md), lokaler Lauf mit allen vier Geräten geprüft |
+| PV-Simulator als Docker-Container (LB04) | Alexander Lux | [PV-Dockerfile](docker/PvSimulator.Dockerfile), [Build und Betrieb](docker/README.md#pv-simulator-im-container-lb04), [Probelauf](docs/nachweise/2026-11-15-pv-container/README.md) |
 | Viewer: MQTT Explorer portable, JSON und Live-Verläufe | Alexander Lux | [Anleitung](docs/viewer/README.md), [textueller Nachweis](docs/nachweise/2026-11-08-viewer/README.md) |
 | Funktionsnachweise 1–7 | | [`docs/nachweise/`](docs/nachweise/2026-11-08-gateway-mit-master/README.md) (Lauf mit Ladesäule und Master) |
 | Optional: zusätzliche TimeSim-Nachrichten über RabbitMQ | | Wetter-MQTT ist separat oben dokumentiert; Zeitsteuerung bleibt TCP |
@@ -43,9 +44,9 @@ Leere Zuständigkeitsfelder bleiben unzugeteilt.
 ## LB03 starten
 
 Zusätzliche lokale Weboberfläche: [EnergyTwin.Web](src/EnergyTwin.Web/README.md).
-Auf der Startseite sind die Instanzen nach Modulgruppe angeordnet und lassen sich einzeln starten.
-Statusampeln und farbige Kurzwerte zeigen den aktuellen Stand. „Short Info“ bietet dieselben
-Kurzwerte in einer filterbaren Kartenübersicht. Die Anlagenleiste steuert einen per MQTT bestätigten Master.
+Die Anlagenübersicht zeigt Geräte und Infrastruktur mit Status, Kurzinfo und individuellen Startaktionen.
+Die Fehlerdiagnose verweist auf betroffene Instanzen. Auf der Geräteseite sind gespeicherte Startwerte
+sichtbar, die noch auf einen Neustart warten. Die Anlagenleiste steuert einen per MQTT bestätigten Master.
 
 Einrichtung und vollständige Startfolge: [`docker/README.md`](docker/README.md).
 Nach einmaliger Einrichtung von `docker/.env`, aus dem Repository-Root:

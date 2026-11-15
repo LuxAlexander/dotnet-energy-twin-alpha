@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="EasyModbusTCP.NETCore" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
 </Project>

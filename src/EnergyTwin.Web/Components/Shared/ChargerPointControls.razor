@@ -1,0 +1,64 @@
+@using Devices.Common.Control
+@using DualChargerSim.Models
+@using DualChargerSim.Simulation
+
+<section class="device-live-card device-live-standalone">
+    <h3>Ladepunkt @Point.Number</h3>
+    <p>@StateName @Point.Vehicle</p>
+    @Metrics
+    @if (Point.State == ChargingPointState.Available)
+    {
+        <div class="device-live-value">
+            <label>Fahrzeug
+                <select @bind="_model">
+                    @foreach (var model in VehicleCatalog.Models) { <option value="@model.Name">@model.Name</option> }
+                </select>
+            </label>
+            <label>Start-SOC (%) <input type="number" min="0" max="100" step="any" @bind="_startSoc" /></label>
+            <label>Ziel-SOC (%) <input type="number" min="1" max="100" step="any" @bind="_targetSoc" /></label>
+            <button @onclick="ConnectAsync">Fahrzeug anstecken</button>
+        </div>
+    }
+    <button disabled="@(Point.State is not (ChargingPointState.Connected or ChargingPointState.Charging or ChargingPointState.Finished))"
+            @onclick='() => InvokeAsync("disconnect")'>Abstecken</button>
+    <button disabled="@(Point.State is not (ChargingPointState.Connected or ChargingPointState.Charging))"
+            @onclick='() => InvokeAsync("charge", (Point.State != ChargingPointState.Charging).ToString())'>
+        @(Point.State == ChargingPointState.Charging ? "Laden anhalten" : "Laden starten")
+    </button>
+    @if (ShowFaultControls)
+    {
+        <button disabled="@(Point.State == ChargingPointState.Faulted)" @onclick='() => InvokeAsync("fault")'>Kühlungsdefekt auslösen</button>
+        <button disabled="@(Point.State != ChargingPointState.Faulted)" @onclick='() => InvokeAsync("reset")'>Störung zurücksetzen</button>
+    }
+    @if (Feedback is not null)
+    {
+        <p role="status">@Feedback</p>
+    }
+</section>
+
+@code {
+    [Parameter, EditorRequired] public ChargerPointStatus Point { get; set; } = null!;
+    [Parameter, EditorRequired] public EventCallback<DeviceCommand> Send { get; set; }
+
+    [Parameter] public RenderFragment? Metrics { get; set; }
+    [Parameter] public bool ShowFaultControls { get; set; } = true;
+    [Parameter] public string? Feedback { get; set; }
+
+    private string _model = VehicleCatalog.Models[0].Name;
+    private double _startSoc = 20, _targetSoc = 100;
+    private string StateName => Point.State switch
+    {
+        ChargingPointState.Available => "Frei",
+        ChargingPointState.Connected => "Angesteckt",
+        ChargingPointState.Charging => "Lädt",
+        ChargingPointState.Finished => "Laden abgeschlossen",
+        ChargingPointState.Faulted => "Störung",
+        _ => "Unbekannt"
+    };
+
+    private Task ConnectAsync() => InvokeAsync("connect",
+        System.Text.Json.JsonSerializer.Serialize(new VehicleSelection(_model, _startSoc, _targetSoc)));
+
+    private Task InvokeAsync(string action, string? value = null) =>
+        Send.InvokeAsync(new DeviceCommand($"{action}:{Point.Number}", value));
+}

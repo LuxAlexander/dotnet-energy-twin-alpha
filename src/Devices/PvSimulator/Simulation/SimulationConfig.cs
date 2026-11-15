@@ -8,6 +8,7 @@ namespace EnergySimulator.Simulation;
 public sealed class SimulationConfig
 {
     public const double DefaultStandaloneSpeed = 60;
+    public const int ContainerControlPort = 5191;
 
     public string DeviceId { get; set; } = "PV-01";
     public int StepMinutes { get; set; } = 15;               // CSV-Intervall

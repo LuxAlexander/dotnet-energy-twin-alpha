@@ -1,0 +1,14 @@
+.pending-start {
+    margin-block: 16px;
+    padding: 16px 20px;
+    border: 1px solid var(--line);
+    border-inline-start: 4px solid var(--gold);
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--gold) 7%, var(--surface));
+}
+.pending-start h2 { margin: 0 0 10px; font-size: 1.03rem; }
+.pending-start dl { margin: 0 0 12px; }
+.pending-start dl div { display: flex; flex-wrap: wrap; column-gap: 12px; margin-block: 6px; }
+.pending-start dt { font-weight: 650; }
+.pending-start dd { margin: 0; overflow-wrap: anywhere; }
+.pending-start dd span { color: var(--muted); font-size: .83em; }

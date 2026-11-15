@@ -5,6 +5,9 @@ Im Master-Betrieb übernimmt er die virtuelle Zeit und fragt den lokalen Wetterd
 eine lokale Uhr und lokales Wetter. Zustand und Sollwerte sind über Modbus TCP zugänglich (abschaltbar).
 
 **Verantwortlich:** Alexander Lux  
+
+Das [PV-Dockerfile und die Startanleitung](../../../docker/README.md#pv-simulator-im-container-lb04)
+beschreiben den Betrieb im Linux-Container mit Master und Wetterdienst auf Windows.
 **Team:** Alpha
 
 ## Voraussetzungen
@@ -302,6 +305,13 @@ andere Geräte dieselben Bausteine verwenden, ohne Code zu kopieren.
 
 `-s` und `-d` aus LB01 bleiben als Kürzel für `--speed` und `--start`, bedeuten aber nur noch standalone etwas (`--start` jetzt mit Uhrzeit).
 Die Option `--timescale` gibt es nicht mehr; mit Master bestimmt der Master das Tempo.
+
+Der Simulator veröffentlicht pro Prozesslauf einen lokalen HTTP-Steuerzugang. Die Web-App unter
+demselben Benutzerkonto erkennt dadurch auch Konsolenprozesse. Konsole und Web-App führen Befehle
+in der Simulationsschleife aus. Der Steuerzugang lauscht auf IPv4-Loopback und benötigt den Schlüssel
+des aktuellen Prozesslaufs. Die Registrierung liegt im lokalen Anwendungsdatenverzeichnis unter
+`EnergyTwin/device-control`. Für isolierte Prüfläufe kann `ENERGYTWIN_DEVICE_CONTROL_DIR` in beiden
+Prozessen auf denselben alternativen Ordner gesetzt werden.
 
 ### Bedienung / Start
 

@@ -1,0 +1,102 @@
+@inject InstanceStore Store
+@inject DeviceSessions Sessions
+@inject ProcessManager Processes
+
+@if (_differences.Length > 0 || _notice is not null || _recovery is not null)
+{
+    <section class="pending-start" aria-labelledby="pending-start-heading">
+        @if (_differences.Length > 0)
+        {
+            <h2 id="pending-start-heading">Gespeicherte Startwerte warten auf Neustart</h2>
+            <dl>
+                @foreach (var change in _differences)
+                {
+                    <div><dt>@change.Label</dt><dd>@change.Active <span>aktiv</span> → @change.Saved <span>gespeichert</span></dd></div>
+                }
+            </dl>
+            @if (_confirmation is null)
+            {
+                <button class="button-primary" disabled="@_busy" @onclick="Confirm">Jetzt neu starten</button>
+            }
+        }
+        else
+        {
+            <h2 id="pending-start-heading">Neustart</h2>
+        }
+        @if (_confirmation is { } confirmation)
+        {
+            <p>Die laufende Simulation wird beendet und mit den gespeicherten Startwerten gestartet.</p>
+            <button class="button-primary" disabled="@_busy" @onclick="() => RestartAsync(confirmation)">Neustart bestätigen</button>
+            <button disabled="@_busy" @onclick="() => _confirmation = null">Abbrechen</button>
+        }
+        @if (_recovery is not null)
+        {
+            <button disabled="@_busy" @onclick="RecoverAsync">Mit vorherigen Werten starten</button>
+        }
+        @if (_notice is not null)
+        {
+            <p role="status">@_notice</p>
+        }
+    </section>
+}
+
+@code {
+    [Parameter, EditorRequired] public InstanceConfig Device { get; set; } = null!;
+    [Parameter, EditorRequired] public DeviceSessions.Session[] ActiveSessions { get; set; } = [];
+    private StartupDifference[] _differences = [];
+    private sealed record Confirmation(InstanceConfig Saved, DeviceSessions.Session Active);
+    private Confirmation? _confirmation;
+    private InstanceConfig? _recovery;
+    private bool _busy;
+    private string? _notice;
+
+    protected override void OnParametersSet() => Refresh();
+
+    private void Refresh()
+    {
+        _differences = ActiveSessions is [var session] && Store.Find(Device.Id) is { Revision: >= 0 } saved
+            ? StartupDifferences.Compare(session.Startup, saved) : [];
+    }
+
+    private void Confirm()
+    {
+        if (ActiveSessions is [var active] && Store.Find(Device.Id) is { Revision: >= 0 } saved && _differences.Length > 0)
+            _confirmation = new(saved, active);
+    }
+
+    private async Task RestartAsync(Confirmation confirmation)
+    {
+        if (_busy) return;
+        _confirmation = null;
+        if (Store.Find(Device.Id)?.Revision != confirmation.Saved.Revision)
+        {
+            _notice = "Die Startwerte wurden inzwischen erneut gespeichert. Bitte den Neustart erneut bestätigen.";
+            return;
+        }
+        _busy = true;
+        try
+        {
+            var result = await Processes.RestartDeviceAsync(confirmation.Saved, Store.Instances, confirmation.Active.Registration.Session);
+            _notice = result.Detail;
+            var previous = confirmation.Active.Startup;
+            _recovery = !result.Started && Sessions.For(Device.Id).Length == 0
+                && previous.Pv?.Modbus.Disabled != true && previous.Battery?.Modbus.Disabled != true
+                && previous.Equipment?.Modbus.Disabled != true ? previous : null;
+        }
+        finally { _busy = false; }
+    }
+
+    private async Task RecoverAsync()
+    {
+        if (_busy || _recovery is not { } previous) return;
+        _busy = true;
+        try
+        {
+            var result = await Processes.RestartDeviceAsync(previous,
+                Store.Instances.Select(instance => instance.Id == Device.Id ? previous : instance).ToArray(), null);
+            _notice = result.Started ? result.Detail + " Die gespeicherten neuen Werte bleiben erhalten." : result.Detail;
+            if (result.Started) _recovery = null;
+        }
+        finally { _busy = false; }
+    }
+}

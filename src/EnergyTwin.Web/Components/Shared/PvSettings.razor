@@ -1,0 +1,486 @@
+@using Devices.Common.Control
+@using EnergySimulator.Simulation
+@using global::Shared.Weather
+@inject DeviceSessions Sessions
+@inject InstanceStore Store
+@inject ProcessManager Processes
+@inject NavigationManager Navigation
+@implements IAsyncDisposable
+
+<h2>Startoptionen</h2>
+<p>Geräte-ID <strong>@Instance.Id</strong></p>
+@if (_draft is { } draft)
+{
+    <fieldset disabled="@(_busy || SessionConflict)" class="device-start-grid" aria-label="PV-Startoptionen">
+        <section class="device-live-card device-start-card">
+            <h3>Anlage und Modell</h3>
+            <label class="device-wide-field">Anzeigename <input @bind="_name" /></label>
+            <label>Nennleistung (kW) <input type="number" min="0.01" step="any" @bind="draft.PeakPowerKw" /></label>
+            <label>Modellschrittweite (min) <input type="number" step="any" @bind="draft.ModelStepMinutes" /></label>
+            <label>Zufalls-Seed <input type="number" @bind="draft.Seed" /></label>
+        </section>
+        <section class="device-live-card device-start-card">
+            <h3>Betriebsart und Wetter</h3>
+            <label>Betriebsart
+                <select @bind="OperatingMode">
+                    <option value="master">Master</option>
+                    <option value="standalone">Standalone</option>
+                </select>
+            </label>
+            <label>Standort
+                <select @bind="draft.Location">
+                    @foreach (var location in Locations) { <option value="@location">@location</option> }
+                </select>
+            </label>
+            @if (_standalone)
+            {
+                <label>Virtuelle Startzeit <input type="datetime-local" step="1" @bind="_start" /></label>
+                <label>Starttempo <input type="number" min="1" max="100000" step="any" @bind="_speed" /></label>
+            }
+            else
+            {
+                <label class="device-wide-field">Master-Adresse (Host:Port) <input @bind="_master" /></label>
+            }
+            <label class="device-wide-field">Wetterquelle (HTTP-Adresse oder „off“) <input @bind="_weather" /></label>
+        </section>
+        <section class="device-live-card device-start-card">
+            <h3>Aufzeichnung und Konsole</h3>
+            <label class="device-wide-field">CSV-Ordner <input @bind="draft.OutputDirectory" /></label>
+            <label>CSV-Intervall (min) <input type="number" @bind="draft.StepMinutes" /></label>
+            <div class="device-console-field">
+                <label for="device-start-refresh">Konsolenintervall (ms)</label>
+                <details class="field-hint"><summary aria-label="Hinweis zum Konsolenintervall">ⓘ</summary>Diese Einstellung betrifft die Bildschirmaktualisierung der Konsole.</details>
+                <input id="device-start-refresh" type="number" min="50" @bind="draft.RefreshMs" />
+            </div>
+        </section>
+        <section class="device-live-card device-start-card">
+            <h3>Modbus-Verbindung</h3>
+            @if (draft.Modbus.Bind == "0.0.0.0")
+            {
+                <p class="device-wide-field">Die bisherige Einstellung für alle Schnittstellen wird beim Containerstart durch einen lokalen Windows-Port ersetzt.</p>
+            }
+            <label>Lokaler Modbus-Port <input type="number" min="1024" max="65535" @bind="_port" /></label>
+            <label>Unit-ID <input type="number" min="1" max="247" @bind="_unit" /></label>
+            <div class="device-wide-field">
+                <button @onclick="SuggestPort">Freien Port vorschlagen</button>
+            </div>
+        </section>
+    </fieldset>
+    <div class="device-start-actions">
+        @if (_active.Length == 1)
+        {
+            <button disabled="@_busy" @onclick="() => Load(_active[0].PvState!.Startup)">Aktive Werte übernehmen</button>
+        }
+        <div class="device-save-actions">
+            <button class="button-primary" disabled="@(_busy || SessionConflict)" @onclick="() => SaveAsync(false)">Speichern</button>
+            <button disabled="@(_busy || SessionConflict)" @onclick="() => _confirm = true">Speichern und neu starten</button>
+        </div>
+    </div>
+    @if (_confirm)
+    {
+        <p>Eine laufende Simulation wird beendet und mit den neuen Startoptionen gestartet.</p>
+        <button disabled="@_busy" @onclick="() => SaveAsync(true)">Neustart bestätigen</button>
+        <button @onclick="() => _confirm = false">Abbrechen</button>
+    }
+    @if (_message is not null)
+    {
+        <p role="status">@_message</p>
+    }
+}
+@if (_recovery is not null)
+{
+    <p>Entwurf korrigieren und erneut starten oder die vorherigen Startwerte verwenden.</p>
+    <button disabled="@_busy" @onclick="RecoverAsync">Mit vorherigen Werten starten</button>
+    <button @onclick="() => _recovery = null">Gestoppt lassen</button>
+}
+@if (_conflict is { } conflict)
+{
+    <details open><summary>Inzwischen gespeicherte Startwerte</summary>
+        <pre class="live-json">@Describe(conflict.Pv ?? Defaults(conflict))</pre>
+        <button disabled="@_busy" @onclick="ReloadSaved">Gespeicherte Werte laden</button>
+        <button disabled="@_busy" @onclick="KeepDraft">Mit meinem Entwurf weiterarbeiten</button>
+    </details>
+}
+@if (_saved is { } savedConfig)
+{
+    <details><summary>Gespeicherte Startwerte</summary><pre class="live-json">@Describe(savedConfig.Pv ?? Defaults(savedConfig))</pre></details>
+}
+
+<h2>Live-Bedienung</h2>
+@if (SessionConflict)
+{
+    <p role="alert">Die Geräte-ID ist mehrfach belegt oder gehört zu einer anderen Geräteart. Bedienung gesperrt.</p>
+}
+else if (_state is { } state)
+{
+    <details><summary>Aktive Startwerte</summary><pre class="live-json">@Describe(state.Startup)</pre></details>
+    <fieldset disabled="@_busy" class="device-live-controls" aria-label="PV-Live-Bedienung">
+        @if (state.Startup.TimeSync.Standalone)
+        {
+            <section class="device-live-card device-live-standalone">
+                <h3>Standalone-Steuerung</h3>
+                <button @onclick='() => SendAsync("pause", (!state.Paused).ToString())'>@(state.Paused ? "Fortsetzen" : "Pausieren")</button>
+                <button @onclick='() => SendAsync("mode", state.Mode == SimulationMode.Auto ? "Manual" : "Auto")'>Modus @(state.Mode == SimulationMode.Auto ? "manuell" : "automatisch") wählen</button>
+                <p>Tempo ×@state.Speed · Modus @(state.Mode == SimulationMode.Auto ? "Automatik" : "Manuell")</p>
+                @foreach (var speed in Speeds)
+                {
+                    <button @onclick='() => SendAsync("speed", speed.ToString(System.Globalization.CultureInfo.InvariantCulture))'>×@speed</button>
+                }
+                @if (state.Startup.WeatherUrl is null)
+                {
+                    <p>Wetter @state.Weather.ToGerman()</p>
+                    @foreach (var weather in Weather)
+                    {
+                        <button @onclick='() => SendAsync("weather", weather.ToString())'>@weather.ToGerman()</button>
+                    }
+                }
+            </section>
+        }
+        <div class="device-live-grid">
+            <section class="device-live-card">
+                <h3>Wartung</h3>
+                <p>Setzt die Verschmutzung der PV-Module zurück.</p>
+                <button @onclick='() => SendAsync("clean")'>Module reinigen</button>
+            </section>
+            <section class="device-live-card">
+                <h3>Konsolenanzeige</h3>
+                <label>Aktives Konsolenintervall
+                    <select value="@state.RefreshMs" @onchange='e => SendAsync("refresh", e.Value?.ToString())'>
+                        @foreach (var interval in RefreshIntervals.Append(state.RefreshMs).Distinct().Order())
+                        {
+                            <option value="@interval">@interval ms</option>
+                        }
+                    </select>
+                </label>
+                <details class="field-hint"><summary aria-label="Hinweis zum aktiven Konsolenintervall">ⓘ</summary>Diese Einstellung betrifft nur die Konsolenanzeige.</details>
+            </section>
+        </div>
+        <section class="device-live-card">
+            <h3>Simulierte Störungen</h3>
+            <ul class="device-faults">
+                @foreach (var (action, name, active) in new[] { ("inverter", "Wechselrichterfehler", state.InverterFault),
+                    ("overheat", "Erzwungene Überhitzung", state.Overheat), ("grid", "Netzstörung", state.GridFault) })
+                {
+                    var label = active ? "Aufheben" : "Auslösen";
+                    <li>
+                        <strong>@name</strong>
+                        <span class="device-fault-status @(active ? "is-active" : "")">@(active ? "Aktiv" : "Inaktiv")</span>
+                        <button aria-label="@($"{name} – {label}")" @onclick="() => SendAsync(action, (!active).ToString())">@label</button>
+                    </li>
+                }
+            </ul>
+        </section>
+        <div class="device-live-footer">
+            <p role="status">@(_busy ? "Wird angewendet …" : _liveMessage)</p>
+            <button class="button-danger" @onclick="StopAsync">Simulator beenden</button>
+        </div>
+    </fieldset>
+}
+else
+{
+    <p>Kein steuerbarer PV-Prozess erreichbar.</p>
+    @if (_liveMessage is not null)
+    {
+        <p role="status">@_liveMessage</p>
+    }
+    @if (Processes.HasPvContainer(Instance.Id))
+    {
+        <button class="button-danger" disabled="@_busy" @onclick="StopUnconfirmedAsync">PV-Container beenden</button>
+    }
+    else
+    {
+        <button disabled="@(_busy || _revision < 0)" @onclick="StartAsync">Starten</button>
+    }
+    @if (_revision >= 0 && !Processes.HasPvContainer(Instance.Id))
+    {
+        @if (_confirmDelete)
+        {
+            <p>Gespeicherte Instanz @Instance.Id löschen?</p>
+            <button disabled="@_busy" @onclick="DeleteAsync">Löschen bestätigen</button>
+            <button @onclick="() => _confirmDelete = false">Abbrechen</button>
+        }
+        else
+        {
+            <button disabled="@_busy" @onclick="() => _confirmDelete = true">Instanz löschen</button>
+        }
+    }
+}
+@if (_busy)
+{
+    <p role="status">Wird angewendet …</p>
+}
+<PvCliHelp />
+
+@code {
+    [Parameter, EditorRequired] public InstanceConfig Instance { get; set; } = null!;
+    private static readonly string[] Locations = ["salzburg", "wien", "innsbruck", "tamanrasset", "neumayer"];
+    private static readonly int[] Speeds = [1, 15, 60, 300, 1800];
+    private static readonly int[] RefreshIntervals = [100, 200, 400, 800, 1500, 3000];
+    private static readonly WeatherCondition[] Weather = [WeatherCondition.Night, WeatherCondition.Sunny,
+        WeatherCondition.PartlyCloudy, WeatherCondition.Overcast, WeatherCondition.Storm];
+    private readonly CancellationTokenSource _stop = new();
+    private Task? _poll;
+    private SimulationConfig? _draft;
+    private DeviceSessions.Session[] _active = [];
+    private PvControlState? _state;
+    private bool SessionConflict => _active.Length > 1 || _active is [{ PvState: null }];
+    private InstanceConfig? _conflict;
+    private InstanceConfig? _recovery;
+    private InstanceConfig? _saved;
+    private long _revision;
+    private string _name = "", _weather = "", _master = "";
+    private DateTime _start;
+    private double _speed;
+    private int _port, _unit;
+    private bool _standalone, _busy, _confirm, _confirmDelete;
+    private string? _message;
+    private string? _liveMessage;
+    private string OperatingMode
+    {
+        get => _standalone ? "standalone" : "master";
+        set
+        {
+            var standalone = value == "standalone";
+            if (standalone != _standalone)
+            {
+                var previousDefault = _standalone ? "off" : SimulationConfig.DefaultWeatherUrl;
+                if (_weather == previousDefault)
+                    _weather = standalone ? "off" : SimulationConfig.DefaultWeatherUrl;
+            }
+            _standalone = standalone;
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        _revision = Instance.Revision;
+        _name = Instance.Name;
+        Load(Instance.Pv ?? Defaults(Instance));
+        Refresh();
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender) _poll = PollAsync(_stop.Token);
+        return Task.CompletedTask;
+    }
+
+    private async Task PollAsync(CancellationToken cancellationToken)
+    {
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
+        try
+        {
+            while (await timer.WaitForNextTickAsync(cancellationToken))
+            {
+                if (_busy) continue;
+                Refresh();
+                StateHasChanged();
+            }
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested) { }
+    }
+
+    private void Refresh()
+    {
+        _active = Sessions.For(Instance.Id);
+        _state = _active.Length == 1 ? _active[0].PvState : null;
+        _saved = Store.Find(Instance.Id) is { Revision: >= 0 } saved ? saved : null;
+    }
+
+    private static SimulationConfig Defaults(InstanceConfig instance) =>
+        ArgsParser.Parse(PvStartup.Arguments(instance));
+
+    private static string Describe(SimulationConfig config)
+    {
+        var arguments = PvStartup.Arguments(DeviceSessions.FromStartup(config));
+        var lines = new List<string>();
+        for (var index = 0; index < arguments.Length; index++)
+        {
+            var flag = arguments[index];
+            lines.Add(flag == "--standalone" ? flag : $"{flag} {arguments[++index]}");
+        }
+        if (config.Modbus.Disabled) lines.Add("--no-modbus");
+        return string.Join(Environment.NewLine, lines);
+    }
+
+    private void Load(SimulationConfig config)
+    {
+        _draft = System.Text.Json.JsonSerializer.Deserialize<SimulationConfig>(
+            System.Text.Json.JsonSerializer.Serialize(config))!;
+        _draft.Location = config.Location.ToLowerInvariant();
+        _weather = config.WeatherUrl ?? "off";
+        _standalone = config.TimeSync.Standalone;
+        _start = config.TimeSync.StandaloneStart;
+        _master = config.TimeSync.MasterEndpoint;
+        _speed = config.TimeSync.StandaloneSpeed;
+        _port = config.Modbus.Port;
+        _unit = config.Modbus.UnitId;
+    }
+
+    private void ReloadSaved()
+    {
+        if (_conflict is not { } saved) return;
+        Load(saved.Pv ?? Defaults(saved));
+        _name = saved.Name;
+        KeepDraft();
+    }
+
+    private void KeepDraft()
+    {
+        if (_conflict is not { } saved) return;
+        _revision = saved.Revision;
+        _conflict = null;
+    }
+
+    private void SuggestPort()
+    {
+        var port = Store.SuggestModbusPort();
+        if (port > 0) _port = port;
+        _message = port > 0 ? $"Port {port} im Entwurf übernommen." : "Kein freier Modbus-Port gefunden.";
+    }
+
+    private async Task SaveAsync(bool restart)
+    {
+        if (_busy || _draft is null) return;
+        Refresh();
+        if (SessionConflict) return;
+        _busy = true;
+        _confirm = false;
+        try
+        {
+            if (_unit is < 1 or > 247) throw new ArgumentException("Die Modbus-Unit-ID muss zwischen 1 und 247 liegen.");
+            if (_draft.RefreshMs < 50) throw new ArgumentException("Das Konsolenintervall muss mindestens 50 ms betragen.");
+            if (string.IsNullOrWhiteSpace(_name)) throw new ArgumentException("Der Anzeigename fehlt.");
+            if (_weather != "off" && (!Uri.TryCreate(_weather, UriKind.Absolute, out var url)
+                || url.Scheme is not ("http" or "https") || url.UserInfo.Length > 0))
+                throw new ArgumentException("Für die Wetterquelle eine HTTP-Adresse ohne Zugangsdaten oder „off“ angeben.");
+            var current = Store.Find(Instance.Id) ?? Instance;
+            var pv = _draft;
+            pv.TimeSync = pv.TimeSync with { Standalone = _standalone, StandaloneStart = _start, StandaloneSpeed = _speed };
+            if (!_standalone)
+            {
+                Devices.Common.TimeSyncOptions.TryApply("--master", () => _master, pv.TimeSync, out var time);
+                pv.TimeSync = time;
+            }
+            pv.WeatherUrl = _weather == "off" ? null : _weather;
+            pv.Modbus = pv.Modbus with { Disabled = false, Bind = "127.0.0.1", Port = _port, UnitId = (byte)_unit };
+            var candidate = current with { Name = _name.Trim(), Location = pv.Location, ModbusPort = _port, Pv = pv };
+            candidate = candidate with { Pv = ArgsParser.Parse(PvStartup.Arguments(candidate)) };
+            var active = _active.SingleOrDefault();
+            if (restart && (active is null || active.PvState!.Startup.Modbus.Disabled || active.PvState!.Startup.Modbus.Port != _port)
+                && !PortProbe.IsFree(_port))
+                throw new ArgumentException($"Modbus-Port {_port} ist belegt. Wähle einen anderen Port oder nutze den Vorschlag.");
+
+            var error = Store.Save(candidate, _revision, out var saved);
+            if (error is not null)
+            {
+                if (current.Revision != _revision) _conflict = current;
+                _message = error;
+                return;
+            }
+            _revision = saved.Revision;
+            _saved = saved;
+            _conflict = null;
+            _message = "Gespeichert. Die Werte gelten ab dem nächsten Start.";
+            if (!restart) return;
+
+            var previous = active is null ? _recovery ?? current : DeviceSessions.FromStartup(active.PvState!.Startup) with { Name = current.Name };
+            var result = await Processes.RestartDeviceAsync(saved, Store.Instances, active?.Registration.Session);
+            _message = result.Detail;
+            Refresh();
+            _recovery = result.Started || _active.Length > 0 || previous.Pv?.Modbus.Disabled == true ? null : previous;
+        }
+        catch (ArgumentException ex) { _message = ex.Message; }
+        finally { _busy = false; }
+    }
+
+    private async Task RecoverAsync()
+    {
+        if (_busy || _recovery is not { } previous) return;
+        _busy = true;
+        try
+        {
+            var result = await Processes.RestartDeviceAsync(previous, Store.Instances
+                .Select(config => config.Id == previous.Id ? previous : config).ToArray(), null);
+            _message = result.Started ? $"{result.Detail} Die gespeicherten neuen Werte bleiben erhalten." : result.Detail;
+            if (result.Started) _recovery = null;
+        }
+        finally { _busy = false; }
+    }
+
+    private async Task StartAsync()
+    {
+        if (_busy || Store.Find(Instance.Id) is not { Revision: >= 0 } config) return;
+        _busy = true;
+        try { _message = await Processes.StartInstanceAsync(config, Store.Instances); }
+        finally { _busy = false; }
+    }
+
+    private async Task StopAsync()
+    {
+        if (_busy || _active.Length != 1) return;
+        _busy = true;
+        try
+        {
+            var result = await Processes.StopDeviceAsync(Instance, _active[0].Registration.Session);
+            _liveMessage = result.Detail;
+            Refresh();
+        }
+        finally { _busy = false; }
+    }
+
+    private async Task StopUnconfirmedAsync()
+    {
+        if (_busy) return;
+        _busy = true;
+        try
+        {
+            var result = await Processes.StopAsync(Instance);
+            _liveMessage = result?.Detail;
+            Refresh();
+        }
+        finally { _busy = false; }
+    }
+
+    private async Task DeleteAsync()
+    {
+        if (_busy || Sessions.For(Instance.Id).Length != 0) return;
+        _busy = true;
+        try
+        {
+            Store.Remove(Instance.Id);
+            await Processes.SyncGatewayAsync(Store.Instances, startIfStopped: false);
+            Navigation.NavigateTo("/");
+        }
+        finally { _busy = false; }
+    }
+
+    private async Task SendAsync(string action, string? value = null)
+    {
+        if (_busy || _active.Length != 1) return;
+        var registration = _active[0].Registration;
+        var latest = Sessions.For(Instance.Id);
+        if (latest.Length != 1 || latest[0].Registration.Session != registration.Session)
+        {
+            Refresh();
+            _liveMessage = "Der Prozess hat gewechselt. Bitte erneut prüfen.";
+            return;
+        }
+        _busy = true;
+        try
+        {
+            var reply = await Sessions.SendAsync<PvControlState>(registration, new(action, value), _stop.Token);
+            _liveMessage = reply is null ? "Zustand unbekannt. Der aktuelle Zustand wird erneut abgefragt."
+                : reply.Error ?? "Angewendet.";
+            _state = reply?.State is { } state ? state with { Startup = latest[0].PvState!.Startup } : null;
+        }
+        finally { _busy = false; }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await _stop.CancelAsync();
+        if (_poll is not null) await _poll;
+        _stop.Dispose();
+    }
+}

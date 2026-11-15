@@ -83,6 +83,14 @@ Hinweise:
 
 Während der Simulation zeigt ein festes Dashboard Simulationszeit, Tempo, Modus, Gerätezustand, Soll- und Ist-Leistung, SOC (Zahl und Balken), Temperatur, aktive Störung sowie Energie- und Zykluszähler.
 
+### Bedienung in der Web-App
+
+Im Reiter „Einstellungen“ des Batteriespeichers lassen sich Startwerte speichern und beim Neustart anwenden.
+Die Live-Bedienung bietet Ein/Aus, Automatik und manuellen Betrieb, Sollleistung, Leistungs- und SOC-Grenzen
+sowie Not-Aus, Überhitzung und Rücksetzen. Pause und Tempo sind standalone verfügbar. Ein lokaler Steuerzugang
+meldet die Befehlsausführung zurück und erkennt auch separat gestartete Prozesse desselben Benutzerkontos.
+Details stehen in der [Web-Anleitung](../../EnergyTwin.Web/README.md#geräte-bearbeiten).
+
 ### Tasten im laufenden Betrieb
 
 | Taste | Funktion |

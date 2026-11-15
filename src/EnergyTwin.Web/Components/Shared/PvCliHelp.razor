@@ -1,0 +1,75 @@
+<details class="pv-cli-help">
+    <summary>CLI-Hilfe</summary>
+    <div class="pv-cli-help-content">
+        <h3>Aufruf</h3>
+        <code class="pv-cli-command">dotnet run --project src/Devices/PvSimulator -- [Optionen]</code>
+
+        @foreach (var group in OptionGroups)
+        {
+            <h3>@group.Title</h3>
+            <dl class="pv-cli-options">
+                @foreach (var option in group.Options)
+                {
+                    <div>
+                        <dt><code>@option.Syntax</code></dt>
+                        <dd>@option.Description</dd>
+                    </div>
+                }
+            </dl>
+        }
+
+        <h3>Bedienung in der Konsole</h3>
+        <ul class="pv-cli-keys">
+            <li><kbd>Q</kbd> Beenden</li>
+            <li><kbd>C</kbd> Module reinigen</li>
+            <li><kbd>R</kbd> Anzeigeintervall wechseln</li>
+            <li><kbd>F</kbd> Wechselrichterfehler</li>
+            <li><kbd>T</kbd> Überhitzung</li>
+            <li><kbd>G</kbd> Netzstörung</li>
+        </ul>
+        <h4>Nur im Standalone-Betrieb</h4>
+        <ul class="pv-cli-keys">
+            <li><kbd>P</kbd> Pausieren oder fortsetzen</li>
+            <li><kbd>M</kbd> Automatik- oder manuellen Modus wählen</li>
+            <li><kbd>0</kbd>–<kbd>4</kbd> Wetter bei lokaler Wetterquelle wählen</li>
+            <li><kbd>5</kbd>–<kbd>9</kbd> Tempo ×1, ×15, ×60, ×300 oder ×1800 wählen</li>
+        </ul>
+
+        <h3>Beispiele</h3>
+        <code class="pv-cli-command">dotnet run --project src/Devices/PvSimulator -- --id PV-01 -p 10</code>
+        <code class="pv-cli-command">dotnet run --project src/Devices/PvSimulator -- --standalone -s 300 -d "2026-06-21 05:00"</code>
+    </div>
+</details>
+
+@code {
+    private static readonly (string Title, (string Syntax, string Description)[] Options)[] OptionGroups =
+    [
+        ("Anlage, Wetter und CSV",
+        [
+            ("--id <Text>", "Geräte-ID. Standard PV-01."),
+            ("-p, --peak <kW>", "Nennleistung. Standard 10 kW."),
+            ("--model-step <Minuten>", "Schrittweite des Modells. Standard 1 Minute."),
+            ("-t, --step <Minuten>", "CSV-Aufzeichnungsintervall. Standard 15 Minuten."),
+            ("-o, --output <Ordner>", "CSV-Zielordner. Standard docs/data im Repository."),
+            ("-r, --refresh <ms>", "Konsolenintervall. Standard 400 ms, mindestens 50 ms."),
+            ("--seed <Zahl>", "Optionaler Zufalls-Seed für Netzrauschen und Störmodell."),
+            ("--weather <URL|off>", "Wetterdienst oder lokales Wetter. Mit Master standardmäßig http://127.0.0.1:8080, standalone lokal."),
+            ("--location <Kennung>", "Wetterstandort. Standard salzburg.")
+        ]),
+        ("Virtuelle Zeit",
+        [
+            ("--master <Host:Port>", "Adresse des Simulations-Masters. Standard 127.0.0.1:5100."),
+            ("--standalone", "Mit lokaler Uhr starten."),
+            ("-d, --start <Zeit>", "Virtuelle Startzeit im Standalone-Betrieb. Format yyyy-MM-dd HH:mm, Standard heute um 00:00."),
+            ("-s, --speed <Faktor>", "Tempo im Standalone-Betrieb. Bereich 1 bis 100 000, Standard 60.")
+        ]),
+        ("Modbus und Hilfe",
+        [
+            ("--modbus-port <Port>", "Modbus-TCP-Port von 1024 bis 65535. Standard 1502."),
+            ("--modbus-bind <IP>", "Bind-Adresse. Standard 127.0.0.1, 0.0.0.0 für alle IPv4-Schnittstellen."),
+            ("--unit-id <1–247>", "Modbus-Unit-ID. Standard 1."),
+            ("--no-modbus", "Simulator per CLI ohne Modbus-Server starten."),
+            ("-h, --help, /?", "CLI-Hilfe in der Konsole anzeigen.")
+        ])
+    ];
+}

@@ -1,6 +1,7 @@
 @page "/module/{Id}"
 @inject PreviewCatalog Catalog
 @inject InstanceStore InstanceStore
+@inject DeviceSessions DeviceSessions
 @inject ProcessManager Processes
 @inject EnergyTwin.Web.Live.MasterControlClient MasterControl
 @inject LiveStore Store
@@ -25,6 +26,10 @@ else
             <button class="@(_view == view ? "selected" : null)" aria-pressed="@(_view == view)" @onclick="() => _view = view">@ViewLabel(view)</button>
         }
     </nav>
+    @if (_isFieldDevice && _config is { } device && _view is ModuleView.Overview or ModuleView.Settings)
+    {
+        <PendingStartup @key="(typeof(PendingStartup), Id)" Device="device" ActiveSessions="_overviewSessions" />
+    }
     @if (_view == ModuleView.Overview)
     {
         @switch (_module.Kind)
@@ -37,77 +42,64 @@ else
                 {
                     <MetricCards Metrics="LiveView.DeviceMetrics(_module.Kind, _live)" />
                     <p class="muted small">Live-Daten · Qualität @_live.Quality (@_live.QualityReason) @Freshness</p>
-                    @switch (_module.Kind)
-                    {
-                        case ModuleKind.Pv:
-                            <LiveChart Title="@LiveView.ChartTitle(_module.Kind)" Unit="@LiveView.Unit(_module.Kind)"
-                                       Description="@LiveView.ChartDescription(_module.Kind)" RunId="@ChartRunId"
-                                       SeriesKeys="LiveView.ChartSeries(_module.Kind)" SeriesOf="TrendOf" />
-                            <div class="control-panel"><div><h2>Leistungsbegrenzung</h2><p class="muted">Geräterückmeldung folgt mit dem Befehlsvertrag.</p></div><label>Limit (%) <input type="number" value="100" disabled /></label><button disabled>Übernehmen</button></div>
-                            break;
-                        case ModuleKind.Battery:
-                            <LiveChart Title="@LiveView.ChartTitle(_module.Kind)" Unit="@LiveView.Unit(_module.Kind)"
-                                       Description="@LiveView.ChartDescription(_module.Kind)" RunId="@ChartRunId"
-                                       SeriesKeys="LiveView.ChartSeries(_module.Kind)" SeriesOf="TrendOf" />
-                            <section class="detail-panel"><div class="section-heading"><h2>Speicherfüllstand</h2><span>@SocPercent</span></div><div class="trend-progress"><progress value="@SocValue" max="100" aria-label="Ladezustand"></progress></div><p class="muted">Positive Leistung bedeutet Laden, negative Leistung Entladen.</p></section>
-                            <div class="control-panel"><h2>Leistungssollwert</h2><label>Leistung (kW) <input type="number" value="4.2" disabled /></label><button disabled>Übernehmen</button></div>
-                            break;
-                        case ModuleKind.Charger:
-                            <div class="charging-ports">
-                                @for (var port = 1; port <= 2; port++)
-                                {
-                                    <section class="detail-panel"><span class="eyebrow">@($"Anschluss {port}")</span><h2>@ChargerPortHeading(port)</h2>
-                                        @if (PortSoc(port) is { } soc)
-                                        {
-                                            <progress value="@soc" max="100" aria-label="@($"Ladezustand Anschluss {port}")"></progress><p>@($"{soc:0} % · {PortLeistung(port):0.#} kW")</p>
-                                        }
-                                        else { <p class="muted">Kein Fahrzeug oder kein Ladezustand sichtbar.</p> }
-                                        <button disabled>Ladepunkt bedienen</button>
-                                    </section>
-                                }
-                            </div>
-                            <div class="control-panel"><div><h2>Leistungsgrenze</h2><p class="muted">Geräterückmeldung folgt mit dem Befehlsvertrag.</p></div><label>Grenze (kW) <input type="number" value="100" disabled /></label><button disabled>Übernehmen</button></div>
-                            break;
-                        case ModuleKind.ColdStore:
-                            <LiveChart Title="@LiveView.ChartTitle(_module.Kind)" Unit="@LiveView.Unit(_module.Kind)"
-                                       Description="@LiveView.ChartDescription(_module.Kind)" RunId="@ChartRunId"
-                                       SeriesKeys="LiveView.ChartSeries(_module.Kind)" SeriesOf="TrendOf" />
-                            <section class="detail-panel"><span class="eyebrow">Temperaturführung</span><h2 class="blue">@IstTemp °C → Soll @SollTemp °C</h2><p>Ist- und Solltemperatur im gemeinsamen Verlauf.</p></section>
-                            <div class="control-panel"><h2>Solltemperatur</h2><label>Temperatur (°C) <input type="number" value="-18" disabled /></label><button disabled>Übernehmen</button></div>
-                            break;
-                    }
                 }
                 else
                 {
                     <MetricCards Metrics="_module.Metrics" />
-                    @switch (_module.Kind)
-                    {
-                        case ModuleKind.Pv:
-                            <PreviewChart ModuleId="@_module.Id" />
-                            <div class="control-panel"><div><h2>Leistungsbegrenzung</h2><p class="muted">Übernahme mit Geräterückmeldung folgt.</p></div><label>Limit (%) <input type="number" value="100" disabled /></label><button disabled>Übernehmen</button></div>
-                            break;
-                        case ModuleKind.Battery: <PreviewChart ModuleId="@_module.Id" />
-                            <section class="detail-panel"><div class="section-heading"><h2>Speicherfüllstand</h2><span class="green">68 % · Beispiel</span></div><progress value="68" max="100" aria-label="Beispiel-Ladezustand: 68 Prozent"></progress><p class="muted">Positive Leistung bedeutet Laden, negative Leistung Entladen.</p></section>
-                            <div class="control-panel"><h2>Leistungssollwert</h2><label>Leistung (kW) <input type="number" value="4.2" disabled /></label><button disabled>Übernehmen</button></div>
-                            break;
-                        case ModuleKind.Charger:
-                            <div class="charging-ports">
-                                @for (var port = 1; port <= 2; port++)
+                    <p class="muted small">Keine Live-Messwerte für diese Kennung. Beispieldaten sind entsprechend gekennzeichnet.</p>
+                }
+
+                @switch (_module.Kind)
+                {
+                    case ModuleKind.Pv:
+                        <DeviceOverviewControls @key="Id" DeviceId="@Id" Kind="_module.Kind" ActiveSessions="_overviewSessions" />
+                        break;
+                    case ModuleKind.Battery:
+                        <section class="detail-panel">
+                            <div class="section-heading"><h2>Speicherfüllstand</h2><span>@(_live is null ? "—" : SocPercent)</span></div>
+                            @if (_live is not null)
+                            {
+                                <div class="trend-progress"><progress value="@SocValue" max="100" aria-label="Ladezustand"></progress></div>
+                            }
+                            <p class="muted">Positive Leistung bedeutet Laden, negative Leistung Entladen.</p>
+                            <DeviceOverviewControls @key="Id" DeviceId="@Id" Kind="_module.Kind" ActiveSessions="_overviewSessions" />
+                        </section>
+                        break;
+                    case ModuleKind.Charger:
+                        <DeviceOverviewControls @key="Id" DeviceId="@Id" Kind="_module.Kind" ActiveSessions="_overviewSessions">
+                            <PointMetrics Context="port">
+                                @if (PortSoc(port) is { } soc && soc > 0)
                                 {
-                                    <section class="detail-panel"><span class="eyebrow">@($"Anschluss {port} · Beispiel")</span><h2>@(port == 1 ? "Fahrzeug lädt" : "Kein Fahrzeug")</h2>
-                                        @if (port == 1) { <progress value="42" max="100" aria-label="Beispiel-Ladezustand Fahrzeug: 42 Prozent"></progress><p>42 % · 62 kW</p> }
-                                        else { <p class="muted">Bereit für den nächsten Ladevorgang.</p> }
-                                        <button disabled>Ladepunkt bedienen</button>
-                                    </section>
+                                    <progress value="@soc" max="100" aria-label="@($"Ladezustand Ladepunkt {port}")"></progress>
+                                    <p>@($"{soc:0} % · {PortLeistung(port):0.#} kW")</p>
                                 }
-                            </div>
-                            break;
-                        case ModuleKind.ColdStore: <PreviewChart ModuleId="@_module.Id" />
-                            <section class="detail-panel"><span class="eyebrow">Temperaturführung · Beispiel</span><h2 class="blue">−18,2 °C → Soll −18,0 °C</h2><p>Ist- und Solltemperatur im gemeinsamen Beispielverlauf.</p></section>
-                            <div class="control-panel"><h2>Solltemperatur</h2><label>Temperatur (°C) <input type="number" value="-18" disabled /></label><button disabled>Übernehmen</button></div>
-                            break;
+                            </PointMetrics>
+                        </DeviceOverviewControls>
+                        break;
+                    case ModuleKind.ColdStore:
+                        <section class="detail-panel">
+                            <h2>Temperaturführung</h2>
+                            @if (_live is not null)
+                            {
+                                <p class="blue">Ist @IstTemp °C · Soll @SollTemp °C</p>
+                            }
+                            <DeviceOverviewControls @key="Id" DeviceId="@Id" Kind="_module.Kind" ActiveSessions="_overviewSessions" />
+                        </section>
+                        break;
+                }
+
+                @if (_module.Kind != ModuleKind.Charger)
+                {
+                    @if (_live is not null)
+                    {
+                        <LiveChart Title="@LiveView.ChartTitle(_module.Kind)" Unit="@LiveView.Unit(_module.Kind)"
+                                   Description="@LiveView.ChartDescription(_module.Kind)" RunId="@ChartRunId"
+                                   SeriesKeys="LiveView.ChartSeries(_module.Kind)" SeriesOf="TrendOf" />
                     }
-                    <p class="muted small">Keine Live-Daten für diese Kennung. Angezeigt werden ausdrücklich markierte Beispieldaten; Fachlichkeit folgt, sobald Messwerte empfangen werden.</p>
+                    else
+                    {
+                        <PreviewChart ModuleId="@_module.Id" />
+                    }
                 }
                 break;
             case ModuleKind.Weather:
@@ -159,7 +151,19 @@ else
     }
     else if (_view == ModuleView.Settings)
     {
-        @if (_config is null)
+        @if (InstanceStore.Find(Id) is { Kind: ModuleKind.Pv } pv)
+        {
+            <PvSettings @key="Id" Instance="pv" />
+        }
+        else if (InstanceStore.Find(Id) is { Kind: ModuleKind.Battery } battery)
+        {
+            <BatterySettings @key="Id" Instance="battery" />
+        }
+        else if (InstanceStore.Find(Id) is { Kind: ModuleKind.Charger or ModuleKind.ColdStore } equipment)
+        {
+            <EquipmentSettings @key="Id" Instance="equipment" />
+        }
+        else if (_config is null)
         {
             <h2>Instanzkonfiguration</h2><p>Keine gespeicherte Instanz unter dieser Kennung.</p>
         }
@@ -282,6 +286,8 @@ else
         Navigation.NavigateTo("/");
     }
 
+    private DeviceSessions.Session[] _overviewSessions = [];
+
     private bool _isFieldDevice => _module?.Kind is ModuleKind.Pv or ModuleKind.Battery or ModuleKind.Charger or ModuleKind.ColdStore;
 
     protected override void OnParametersSet()
@@ -293,9 +299,12 @@ else
             ? null
             : new ModulePreview(_config.Id, _config.Name, _config.Group, _config.Kind, _config.Location,
                 fallbackMetrics ?? new[] { new Metric("Kennzahl", "—", "", "neutral", "Noch keine Live-Daten und keine Beispieldaten") });
-        _view = ModuleView.Overview;
+        _view = RequestedView == "einstellungen" ? ModuleView.Settings : ModuleView.Overview;
         Refresh();
     }
+
+    [SupplyParameterFromQuery(Name = "ansicht")]
+    private string? RequestedView { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -316,6 +325,7 @@ else
 
     private void Refresh()
     {
+        _overviewSessions = _isFieldDevice ? DeviceSessions.For(Id) : [];
         _snapshot = Store.Snapshot();
         _runState = _config is null ? InstanceRunState.NotTracked : Processes.State(_config);
         _live = null;
@@ -354,6 +364,10 @@ else
 
     private string StatusText => _module?.Kind switch
     {
+        ModuleKind.Pv when _overviewSessions.Length > 1 => "Geräte-ID mehrfach belegt",
+        ModuleKind.Pv when _overviewSessions is [{ ContainerId: not null }] => "PV-Container läuft",
+        ModuleKind.Pv when _overviewSessions.Length == 1 => "PV-Konsolenprozess erreichbar",
+        ModuleKind.Pv when Processes.HasPvContainer(Id) => "PV-Container ohne bestätigten Steuerzugang",
         ModuleKind.Pv or ModuleKind.Battery or ModuleKind.Charger or ModuleKind.ColdStore => _live?.State ?? "unbekannt",
         ModuleKind.Broker => _snapshot.Connected ? "verbunden" : "getrennt",
         ModuleKind.Gateway => _gatewayStatus is null ? "unbekannt" : LiveStore.Text(_gatewayStatus.Data, "state"),
@@ -386,7 +400,6 @@ else
 
     private double? PortSoc(int port) => _live is null ? null : LiveView.Measurement(_live.Values, $"punkt_{port}_soc");
     private double? PortLeistung(int port) => _live is null ? null : LiveView.Measurement(_live.Values, $"punkt_{port}_leistung");
-    private string ChargerPortHeading(int port) => PortSoc(port) is { } soc && soc > 0 ? "Fahrzeug lädt" : "Kein Fahrzeug";
 
     private string MessageSummary => _module?.Kind switch
     {

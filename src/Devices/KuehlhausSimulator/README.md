@@ -84,6 +84,11 @@ Fehlermeldung und Hilfe (Exit-Code 1).
 
 ## Bedienung
 
+In der [Web-App](../../EnergyTwin.Web/README.md#geräte-bearbeiten) zeigt der Reiter „Einstellungen“
+aktive und gespeicherte Startwerte. Im laufenden Betrieb lassen sich Ein/Aus, Betriebsmodus, Solltemperatur,
+Tür und Kompressorausfall bedienen. Eine manuelle Türaktion schaltet in den Handbetrieb. Pause und Tempo
+stehen im Standalone-Modus zur Verfügung.
+
 Die Anzeige zeigt Kopf (Gerät, Modus, Zeitquelle, Modbus, Wetter), Simulationszeit und Lauf, Außentemperatur und ihre
 Quelle, Anlage (Ein/Aus), Soll- und Raumtemperatur mit Balken bis zum Alarm, Kompressor, Kälte- und elektrische Leistung,
 Energie, Laufzeit, Türzustand und die letzte Meldung. Sie wird flackerfrei ab Position (0,0) überschrieben.

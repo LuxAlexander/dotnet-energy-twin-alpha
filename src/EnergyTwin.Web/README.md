@@ -1,6 +1,6 @@
 # EnergyTwin.Web – lokale Bedienoberfläche
 
-**Stand:** 2026-11-11. Blazor Interactive Server mit Instanzstart, MQTT-Live-Daten und bestätigter Master-Bedienung.
+**Stand:** 2026-11-15. Blazor Interactive Server mit Anlagenübersicht, Fehlerdiagnose, Instanzstart und bestätigter Bedienung.
 
 ## Start
 
@@ -15,16 +15,27 @@ kein automatischer Browser-, Broker- oder Simulatorstart. Port über `--Web:Port
 oder `Web__Port` (1024–65535). Alle Browserdateien werden lokal ausgeliefert.
 
 Unter „Darstellung“ lassen sich System, Hell und Dunkel wählen. Die Auswahl wird im jeweiligen
-Browser gespeichert. Die Modulnavigation kann bei Bedarf aufgeklappt werden.
+Browser gespeichert. Unter „Module und Geräte“ lässt sich jede Kategorie einzeln ein- und ausklappen.
+
+## Anlagenübersicht und Fehlerdiagnose
+
+Die Startseite zeigt gestartete Feldgeräte, Fehlermeldungen und die MQTT-Verbindung. Geräte mit Fehlern
+stehen oben und lassen sich mit „Mit Fehlern“ filtern. Über die Gerätekarten lassen sich Instanzen öffnen
+und einzeln starten. Die Infrastruktur hat einen eigenen Abschnitt.
+
+„Fehlerdiagnose“ zeigt erkannte Gerätestörungen, Verbindungsprobleme und fehlgeschlagene Starts mit einem
+Link zur betroffenen Instanz. Gesunde und regulär gestoppte Geräte erscheinen dort nicht. Gespeicherte
+Startfehlermeldungen lassen sich ausblenden und verschwinden nach einem erfolgreichen Start automatisch.
 
 ## Live-Empfang
 
-Unter den Instanzen zeigt „MQTT-Diagnose“ den Verbindungszustand. „Nachrichten anzeigen“ öffnet
-die Geräte-, Gateway- und Wetternachrichten aus RabbitMQ samt Suche.
+„MQTT-Nachrichten“ öffnet die Geräte-, Gateway- und Wetternachrichten aus RabbitMQ samt Suche.
 Für Gerätedaten das Gateway starten, für Wetterdaten den Wetterdienst. Der Start über die Web-App aktiviert Wetter-MQTT.
 Die Anzeige enthält Messwerte mit Einheit, virtuelle Zeit, Lauf, Sequenz, Qualität,
 reale Empfangszeit sowie die empfangene JSON-Nachricht zur Diagnose.
 Neue Gerätekennungen erscheinen automatisch. Topics sind durchsuchbar.
+In „MQTT-Nachrichten“ lassen sich einzelne Topics aufklappen. Pastellfarbene Karten kennzeichnen die Messwerte, etwa Leistung
+in Gelb, Energie in Grün, Temperatur in Pfirsich und elektrische Größen in Blau.
 Prozessstatus und globale Master-Zeit werden nicht aus einzelnen Geräten abgeleitet.
 
 Verbindung: `Mqtt:Host` (Standard `127.0.0.1`), `Mqtt:Port` (1883), optional `Mqtt:EnvFile`.
@@ -49,7 +60,7 @@ Gerätemesswerte werden nach 15 realen Sekunden, Status nach 45 Sekunden als ver
 Bei abweichenden Publisher-Intervallen können diese konservativen Grenzen zu Warnungen führen.
 Qualität und Offline-/Dekodierstatus bleiben sichtbar. Wetterwerte werden mit Source-/Master-Sitzung
 und Lauf des Dienststatus abgeglichen. Gespeicherte Pausenstände sind keine Prozess-Lebendbestätigung.
-Gerätebefehle bleiben deaktiviert. Master-Befehle werden wie unten beschrieben gesendet; keine Anwendung puffert sie für spätere Neuversuche.
+PV-Befehle verwenden den lokalen Steuerzugang. Master-Befehle werden wie unten beschrieben gesendet. Befehle werden nicht für spätere Neuversuche gepuffert.
 
 ## Live-Verläufe und gerätespezifische Live-Ansichten
 
@@ -79,12 +90,8 @@ Der PreviewCatalog ist kein Laufzeitspeicher und dient als Beispielfallback.
 Instanzen sind in `instances.local.json` im Projektordner lokal gespeichert (nicht versioniert; Pfad über
 `Instances:File`). Über `/instanz/neu` Geräteinstanzen (PV, Batterie, Ladesäule, Kühlhaus) anlegen;
 Kennung und Modbus-Port werden vorgeschlagen, Kennungs- und Portkonflikte werden abgelehnt, speichern
-allein startet keinen Prozess. Die Startseite gruppiert Instanzen nach Modulgruppe. Jede Instanz hat eine rote
-oder grüne Ampel mit Textstatus und einen eigenen Startknopf. Bei aktuellen Live-Daten steht ein farblich
-hervorgehobener Kurzinfo-Wert in der Zeile. Grün bei der Ampel steht für einen laufenden verwalteten Prozess, eine per
-MQTT gemeldete Gateway-Verbindung, verbundenes RabbitMQ oder einen steuerbereiten Master. Bei
-einem belegten Geräteport bleibt der Start gesperrt. Beim Master wechselt die Ampel erst nach
-einer aktuellen MQTT-Statusmeldung auf Grün. Bei getrenntem oder verspätet gestartetem Broker
+allein startet keinen Prozess. Bei aktuellen Live-Daten steht ein farblich hervorgehobener Kurzinfo-Wert auf der Karte.
+Bei einem belegten Geräteport bleibt der Start gesperrt. Bei getrenntem oder verspätet gestartetem Broker
 verbinden sich Web-App und Master automatisch erneut.
 
 Im Reiter „Einstellungen" einer Instanz: Starten, Beenden und Löschen
@@ -102,17 +109,60 @@ berührt. „Alles starten" startet keine Module doppelt: belegt ein Port oder l
 bereits extern, wird das Modul übersprungen (Meldung pro Modul). Ein laufendes Gateway wird dagegen
 mit der aktuellen Geräteliste neu gestartet, damit neue Anlagen Live-Daten liefern. Sichere Wiedererkennung nach
 Neustart bleibt auf Port+Kommandozeile beschränkt. Der verwaltete Master startet mit `--mqtt`; Pause/Fortsetzen ist bei frischem Master-Status verfügbar.
-Gerätebefehle bleiben offen. Tempoänderung und neuer Lauf stehen auf der Masterseite bereit. Prozessprotokolle liegen unter
+Tempoänderung und neuer Lauf stehen auf der Masterseite bereit. Prozessprotokolle liegen unter
 `%TEMP%\energytwin-web\<Kennung>.log`. Der Startknopf für RabbitMQ auf der Startseite verwendet Docker Compose.
 Beim Starten, Beenden oder Löschen einer Geräteinstanz wird ein
 laufendes Gateway mit der aktuellen Geräteliste neu gestartet, damit neue Anlagen ohne manuellen Neustart
 Live-Daten liefern.
 
+## Geräte bearbeiten
+
+Unterscheiden sich gespeicherte Startwerte von denen des identifizierten laufenden Geräts, zeigt die
+Geräteseite die jeweiligen Werte nebeneinander. „Jetzt neu starten“ übernimmt die gespeicherten Werte
+nach Bestätigung. Falls der Neustart nach dem Beenden fehlschlägt, kann die vorige Konfiguration wieder
+gestartet werden.
+
+PV-Instanzen startet die Web-App als Linux-Container in Docker Desktop. Vor dem ersten Start das
+[PV-Image bauen](../../docker/README.md#pv-simulator-im-container-lb04). Modbus bleibt auf dem eingestellten
+Windows-Port lokal erreichbar, CSV-Dateien bleiben im eingestellten Windows-Ordner.
+Der Container wird nach einem Web-App-Neustart wiedererkannt. Weitere Details zu
+[Containerstatus und Logs](../../docker/README.md#verwaltung-durch-blazor).
+
+Bei PV-Anlagen, Batteriespeichern, Ladesäulen und Kühlhäusern erscheinen auch separat gestartete Prozesse desselben Benutzerkontos.
+Der Reiter „Einstellungen“ zeigt aktive und gespeicherte Startwerte, die Live-Bedienung und die Kommandozeilenhilfe.
+Die Registerwerte stehen im Reiter „Register“. „Speichern“ übernimmt Startwerte für den nächsten Start.
+„Speichern und neu starten“ beendet einen erreichbaren Prozess geordnet und startet ihn mit den neuen Werten.
+Bei Portkonflikten lässt sich ein freier Port vorschlagen. Nach einem Fehlstart kann der Benutzer den Entwurf
+korrigieren oder den Simulator mit den vorherigen Startwerten wieder starten.
+
+Beim Batteriespeicher sind unter anderem Kapazität, Start-SOC und Lade- und Entladegrenzen konfigurierbar.
+Im laufenden Betrieb lassen sich die Batterie ein- und ausschalten, Automatik und manueller Betrieb wählen,
+Sollleistung und Grenzen setzen sowie simulierte Störungen auslösen und zurücksetzen. Pause und Tempo stehen
+im Standalone-Betrieb zur Verfügung. Live-Änderungen gelten für den aktuellen Prozesslauf.
+
+Bei der Ladesäule lässt sich die Gesamtleistung vorgeben. Für beide Ladepunkte stehen Fahrzeugwahl mit
+Start- und Ziel-SOC, Anstecken, Laden, Abstecken sowie Kühlungsdefekt und Reset zur Verfügung.
+Beim Kühlhaus lässt sich die Solltemperatur einstellen, die Tür bedienen und ein Kompressorausfall
+auslösen oder zurücksetzen. Das Bedienen der Tür schaltet das Kühlhaus in den Handbetrieb.
+
+Im Master-Betrieb sind Standalone-Felder ausgeblendet. Bei PV tragen Konsolenintervalle ein Hinweissymbol.
+Die Geräte-ID bleibt fest. Modbus bleibt bei Starts aus der Web-App aktiv und über IPv4-Loopback erreichbar.
+Bei mehrfach gemeldeter Kennung ist die Bedienung gesperrt.
+Details zur [Umsetzung der Gerätebearbeitung](../../docs/Umsetzung-Geraetebearbeitung.md).
+
+### Live-Bedienung in der Übersicht
+
+Die Übersicht bietet PV-Reinigung und Störungsstatus, Batteriemodus und Sollleistung, die Bedienung beider
+Ladepunkte sowie Solltemperatur und Tür des Kühlhauses. Die Rückmeldung kommt vom Simulator. Die Bedienung
+ist auch ohne MQTT-Messwerte verfügbar, sobald ein eindeutiger lokaler Geräteprozess erkannt wird.
+Weitere Aktionen und Startwerte stehen im Reiter „Einstellungen“.
+
 ## Aufbau und Prüfung
 
 `Live/LiveStore.cs`: threadsicherer letzter Empfangsstand; `Live/MqttReceiver.cs`: Hintergrundempfang;
 `Live/LiveTrends.cs`: begrenzter Verlaufsspeicher je Messwert-Schlüssel; `Live/LiveView.cs`: Aufbereitung je Modulart;
-`Components/Pages/Live.razor`: Instanzstart, Statusampeln und MQTT-Nachrichten mit Aktualisierung einmal je Sekunde;
+`Components/Pages/Live.razor` und `FaultDiagnosis.razor`: Anlagenübersicht und Fehlerdiagnose aus `Live/PlantStatus.cs`;
+`Components/Pages/MqttMessages.razor`: MQTT-Nachrichten samt Suche und Nutzlast;
 `Components/Pages/Home.razor`: filterbare Kurzinfos mit Live-Kennzahlen aus `Live/OverviewMetrics.cs`;
 `Components/Shared/LiveChart.razor`: Verlaufsanzeige mit virtueller Zeit und Wertetabelle;
 `Management/InstanceStore.cs`: persistierte Instanzkonfiguration mit Konfliktprüfung;

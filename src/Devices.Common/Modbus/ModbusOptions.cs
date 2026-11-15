@@ -28,6 +28,7 @@ public sealed record ModbusOptions
     /// <summary>Wurde <c>--register-plan</c> angegeben? Das Gerät gibt dann den Plan aus und beendet sich.</summary>
     public bool PrintRegisterPlan { get; init; }
 
+    [System.Text.Json.Serialization.JsonIgnore]
     public IPAddress BindAddress => IPAddress.Parse(Bind);
 
     /// <summary>Verarbeitet eine Modbus-Option, falls <paramref name="name"/> eine ist.</summary>

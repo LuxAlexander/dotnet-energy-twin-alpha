@@ -13,22 +13,23 @@
     <aside class="sidebar" aria-label="Module und Geräte">
         <a class="brand" href="/">EnergyTwin</a>
         <nav class="main-nav" aria-label="Hauptnavigation">
-            <NavLink href="/" Match="NavLinkMatch.All">Live-Anlage</NavLink>
+            <NavLink href="/" Match="NavLinkMatch.All">Anlagenübersicht</NavLink>
+            <NavLink href="/fehlerdiagnose">Fehlerdiagnose</NavLink>
             <NavLink href="/short-info">Short Info</NavLink>
         </nav>
         <details class="module-nav">
             <summary>Module und Geräte</summary>
             @foreach (var group in InstanceStore.Instances.GroupBy(instance => instance.Group))
             {
-                <div class="nav-group">
-                    <p>@group.Key</p>
+                <details class="nav-group" @key="group.Key">
+                    <summary>@group.Key</summary>
                     @foreach (var instance in group)
                     {
                         <NavLink href="@($"module/{instance.Id}")">
                             @instance.Name <small>@instance.Location</small>
                         </NavLink>
                     }
-                </div>
+                </details>
             }
             <a href="/instanz/neu">Instanz hinzufügen</a>
         </details>

@@ -1,0 +1,36 @@
+.live-topic > summary {
+    padding-block: 6px;
+    cursor: pointer;
+}
+
+.live-topic > summary strong {
+    overflow-wrap: anywhere;
+}
+
+.live-topic > summary .small {
+    display: inline-block;
+    margin-inline-start: 12px;
+}
+
+.live-topic[open] > summary {
+    margin-block-end: 8px;
+}
+
+.metric-power { --metric-fill: #fff0bb; }
+.metric-energy { --metric-fill: #d4f1d9; }
+.metric-temperature { --metric-fill: #ffdbc2; }
+.metric-electrical { --metric-fill: #d4e9ff; }
+.metric-setting { --metric-fill: #e9defa; }
+.metric-fault { --metric-fill: #ffd3dd; }
+
+.metric:is(.metric-power, .metric-energy, .metric-temperature, .metric-electrical, .metric-setting, .metric-fault) {
+    background: var(--metric-fill);
+    border-color: transparent;
+    color: #182334;
+    --muted: #39485a;
+}
+
+.live-topic .metric h2 {
+    font-weight: 600;
+}
+

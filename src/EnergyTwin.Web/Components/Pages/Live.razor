@@ -1,223 +1,144 @@
 @page "/"
-@using EnergyTwin.Web.Live
-@using System.Text.Json
 @implements IAsyncDisposable
-@inject LiveStore Store
+@inject PlantStatus Plant
 @inject InstanceStore Instances
 @inject ProcessManager Processes
-@inject MasterControlClient Master
-@inject IConfiguration Configuration
 
-<PageTitle>Live-Anlage · EnergyTwin</PageTitle>
-<div class="page-heading section-heading">
-    <h1>Live-Anlage</h1>
-    <a class="button-link" href="/instanz/neu">+ Instanz hinzufügen</a>
-</div>
-<section class="instance-overview" aria-labelledby="instance-heading">
-    <div class="section-heading">
-        <h2 id="instance-heading">Instanzen</h2>
+<PageTitle>Anlagenübersicht · EnergyTwin</PageTitle>
+<header class="plant-hero">
+    <div class="hero-content">
+        <h1>Anlagenübersicht</h1>
+        <div class="hero-actions">
+            <a class="button-link button-primary" href="/instanz/neu">Instanz hinzufügen</a>
+            <a class="button-link" href="/fehlerdiagnose">Fehlerdiagnose</a>
+        </div>
     </div>
-    @{
-        var master = Master.Snapshot();
-        var metrics = new OverviewMetrics(_snapshot, master, Configuration["Mqtt:GatewayId"] ?? "GW-01");
-    }
-    @foreach (var group in Instances.StartupOrder().OrderBy(instance => instance.Kind != ModuleKind.Broker).GroupBy(instance => instance.Group))
+    <dl class="plant-summary">
+        <div><dt>Gestartete Feldgeräte</dt><dd>@RunningCount<span> / @DeviceCount</span></dd></div>
+        <div class="@(_snapshot.Issues.Length > 0 ? "has-issues" : null)">
+            <dt>Fehlermeldungen</dt><dd>@_snapshot.Issues.Length</dd>
+        </div>
+        <div><dt>MQTT</dt><dd class="connection-value">@(_snapshot.MqttConnected ? "Verbunden" : "Getrennt")</dd></div>
+    </dl>
+</header>
+
+<section class="plant-section" aria-labelledby="device-heading">
+    <div class="plant-section-heading">
+        <h2 id="device-heading">Feldgeräte</h2>
+        <div class="plant-filters" aria-label="Feldgeräte filtern">
+            <button aria-pressed="@(!_faultsOnly)" @onclick="() => _faultsOnly = false">Alle Geräte</button>
+            <button aria-pressed="@_faultsOnly" @onclick="() => _faultsOnly = true">Mit Fehlern</button>
+        </div>
+    </div>
+    @if (!Devices.Any())
     {
-        <div class="instance-group" @key="group.Key">
-            <h3>@group.Key</h3>
-            <ul class="instance-list">
-                @foreach (var instance in group)
-                {
-                    var state = Processes.State(instance);
-                    var (online, status) = InstanceStatus(instance, state, master.Available);
-                    var starting = _starting == instance.Id;
-                    var metric = instance.Kind is ModuleKind.Broker or ModuleKind.Gateway ? null : metrics.For(instance);
-                    <li @key="instance.Id">
-                        <div>
-                            <a class="instance-name" href="@($"module/{instance.Id}")">@instance.Name</a>
-                            <span class="muted small">@instance.Location</span>
-                        </div>
-                        <div class="instance-state">
-                            <span class="instance-status @(starting ? "gold" : online ? "green" : "red")">
-                                <span class="status-light" aria-hidden="true"></span>
-                                @(starting ? "Start läuft…" : status)
-                            </span>
-                            @if (metric is not null)
-                            {
-                                <div class="small instance-metric">
-                                    <span class="muted">@metric.Label</span>
-                                    <strong class="@metric.Tone">@metric.Value @metric.Unit</strong>
-                                    @if (!string.IsNullOrEmpty(metric.Description) && instance.Kind is ModuleKind.Master or ModuleKind.Weather)
-                                    {
-                                        <span class="muted"> · @metric.Description</span>
-                                    }
-                                </div>
-                            }
-                        </div>
-                        <div class="instance-action">
-                            @if (!online && state == InstanceRunState.NotTracked || starting)
-                            {
-                                <button @onclick="() => StartInstanceAsync(instance)" aria-label="@($"{instance.Name} starten")"
-                                        disabled="@(_starting is not null)">@(starting ? "Startet…" : "Starten")</button>
-                            }
-                        </div>
-                        @if (_startResults.TryGetValue(instance.Id, out var notice))
-                        {
-                            <p class="instance-result muted small" role="status">@notice</p>
-                        }
-                    </li>
-                }
-            </ul>
+        <p class="empty-state">@(_faultsOnly ? "Keine Feldgeräte mit Fehlern." : "Noch keine Feldgeräte angelegt.")</p>
+    }
+    else
+    {
+        <div class="plant-cards">@foreach (var item in Devices)
+            {
+                @Card(item)
+            }
         </div>
     }
 </section>
-<section class="diagnostics" aria-labelledby="mqtt-heading">
-    <div class="section-heading">
-        <div>
-            <h2 id="mqtt-heading">MQTT-Diagnose</h2>
-            <p class="@(_snapshot.Connected ? "green" : "muted")">@_snapshot.Connection</p>
-        </div>
-        <button aria-expanded="@(_showDiagnostics ? "true" : "false")" aria-controls="mqtt-details"
-                @onclick="() => _showDiagnostics = !_showDiagnostics">
-            @(_showDiagnostics ? "Nachrichten ausblenden" : $"Nachrichten anzeigen ({_snapshot.Messages.Length})")
-        </button>
+
+<section class="plant-section" aria-labelledby="infrastructure-heading">
+    <div class="plant-section-heading">
+        <h2 id="infrastructure-heading">Infrastruktur</h2>
+        <a href="/mqtt-nachrichten">MQTT-Nachrichten</a>
     </div>
-    <div id="mqtt-details" hidden="@(!_showDiagnostics)">
-        @if (_showDiagnostics)
+    <div class="plant-cards infrastructure-cards">
+        @foreach (var item in _snapshot.Instances.Where(item => !DeviceSessions.Supports(item.Config.Kind))
+            .OrderByDescending(item => item.Issues.Length > 0))
         {
-            <p class="muted small diagnostics-count">@_snapshot.Rejected verworfene Nachrichten</p>
-            <div class="catalog-filters"><label for="live-search">Topic oder Instanz suchen<input id="live-search" type="search" @bind="_search" @bind:event="oninput" /></label></div>
-            @if (_snapshot.Messages.Length == 0)
-            {
-                <div class="empty-state"><h2>Noch keine Nachrichten</h2><p>Starte oben RabbitMQ und das Gateway für Gerätedaten oder den Wetterdienst für Wetterdaten.</p></div>
-            }
-            @foreach (var message in _snapshot.Messages.Where(m => m.Topic.Contains(_search.Trim(), StringComparison.OrdinalIgnoreCase)))
-            {
-                var data = message.Data;
-                <section class="detail-panel" @key="message.Topic">
-                    <div class="section-heading"><h2>@message.Topic</h2><span class="muted small">Empfang: @message.ReceivedAt.ToString("HH:mm:ss 'UTC'")</span></div>
-                    <p class="@(IsConfirmed(message) ? "green" : "orange")">@Validity(message)</p>
-                    @if (data.TryGetProperty("measurements", out var measurements))
-                    {
-                        <div class="status-row"><span>Virtuelle Zeit: @Field(data, "simTime", "simTimeUtc")</span><span>Lauf: @LiveStore.Text(data, "runId")</span><span>Sequenz: @LiveStore.Text(data, "seq")</span><span>Qualität: @Field(data, "quality", "mode") / @Field(data, "qualityReason", "condition")</span></div>
-                        <div class="metrics">
-                        @foreach (var value in measurements.EnumerateArray())
-                        {
-                            <article class="metric"><h2>@Field(value, "name", "key")</h2><p class="metric-value">@FormatValue(value) <span>@LiveStore.Text(value, "unit")</span></p>@if (value.TryGetProperty("address", out var address)) { <p class="muted small">Register @address</p> }</article>
-                        }
-                        </div>
-                    }
-                    else
-                    {
-                        <p>Zustand: @Field(data, "state", "status")</p>
-                        @if (data.TryGetProperty("error", out var error)) { <p>@error</p> }
-                    }
-                    <details class="messages"><summary>Nachricht und Diagnose</summary><pre class="live-json">@JsonSerializer.Serialize(data, JsonOptions)</pre></details>
-                </section>
-            }
-            @if (_snapshot.Messages.Length > 0 && !_snapshot.Messages.Any(m => m.Topic.Contains(_search.Trim(), StringComparison.OrdinalIgnoreCase)))
-            {
-                <p class="empty-state">Keine Topics passen zum Suchbegriff.</p>
-            }
+            @Card(item)
         }
     </div>
 </section>
 
 @code {
-    private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
     private readonly CancellationTokenSource _stop = new();
-    private Task? _refreshTask;
-    private string _search = string.Empty;
-    private bool _showDiagnostics;
+    private readonly Dictionary<string, string> _results = new();
+    private Task? _refresh;
+    private PlantSnapshot _snapshot = null!;
     private string? _starting;
-    private readonly Dictionary<string, string> _startResults = new();
-    private LiveSnapshot _snapshot = null!;
-    protected override void OnInitialized() => _snapshot = Store.Snapshot();
+    private bool _faultsOnly;
+    private int DeviceCount => _snapshot.Instances.Count(item => DeviceSessions.Supports(item.Config.Kind));
+    private int RunningCount => _snapshot.Instances.Count(item => DeviceSessions.Supports(item.Config.Kind) && item.Running);
+    private IEnumerable<PlantInstance> Devices => _snapshot.Instances
+        .Where(item => DeviceSessions.Supports(item.Config.Kind) && (!_faultsOnly || item.Issues.Length > 0))
+        .OrderByDescending(item => item.Issues.Length > 0).ThenByDescending(item => item.Running).ThenBy(item => item.Config.Kind);
+
+    private RenderFragment Card(PlantInstance item) => @<article @key="item.Config.Id"
+        class="plant-card @(item.Issues.Length > 0 ? "plant-card-fault" : null)">
+        <div class="plant-card-top">
+            <span>@item.Config.Group</span>
+            <span class="plant-status @(item.Issues.Length > 0 ? "status-fault" : item.Running ? "status-running" : "")">
+                @(_starting == item.Config.Id ? "Startet …" : item.Status)
+            </span>
+        </div>
+        <h3><a href="@("/module/" + Uri.EscapeDataString(item.Config.Id))">@item.Config.Name</a></h3>
+        @if (DeviceSessions.Supports(item.Config.Kind))
+        {
+            <p class="plant-location">@item.Config.Location</p>
+        }
+        @if (item.Metric is { } metric)
+        {
+            <div class="plant-metric">
+                <span>@metric.Label</span>
+                <strong class="@metric.Tone">@metric.Value <small>@metric.Unit</small></strong>
+            </div>
+        }
+        @if (item.Issues.FirstOrDefault() is { } issue)
+        {
+            <a class="card-issue" href="@($"/fehlerdiagnose#fehler-{Uri.EscapeDataString(issue.Key)}")">@issue.Title</a>
+        }
+        @if (!item.Running && item.ProcessState == InstanceRunState.NotTracked || _starting == item.Config.Id)
+        {
+            <div class="plant-card-actions">
+                <button disabled="@(_starting is not null)" aria-label="@($"{item.Config.Name} starten")"
+                        @onclick="() => StartAsync(item.Config)">Starten</button>
+            </div>
+        }
+        @if (_results.TryGetValue(item.Config.Id, out var notice))
+        {
+            <p class="plant-notice" role="status">@notice</p>
+        }
+    </article>;
+
+    protected override void OnInitialized() => _snapshot = Plant.Read();
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender) _refreshTask = RefreshAsync();
+        if (firstRender) _refresh = RefreshAsync();
         return Task.CompletedTask;
     }
+
     private async Task RefreshAsync()
     {
         using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
         try
         {
             while (await timer.WaitForNextTickAsync(_stop.Token))
-                await InvokeAsync(() => { _snapshot = Store.Snapshot(); StateHasChanged(); });
+                await InvokeAsync(() => { _snapshot = Plant.Read(); StateHasChanged(); });
         }
         catch (OperationCanceledException) when (_stop.IsCancellationRequested) { }
     }
-    private bool IsConfirmed(LiveMessage message) => Validity(message) == "Empfang aktuell bestätigt";
 
-    private (bool Online, string Status) InstanceStatus(InstanceConfig instance, InstanceRunState state, bool masterAvailable)
-    {
-        if (instance.Kind == ModuleKind.Broker)
-            return _snapshot.Connected ? (true, "Verbunden") : (false, "MQTT getrennt");
-
-        if (instance.Kind == ModuleKind.Master)
-        {
-            if (masterAvailable) return (true, "Steuerung bereit");
-            if (state != InstanceRunState.NotTracked)
-            {
-                var processStatus = state == InstanceRunState.ManagedRunning ? "Master läuft" : "Master-Port belegt";
-                return (false, processStatus + (_snapshot.Connected ? " · warte auf MQTT-Status" : " · MQTT getrennt"));
-            }
-        }
-
-        if (state == InstanceRunState.ManagedRunning) return (true, "Läuft");
-        if (state == InstanceRunState.ExternallyReachable) return (false, "Port belegt");
-        if (instance.Kind == ModuleKind.Gateway && _snapshot.Connected &&
-            _snapshot.Messages.Any(message => message.Topic == $"energytwin/gateway/{Configuration["Mqtt:GatewayId"] ?? "GW-01"}/status" &&
-                message.Generation == _snapshot.Generation && IsConfirmed(message) && LiveStore.Text(message.Data, "state") == "online"))
-            return (true, "MQTT meldet online");
-        return (false, "Gestoppt oder nicht erkannt");
-    }
-
-    private async Task StartInstanceAsync(InstanceConfig instance)
+    private async Task StartAsync(InstanceConfig instance)
     {
         if (_starting is not null) return;
         _starting = instance.Id;
-        _startResults.Remove(instance.Id);
-        try { _startResults[instance.Id] = await Processes.StartInstanceAsync(instance, Instances.Instances); }
-        finally { _starting = null; }
+        _results.Remove(instance.Id);
+        try { _results[instance.Id] = await Processes.StartInstanceAsync(instance, Instances.Instances); }
+        finally { _starting = null; _snapshot = Plant.Read(); }
     }
-    private string Validity(LiveMessage message)
-    {
-        if (!_snapshot.Connected || message.Generation != _snapshot.Generation) return "Letzter Stand – nach Verbindungsunterbrechung nicht bestätigt";
-        var age = DateTimeOffset.UtcNow - message.ReceivedAt;
-        if (message.Topic.StartsWith("energytwin/weather/", StringComparison.Ordinal))
-        {
-            var status = _snapshot.Messages.FirstOrDefault(m => m.Topic == "energytwin/weather/status");
-            if (status is null || status.Generation != _snapshot.Generation) return "Wetterstatus fehlt – Gültigkeit unbestätigt";
-            var state = LiveStore.Text(status.Data, "status");
-            if (state is not ("paused" or "continued")) return $"Wetter nicht aktuell bestätigt: {state}";
-            if (message.Topic.EndsWith("/measurements", StringComparison.Ordinal) && new[] { "sourceSession", "masterSession", "runId" }.Any(key => LiveStore.Text(message.Data, key) == "—" || LiveStore.Text(message.Data, key) != LiveStore.Text(status.Data, key))) return "Wetter gehört nicht zum bestätigten Lauf";
-            // Retained Zustände sind keine Bestätigung, dass der Prozess noch lebt.
-            return state == "paused" ? "Gespeicherter Pausenstand – keine aktuelle Prozessbestätigung" : age > TimeSpan.FromSeconds(15) ? "Wetterstand älter als 15 Sekunden – nicht aktuell bestätigt" : "Wetterstand empfangen – gespeicherte Nachrichten möglich";
-        }
-        if (age > TimeSpan.FromSeconds(message.Topic.EndsWith("/status", StringComparison.Ordinal) ? 45 : 15)) return "Empfang veraltet – letzter Stand, nicht aktuell bestätigt";
-        if (message.Topic.EndsWith("/measurements", StringComparison.Ordinal))
-        {
-            var statusTopic = message.Topic[..^"measurements".Length] + "status";
-            var status = _snapshot.Messages.FirstOrDefault(m => m.Topic == statusTopic);
-            if (status is not null && status.Generation == _snapshot.Generation && LiveStore.Text(status.Data, "state") is "offline" or "decodeError") return "Gerät meldet Ausfall oder Dekodierfehler – letzte Werte";
-            if (LiveStore.Text(message.Data, "quality") != "good") return "Messqualität eingeschränkt – Quelle und Qualitätsgrund prüfen";
-        }
-        return "Empfang aktuell bestätigt";
-    }
-    private static string Field(JsonElement value, string first, string second) => value.TryGetProperty(first, out var field) ? field.ToString() : LiveStore.Text(value, second);
-    private static string FormatValue(JsonElement value)
-    {
-        if (value.TryGetProperty("text", out var text) && text.ValueKind == JsonValueKind.String) return text.GetString() ?? "—";
-        return value.TryGetProperty("value", out var number) && number.ValueKind == JsonValueKind.Number && number.TryGetDouble(out var parsed) && double.IsFinite(parsed)
-            ? parsed.ToString("0.###", System.Globalization.CultureInfo.GetCultureInfo("de-DE")) : "Ungültig / fehlt";
-    }
+
     public async ValueTask DisposeAsync()
     {
         await _stop.CancelAsync();
-        if (_refreshTask is not null) await _refreshTask;
+        if (_refresh is not null) await _refresh;
         _stop.Dispose();
     }
 }
-

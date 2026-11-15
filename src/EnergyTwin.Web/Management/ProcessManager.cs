@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Text.Json;
+using Devices.Common.Control;
 using EnergyTwin.Web.Presentation;
 
 namespace EnergyTwin.Web.Management;
@@ -18,13 +19,26 @@ public sealed record StartStepResult(string Id, bool Started, string Detail)
 /// und können trotzdem geordnet beendet werden. Programme fremder Anbieter auf belegten Ports bleiben
 /// unberührt.
 /// </summary>
-public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguration configuration)
+public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguration configuration, DeviceSessions sessions,
+    PvContainers pvContainers)
 {
     private static string? _repoRootCache;
     private readonly string _repoRoot = FindRoot();
     private readonly object _gate = new();
     private readonly Dictionary<string, Process> _processes = new(StringComparer.Ordinal);
     private readonly SemaphoreSlim _actions = new(1, 1);
+    private readonly System.Collections.Concurrent.ConcurrentDictionary<string, StartStepResult> _startFailures = new();
+
+    public StartStepResult? StartFailure(string id) => _startFailures.GetValueOrDefault(id);
+
+    public void DismissStartFailure(string id) => _startFailures.TryRemove(id, out _);
+
+    private StartStepResult TrackStart(StartStepResult result)
+    {
+        if (result.Started) DismissStartFailure(result.Id);
+        else _startFailures[result.Id] = result;
+        return result;
+    }
 
     public static string FindRoot()
     {
@@ -38,16 +52,23 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguratio
 
     public InstanceRunState State(InstanceConfig config)
     {
+        if (config.Kind == ModuleKind.Pv && sessions.For(config.Id) is [{ ContainerId: not null }])
+            return InstanceRunState.ManagedRunning;
         lock (_gate)
             if (_processes.TryGetValue(config.Id, out var process) && !process.HasExited)
                 return InstanceRunState.ManagedRunning;
+        if (DeviceSessions.Supports(config.Kind) && sessions.For(config.Id).Length > 0)
+            return InstanceRunState.ExternallyReachable;
         var port = ListenPort(config);
         if (port is null) return InstanceRunState.NotTracked;
         return PortProbe.IsFree(port.Value) ? InstanceRunState.NotTracked : InstanceRunState.ExternallyReachable;
     }
 
     public bool IsRunning(InstanceConfig config) =>
-        State(config) == InstanceRunState.ManagedRunning || FindOurselves(config, ListenPort(config)) is not null;
+        State(config) == InstanceRunState.ManagedRunning
+        || (DeviceSessions.Supports(config.Kind) ? sessions.For(config.Id) is [var session] && session.Startup.Kind == config.Kind : FindOurselves(config, ListenPort(config)) is not null);
+
+    public bool HasPvContainer(string id) => pvContainers.For(id).Length > 0;
 
     public async Task<string> StartInstanceAsync(InstanceConfig config, IReadOnlyList<InstanceConfig> configs)
     {
@@ -85,9 +106,22 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguratio
     public async Task<StartStepResult> StartAsync(InstanceConfig config, IReadOnlyList<InstanceConfig> configs)
     {
         await _actions.WaitAsync();
+        try { return TrackStart(await StartCoreAsync(config, configs)); }
+        finally { _actions.Release(); }
+    }
+
+    private async Task<StartStepResult> StartCoreAsync(InstanceConfig config, IReadOnlyList<InstanceConfig> configs,
+        Guid? stoppedSession = null)
+    {
         try
         {
+            if (config.Kind == ModuleKind.Pv)
+                return await pvContainers.StartAsync(config, sessions);
             var state = State(config);
+            if (stoppedSession is not null && state == InstanceRunState.ExternallyReachable
+                && sessions.For(config.Id).All(session => session.Registration.Session == stoppedSession)
+                && config.ModbusPort is int targetPort && PortProbe.IsFree(targetPort))
+                state = InstanceRunState.NotTracked;
             if (state == InstanceRunState.ManagedRunning)
                 return new StartStepResult(config.Id, false, "Läuft bereits.");
             var port = ListenPort(config);
@@ -96,7 +130,11 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguratio
             if (port is null && FindOurselves(config, null) is not null)
                 return new StartStepResult(config.Id, false, "Läuft bereits extern.");
 
-            var logPath = Path.Combine(Path.GetTempPath(), "energytwin-web", $"{config.Id}.log");
+            var logName = config.Id.All(character => char.IsAsciiLetterOrDigit(character) || character is '-' or '_')
+                && config.Id.Length is > 0 and <= 40
+                ? config.Id
+                : Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(config.Id)));
+            var logPath = Path.Combine(Path.GetTempPath(), "energytwin-web", $"{logName}.log");
             Directory.CreateDirectory(Path.GetDirectoryName(logPath)!);
             var info = new ProcessStartInfo
             {
@@ -128,7 +166,14 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguratio
 
             // Kurz warten und prüfen, ob der Prozess sofort wieder abstürzt (z. B. wegen
             // Port-Konflikt, fehlender Build-Ausgabe oder Initialisierungsfehler).
-            await Task.Delay(400);
+            if (DeviceSessions.Supports(config.Kind))
+            {
+                var deadline = Stopwatch.StartNew();
+                while (!process.HasExited && deadline.Elapsed < TimeSpan.FromSeconds(8)
+                    && !DeviceStartConfirmed(config, stoppedSession))
+                    await Task.Delay(150);
+            }
+            else await Task.Delay(400);
             if (process.HasExited)
             {
                 lock (_gate) _processes.Remove(config.Id);
@@ -143,6 +188,8 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguratio
             _ = Redirect(process.StandardOutput, logPath, append: false);
             _ = Redirect(process.StandardError, logPath, append: true);
             logger.LogInformation("Instanz {Id} gestartet (PID {Pid}), Protokoll {Log}", config.Id, process.Id, logPath);
+            if (DeviceSessions.Supports(config.Kind) && !DeviceStartConfirmed(config, stoppedSession))
+                return new StartStepResult(config.Id, false, "Geräteprozess gestartet, Steuerzugang noch nicht bestätigt. Protokoll prüfen.");
             return new StartStepResult(config.Id, true, "Gestartet.");
         }
         catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or System.ComponentModel.Win32Exception)
@@ -150,10 +197,118 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguratio
             logger.LogWarning(exception, "Instanz {Id} konnte nicht gestartet werden", config.Id);
             return new StartStepResult(config.Id, false, "Start fehlgeschlagen. Details stehen im Webdienst-Protokoll.");
         }
+    }
+
+    private bool DeviceStartConfirmed(InstanceConfig config, Guid? stoppedSession) =>
+        sessions.For(config.Id) is [var session] && session.Startup.Kind == config.Kind
+        && session.Registration.Session != stoppedSession;
+
+    public async Task<StartStepResult?> StopAsync(InstanceConfig config)
+    {
+        await _actions.WaitAsync();
+        try
+        {
+            return DeviceSessions.Supports(config.Kind)
+                ? await StopDeviceAsync(config.Id, config.Kind, sessions.For(config.Id), explicitStop: true)
+                : await StopCoreAsync(config);
+        }
         finally { _actions.Release(); }
     }
 
-    public async Task<StartStepResult?> StopAsync(InstanceConfig config)
+    public async Task<StartStepResult> StopDeviceAsync(InstanceConfig config, Guid expectedSession)
+    {
+        await _actions.WaitAsync();
+        try
+        {
+            var active = sessions.For(config.Id);
+            if (active.Length != 1 || active[0].Registration.Session != expectedSession)
+                return new(config.Id, false, "Der laufende Prozess hat gewechselt. Bitte erneut prüfen.");
+            return await StopDeviceAsync(config.Id, config.Kind, active, explicitStop: true);
+        }
+        finally { _actions.Release(); }
+    }
+
+    public async Task<StartStepResult> RestartDeviceAsync(InstanceConfig config, IReadOnlyList<InstanceConfig> configs,
+        Guid? expectedSession) => TrackStart(await RestartDeviceCoreAsync(config, configs, expectedSession));
+
+    private async Task<StartStepResult> RestartDeviceCoreAsync(InstanceConfig config, IReadOnlyList<InstanceConfig> configs,
+        Guid? expectedSession)
+    {
+        StartStepResult result;
+        await _actions.WaitAsync();
+        try
+        {
+            var active = sessions.For(config.Id);
+            if (active.Length > 1 || active.SingleOrDefault()?.Registration.Session != expectedSession
+                || active is [var session] && session.Startup.Kind != config.Kind)
+                return new(config.Id, false, "Der laufende Prozess hat gewechselt. Bitte erneut prüfen.");
+            var modbus = DeviceModbus(active.SingleOrDefault()?.Startup);
+            if (config.ModbusPort is int port
+                && (modbus is null || modbus.Disabled || modbus.Port != port) && !PortProbe.IsFree(port))
+                return new(config.Id, false, $"Modbus-Port {port} ist belegt.");
+            if (config.Kind == ModuleKind.Pv && await pvContainers.CheckImageAsync() is { } unavailable)
+                return new(config.Id, false, unavailable);
+            if (active.Length == 1)
+            {
+                var stopped = await StopDeviceAsync(config.Id, config.Kind, active);
+                if (!stopped.Started) return stopped;
+            }
+            result = await StartCoreAsync(config, configs, expectedSession);
+        }
+        finally { _actions.Release(); }
+        if (result.Started && await SyncGatewayAsync(configs, startIfStopped: false) is { Started: false } gateway)
+            return result with { Detail = $"{result.Detail} Gateway: {gateway.Detail}" };
+        return result;
+    }
+
+    private async Task<StartStepResult> StopDeviceAsync(string id, ModuleKind kind, DeviceSessions.Session[] active,
+        bool explicitStop = false)
+    {
+        var containers = kind == ModuleKind.Pv ? pvContainers.For(id) : [];
+        if (explicitStop && active.Length == 0 && containers is [var unconfirmed])
+            return await pvContainers.FinishStopAsync(id, unconfirmed.ContainerId, useDockerStop: true);
+        if (active.Length != 1 || active[0].Startup.Kind != kind)
+            return new(id, false, active.Length > 1 ? "Mehrere Geräteprozesse haben dieselbe Kennung." : "Kein passender steuerbarer Geräteprozess erreichbar.");
+        if (containers.Any(container => container.ContainerId != active[0].ContainerId))
+            return new(id, false, "Mehrere PV-Prozesse haben dieselbe Kennung.");
+        var registration = active[0].Registration;
+        using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(12));
+        var reply = await sessions.SendAsync<System.Text.Json.JsonElement>(registration, new("stop"), timeout.Token);
+        if (reply is null || reply.Error is not null)
+        {
+            if (explicitStop && active[0].ContainerId is { } unresponsive)
+                return await pvContainers.FinishStopAsync(id, unresponsive, useDockerStop: true);
+            return new(id, false, reply?.Error ?? "Beenden nicht bestätigt. Bitte Prozesszustand prüfen.");
+        }
+        if (active[0].ContainerId is { } containerId)
+        {
+            var directory = Path.GetDirectoryName(registration.FilePath);
+            var stopped = await pvContainers.FinishStopAsync(id, containerId, useDockerStop: false, directory);
+            return !stopped.Started && explicitStop
+                ? await pvContainers.FinishStopAsync(id, containerId, useDockerStop: true, directory)
+                : stopped;
+        }
+        try
+        {
+            while (DeviceControl.IsRegistered(registration))
+                await Task.Delay(150, timeout.Token);
+            Process? process;
+            lock (_gate) _processes.TryGetValue(id, out process);
+            if (process is not null)
+            {
+                await process.WaitForExitAsync(timeout.Token);
+                lock (_gate) _processes.Remove(id);
+                process.Dispose();
+            }
+            return new(id, true, "Geräteprozess geordnet beendet.");
+        }
+        catch (OperationCanceledException)
+        {
+            return new(id, false, "Geräteprozess hat sich noch nicht beendet.");
+        }
+    }
+
+    private async Task<StartStepResult?> StopCoreAsync(InstanceConfig config)
     {
         Process? process;
         lock (_gate) _processes.TryGetValue(config.Id, out process);
@@ -198,6 +353,7 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguratio
             return new StartStepResult(config.Id, false, "Beenden fehlgeschlagen.");
         }
         lock (_gate) _processes.Remove(config.Id);
+        process.Dispose();
         return new StartStepResult(config.Id, true, okText);
     }
 
@@ -327,7 +483,9 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguratio
     }
 
     /// <summary>Startet den vorhandenen RabbitMQ-Container über docker compose; Fehler enthalten die docker-Ausgabe.</summary>
-    public async Task<StartStepResult> StartBrokerAsync()
+    public async Task<StartStepResult> StartBrokerAsync() => TrackStart(await StartBrokerCoreAsync());
+
+    private async Task<StartStepResult> StartBrokerCoreAsync()
     {
         var composeDirectory = Path.Combine(_repoRoot, "docker");
         var (fileName, arguments) = ComposeCommand(composeDirectory);
@@ -406,26 +564,35 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguratio
     };
 
     /// <summary>dotnet-Kommandozeile je Instanz; Master startet standardmäßig pausiert.</summary>
-    private static string[] CommandFor(InstanceConfig config, IReadOnlyList<InstanceConfig> configs)
+    private string[] CommandFor(InstanceConfig config, IReadOnlyList<InstanceConfig> configs)
     {
         var (project, options) = config.Kind switch
         {
-            ModuleKind.Pv => ("Devices/PvSimulator", DeviceOptions(config)),
-            ModuleKind.Battery => ("Devices/BatterySimulator", DeviceOptions(config)),
-            ModuleKind.Charger => ("Devices/DualPortCharger", DeviceOptions(config)),
-            ModuleKind.ColdStore => ("Devices/KuehlhausSimulator", DeviceOptions(config)),
+            ModuleKind.Battery => ("Devices/BatterySimulator", BatteryStartup.Arguments(config)),
+            ModuleKind.Charger => ("Devices/DualPortCharger", EquipmentOptions.Arguments(config)),
+            ModuleKind.ColdStore => ("Devices/KuehlhausSimulator", EquipmentOptions.Arguments(config)),
             ModuleKind.Weather => ("WeatherSimulator", new[] { "--port", $"{config.HttpPort}", "--mqtt" }),
             ModuleKind.Master => ("SimulationMaster", new[] { "--speed", $"{config.Speed}", "--mqtt" }),
             ModuleKind.Gateway => ("ModbusRabbitGateway", new[] { "--interval", "1" }.Concat(configs
-                .Where(device => device.ModbusPort is not null)
-                .SelectMany(device => new[] { "--device", $"{device.Id}=127.0.0.1:{device.ModbusPort}" }))),
+                .SelectMany(GatewayArguments))),
             _ => throw new InvalidOperationException($"Kein Startkommando für {config.Kind}.")
         };
         return ["run", "--no-build", "--project", $"src/{project}", "--", .. options];
     }
 
-    private static string[] DeviceOptions(InstanceConfig config) =>
-        ["--id", config.Id, "--modbus-port", $"{config.ModbusPort}", "--location", config.Location ?? "salzburg"];
+    private IEnumerable<string> GatewayArguments(InstanceConfig device)
+    {
+        if (device.ModbusPort is not { } port) yield break;
+        var active = DeviceSessions.Supports(device.Kind) ? sessions.For(device.Id) : [];
+        if (active.Length > 1 || active is [var session] && session.Startup.Kind != device.Kind) yield break;
+        var modbus = DeviceModbus(active.SingleOrDefault()?.Startup ?? device);
+        if (modbus?.Disabled == true) yield break;
+        yield return "--device";
+        yield return $"{device.Id}=127.0.0.1:{modbus?.Port ?? port}/{modbus?.UnitId ?? 1}";
+    }
+
+    private static Devices.Common.Modbus.ModbusOptions? DeviceModbus(InstanceConfig? config) =>
+        config?.Pv?.Modbus ?? config?.Battery?.Modbus ?? config?.Equipment?.Modbus;
 
     private static async Task Redirect(StreamReader reader, string path, bool append)
     {

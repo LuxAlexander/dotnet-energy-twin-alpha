@@ -1,0 +1,176 @@
+@using Batterie_Sim
+@using Devices.Common.Control
+@using DualChargerSim.Simulation
+@using EnergySimulator.Simulation
+@using KuehlhausSimulator.Simulation
+@inject DeviceSessions Sessions
+@implements IDisposable
+
+@if (Kind == ModuleKind.Charger)
+{
+    <div class="charging-ports">
+        @for (var number = 1; number <= 2; number++)
+        {
+            var port = number;
+            var point = _session?.ChargerState?.Device.Points.SingleOrDefault(point => point.Number == port);
+            @if (point is not null)
+            {
+                <fieldset @key="(_session!.Registration.Session, port)" disabled="@_busy" class="device-overview-fieldset">
+                    <ChargerPointControls Point="point" Metrics="@(point.Vehicle is null ? null : PointMetrics?.Invoke(port))" Send="command => SendAsync(command, port)"
+                                          ShowFaultControls="false" Feedback="@(_port == port ? _message : null)" />
+                </fieldset>
+            }
+            else
+            {
+                <section class="device-live-card">
+                    <h3>Ladepunkt @port</h3>
+                    @PointMetrics?.Invoke(port)
+                </section>
+            }
+        }
+    </div>
+}
+
+@if (_session is null)
+{
+    <p class="muted">@Unavailable</p>
+    @if (_message is not null)
+    {
+        <p role="status">@_message</p>
+    }
+}
+else if (Kind != ModuleKind.Charger)
+{
+    <fieldset @key="_session.Registration.Session" disabled="@_busy" class="device-overview-fieldset device-overview-actions">
+        @if (_session.PvState is { } pv)
+        {
+            <h2>Wartung und Störungen</h2>
+            <div class="device-overview-row">
+                <button @onclick='() => SendAsync(new("clean"))'>Module reinigen</button>
+                @foreach (var (label, active) in new[] { ("Wechselrichterfehler", pv.InverterFault),
+                    ("Überhitzung", pv.Overheat), ("Netzstörung", pv.GridFault) })
+                {
+                    <span class="device-fault-status @(active ? "is-active" : null)">@label · @(active ? "Aktiv" : "Inaktiv")</span>
+                }
+            </div>
+        }
+        else if (_session.BatteryState is { } battery)
+        {
+            <h3>Leistung steuern</h3>
+            <p>@(battery.Mode == ControlMode.Auto ? "Automatik" : "Handbetrieb") · Aktiver Sollwert @battery.SetpointKw kW</p>
+            <div class="device-overview-row">
+                <button @onclick='() => SendAsync(new("mode", battery.Mode == ControlMode.Auto ? "Manual" : "Auto"))'>
+                    @(battery.Mode == ControlMode.Auto ? "Handbetrieb wählen" : "Automatik wählen")
+                </button>
+                <form class="device-overview-row" @onsubmit='() => SetValueAsync("setpoint")' @onsubmit:preventDefault>
+                    <label>Sollleistung (kW) <input type="number" min="@Number(-battery.MaxDischargeKw)" max="@Number(battery.MaxChargeKw)" step="any" @bind="_value" required /></label>
+                    <button type="submit">Sollleistung setzen</button>
+                </form>
+            </div>
+        }
+        else if (_session.ColdStoreState is { Device: var cold })
+        {
+            <p>Aktiver Sollwert @cold.SetpointC °C · Tür @(cold.DoorOpen ? "offen" : "geschlossen") · @(cold.IsAuto ? "Automatik" : "Handbetrieb")</p>
+            <div class="device-overview-row">
+                <button @onclick='() => SendAsync(new("door", (!cold.DoorOpen).ToString()))'>@(cold.DoorOpen ? "Tür schließen" : "Tür öffnen")</button>
+                <form class="device-overview-row" @onsubmit='() => SetValueAsync("setpoint")' @onsubmit:preventDefault>
+                    <label>Solltemperatur (°C) <input type="number" min="-30" max="0" step="any" @bind="_value" required /></label>
+                    <button type="submit">Solltemperatur setzen</button>
+                </form>
+            </div>
+        }
+        @if (_message is not null)
+        {
+            <p role="status">@_message</p>
+        }
+    </fieldset>
+}
+
+@code {
+    [Parameter, EditorRequired] public string DeviceId { get; set; } = "";
+    [Parameter, EditorRequired] public ModuleKind Kind { get; set; }
+    [Parameter, EditorRequired] public DeviceSessions.Session[] ActiveSessions { get; set; } = [];
+    [Parameter] public RenderFragment<int>? PointMetrics { get; set; }
+
+    private readonly CancellationTokenSource _stop = new();
+    private DeviceSessions.Session? _session;
+    private double? _value;
+    private bool _busy;
+    private int? _port;
+    private string? _message;
+    private string Unavailable { get; set; } = "Kein steuerbarer Geräteprozess erreichbar.";
+
+    protected override void OnParametersSet()
+    {
+        if (_busy) return;
+        var current = GetSession(ActiveSessions);
+        if (current?.Registration.Session != _session?.Registration.Session)
+        {
+            _value = null;
+            if (current is not null) _message = null;
+        }
+        _session = current;
+    }
+
+    private DeviceSessions.Session? GetSession(DeviceSessions.Session[] active)
+    {
+        Unavailable = active.Length == 0 ? "Kein steuerbarer Geräteprozess erreichbar."
+            : "Die Geräte-ID ist mehrfach belegt oder gehört zu einer anderen Geräteart. Bedienung gesperrt.";
+        return active is [var session] && session.Startup.Kind == Kind ? session : null;
+    }
+
+    private static string Number(double value) => value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+
+    private Task SetValueAsync(string action) =>
+        _value is double value ? SendAsync(new(action, Number(value))) : Task.CompletedTask;
+
+    private async Task SendAsync(DeviceCommand command, int? port = null)
+    {
+        if (_busy || _session is not { } current) return;
+        _port = port;
+        if (GetSession(Sessions.For(DeviceId))?.Registration.Session != current.Registration.Session)
+        {
+            _session = null;
+            _message = "Der Prozess hat gewechselt. Bitte erneut prüfen.";
+            return;
+        }
+
+        _busy = true;
+        _message = "Wird angewendet …";
+        try
+        {
+            switch (Kind)
+            {
+                case ModuleKind.Pv:
+                    await ApplyAsync<PvControlState>(current, command, state => current with { PvState = state });
+                    break;
+                case ModuleKind.Battery:
+                    await ApplyAsync<BatteryControlState>(current, command, state => current with { BatteryState = state });
+                    break;
+                case ModuleKind.Charger:
+                    await ApplyAsync<EquipmentState<ChargerControlState>>(current, command, state => current with { ChargerState = state });
+                    break;
+                case ModuleKind.ColdStore:
+                    await ApplyAsync<EquipmentState<ColdStoreControlState>>(current, command, state => current with { ColdStoreState = state });
+                    break;
+            }
+        }
+        finally { _busy = false; }
+    }
+
+    private async Task ApplyAsync<T>(DeviceSessions.Session current, DeviceCommand command,
+        Func<T, DeviceSessions.Session> withState) where T : class
+    {
+        var reply = await Sessions.SendAsync<T>(current.Registration, command, _stop.Token);
+        if (_stop.IsCancellationRequested) return;
+        _message = reply is null ? "Keine Bestätigung erhalten. Der Gerätezustand wird erneut abgefragt."
+            : reply.Error ?? "Angewendet.";
+        if (reply?.State is { } state) _session = withState(state);
+    }
+
+    public void Dispose()
+    {
+        _stop.Cancel();
+        _stop.Dispose();
+    }
+}

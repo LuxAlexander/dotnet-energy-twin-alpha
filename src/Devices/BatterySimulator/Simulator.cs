@@ -10,7 +10,7 @@ namespace Batterie_Sim;
 /// festen Schritte, schreibt CSV und Modbus-Register, zeichnet die Anzeige und verarbeitet Tasten – ohne blockierendes Warten.
 /// Die Modbus-Register bleiben auch in der Pause und bei verlorenem Master erreichbar.
 /// </summary>
-public sealed class Simulator
+public sealed partial class Simulator
 {
     private static readonly TimeSpan PollInterval = TimeSpan.FromMilliseconds(100);
     private static readonly TimeSpan RedirectedInterval = TimeSpan.FromSeconds(5);
@@ -56,6 +56,7 @@ public sealed class Simulator
         _battery = battery;
         _profile = profile;
         _options = options;
+        _startup = options with { Config = CopyConfig(options.Config) };
         _scheduler = new StepScheduler(options.Step);
 
         Time = DeviceTimeSource.Create(options.TimeSync, battery.DeviceId, "Battery");
@@ -74,6 +75,8 @@ public sealed class Simulator
         _modbus?.Start();                                         // Port belegt → IOException, bevor etwas angelegt wird
         await using var logger = await CsvLogger.CreateAsync(_battery.Config, cancellationToken);
         using var stop = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        await using var control = await Devices.Common.Control.DeviceControl.StartAsync<BatteryControlState>(
+            _battery.DeviceId, BatteryControlState.Kind, DispatchAsync, stop.Token);
         var syncTask = Time.RunAsync(stop.Token);
 
         Message = Time.IsStandalone
@@ -91,6 +94,7 @@ public sealed class Simulator
                 if (!menuOpen)
                     HandleKeys(stop.Token);
                 RunPending();
+                ProcessControlRequests();
                 await AdvanceAsync(logger, stop.Token);
 
                 // Modbus läuft auch in der Pause weiter: Befehle umsetzen, Zustand veröffentlichen
@@ -120,6 +124,7 @@ public sealed class Simulator
         }
         finally
         {
+            _controlRequests.Writer.TryComplete();
             await stop.CancelAsync();
             _modbus?.Dispose();
             _weather?.Dispose();
@@ -204,16 +209,7 @@ public sealed class Simulator
                 Message = Time.TogglePause();
                 break;
             case ConsoleKey.M:
-                if (Mode == ControlMode.Auto)
-                {
-                    Mode = ControlMode.Manual;
-                    _battery.SetPower(0);
-                }
-                else
-                {
-                    Mode = ControlMode.Auto;
-                }
-                Message = $"Modus {Mode}.";
+                SetMode(Mode == ControlMode.Auto ? ControlMode.Manual : ControlMode.Auto);
                 break;
             case ConsoleKey.Q:
                 QuitRequested = true;
@@ -230,10 +226,7 @@ public sealed class Simulator
                 _battery.SetPower(0);
                 break;
             case ConsoleKey.E:
-                if (_battery.IsOn)
-                    _battery.TurnOff();
-                else
-                    _battery.TurnOn();
+                SetPowerEnabled(!_battery.IsOn);
                 break;
             case ConsoleKey.H:
                 _battery.TriggerFault(FaultType.Overheat);
