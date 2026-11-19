@@ -105,22 +105,47 @@ public sealed class PvContainers(ILogger<PvContainers> logger)
         return null;
     }
 
-    public async Task<string?> CheckImageAsync(CancellationToken cancellationToken = default)
+    public async Task<string?> EnsureImageAsync(CancellationToken cancellationToken = default)
     {
         var result = await DockerAsync(["image", "inspect", "--format", "{{.Id}}", Image], cancellationToken);
-        return result.Success ? null : $"PV-Image {Image} nicht verfügbar. Docker Desktop und die Build-Anleitung prüfen. {result.Detail}";
+        if (result.Success) return null;
+        var engine = await DockerAsync(["info", "--format", "{{.OSType}}"], cancellationToken);
+        if (!engine.Success)
+            return $"Docker Desktop ist nicht erreichbar. Docker Desktop mit Linux-Containern starten. {engine.Detail}";
+        if (engine.Output.Trim() != "linux")
+            return "Für die PV-Anlage muss Docker Desktop Linux-Container verwenden.";
+
+        var root = ProcessManager.FindRoot();
+        var dockerfile = Path.Combine(root, "docker", "PvSimulator.Dockerfile");
+        if (!File.Exists(dockerfile) || !Directory.Exists(Path.Combine(root, "src", "Devices", "PvSimulator")))
+            return "Das PV-Image fehlt und kann ohne Dockerfile und PV-Quellcode nicht automatisch erstellt werden. Bitte das vollständige Repository verwenden.";
+
+        logger.LogInformation("PV-Image {Image} fehlt und wird automatisch erstellt. Der erste Build kann mehrere Minuten dauern.", Image);
+        var build = await DockerAsync(["build", "--file", dockerfile, "--tag", Image, root], cancellationToken,
+            TimeSpan.FromMinutes(10));
+        if (!build.Success)
+        {
+            logger.LogWarning("Automatischer PV-Image-Build fehlgeschlagen: {Output}\n{Error}", build.Output, build.Error);
+            var detail = build.Error.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                .LastOrDefault() ?? build.Detail;
+            return $"Das PV-Image konnte nicht automatisch erstellt werden. Beim ersten Build ist Internet erforderlich. Details stehen im Webdienst-Protokoll. {detail}";
+        }
+        var verified = await DockerAsync(["image", "inspect", "--format", "{{.Id}}", Image], cancellationToken);
+        return verified.Success ? null : $"Das erstellte PV-Image ist nicht verfügbar. {verified.Detail}";
     }
 
     public async Task<StartStepResult> StartAsync(InstanceConfig config, DeviceSessions sessions)
     {
-        using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(20));
+        using var timeout = new CancellationTokenSource();
         var token = timeout.Token;
         var existing = await DiscoverAsync(token);
         if (existing.Any(run => run.Startup.Id == config.Id) || sessions.For(config.Id).Length > 0)
             return new(config.Id, false, "Die PV-Instanz läuft bereits oder ihre Geräte-ID ist belegt.");
         if (config.ModbusPort is not int modbusPort || !PortProbe.IsFree(modbusPort))
             return new(config.Id, false, $"Modbus-Port {config.ModbusPort} fehlt oder ist belegt.");
-        if (await CheckImageAsync(token) is { } unavailable) return new(config.Id, false, unavailable);
+        if (await EnsureImageAsync() is { } unavailable) return new(config.Id, false, unavailable);
+        // Die Startfrist beginnt erst nach dem möglicherweise mehrminütigen Image-Build.
+        timeout.CancelAfter(TimeSpan.FromSeconds(20));
 
         var directory = Path.Combine(RunsDirectory, Guid.NewGuid().ToString("N"));
         var controlDirectory = Path.Combine(directory, "control");
@@ -258,10 +283,11 @@ public sealed class PvContainers(ILogger<PvContainers> logger)
     private static string ContainerName(string id) =>
         "energytwin-pv-" + Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(id))).ToLowerInvariant()[..24];
 
-    private static async Task<DockerResult> DockerAsync(string[] arguments, CancellationToken cancellationToken)
+    private static async Task<DockerResult> DockerAsync(string[] arguments, CancellationToken cancellationToken,
+        TimeSpan? commandTimeout = null)
     {
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        timeout.CancelAfter(TimeSpan.FromSeconds(15));
+        timeout.CancelAfter(commandTimeout ?? TimeSpan.FromSeconds(15));
         var executable = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
             "Docker", "Docker", "resources", "bin", "docker.exe");
         var info = new ProcessStartInfo(File.Exists(executable) ? executable : "docker")

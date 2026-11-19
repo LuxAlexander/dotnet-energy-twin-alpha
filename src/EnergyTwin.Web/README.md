@@ -124,8 +124,12 @@ Geräteseite die jeweiligen Werte nebeneinander. „Jetzt neu starten“ überni
 nach Bestätigung. Falls der Neustart nach dem Beenden fehlschlägt, kann die vorige Konfiguration wieder
 gestartet werden.
 
-PV-Instanzen startet die Web-App als Linux-Container in Docker Desktop. Vor dem ersten Start das
-[PV-Image bauen](../../docker/README.md#pv-simulator-im-container-lb04). Modbus bleibt auf dem eingestellten
+PV-Instanzen startet die Web-App als Linux-Container in Docker Desktop. Ein fehlendes PV-Image erstellt
+sie beim Start automatisch aus dem vollständigen Repository (höchstens zehn Minuten Buildzeit).
+Docker Desktop muss mit Linux-Containern laufen; für den ersten Build ist Internet erforderlich.
+Ein vorhandenes Image wird weiterverwendet. Beim Neustart erfolgt die Bereitstellung vor dem Stoppen
+der laufenden PV. Buildfehler stehen in der Rückmeldung und ausführlich im Webdienst-Protokoll.
+Der [manuelle Image-Build](../../docker/README.md#pv-simulator-im-container-lb04) bleibt möglich. Modbus bleibt auf dem eingestellten
 Windows-Port lokal erreichbar, CSV-Dateien bleiben im eingestellten Windows-Ordner.
 Der Container wird nach einem Web-App-Neustart wiedererkannt. Weitere Details zu
 [Containerstatus und Logs](../../docker/README.md#verwaltung-durch-blazor).

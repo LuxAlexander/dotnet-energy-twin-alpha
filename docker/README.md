@@ -91,7 +91,13 @@ Der eigenständige Konsolenstart steht weiter zur Verfügung. Die bestehende Com
 
 ### Verwaltung durch Blazor
 
-Nach dem Image-Build unter „PV-Anlagen“ in der Web-App eine Instanz auswählen oder anlegen und starten.
+Unter „PV-Anlagen“ in der Web-App eine Instanz auswählen oder anlegen und starten.
+Fehlt das Image, baut die Web-App es automatisch aus dem vollständigen Repository im Docker-Kontext
+`desktop-linux` (Windows). Docker Desktop muss laufen; der erste Build benötigt Internet und kann
+mehrere Minuten dauern. Nach spätestens zehn Minuten wird der Buildversuch abgebrochen.
+Vorhandene Images werden weiterverwendet; für Quellcodeänderungen das Image manuell neu bauen.
+Beim Neustart wird das Image vor dem Stoppen der laufenden PV bereitgestellt.
+Buildfehler erscheinen in der Rückmeldung und ausführlich im Webdienst-Protokoll.
 Die Web-App legt je PV-ID einen Container an. Sie bindet den eingestellten CSV-Ordner ein, veröffentlicht
 den konfigurierten Modbus-Port ausschließlich auf Windows-Loopback und übersetzt lokale Master- und
 Wetteradressen für Docker Desktop. Externe Adressen und `Wetter aus` bleiben erhalten.

@@ -246,7 +246,7 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguratio
             if (config.ModbusPort is int port
                 && (modbus is null || modbus.Disabled || modbus.Port != port) && !PortProbe.IsFree(port))
                 return new(config.Id, false, $"Modbus-Port {port} ist belegt.");
-            if (config.Kind == ModuleKind.Pv && await pvContainers.CheckImageAsync() is { } unavailable)
+            if (config.Kind == ModuleKind.Pv && await pvContainers.EnsureImageAsync() is { } unavailable)
                 return new(config.Id, false, unavailable);
             if (active.Length == 1)
             {
