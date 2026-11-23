@@ -17,6 +17,7 @@ Die zentrale [README](README.md) enthält Architektur, Startreihenfolge und Zust
 | MQTT | Gateway und RabbitMQ-Broker eingerichtet | [Gateway](src/ModbusRabbitGateway/README.md), [Broker](docker/README.md) |
 | Viewer | MQTT Explorer eingerichtet und mit Geräte- und Wetterdaten geprüft | [Anleitung](docs/viewer/README.md) |
 | Weboberfläche | Blazor mit Anlagenübersicht, Fehlerdiagnose, Master-Steuerung und Bearbeitung aller vier Feldgeräte | [Weboberfläche](src/EnergyTwin.Web/README.md), [Gerätebearbeitung](docs/Umsetzung-Geraetebearbeitung.md) |
+| Containerbetrieb | PV und Kühlhaus als Linux-Container; Web-App baut die Images und verwaltet Start/Stopp. Kühlhaus-Lauf noch nicht nachgewiesen | [Docker](docker/README.md#pv-simulator-im-container-lb04), [Kühlhaus-Container](docker/README.md#kuehlhaus-simulator-im-container-lb04) |
 
 ## Arbeitsregeln für Agenten
 
@@ -72,6 +73,6 @@ skills/                   lokale Arbeits-Skills
 - Zeit und Synchronisation: [SimCore.Time](src/SimCore.Time/README.md), [SimCore.TimeSync](src/SimCore.TimeSync/README.md), [SimulationMaster](src/SimulationMaster/README.md).
 - Wetter und MQTT: [WeatherSimulator](src/WeatherSimulator/README.md), [Wetter-Nachrichtenvertrag](docs/Wetter-Nachrichtenvertrag-LB03.md).
 - Modbus und Geräteanbindung: [Modbus.Contracts](src/Modbus.Contracts/README.md), [Devices.Common](src/Devices.Common/README.md). Die Registerpläne stehen in den jeweiligen Geräte-READMEs.
-- Gateway und Broker: [ModbusRabbitGateway](src/ModbusRabbitGateway/README.md), [Nachrichtenvertrag](docs/Nachrichtenvertrag-LB03.md), [docker](docker/README.md). Die Web-App startet PV als Container. Image-Build, manuelle Bedienung und Diagnose: [PV-Container](docker/README.md#pv-simulator-im-container-lb04).
+- Gateway und Broker: [ModbusRabbitGateway](src/ModbusRabbitGateway/README.md), [Nachrichtenvertrag](docs/Nachrichtenvertrag-LB03.md), [docker](docker/README.md). Die Web-App startet PV und Kühlhaus als Container. Image-Build, manuelle Bedienung und Diagnose: [PV-Container](docker/README.md#pv-simulator-im-container-lb04), [Kühlhaus-Container](docker/README.md#kuehlhaus-simulator-im-container-lb04).
 - Viewer: [Viewer-Anleitung](docs/viewer/README.md). Anforderungen: [SRS](docs/SRS-LB03.md). Historische Entscheidungen und frühere Stände: [docs/archive](docs/archive/) und [docs/development-journal](docs/development-journal/).
 

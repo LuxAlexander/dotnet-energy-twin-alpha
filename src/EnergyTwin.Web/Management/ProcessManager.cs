@@ -20,7 +20,7 @@ public sealed record StartStepResult(string Id, bool Started, string Detail)
 /// unberührt.
 /// </summary>
 public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguration configuration, DeviceSessions sessions,
-    PvContainers pvContainers)
+    PvContainers pvContainers, ColdStoreContainers coldStoreContainers)
 {
     private static string? _repoRootCache;
     private readonly string _repoRoot = FindRoot();
@@ -52,7 +52,8 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguratio
 
     public InstanceRunState State(InstanceConfig config)
     {
-        if (config.Kind == ModuleKind.Pv && sessions.For(config.Id) is [{ ContainerId: not null }])
+        if (config.Kind is ModuleKind.Pv or ModuleKind.ColdStore
+            && sessions.For(config.Id) is [{ ContainerId: not null }])
             return InstanceRunState.ManagedRunning;
         lock (_gate)
             if (_processes.TryGetValue(config.Id, out var process) && !process.HasExited)
@@ -69,6 +70,8 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguratio
         || (DeviceSessions.Supports(config.Kind) ? sessions.For(config.Id) is [var session] && session.Startup.Kind == config.Kind : FindOurselves(config, ListenPort(config)) is not null);
 
     public bool HasPvContainer(string id) => pvContainers.For(id).Length > 0;
+
+    public bool HasColdStoreContainer(string id) => coldStoreContainers.For(id).Length > 0;
 
     public async Task<string> StartInstanceAsync(InstanceConfig config, IReadOnlyList<InstanceConfig> configs)
     {
@@ -117,6 +120,8 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguratio
         {
             if (config.Kind == ModuleKind.Pv)
                 return await pvContainers.StartAsync(config, sessions);
+            if (config.Kind == ModuleKind.ColdStore)
+                return await coldStoreContainers.StartAsync(config, sessions);
             var state = State(config);
             if (stoppedSession is not null && state == InstanceRunState.ExternallyReachable
                 && sessions.For(config.Id).All(session => session.Registration.Session == stoppedSession)
@@ -248,6 +253,8 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguratio
                 return new(config.Id, false, $"Modbus-Port {port} ist belegt.");
             if (config.Kind == ModuleKind.Pv && await pvContainers.EnsureImageAsync() is { } unavailable)
                 return new(config.Id, false, unavailable);
+            if (config.Kind == ModuleKind.ColdStore && await coldStoreContainers.EnsureImageAsync() is { } khUnavailable)
+                return new(config.Id, false, khUnavailable);
             if (active.Length == 1)
             {
                 var stopped = await StopDeviceAsync(config.Id, config.Kind, active);
@@ -264,28 +271,38 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguratio
     private async Task<StartStepResult> StopDeviceAsync(string id, ModuleKind kind, DeviceSessions.Session[] active,
         bool explicitStop = false)
     {
-        var containers = kind == ModuleKind.Pv ? pvContainers.For(id) : [];
+        DeviceContainerRun[] containers = kind switch
+        {
+            ModuleKind.Pv => pvContainers.For(id),
+            ModuleKind.ColdStore => coldStoreContainers.For(id),
+            _ => []
+        };
+        Task<StartStepResult> Finish(string containerId, bool useDockerStop, string? directory = null) =>
+            kind == ModuleKind.ColdStore
+                ? coldStoreContainers.FinishStopAsync(id, containerId, useDockerStop, directory)
+                : pvContainers.FinishStopAsync(id, containerId, useDockerStop, directory);
+        var deviceName = kind == ModuleKind.Pv ? "PV" : "Kühlhaus";
         if (explicitStop && active.Length == 0 && containers is [var unconfirmed])
-            return await pvContainers.FinishStopAsync(id, unconfirmed.ContainerId, useDockerStop: true);
+            return await Finish(unconfirmed.ContainerId, useDockerStop: true);
         if (active.Length != 1 || active[0].Startup.Kind != kind)
             return new(id, false, active.Length > 1 ? "Mehrere Geräteprozesse haben dieselbe Kennung." : "Kein passender steuerbarer Geräteprozess erreichbar.");
         if (containers.Any(container => container.ContainerId != active[0].ContainerId))
-            return new(id, false, "Mehrere PV-Prozesse haben dieselbe Kennung.");
+            return new(id, false, $"Mehrere {deviceName}-Prozesse haben dieselbe Kennung.");
         var registration = active[0].Registration;
         using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(12));
         var reply = await sessions.SendAsync<System.Text.Json.JsonElement>(registration, new("stop"), timeout.Token);
         if (reply is null || reply.Error is not null)
         {
             if (explicitStop && active[0].ContainerId is { } unresponsive)
-                return await pvContainers.FinishStopAsync(id, unresponsive, useDockerStop: true);
+                return await Finish(unresponsive, useDockerStop: true);
             return new(id, false, reply?.Error ?? "Beenden nicht bestätigt. Bitte Prozesszustand prüfen.");
         }
         if (active[0].ContainerId is { } containerId)
         {
             var directory = Path.GetDirectoryName(registration.FilePath);
-            var stopped = await pvContainers.FinishStopAsync(id, containerId, useDockerStop: false, directory);
+            var stopped = await Finish(containerId, useDockerStop: false, directory);
             return !stopped.Started && explicitStop
-                ? await pvContainers.FinishStopAsync(id, containerId, useDockerStop: true, directory)
+                ? await Finish(containerId, useDockerStop: true, directory)
                 : stopped;
         }
         try

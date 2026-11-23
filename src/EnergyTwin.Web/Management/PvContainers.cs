@@ -19,9 +19,8 @@ public sealed class PvContainers(ILogger<PvContainers> logger)
     private const string ControlTarget = "/run/energytwin/control";
     private static readonly string ContainerControlPort = $"{SimulationConfig.ContainerControlPort}/tcp";
     private static string RunsDirectory => Path.Combine(DeviceControl.DirectoryPath, "pv-containers");
-    private volatile Running[] _running = [];
+    private volatile DeviceContainerRun[] _running = [];
 
-    public sealed record Running(string ContainerId, int ControlPort, string ControlDirectory, InstanceConfig Startup);
     private sealed record DockerResult(int ExitCode, string Output, string Error)
     {
         public bool Success => ExitCode == 0;
@@ -29,9 +28,9 @@ public sealed class PvContainers(ILogger<PvContainers> logger)
             .FirstOrDefault() ?? $"Docker-Exitcode {ExitCode}.";
     }
 
-    public Running[] For(string id) => _running.Where(run => run.Startup.Id == id).ToArray();
+    public DeviceContainerRun[] For(string id) => _running.Where(run => run.Startup.Id == id).ToArray();
 
-    public async Task<Running[]> DiscoverAsync(CancellationToken cancellationToken)
+    public async Task<DeviceContainerRun[]> DiscoverAsync(CancellationToken cancellationToken)
     {
         if (!Directory.Exists(RunsDirectory) || !Directory.EnumerateDirectories(RunsDirectory).Any())
             return _running = [];
@@ -46,10 +45,10 @@ public sealed class PvContainers(ILogger<PvContainers> logger)
         var inspect = await DockerAsync(["container", "inspect", .. ids], cancellationToken);
         if (!inspect.Success) return _running;
         using var json = JsonDocument.Parse(inspect.Output);
-        return _running = json.RootElement.EnumerateArray().Select(ReadRun).OfType<Running>().ToArray();
+        return _running = json.RootElement.EnumerateArray().Select(ReadRun).OfType<DeviceContainerRun>().ToArray();
     }
 
-    private Running? ReadRun(JsonElement container)
+    private DeviceContainerRun? ReadRun(JsonElement container)
     {
         var owner = ReadOwner(container);
         if (owner is not { } owned || !container.GetProperty("State").GetProperty("Running").GetBoolean())

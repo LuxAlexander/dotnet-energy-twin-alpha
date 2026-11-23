@@ -22,6 +22,7 @@ var instancePath = Path.Combine(builder.Environment.ContentRootPath,
     builder.Configuration["Instances:File"] ?? "instances.local.json");
 builder.Services.AddSingleton(new EnergyTwin.Web.Management.InstanceStore(instancePath, port));
 builder.Services.AddSingleton<EnergyTwin.Web.Management.PvContainers>();
+builder.Services.AddSingleton<EnergyTwin.Web.Management.ColdStoreContainers>();
 builder.Services.AddSingleton<EnergyTwin.Web.Management.ProcessManager>();
 builder.Services.AddSingleton<EnergyTwin.Web.Management.DeviceSessions>();
 builder.Services.AddHostedService(services => services.GetRequiredService<EnergyTwin.Web.Management.DeviceSessions>());

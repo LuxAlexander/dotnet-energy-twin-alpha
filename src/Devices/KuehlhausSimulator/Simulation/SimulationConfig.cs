@@ -9,9 +9,12 @@ namespace KuehlhausSimulator.Simulation;
 /// Startparameter der Simulation (Geräte-ID, Solltemperatur, Kälteleistung, Schrittweite, Dauer, Seed,
 /// Zeitquelle, Modbus und Wetter).
 /// </summary>
-public class SimulationConfig
+public sealed record SimulationConfig
 {
     public const double MinimumRecommendedHours = 24;
+
+    /// <summary>Fester Steuerport, wenn die Web-App dieses Gerät als Container startet (PV nutzt 5191).</summary>
+    public const int ContainerControlPort = 5192;
 
     /// <summary>Tempo im Standalone-Betrieb; ein Kühlhaus reagiert langsam, deshalb kein allzu hoher Wert.</summary>
     public const double DefaultStandaloneSpeed = 600;

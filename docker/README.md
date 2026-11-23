@@ -3,9 +3,10 @@
 **Verantwortlich:** Alexander Lux · **Stand:** 2026-11-08
 
 Lokaler Nachrichtenbroker für das Modbus–RabbitMQ-Gateway und den optionalen Wetter-Publisher. Docker Desktop muss mit Linux-Containern laufen.
-Die .NET-Programme laufen beim bisherigen Sammelstart auf dem Host. Für den PV-Simulator gibt es zusätzlich einen
-[Containerstart](#pv-simulator-im-container-lb04). Für die erstmalige Bereitstellung der Images ist Internetzugang
-erforderlich, der Simulationsbetrieb selbst benötigt kein Internet.
+Die .NET-Programme laufen beim bisherigen Sammelstart auf dem Host. Für den PV-Simulator und das Kühlhaus gibt es
+zusätzlich einen [PV-](#pv-simulator-im-container-lb04) bzw.
+[Kühlhaus-Containerstart](#kuehlhaus-simulator-im-container-lb04). Für die erstmalige Bereitstellung der Images ist
+Internetzugang erforderlich, der Simulationsbetrieb selbst benötigt kein Internet.
 
 ## Einrichtung und Start
 
@@ -114,6 +115,60 @@ docker --context desktop-linux logs --tail 30 <Container-ID>
 Die Container laufen bei einem Neustart der Web-App weiter. Nach einem Stopp durch Docker oder einem
 Windows-Neustart kann die Anlage erneut über Blazor gestartet werden. Der manuelle Start oben dient
 auch der Diagnose außerhalb der Web-App. Für dieselbe Geräte-ID nur einen Startweg gleichzeitig verwenden.
+
+## Kühlhaus-Simulator im Container (LB04)
+
+Das Kühlhaus ist wie die PV-Anlage als Linux-Container verfügbar; verantwortlich ist Dominik Zach.
+Die [Container-Konfiguration](KuehlhausSimulator.Dockerfile) baut das Image aus dem vollständigen Repository.
+Aus dem Repository-Root mit laufendem Docker Desktop (Linux-Container):
+
+```powershell
+docker build --file docker/KuehlhausSimulator.Dockerfile --tag energytwin/kh:lb04 .
+```
+
+Der manuelle Start erwartet Master und Wetterdienst auf dem Windows-Host. Das Image bringt die passenden
+Standardargumente mit (`--master host.docker.internal:5100`, `--weather http://host.docker.internal:8080`,
+`--modbus-bind 0.0.0.0`, `--output /data`). Das Beispiel veröffentlicht den Modbus-Standardport 1505 nur auf
+Windows-Loopback und schreibt die CSV in den Windows-Ordner `docs/data`:
+
+```powershell
+$csv = (New-Item -ItemType Directory -Force docs/data).FullName
+docker run --detach --pull never --name energytwin-kh-01 --publish 127.0.0.1:1505:1505 --mount "type=bind,source=$csv,target=/data" energytwin/kh:lb04 --id KH-01
+docker ps --filter name=energytwin-kh-01
+docker logs --tail 30 energytwin-kh-01
+dotnet run --project src/ModbusDiagnosticClient -- --port 1505 --once
+```
+
+`docker stop --timeout 12` löst auch hier den geordneten Stopp aus: Unter Linux empfängt der Prozess SIGTERM,
+meldet sich beim Master ab, schließt die CSV und gibt den Modbus-Port frei. Für geänderte Argumente den
+gestoppten Container entfernen und neu erstellen. Beim Start aus dem Container gelten die
+[Kühlhaus-Startoptionen](../src/Devices/KuehlhausSimulator/README.md).
+
+### Verwaltung durch Blazor
+
+Unter „Kühlhäuser“ in der Web-App eine Instanz auswählen oder anlegen und starten. Fehlt das Image
+`energytwin/kh:lb04`, baut die Web-App es automatisch aus dem vollständigen Repository im Docker-Kontext
+`desktop-linux` (Windows); der erste Build benötigt Internet und kann mehrere Minuten dauern (Abbruch nach
+höchstens zehn Minuten). Vorhandene Images werden weiterverwendet; für Quellcodeänderungen das Image manuell
+neu bauen. Beim Neustart wird das Image vor dem Stoppen des laufenden Kühlhauses bereitgestellt.
+
+Die Web-App legt je Kühlhaus-ID einen Container `energytwin-kh-<Hash>` an. Sie bindet den eingestellten
+CSV-Ordner ein, veröffentlicht den konfigurierten Modbus-Port ausschließlich auf Windows-Loopback und
+übersetzt lokale Master- und Wetteradressen für Docker Desktop. Externe Adressen und `Wetter aus` bleiben
+erhalten. Über die Umgebungsvariable `ENERGYTWIN_KUEHLHAUS_CONTAINER_CONTROL=1` aktiviert sie den lokalen
+Steuerzugang auf Port **5192** (PV nutzt 5191). Auch dieser Port wird nur auf `127.0.0.1` veröffentlicht und
+dient der Live-Bedienung, dem geordneten Stopp und der Wiedererkennung; der Start gilt erst nach Bestätigung
+durch diesen Zugang. Der Container wird nach einem Web-App-Neustart über die Labels `energytwin.web.kh-run`
+und `energytwin.web.kh-id` wiedererkannt. Für die Diagnose:
+
+```powershell
+docker --context desktop-linux ps -a --filter label=energytwin.web.kh-id=KH-01
+docker --context desktop-linux logs --tail 30 <Container-ID>
+```
+
+Nach einem Stopp durch Docker oder einem Windows-Neustart kann das Kühlhaus erneut über Blazor gestartet
+werden. Für dieselbe Geräte-ID nur einen Startweg gleichzeitig verwenden. Ein containergeführter Lauf des
+Kühlhauses ist bisher nicht als Nachweis dokumentiert.
 
 ## Simulatoren und Gateway
 

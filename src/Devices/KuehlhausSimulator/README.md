@@ -82,6 +82,27 @@ Zahlen dürfen Punkt oder Komma als Dezimaltrenner haben. `--duration`, `--start
 `--standalone` erlaubt (mit Master bestimmt der Master Zeit und Tempo); ungültige Werte beenden das Programm mit
 Fehlermeldung und Hilfe (Exit-Code 1).
 
+## Containerbetrieb (LB04)
+
+Das Kühlhaus lässt sich wie die PV-Anlage als Linux-Container in Docker Desktop betreiben. Das Image
+`energytwin/kh:lb04` entsteht aus [`docker/KuehlhausSimulator.Dockerfile`](../../../docker/KuehlhausSimulator.Dockerfile);
+die Web-App baut es beim ersten Containerstart automatisch (erster Build benötigt Internet). Manuell:
+
+```powershell
+docker build --file docker/KuehlhausSimulator.Dockerfile --tag energytwin/kh:lb04 .
+$csv = (New-Item -ItemType Directory -Force docs/data).FullName
+docker run --detach --pull never --name energytwin-kh-01 --publish 127.0.0.1:1505:1505 --mount "type=bind,source=$csv,target=/data" energytwin/kh:lb04 --id KH-01
+```
+
+Im Container lauscht Modbus auf `0.0.0.0`, damit der veröffentlichte Windows-Port 1505 erreichbar bleibt;
+die CSV landet unter `/data` (im Beispiel der Windows-Ordner `docs/data`). Master und Wetter erreicht der
+Container über `host.docker.internal`. Mit `ENERGYTWIN_KUEHLHAUS_CONTAINER_CONTROL=1` aktiviert die Web-App
+zusätzlich den lokalen Steuerzugang auf Port **5192** (`SimulationConfig.ContainerControlPort`; PV nutzt 5191).
+`docker stop` löst unter Linux SIGTERM aus und beendet den Lauf geordnet: Abmeldung beim Master, CSV schließen,
+Modbus-Port freigeben. Start, Live-Bedienung und Stopp erfolgen in der Web-App unter „Kühlhäuser“; Details stehen
+in der [Docker-Anleitung](../../../docker/README.md#kuehlhaus-simulator-im-container-lb04). Ein containergeführter
+Lauf des Kühlhauses ist bisher nicht als Nachweis dokumentiert.
+
 ## Bedienung
 
 In der [Web-App](../../EnergyTwin.Web/README.md#geräte-bearbeiten) zeigt der Reiter „Einstellungen“

@@ -20,8 +20,9 @@ public sealed class SimulationControl<T>(Func<T> readState, Func<DeviceCommand, 
 
     private readonly Channel<Request> _requests = Channel.CreateBounded<Request>(32);
 
-    public Task<IAsyncDisposable> StartAsync(string id, string kind, CancellationToken cancellationToken) =>
-        DeviceControl.StartAsync<T>(id, kind, DispatchAsync, cancellationToken);
+    public Task<IAsyncDisposable> StartAsync(string id, string kind, CancellationToken cancellationToken,
+        int? containerPort = null) =>
+        DeviceControl.StartAsync<T>(id, kind, DispatchAsync, cancellationToken, containerPort);
 
     private async Task<DeviceReply<T>> DispatchAsync(DeviceCommand? command, CancellationToken cancellationToken)
     {

@@ -9,7 +9,8 @@ using EnergyTwin.Web.Presentation;
 
 namespace EnergyTwin.Web.Management;
 
-public sealed class DeviceSessions(InstanceStore store, ILogger<DeviceSessions> logger, PvContainers containers) : BackgroundService
+public sealed class DeviceSessions(InstanceStore store, ILogger<DeviceSessions> logger, PvContainers pvContainers,
+    ColdStoreContainers coldStoreContainers) : BackgroundService
 {
     private readonly HttpClient _client = new(new SocketsHttpHandler { UseProxy = false, AllowAutoRedirect = false })
     {
@@ -31,11 +32,16 @@ public sealed class DeviceSessions(InstanceStore store, ILogger<DeviceSessions> 
         {
             try
             {
-                var docker = await containers.DiscoverAsync(stoppingToken);
+                var pvDocker = await pvContainers.DiscoverAsync(stoppingToken);
+                var coldStoreDocker = await coldStoreContainers.DiscoverAsync(stoppingToken);
                 var sessions = await Task.WhenAll(DeviceControl.Discover()
                     .Select(device => ProbeAsync(device, stoppingToken))
-                    .Concat(docker.SelectMany(run => DeviceControl.Discover(run.ControlDirectory)
+                    .Concat(pvDocker.SelectMany(run => DeviceControl.Discover(run.ControlDirectory)
                         .Where(device => device.Kind == "PV" && device.Id == run.Startup.Id)
+                        .Select(device => ProbeAsync(device with { Port = run.ControlPort }, stoppingToken, run))))
+                    .Concat(coldStoreDocker.SelectMany(run => DeviceControl.Discover(run.ControlDirectory)
+                        .Where(device => device.Kind == KuehlhausSimulator.Simulation.SimulationEngine.ControlKind
+                            && device.Id == run.Startup.Id && run.Startup.Kind == ModuleKind.ColdStore)
                         .Select(device => ProbeAsync(device with { Port = run.ControlPort }, stoppingToken, run)))));
                 _sessions = sessions.OfType<Session>().ToArray();
                 store.SetDiscovered(_sessions.Select(session => session.Startup));
@@ -48,7 +54,7 @@ public sealed class DeviceSessions(InstanceStore store, ILogger<DeviceSessions> 
     }
 
     private async Task<Session?> ProbeAsync(DeviceRegistration device, CancellationToken cancellationToken,
-        PvContainers.Running? container = null)
+        DeviceContainerRun? container = null)
     {
         switch (device.Kind)
         {
@@ -68,8 +74,11 @@ public sealed class DeviceSessions(InstanceStore store, ILogger<DeviceSessions> 
                     ? new(device, EquipmentOptions.FromStartup(ModuleKind.Charger, charger.Startup), ChargerState: charger) : null;
             case KuehlhausSimulator.Simulation.SimulationEngine.ControlKind:
                 var coldStore = (await SendAsync<EquipmentState<ColdStoreControlState>>(device, null, cancellationToken))?.State;
-                return coldStore?.Startup.DeviceId == device.Id
-                    ? new(device, EquipmentOptions.FromStartup(ModuleKind.ColdStore, coldStore.Startup), ColdStoreState: coldStore) : null;
+                if (coldStore?.Startup.DeviceId != device.Id) return null;
+                if (container is null) return new(device, EquipmentOptions.FromStartup(ModuleKind.ColdStore, coldStore.Startup),
+                    ColdStoreState: coldStore);
+                return new(device, container.Startup with { Revision = -1 },
+                    ColdStoreState: coldStore with { Startup = container.Startup.Equipment! }, ContainerId: container.ContainerId);
             default:
                 return null;
         }

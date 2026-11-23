@@ -177,8 +177,15 @@ else
     {
         <p role="status">@_liveMessage</p>
     }
-    <button disabled="@(_busy || _revision < 0)" @onclick="StartAsync">Starten</button>
-    @if (_revision >= 0)
+    @if (!IsCharger && Processes.HasColdStoreContainer(Instance.Id))
+    {
+        <button class="button-danger" disabled="@_busy" @onclick="StopUnconfirmedAsync">Kühlhaus-Container beenden</button>
+    }
+    else
+    {
+        <button disabled="@(_busy || _revision < 0)" @onclick="StartAsync">Starten</button>
+    }
+    @if (_revision >= 0 && (IsCharger || !Processes.HasColdStoreContainer(Instance.Id)))
     {
         @if (_confirmDelete)
         {
@@ -194,7 +201,7 @@ else
 }
 @if (_busy)
 {
-    <p role="status">Wird angewendet …</p>
+    <p role="status">@(IsCharger ? "Wird angewendet …" : "Wird angewendet … Ein fehlendes Kühlhaus-Image wird beim Start automatisch erstellt. Das kann beim ersten Mal mehrere Minuten dauern und benötigt Internet.")</p>
 }
 <details><summary>Kommandozeilenhilfe</summary><pre class="live-json">@(IsCharger ? DualChargerSim.IO.ArgsParser.Usage : KuehlhausSimulator.IO.ArgsParser.Usage)</pre></details>
 
@@ -429,6 +436,19 @@ else
         {
             var result = await Processes.StopDeviceAsync(Instance, _active[0].Registration.Session);
             _liveMessage = result.Detail;
+            Refresh();
+        }
+        finally { _busy = false; }
+    }
+
+    private async Task StopUnconfirmedAsync()
+    {
+        if (_busy) return;
+        _busy = true;
+        try
+        {
+            var result = await Processes.StopAsync(Instance);
+            _liveMessage = result?.Detail;
             Refresh();
         }
         finally { _busy = false; }
