@@ -35,5 +35,29 @@ services:
     restart: unless-stopped
     stop_grace_period: 30s
 
+  influxdb:
+    image: influxdb:2.9.1
+    hostname: energytwin-influxdb
+    ports:
+      - "127.0.0.1:8086:8086"    # HTTP-API und Weboberfläche
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUXDB_ADMIN_USER:?Bitte docker/.env mit InfluxDB-Benutzer anlegen}
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUXDB_ADMIN_PASSWORD:?Bitte docker/.env mit InfluxDB-Passwort anlegen}
+      DOCKER_INFLUXDB_INIT_ORG: ${INFLUXDB_ORG:-dotnet}
+      DOCKER_INFLUXDB_INIT_BUCKET: ${INFLUXDB_BUCKET:-sensordata}
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+      - influxdb-config:/etc/influxdb2
+    healthcheck:
+      test: ["CMD", "influx", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    restart: unless-stopped
+
 volumes:
   rabbitmq-data:
+  influxdb-data:
+  influxdb-config:

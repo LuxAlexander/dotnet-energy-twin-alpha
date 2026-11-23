@@ -180,3 +180,17 @@
 **Artefact:** neu `docker/DualPortCharger.Dockerfile`, `docker/DualPortCharger.Dockerfile.dockerignore`, `src/EnergyTwin.Web/Management/{EquipmentContainers,ChargerContainers}.cs`; `ColdStoreContainers.cs` auf das Profil reduziert; geändert `src/Devices/DualPortCharger/{Program.cs,Simulation/SimulationConfig.cs,Simulation/SimulationEngine.cs,README.md}`, `src/EnergyTwin.Web/Management/{DeviceSessions,ProcessManager}.cs`, `Program.cs`, `Components/{Layout/MainLayout,Pages/Module,Shared/EquipmentSettings}.razor`, `src/EnergyTwin.Web/README.md`, `docker/README.md`, `README.md`, `AGENTS.md`.
 **Test:** `dotnet build EnergyTwin.sln` 0 Fehler/0 Warnungen. `docker build` des Images `energytwin/dc:lb04` erfolgreich. Rauchtest: Container standalone mit Steuerzugang gestartet, Diagnose-Client las den Registerkopf über den veröffentlichten Port (Gerätetyp 3 = Charger, Zustand Bereit, Modellzeit läuft), `docker stop --timeout 12` beendete geordnet (Exitcode 0, „CSV gespeichert“); Testcontainer danach entfernt. Nicht ausgeführt: Start über Blazor, Lauf mit Master und Wetter im Container, Unit-Tests.
 **Comment:** Die Verallgemeinerung berührt Dominiks `ColdStoreContainers` (Verhalten unverändert, Startwerte jetzt über `EquipmentOptions.Parse` statt direkt über den Kühlhaus-`ArgsParser`). Der Kühlhaus-Containerlauf ist weiterhin nicht nachgewiesen. Nicht committet.
+
+### Nachtrag 2026-11-23 – InfluxDB im Compose
+**Done:** Den InfluxDB-Dienst aus der neuen `docker-compose.yml` im Hauptverzeichnis in `docker/docker-compose.yml` übernommen und an die Projektregeln angepasst: Port nur lokal (`127.0.0.1:8086`), Zugangsdaten über `docker/.env` (`INFLUXDB_ADMIN_USER`, `INFLUXDB_ADMIN_PASSWORD`, Organisation und Bucket mit Standard `dotnet`/`sensordata`), benannte Volumes für Daten und Konfiguration, Healthcheck mit `influx ping`, `restart: unless-stopped`. `docker/.env.example` und die Konfigurationstabelle in `docker/README.md` ergänzt.
+**KI:** Claude Opus 5.5 => Übernahme und Anpassung des Dienstes, Doku.
+**Artefact:** `docker/docker-compose.yml`, `docker/.env.example`, `docker/README.md`
+**Test:** `docker compose --env-file docker/.env.example -f docker/docker-compose.yml config --quiet` fehlerfrei. Nicht ausgeführt: Start des Containers.
+**Comment:** Die InfluxDB-Variablen mit zufällig erzeugtem Passwort in die lokale `docker/.env` eingetragen (nicht versioniert). Die Vorlage `docker-compose.yml` im Hauptverzeichnis mit Klartext-Passwörtern gelöscht. Nicht committet.
+
+### Nachtrag 2026-11-23 – InfluxDB_Demo an lokale InfluxDB angebunden
+**Done:** Das Demo-Projekt `InfluxDB_Demo` gegen die InfluxDB aus `docker/docker-compose.yml` gestartet. In `InfluxDB_Demo/InfluxDB_Demo/appsettings.json` den alten Token einer anderen Instanz durch einen gültigen API-Token der lokalen Instanz ersetzt; die Datei per `.gitignore` von Commits ausgeschlossen.
+**KI:** Claude Opus 5.5 => Fehlersuche beim Start (Token, zentrale Paketverwaltung, Startordner), Token-Prüfung, Probelauf.
+**Artefact:** `InfluxDB_Demo/InfluxDB_Demo/appsettings.json` (lokal, ignoriert), `.gitignore`
+**Test:** Build des Demos mit `-p:ManagePackageVersionsCentrally=false` 0 Fehler/0 Warnungen. Probelauf: Messpunkte geschrieben und per Flux und InfluxQL mit gleichen Werten zurückgelesen.
+**Comment:** Offen: Das Demo baut nur mit abgeschalteter zentraler Paketverwaltung (NU1008) und muss aus seinem Projektordner gestartet werden. Nicht committet.

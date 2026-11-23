@@ -445,3 +445,6 @@ docs/glossary.md
 /tools/local/mqtt-explorer/
 
 src/EnergyTwin.Web/instances*.local.json
+
+# InfluxDB-Demo: appsettings.json enthält einen lokalen API-Token
+InfluxDB_Demo/InfluxDB_Demo/appsettings.json

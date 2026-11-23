@@ -43,6 +43,9 @@ Die Beispielwerte sind Platzhalter und müssen vor dem Start ersetzt werden.
 | Plugins | `enabled_plugins`, nur lesend eingebunden |
 | Daten | benanntes Volume `energytwin_rabbitmq-data`, stabiler Hostname |
 | Bereitschaft | laufende RabbitMQ-Anwendung und erreichbare Listener; `up --wait` wartet darauf |
+| InfluxDB | `influxdb:2.9.1`, <http://localhost:8086>, Organisation `INFLUXDB_ORG` (Standard `dotnet`), Bucket `INFLUXDB_BUCKET` (Standard `sensordata`) |
+| InfluxDB-Zugang | `INFLUXDB_ADMIN_USER` und `INFLUXDB_ADMIN_PASSWORD` in `docker/.env`; wirkt nur bei der Ersteinrichtung |
+| InfluxDB-Daten | benannte Volumes `energytwin_influxdb-data` und `energytwin_influxdb-config`, Bereitschaft über `influx ping` |
 
 Die Ports sind nur auf diesem Rechner erreichbar. Anmeldung in der Management-Oberfläche mit den Werten aus `.env`.
 Für einen MQTT-Viewer: Host `127.0.0.1`, Port `1883`, dieselben Zugangsdaten, kein TLS, Topic `energytwin/#`.
