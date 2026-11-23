@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using DualChargerSim.IO;
 using DualChargerSim.Simulation;
 
@@ -32,6 +33,14 @@ public static class Program
         }
 
         using var stop = new CancellationTokenSource();
+        // Docker sendet unter Linux SIGTERM für das kontrollierte Beenden.
+        using var sigterm = OperatingSystem.IsLinux()
+            ? PosixSignalRegistration.Create(PosixSignal.SIGTERM, context =>
+            {
+                context.Cancel = true;
+                stop.Cancel();
+            })
+            : null;
         Console.CancelKeyPress += (_, e) =>
         {
             e.Cancel = true;                                      // geordnet beenden (Abmeldung beim Master, CSV schließen)

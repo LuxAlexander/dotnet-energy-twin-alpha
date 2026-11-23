@@ -8,9 +8,12 @@ namespace DualChargerSim.Simulation;
 /// <summary>
 /// Startparameter der Simulation (Geräte-ID, Leistung, Schrittweite, Zeitquelle, Dauer, Seed).
 /// </summary>
-public class SimulationConfig
+public sealed record SimulationConfig
 {
     public const double MinimumRecommendedHours = 24;
+
+    /// <summary>Fester Steuerport, wenn die Web-App dieses Gerät als Container startet (PV 5191, Kühlhaus 5192).</summary>
+    public const int ContainerControlPort = 5193;
     public const double DefaultStandaloneSpeed = 120;
 
     public string DeviceId { get; init; } = "DC-01";

@@ -177,15 +177,15 @@ else
     {
         <p role="status">@_liveMessage</p>
     }
-    @if (!IsCharger && Processes.HasColdStoreContainer(Instance.Id))
+    @if (HasContainer)
     {
-        <button class="button-danger" disabled="@_busy" @onclick="StopUnconfirmedAsync">Kühlhaus-Container beenden</button>
+        <button class="button-danger" disabled="@_busy" @onclick="StopUnconfirmedAsync">@(IsCharger ? "Ladesäulen" : "Kühlhaus")-Container beenden</button>
     }
     else
     {
         <button disabled="@(_busy || _revision < 0)" @onclick="StartAsync">Starten</button>
     }
-    @if (_revision >= 0 && (IsCharger || !Processes.HasColdStoreContainer(Instance.Id)))
+    @if (_revision >= 0 && !HasContainer)
     {
         @if (_confirmDelete)
         {
@@ -201,7 +201,7 @@ else
 }
 @if (_busy)
 {
-    <p role="status">@(IsCharger ? "Wird angewendet …" : "Wird angewendet … Ein fehlendes Kühlhaus-Image wird beim Start automatisch erstellt. Das kann beim ersten Mal mehrere Minuten dauern und benötigt Internet.")</p>
+    <p role="status">Wird angewendet … Ein fehlendes @(IsCharger ? "Ladesäulen" : "Kühlhaus")-Image wird beim Start automatisch erstellt. Das kann beim ersten Mal mehrere Minuten dauern und benötigt Internet.</p>
 }
 <details><summary>Kommandozeilenhilfe</summary><pre class="live-json">@(IsCharger ? DualChargerSim.IO.ArgsParser.Usage : KuehlhausSimulator.IO.ArgsParser.Usage)</pre></details>
 
@@ -218,6 +218,7 @@ else
     private string _location = "", _output = "";
     private DeviceSessions.Session[] _active = [];
     private bool IsCharger => Instance.Kind == ModuleKind.Charger;
+    private bool HasContainer => Processes.HasEquipmentContainer(Instance.Kind, Instance.Id);
     private DeviceSessions.Session? Active => _active is [var session] && session.Startup.Kind == Instance.Kind ? session : null;
     private bool SessionConflict => _active.Length > 0 && Active is null;
     private bool IsPaused => Active?.ChargerState?.Paused ?? Active?.ColdStoreState?.Paused ?? false;

@@ -3,9 +3,9 @@
 **Verantwortlich:** Alexander Lux · **Stand:** 2026-11-08
 
 Lokaler Nachrichtenbroker für das Modbus–RabbitMQ-Gateway und den optionalen Wetter-Publisher. Docker Desktop muss mit Linux-Containern laufen.
-Die .NET-Programme laufen beim bisherigen Sammelstart auf dem Host. Für den PV-Simulator und das Kühlhaus gibt es
-zusätzlich einen [PV-](#pv-simulator-im-container-lb04) bzw.
-[Kühlhaus-Containerstart](#kuehlhaus-simulator-im-container-lb04). Für die erstmalige Bereitstellung der Images ist
+Die .NET-Programme laufen beim bisherigen Sammelstart auf dem Host. Für PV-Simulator, Kühlhaus und Ladesäule gibt
+es zusätzlich einen [PV-](#pv-simulator-im-container-lb04), [Kühlhaus-](#kuehlhaus-simulator-im-container-lb04)
+bzw. [Ladesäulen-Containerstart](#ladesaeulen-simulator-im-container-lb04). Für die erstmalige Bereitstellung der Images ist
 Internetzugang erforderlich, der Simulationsbetrieb selbst benötigt kein Internet.
 
 ## Einrichtung und Start
@@ -169,6 +169,60 @@ docker --context desktop-linux logs --tail 30 <Container-ID>
 Nach einem Stopp durch Docker oder einem Windows-Neustart kann das Kühlhaus erneut über Blazor gestartet
 werden. Für dieselbe Geräte-ID nur einen Startweg gleichzeitig verwenden. Ein containergeführter Lauf des
 Kühlhauses ist bisher nicht als Nachweis dokumentiert.
+
+<a id="ladesaeulen-simulator-im-container-lb04"></a>
+
+## Ladesäulen-Simulator im Container (LB04)
+
+Die DC-Ladesäule ist wie PV und Kühlhaus als Linux-Container verfügbar; verantwortlich ist Susanne Lastowicka.
+Die [Container-Konfiguration](DualPortCharger.Dockerfile) baut das Image aus dem vollständigen Repository.
+Aus dem Repository-Root mit laufendem Docker Desktop (Linux-Container):
+
+```powershell
+docker build --file docker/DualPortCharger.Dockerfile --tag energytwin/dc:lb04 .
+```
+
+Der manuelle Start erwartet Master und Wetterdienst auf dem Windows-Host. Das Image bringt die passenden
+Standardargumente mit (`--master host.docker.internal:5100`, `--weather http://host.docker.internal:8080`,
+`--modbus-bind 0.0.0.0`, `--output /data`). Das Beispiel veröffentlicht den im Gesamtsystem üblichen
+Ladesäulen-Port 1504 nur auf Windows-Loopback und schreibt die CSV in den Windows-Ordner `docs/data`:
+
+```powershell
+$csv = (New-Item -ItemType Directory -Force docs/data).FullName
+docker run --detach --pull never --name energytwin-dc-01 --publish 127.0.0.1:1504:1504 --mount "type=bind,source=$csv,target=/data" energytwin/dc:lb04 --id DC-01 --modbus-port 1504
+docker ps --filter name=energytwin-dc-01
+docker logs --tail 30 energytwin-dc-01
+dotnet run --project src/ModbusDiagnosticClient -- --port 1504 --once
+```
+
+`docker stop --timeout 12` löst den geordneten Stopp aus: Unter Linux empfängt der Prozess SIGTERM, meldet
+sich beim Master ab, schließt die CSV und gibt den Modbus-Port frei. Für geänderte Argumente den gestoppten
+Container entfernen und neu erstellen. Es gelten die [Ladesäulen-Startoptionen](../src/Devices/DualPortCharger/README.md#kommandozeilenargumente).
+
+### Verwaltung durch Blazor
+
+Unter „Ladesäulen“ in der Web-App eine Instanz auswählen oder anlegen und starten. Fehlt das Image
+`energytwin/dc:lb04`, baut die Web-App es automatisch aus dem vollständigen Repository im Docker-Kontext
+`desktop-linux` (Windows); der erste Build benötigt Internet und kann mehrere Minuten dauern (Abbruch nach
+höchstens zehn Minuten). Vorhandene Images werden weiterverwendet; für Quellcodeänderungen das Image manuell
+neu bauen. Beim Neustart wird das Image vor dem Stoppen der laufenden Ladesäule bereitgestellt.
+
+Die Web-App legt je Ladesäulen-ID einen Container `energytwin-dc-<Hash>` an, bindet den eingestellten
+CSV-Ordner ein, veröffentlicht den konfigurierten Modbus-Port ausschließlich auf Windows-Loopback und
+übersetzt lokale Master- und Wetteradressen für Docker Desktop. Externe Adressen und `Wetter aus` bleiben
+erhalten. Über `ENERGYTWIN_CHARGER_CONTAINER_CONTROL=1` aktiviert sie den lokalen Steuerzugang auf Port
+**5193** (PV 5191, Kühlhaus 5192), ebenfalls nur auf `127.0.0.1` veröffentlicht. Der Start gilt erst nach
+Bestätigung durch diesen Zugang. Nach einem Web-App-Neustart wird der Container über die Labels
+`energytwin.web.dc-run` und `energytwin.web.dc-id` wiedererkannt. Für die Diagnose:
+
+```powershell
+docker --context desktop-linux ps -a --filter label=energytwin.web.dc-id=DC-01
+docker --context desktop-linux logs --tail 30 <Container-ID>
+```
+
+Für dieselbe Geräte-ID nur einen Startweg gleichzeitig verwenden. Geprüft ist bisher nur ein manueller
+Standalone-Lauf (Image-Build, Modbus-Abfrage, geordneter Stopp per `docker stop`); ein containergeführter Lauf
+über Blazor mit Master ist nicht als Nachweis dokumentiert.
 
 ## Simulatoren und Gateway
 

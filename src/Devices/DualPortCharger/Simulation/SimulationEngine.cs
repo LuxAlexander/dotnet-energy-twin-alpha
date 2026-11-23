@@ -103,7 +103,9 @@ public partial class SimulationEngine
         await using var logger = await CsvLogger.CreateAsync(Config.DeviceId, Config.OutputDirectory, cancellationToken);
         using var stop = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         var control = CreateControl();
-        await using var controlLifetime = await control.StartAsync(Config.DeviceId, ControlKind, stop.Token);
+        int? containerControlPort = Environment.GetEnvironmentVariable("ENERGYTWIN_CHARGER_CONTAINER_CONTROL") == "1"
+            ? SimulationConfig.ContainerControlPort : null;
+        await using var controlLifetime = await control.StartAsync(Config.DeviceId, ControlKind, stop.Token, containerControlPort);
         var syncTask = Time.RunAsync(stop.Token);
 
         Message = Time.IsStandalone

@@ -20,7 +20,7 @@ public sealed record StartStepResult(string Id, bool Started, string Detail)
 /// unberührt.
 /// </summary>
 public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguration configuration, DeviceSessions sessions,
-    PvContainers pvContainers, ColdStoreContainers coldStoreContainers)
+    PvContainers pvContainers, ColdStoreContainers coldStoreContainers, ChargerContainers chargerContainers)
 {
     private static string? _repoRootCache;
     private readonly string _repoRoot = FindRoot();
@@ -52,7 +52,7 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguratio
 
     public InstanceRunState State(InstanceConfig config)
     {
-        if (config.Kind is ModuleKind.Pv or ModuleKind.ColdStore
+        if (config.Kind is ModuleKind.Pv or ModuleKind.ColdStore or ModuleKind.Charger
             && sessions.For(config.Id) is [{ ContainerId: not null }])
             return InstanceRunState.ManagedRunning;
         lock (_gate)
@@ -71,7 +71,15 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguratio
 
     public bool HasPvContainer(string id) => pvContainers.For(id).Length > 0;
 
-    public bool HasColdStoreContainer(string id) => coldStoreContainers.For(id).Length > 0;
+    /// <summary>Containerverwaltung der Ladesäule bzw. des Kühlhauses; für andere Modultypen <c>null</c>.</summary>
+    private EquipmentContainers? Equipment(ModuleKind kind) => kind switch
+    {
+        ModuleKind.ColdStore => coldStoreContainers,
+        ModuleKind.Charger => chargerContainers,
+        _ => null
+    };
+
+    public bool HasEquipmentContainer(ModuleKind kind, string id) => Equipment(kind)?.For(id).Length > 0;
 
     public async Task<string> StartInstanceAsync(InstanceConfig config, IReadOnlyList<InstanceConfig> configs)
     {
@@ -120,8 +128,8 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguratio
         {
             if (config.Kind == ModuleKind.Pv)
                 return await pvContainers.StartAsync(config, sessions);
-            if (config.Kind == ModuleKind.ColdStore)
-                return await coldStoreContainers.StartAsync(config, sessions);
+            if (Equipment(config.Kind) is { } equipment)
+                return await equipment.StartAsync(config, sessions);
             var state = State(config);
             if (stoppedSession is not null && state == InstanceRunState.ExternallyReachable
                 && sessions.For(config.Id).All(session => session.Registration.Session == stoppedSession)
@@ -253,8 +261,8 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguratio
                 return new(config.Id, false, $"Modbus-Port {port} ist belegt.");
             if (config.Kind == ModuleKind.Pv && await pvContainers.EnsureImageAsync() is { } unavailable)
                 return new(config.Id, false, unavailable);
-            if (config.Kind == ModuleKind.ColdStore && await coldStoreContainers.EnsureImageAsync() is { } khUnavailable)
-                return new(config.Id, false, khUnavailable);
+            if (Equipment(config.Kind) is { } equipment && await equipment.EnsureImageAsync() is { } equipmentUnavailable)
+                return new(config.Id, false, equipmentUnavailable);
             if (active.Length == 1)
             {
                 var stopped = await StopDeviceAsync(config.Id, config.Kind, active);
@@ -271,17 +279,13 @@ public sealed class ProcessManager(ILogger<ProcessManager> logger, IConfiguratio
     private async Task<StartStepResult> StopDeviceAsync(string id, ModuleKind kind, DeviceSessions.Session[] active,
         bool explicitStop = false)
     {
-        DeviceContainerRun[] containers = kind switch
-        {
-            ModuleKind.Pv => pvContainers.For(id),
-            ModuleKind.ColdStore => coldStoreContainers.For(id),
-            _ => []
-        };
+        var equipment = Equipment(kind);
+        DeviceContainerRun[] containers = kind == ModuleKind.Pv ? pvContainers.For(id) : equipment?.For(id) ?? [];
         Task<StartStepResult> Finish(string containerId, bool useDockerStop, string? directory = null) =>
-            kind == ModuleKind.ColdStore
-                ? coldStoreContainers.FinishStopAsync(id, containerId, useDockerStop, directory)
+            equipment is not null
+                ? equipment.FinishStopAsync(id, containerId, useDockerStop, directory)
                 : pvContainers.FinishStopAsync(id, containerId, useDockerStop, directory);
-        var deviceName = kind == ModuleKind.Pv ? "PV" : "Kühlhaus";
+        var deviceName = equipment?.Profile.Name ?? "PV";
         if (explicitStop && active.Length == 0 && containers is [var unconfirmed])
             return await Finish(unconfirmed.ContainerId, useDockerStop: true);
         if (active.Length != 1 || active[0].Startup.Kind != kind)

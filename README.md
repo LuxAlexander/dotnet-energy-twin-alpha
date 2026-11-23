@@ -34,6 +34,7 @@ Leere Zuständigkeitsfelder bleiben unzugeteilt.
 | RabbitMQ unter Docker (Compose, `.env.example`, Start/Status/Stopp) | Alexander Lux | [`docker/README.md`](docker/README.md), lokaler Lauf mit allen vier Geräten geprüft |
 | PV-Simulator als Docker-Container (LB04) | Alexander Lux | [PV-Dockerfile](docker/PvSimulator.Dockerfile), [Build und Betrieb](docker/README.md#pv-simulator-im-container-lb04), [Probelauf](docs/nachweise/2026-11-15-pv-container/README.md) |
 | Kühlhaus-Simulator als Docker-Container (LB04) | Dominik Zach | [Kühlhaus-Dockerfile](docker/KuehlhausSimulator.Dockerfile), [Build und Betrieb](docker/README.md#kuehlhaus-simulator-im-container-lb04); kein Nachweis vorhanden |
+| Ladesäulen-Simulator als Docker-Container (LB04) | Susanne Lastowicka | [Ladesäulen-Dockerfile](docker/DualPortCharger.Dockerfile), [Build und Betrieb](docker/README.md#ladesaeulen-simulator-im-container-lb04); kein Nachweis vorhanden |
 | Viewer: MQTT Explorer portable, JSON und Live-Verläufe | Alexander Lux | [Anleitung](docs/viewer/README.md), [textueller Nachweis](docs/nachweise/2026-11-08-viewer/README.md) |
 | Funktionsnachweise 1–7 | | [`docs/nachweise/`](docs/nachweise/2026-11-08-gateway-mit-master/README.md) (Lauf mit Ladesäule und Master) |
 | Optional: zusätzliche TimeSim-Nachrichten über RabbitMQ | | Wetter-MQTT ist separat oben dokumentiert; Zeitsteuerung bleibt TCP |
@@ -66,10 +67,11 @@ Geräte verwenden weiterhin HTTP. Für gespeicherte Wetterstände im Viewer die 
 [Wettervertrag](docs/Wetter-Nachrichtenvertrag-LB03.md) abonnieren. Ohne `-WeatherMqtt` bleibt der bisherige Wetterstart erhalten.
 Der [Docker-Funktionsnachweis](docs/nachweise/2026-11-08-docker-alexander/README.md) belegt den Empfang aller vier Geräte.
 
-PV und Kühlhaus lassen sich alternativ als Linux-Container betreiben; Image-Build, Port-Veröffentlichung und
-Blazor-Verwaltung stehen im [PV-](docker/README.md#pv-simulator-im-container-lb04) und
-[Kühlhaus-Abschnitt](docker/README.md#kuehlhaus-simulator-im-container-lb04) der Docker-Anleitung. Für den
-Kühlhaus-Containerlauf liegt noch kein Nachweis vor.
+PV, Kühlhaus und Ladesäule lassen sich alternativ als Linux-Container betreiben; Image-Build,
+Port-Veröffentlichung und Blazor-Verwaltung stehen im [PV-](docker/README.md#pv-simulator-im-container-lb04),
+[Kühlhaus-](docker/README.md#kuehlhaus-simulator-im-container-lb04) und
+[Ladesäulen-Abschnitt](docker/README.md#ladesaeulen-simulator-im-container-lb04) der Docker-Anleitung. Für die
+Kühlhaus- und Ladesäulen-Containerläufe liegt noch kein Nachweis vor.
 
 Viewer einrichten und Werteverläufe auswählen: [MQTT-Explorer-Anleitung](docs/viewer/README.md).
 Die Diagramme verwenden reale Empfangszeit; virtuelle Zeit und Qualität stehen im JSON.

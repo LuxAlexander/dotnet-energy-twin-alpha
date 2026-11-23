@@ -1,6 +1,6 @@
 # EnergyTwin.Web – lokale Bedienoberfläche
 
-**Stand:** 2026-11-22. Blazor Interactive Server mit Anlagenübersicht, Fehlerdiagnose, Instanzstart, Containerstart für PV und Kühlhaus sowie bestätigter Bedienung.
+**Stand:** 2026-11-22. Blazor Interactive Server mit Anlagenübersicht, Fehlerdiagnose, Instanzstart, Containerstart für PV, Kühlhaus und Ladesäule sowie bestätigter Bedienung.
 
 ## Start
 
@@ -124,20 +124,22 @@ Geräteseite die jeweiligen Werte nebeneinander. „Jetzt neu starten“ überni
 nach Bestätigung. Falls der Neustart nach dem Beenden fehlschlägt, kann die vorige Konfiguration wieder
 gestartet werden.
 
-PV- und Kühlhaus-Instanzen startet die Web-App als Linux-Container in Docker Desktop. Fehlende Images
-(`energytwin/pv:lb04`, `energytwin/kh:lb04`) erstellt sie beim Start automatisch aus dem vollständigen
+PV-, Kühlhaus- und Ladesäulen-Instanzen startet die Web-App als Linux-Container in Docker Desktop. Fehlende
+Images (`energytwin/pv:lb04`, `energytwin/kh:lb04`, `energytwin/dc:lb04`) erstellt sie beim Start automatisch aus dem vollständigen
 Repository (höchstens zehn Minuten Buildzeit). Docker Desktop muss mit Linux-Containern laufen; für den
 ersten Build ist Internet erforderlich. Vorhandene Images werden weiterverwendet. Beim Neustart erfolgt
 die Bereitstellung vor dem Stoppen des laufenden Geräts. Buildfehler stehen in der Rückmeldung und
 ausführlich im Webdienst-Protokoll. Die manuellen Image-Builds für
-[PV](../../docker/README.md#pv-simulator-im-container-lb04) und
-[Kühlhaus](../../docker/README.md#kuehlhaus-simulator-im-container-lb04) bleiben möglich. Modbus bleibt auf dem
+[PV](../../docker/README.md#pv-simulator-im-container-lb04),
+[Kühlhaus](../../docker/README.md#kuehlhaus-simulator-im-container-lb04) und
+[Ladesäule](../../docker/README.md#ladesaeulen-simulator-im-container-lb04) bleiben möglich. Modbus bleibt auf dem
 eingestellten Windows-Port lokal erreichbar, CSV-Dateien bleiben im eingestellten Windows-Ordner.
-Für die Live-Bedienung aktiviert die Web-App den lokalen Steuerzugang (PV 5191, Kühlhaus 5192, jeweils nur
+Für die Live-Bedienung aktiviert die Web-App den lokalen Steuerzugang (PV 5191, Kühlhaus 5192, Ladesäule 5193, jeweils nur
 Loopback); ein Start gilt erst nach Bestätigung durch diesen Zugang. Die Container werden nach einem
 Web-App-Neustart wiedererkannt. Details zu Status und Logs stehen im
-[PV-](../../docker/README.md#pv-simulator-im-container-lb04) und
-[Kühlhaus-Abschnitt](../../docker/README.md#kuehlhaus-simulator-im-container-lb04) der Docker-Anleitung.
+[PV-](../../docker/README.md#pv-simulator-im-container-lb04),
+[Kühlhaus-](../../docker/README.md#kuehlhaus-simulator-im-container-lb04) und
+[Ladesäulen-Abschnitt](../../docker/README.md#ladesaeulen-simulator-im-container-lb04) der Docker-Anleitung.
 
 Bei PV-Anlagen, Batteriespeichern, Ladesäulen und Kühlhäusern erscheinen auch separat gestartete Prozesse desselben Benutzerkontos.
 Der Reiter „Einstellungen“ zeigt aktive und gespeicherte Startwerte, die Live-Bedienung und die Kommandozeilenhilfe.
@@ -179,7 +181,7 @@ Weitere Aktionen und Startwerte stehen im Reiter „Einstellungen“.
 `Management/InstanceStore.cs`: persistierte Instanzkonfiguration mit Konfliktprüfung;
 `Management/ProcessManager.cs`: Start/Stop verwalteter Prozesse, Broker-Start über docker compose,
 Wiedererkennung extern gestarteter Prozesse über Port und Kommandozeile sowie Doppelstart-Schutz;
-`Management/PvContainers.cs`, `Management/ColdStoreContainers.cs`, `Management/DeviceContainerRun.cs`:
+`Management/PvContainers.cs`, `Management/EquipmentContainers.cs` (gemeinsam für `ColdStoreContainers.cs` und `ChargerContainers.cs`), `Management/DeviceContainerRun.cs`:
 Image-Build und Containerlauf je Gerät (Labels, Port-Veröffentlichung, lokaler Steuerzugang,
 Wiedererkennung nach Web-App-Neustart);
 `Components/Pages/AddInstance.razor`: Anlegen von Geräteinstanzen;

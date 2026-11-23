@@ -92,6 +92,27 @@ dotnet run --project src/Devices/DualPortCharger -- --standalone --step 1 --spee
 Mehrere Instanzen mit verschiedenen `--id` und jeweils freiem `--modbus-port` können gleichzeitig laufen. Jede schreibt ihre eigene CSV und erscheint
 einzeln in der Liste des Masters.
 
+## Containerbetrieb (LB04)
+
+Die Ladesäule lässt sich wie PV und Kühlhaus als Linux-Container in Docker Desktop betreiben. Das Image
+`energytwin/dc:lb04` entsteht aus [`docker/DualPortCharger.Dockerfile`](../../../docker/DualPortCharger.Dockerfile);
+die Web-App baut es beim ersten Containerstart automatisch (erster Build benötigt Internet). Manuell:
+
+```powershell
+docker build --file docker/DualPortCharger.Dockerfile --tag energytwin/dc:lb04 .
+$csv = (New-Item -ItemType Directory -Force docs/data).FullName
+docker run --detach --pull never --name energytwin-dc-01 --publish 127.0.0.1:1504:1504 --mount "type=bind,source=$csv,target=/data" energytwin/dc:lb04 --id DC-01 --modbus-port 1504
+```
+
+Im Container lauscht Modbus auf `0.0.0.0`, damit der veröffentlichte Windows-Port erreichbar bleibt; die CSV
+landet unter `/data`. Master und Wetter erreicht der Container über `host.docker.internal`. Mit
+`ENERGYTWIN_CHARGER_CONTAINER_CONTROL=1` aktiviert die Web-App den lokalen Steuerzugang auf Port **5193**
+(`SimulationConfig.ContainerControlPort`; PV 5191, Kühlhaus 5192). `docker stop` löst unter Linux SIGTERM aus
+und beendet den Lauf geordnet: Abmeldung beim Master, CSV schließen, Modbus-Port freigeben. Start,
+Live-Bedienung und Stopp erfolgen in der Web-App unter „Ladesäulen“; Details stehen in der
+[Docker-Anleitung](../../../docker/README.md#ladesaeulen-simulator-im-container-lb04). Tastenbedienung gibt es im
+Container nicht; sie ersetzt die Live-Bedienung der Web-App.
+
 ## Bedienung
 
 In der [Web-App](../../EnergyTwin.Web/README.md#geräte-bearbeiten) zeigt der Reiter „Einstellungen“
